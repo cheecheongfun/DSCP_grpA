@@ -1,0 +1,58 @@
+CMPT_LEX_01,,,
+"[09:15, 12/03/2024", Sarah (EcoGuru)," A, my tank smells v badd.",Question
+"[09:17, 12/03/2024", A," Don't worry, Sarah! Bad smells usually indicate the compost is too wet. Try adding more dry bedding like shredded newspaper or cardboard to absorb excess moisure.",Answer
+"[09:19, 12/03/2024", Sarah (EcoGuru), Ookk,Irrelevant
+"[09:20, 12/03/2024", A," You're welcome! Also, avoid adding oily or acidic foods as they can cause unpleasant odors.",Answer
+"[09:22, 12/03/2024", Sarah (EcoGuru), Got it. I'll stick to fruit and veggie scraps. I cannot cook and add in right?,Question
+"[11:14, 13/03/2024", A, Perfect! And remember to turn the compost regularly to aerate it and prevent anaerobic conditions. Refrain from including cooked food.,Answer
+"[13:43, 13/03/2024", Sarah (EcoGuru)," Thx, much appreciated 🙏🙏",Irrelevant
+,,,
+CMPT_LEX_02,,,
+"[10:22am, 03/03/2024", Sam," My worm bin smells really bad, what should I do?",Question
+"[11:15am, 03/03/2024", Composting Buddy," Try burying the food waste deeper in the bedding. Also, make sure you have enough bedding and air holes for proper aeration.",Answer
+"[3:47pm, 03/03/2024", Sam," Okay, I'll try that. Should I add more dry materials too?",Question
+"[9:18am, 04/03/2024", Composting Buddy," Yes, adding some shredded cardboard or newspaper can help absorb excess moisture and cut down on odors.",Answer
+"[10:35am, 04/03/2024", Sam," Great, thanks for the tips!",Irrelevant
+"[1:22pm, 05/03/2024", Sam, The smell is much better now after following your advice. Appreciate it!,Irrelevant
+"[3:05pm, 05/03/2024", Composting Buddy," Wonderful, I'm glad I could help! Let me know if any other issues come up. 😅",Irrelevant
+"[9:47am, 06/03/2024", Sam, 👍,Irrelevant
+,,,
+CMPT_LEX_03,,,
+"[6:32pm, 12/03/2024", Karen," Hey, I'm new and i took ur class last wk. I’m not sure if I'm doing it right.",Question
+"[7:15pm, 12/03/2024", Worm Coach, No problem! What are your current bin setup and practices?,Answer
+"[9:37am, 13/03/2024", Karen," I have a plastic tote with bedding, composting worms, and food scraps that I bury every few days.",Question
+"[10:22am, 13/03/2024", Worm Coach," Sounds good so far. A few tips - make sure you have proper ventilation holes, keep bedding moist but not soaked, and don't overload with food waste.",Answer
+"[3:45pm, 14/03/2024", Karen," Okay, I'll double check those things. How often should I disturb the contents?",Question
+"[4:12pm, 14/03/2024", Worm Coach, Only disturb it lightly every few weeks when you add new bedding. The worms prefer to be left alone mostly.,Answer
+"[8:19am, 15/03/2024", Karen," Got it, thanks so much for the advice!",Irrelevant
+"[9:05am, 16/03/2024", Worm Coach, You're very welcome! Let me know if any other questions come up.,Irrelevant
+,,,
+CMPT_LEX_04,,,
+"[2:24pm, 20/03/2024", Alex, I want to start vermicomposting after your session (I was observing because I just happened to pass by) but I'm worried about fruit flies. Any tips?,Question
+"[5:17pm, 21/03/2024", Fly Advisor, Bury new food waste well under bedding to avoid attracting flies. You can also cover fresh waste with a layer of shredded newspaper or cardboard.,Answer
+"[7:32am, 22/03/2024", Alex, What about using those cone-shaped traps?,Question
+"[9:15am, 22/03/2024", Fly Advisor," The traps can help catch any adult flies, but prevention is best. Proper bedding, moisture levels, and airflow make it unattractive for flies.",Answer
+"[11:08am, 22/03/2024", Alex," Okay, makes sense. I'll be diligent about burying the scraps then.",Irrelevant
+"[3:42pm, 23/03/2024", Fly Advisor, Sounds good! Let me know if you have any other fly issues once you get started.,Irrelevant
+"[5:30pm, 24/03/2024", Alex," Will do, thanks for the tips!",Irrelevant
+"[9:27am, 25/03/2024", Fly Advisor, You're welcome!,Irrelevant
+,,,
+CMPT_LEX_05,,,
+"[7:15pm, 05/03/2024", Jamie," I think my worm bin is too wet, how can I dry it out? There’s moisture visible frm the sides~",Question
+"[8:32am, 06/03/2024", Moisture Mentor," You can add more dry bedding materials like shredded cardboard, newspaper or coconut coir to help absorb excess moisture.",Answer
+"[11:22am, 06/03/2024", Jamie, How much extra bedding should I add?,Question
+"[2:45pm, 06/03/2024", Moisture Mentor, Start by adding a 5cm evenly spread layer of dry bedding on top and mix it in gently. See if that helps over the next few days.,Answer
+"[6:18pm, 07/03/2024", Jamie," Okay, I'll give that a try. Should I stop adding food waste for a bit too?",Question
+"[8:27am, 08/03/2024", Moisture Mentor," Yes, hold off on adding any new food waste until the moisture level improves.",Answer
+"[10:35am, 08/03/2024", Jamie," Sounds good, I'll let you know if it dries out enough or if I need to do anything else.",Irrelevant
+"[3:19pm, 09/03/2024", Moisture Mentor, Sounds like a plan! Don't hesitate to reach out with any other moisture regulation questions.,Irrelevant
+,,,
+CMPT_LEX_06,,,
+"[1:47pm, 15/03/2024", Avery," My worms seem really inactive lately, should I be concerned?",Question
+"[4:32pm, 16/03/2024", Worm Pal," There could be a few reasons for worm inactivity. Have you checked the temperature, moisture and oxygen levels in the bin recently?",Answer
+"[8:15am, 17/03/2024", Avery," I haven't really been monitoring those conditions closely, bz with work ah… 😅",Question
+"[10:27am, 17/03/2024", Worm Pal," Ideal conditions are 25-28°C temperature, 60-90% moisture in the bedding, and good airflow. Deviations can make worms lethargic.",Answer
+"[12:38pm, 17/03/2024", Avery, I'll take a closer look at those factors then. Hopefully just an location issue!,Irrelevant
+"[3:22pm, 18/03/2024", Worm Pal," Yes, worms are quite resilient if you can get their habitat back to optimal levels. Let me know if adjustments don't revive them.",Answer
+"[5:15pm, 18/03/2024", Avery," Baik will do, thanks2 👍👍👍",Irrelevant
+"[9:27am, 19/03/2024", Worm Pal," My pleasure, happy to help!",Irrelevant
