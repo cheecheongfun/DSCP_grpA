@@ -49,11 +49,14 @@ class Tokenizer:
         """
         assert type(s) is str
         t = self.sp_model.encode(s)
+        attn_mask = [1] * len(t)
         if bos:
             t = [self.bos_id] + t
+            attn_mask = [1] + attn_mask
         if eos:
             t = t + [self.eos_id]
-        return t
+            attn_mask = attn_mask + [1]
+        return t, attn_mask
 
     def decode(self, t: List[int]) -> str:
         """
