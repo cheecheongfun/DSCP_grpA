@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.Home.HomeFragment"
+    tools:context=".Fragments.Chatbot.ChatBotFragment"
     android:background="@color/main_background">
 
     <!-- TODO: Update blank fragment layout -->
@@ -14,7 +14,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Home Fragment"
+            android:text="Chat Bot Fragment"
             android:gravity="center"/>
     </RelativeLayout>
+
 </FrameLayout>

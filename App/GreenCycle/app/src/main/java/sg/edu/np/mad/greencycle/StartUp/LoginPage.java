@@ -1,29 +1,17 @@
 package sg.edu.np.mad.greencycle.StartUp;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
 import sg.edu.np.mad.greencycle.Fragments.MainActivity;
 import sg.edu.np.mad.greencycle.R;
 import androidx.biometric.BiometricPrompt;
-
 import java.util.concurrent.Executor;
 
 public class LoginPage extends AppCompatActivity {
@@ -90,6 +78,7 @@ public class LoginPage extends AppCompatActivity {
             public void onClick(View view) {
                 Log.i(null,"login button pressed");
                 Intent intent = new Intent(LoginPage.this, MainActivity.class);
+                intent.putExtra("tab","home_tab");
                 startActivity(intent);
                 finish();
             }
