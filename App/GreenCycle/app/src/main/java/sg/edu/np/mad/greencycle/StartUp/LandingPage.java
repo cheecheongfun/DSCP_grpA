@@ -39,6 +39,8 @@ public class LandingPage extends AppCompatActivity {
         }, SPLASH_DELAY_MILLIS);
     }
 
+    // qwqwqwqwqwqw///
+
     private void ToLogin() {
         Intent intent = new Intent(LandingPage.this, LoginPage.class);
         startActivity(intent);
