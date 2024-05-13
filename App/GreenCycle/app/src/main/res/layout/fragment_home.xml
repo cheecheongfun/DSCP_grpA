@@ -1,20 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.Home.HomeFragment"
-    android:background="@color/main_background">
+    android:paddingTop="0dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/greenBox"
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.47"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/white_square_with_rounded_corners" />
+
+        <ImageButton
+            android:id="@+id/livebutton"
+            android:layout_width="75dp"
+            android:layout_height="76dp"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="62dp"
+            android:background="@drawable/rounded_corners"
+            app:layout_constraintEnd_toStartOf="@+id/feedinglogbutton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/greenBox" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Home Fragment"
-            android:gravity="center"/>
-    </RelativeLayout>
-</FrameLayout>
+            android:id="@+id/livedatatext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Live Data"
+            app:layout_constraintStart_toStartOf="@id/livebutton"
+            app:layout_constraintTop_toBottomOf="@id/livebutton" />
+
+        <ImageButton
+            android:id="@+id/feedinglogbutton"
+            android:layout_width="75dp"
+            android:layout_height="76dp"
+            android:layout_marginStart="62dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/rounded_corners"
+            app:layout_constraintStart_toEndOf="@+id/livebutton"
+            app:layout_constraintTop_toBottomOf="@+id/greenBox" />
+
+        <TextView
+            android:id="@+id/feedingtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Feeding Log"
+            app:layout_constraintStart_toStartOf="@id/feedinglogbutton"
+            app:layout_constraintTop_toBottomOf="@id/feedinglogbutton" />
+
+        <ImageButton
+            android:id="@+id/analyticsbutton"
+            android:layout_width="75dp"
+            android:layout_height="76dp"
+            android:layout_marginStart="62dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/rounded_corners"
+            app:layout_constraintStart_toEndOf="@+id/feedinglogbutton"
+            app:layout_constraintTop_toBottomOf="@+id/greenBox" />
+
+        <TextView
+            android:id="@+id/analticstext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Analytics"
+            app:layout_constraintStart_toStartOf="@id/analyticsbutton"
+            app:layout_constraintTop_toBottomOf="@id/analyticsbutton" />
+
+        <ImageButton
+            android:id="@+id/goalsbutton"
+            android:layout_width="75dp"
+            android:layout_height="76dp"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="62dp"
+            android:background="@drawable/rounded_corners"
+            app:layout_constraintEnd_toStartOf="@+id/identifierbutton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/livedatatext" />
+
+        <TextView
+            android:id="@+id/goalstext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="Goals"
+            app:layout_constraintStart_toStartOf="@id/goalsbutton"
+            app:layout_constraintTop_toBottomOf="@id/goalsbutton" />
+
+        <ImageButton
+            android:id="@+id/identifierbutton"
+            android:layout_width="75dp"
+            android:layout_height="76dp"
+            android:layout_marginStart="62dp"
+            android:layout_marginTop="48dp"
+            android:background="@drawable/rounded_corners"
+            app:layout_constraintStart_toEndOf="@id/goalsbutton"
+            app:layout_constraintTop_toBottomOf="@id/feedingtext" />
+
+        <TextView
+            android:id="@+id/identifiertext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Identifier"
+            app:layout_constraintStart_toStartOf="@id/identifierbutton"
+            app:layout_constraintTop_toBottomOf="@id/identifierbutton" />
+
+        <ImageButton
+            android:id="@+id/soilbutton"
+            android:layout_width="75dp"
+            android:layout_height="76dp"
+            android:layout_marginStart="62dp"
+            android:layout_marginTop="48dp"
+            android:background="@drawable/rounded_corners"
+            app:layout_constraintStart_toEndOf="@id/identifierbutton"
+            app:layout_constraintTop_toBottomOf="@id/analticstext" />
+
+        <TextView
+            android:id="@+id/Soiltext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Soil Type"
+            app:layout_constraintStart_toStartOf="@id/soilbutton"
+            app:layout_constraintTop_toBottomOf="@id/soilbutton" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
