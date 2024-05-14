@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -26,6 +28,7 @@ public class LoginPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(null, "LoginPage");
+        EdgeToEdge.enable(this);
         setContentView(R.layout.login_page);
 
         btnAuth = findViewById(R.id.btnAuth);
@@ -46,6 +49,7 @@ public class LoginPage extends AppCompatActivity {
                 tvAuthStatus.setText("Successfully Auth");
                 Log.i(null,"success");
                 Intent intent = new Intent(LoginPage.this, MainActivity.class);
+                intent.putExtra("tab","home_tab");
                 startActivity(intent);
                 finish();
             }

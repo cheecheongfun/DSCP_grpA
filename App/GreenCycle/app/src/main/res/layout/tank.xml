@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tankCard"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@drawable/tank_card"
+    android:clickable="true"
+    android:elevation="10dp"
+    android:layout_marginTop="20dp">
+
+
+    <TextView
+        android:id="@+id/tankName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:gravity="center"
+        android:text="Tank 0"
+        android:textSize="20sp"
+        android:textColor="@color/light_green"
+        />
+
+    <ImageView
+        android:id="@+id/tankImage"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/tankName"
+        app:srcCompat="@color/material_dynamic_neutral40"
+        android:layout_marginStart="15dp"/>
+
+    <RelativeLayout
+        android:id="@+id/tankDescriptionCard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/home_page_buttons"
+        android:layout_alignBottom="@+id/tankImage"
+        android:layout_toEndOf="@+id/tankImage"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="15dp"
+        android:layout_alignTop="@+id/tankImage">
+
+        <TextView
+            android:id="@+id/dateCreatedText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="5dp"
+            android:text="Date Created: 1/1/2024"/>
+
+        <TextView
+            android:id="@+id/numberOfWormsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dateCreatedText"
+            android:layout_marginStart="5dp"
+            android:text="Number of worms: 30"/>
+
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

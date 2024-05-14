@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.ImageView;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import sg.edu.np.mad.greencycle.R;
@@ -20,6 +21,7 @@ public class LandingPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.landing_page);
 
         animationView = findViewById(R.id.animate);

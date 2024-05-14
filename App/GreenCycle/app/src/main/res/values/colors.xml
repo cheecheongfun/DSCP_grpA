@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="mid_green">#69be50</color>
-    <color name="dark_green">#258730</color>
     <color name="light_green">#7ac365</color>
+    <color name="mid_green">#3ea049</color>
+    <color name="dark_green">#258730</color>
     <color name="main_background">#F3F8E2</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="textColour">#47525E</color>
 </resources>

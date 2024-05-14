@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.GreenCycle" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.GreenCycle" parent="Theme.Material3.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/mid_green</item>
         <item name="colorPrimaryVariant">@color/light_green</item>
@@ -9,13 +9,24 @@
         <item name="colorSecondary">@color/dark_green</item>
         <item name="colorSecondaryVariant">@color/dark_green</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:background">@color/main_background</item>
+        <item name="android:textColor">@color/textColour</item>
+
     </style>
     <!-- Base application theme. -->
     <style name="Base.Theme.GreenCycle" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
+
+    <style name="ButtonHome" parent="@style/Widget.Material3.ExtendedFloatingActionButton.Icon.Secondary">
+        <item name="colorAccent">@color/light_green</item>
+
+    </style>
+
 </resources>
