@@ -6,5 +6,7 @@
     <color name="main_background">#F3F8E2</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="light_grey">#D3D3D3</color>
+    <color name="android_hint">#9E9E9E</color>
     <color name="textColour">#47525E</color>
 </resources>

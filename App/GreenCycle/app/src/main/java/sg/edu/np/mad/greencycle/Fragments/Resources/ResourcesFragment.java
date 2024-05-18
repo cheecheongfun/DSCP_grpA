@@ -3,10 +3,18 @@ package sg.edu.np.mad.greencycle.Fragments.Resources;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.SearchView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import sg.edu.np.mad.greencycle.R;
 
@@ -16,6 +24,13 @@ import sg.edu.np.mad.greencycle.R;
  * create an instance of this fragment.
  */
 public class ResourcesFragment extends Fragment {
+
+    private RecyclerView recyclerView;
+    private ResourceAdapter adapter;
+    private List<Resource> resourceList;
+    private List<Resource> filteredResourceList;
+    private TextView noResource;
+    private SearchView searchView;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,6 +76,68 @@ public class ResourcesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_resources, container, false);
+        //return inflater.inflate(R.layout.fragment_resources, container, false);
+
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_resources, container, false);
+
+        recyclerView = view.findViewById(R.id.recycler_view);
+        searchView = view.findViewById(R.id.search);
+        noResource = view.findViewById(R.id.noResourceTextView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        resourceList = new ArrayList<>();
+        filteredResourceList = new ArrayList<>();
+        adapter = new ResourceAdapter(filteredResourceList,getContext());
+        recyclerView.setAdapter(adapter);
+
+        // Set up search functionality
+
+        // Set initial data
+        setData();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filter(newText);
+                return true;
+            }
+        });
+        return view;
+
+    }
+
+
+    private void setData() {
+        List<Resource> newResourceList = new ArrayList<>();
+        newResourceList.add(new Resource(1,"1","1","https://www.apple.com/sg/","1"));
+        newResourceList.add(new Resource(2,"1","2","https://www.apple.com/sg/","1"));
+        // Add more items as needed
+
+        resourceList.addAll(newResourceList);
+        filteredResourceList.addAll(newResourceList);
+        adapter.notifyDataSetChanged();
+    }
+
+    private void filter(String text) {
+        filteredResourceList.clear();
+        if (text.isEmpty()) {
+            filteredResourceList.addAll(resourceList);
+
+        } else {
+            text = text.toLowerCase();
+            for (Resource item : resourceList) {
+                if (item.getResourcelink().toLowerCase().contains(text)) {
+                    filteredResourceList.add(item);
+                }
+            }
+        }
+
+        adapter.notifyDataSetChanged();
     }
 }
