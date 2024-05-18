@@ -29,8 +29,7 @@
         android:layout_marginStart="44dp"
         android:layout_marginTop="154dp"
         android:ems="10"
-        android:inputType="text"
-        android:text="Username" />
+        android:inputType="text" />
 
     <EditText
         android:id="@+id/Registerpassword"

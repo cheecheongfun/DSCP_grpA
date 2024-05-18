@@ -1,5 +1,6 @@
 plugins {
-    alias(libs.plugins.android.application)
+    id ("com.android.application")
+    id ("com.google.gms.google-services")
 }
 
 android {
@@ -52,4 +53,5 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-database")
+    implementation ("com.google.firebase:firebase-database:20.1.0")
 }

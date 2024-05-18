@@ -43,19 +43,18 @@
         android:text="Fingerprint" />
 
     <EditText
-        android:id="@+id/usernameLogin"
+        android:id="@+id/etUsername"
         style="@style/Widget.Material3.TextInputEditText.FilledBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/btnAuth"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="25dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="23dp"
         android:backgroundTint="@color/white"
-        android:inputType="text"
-        android:text="Username" />
+        android:inputType="text" />
 
     <TextView
         android:id="@+id/tvAuthStatus"
@@ -74,12 +73,12 @@
         android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/usernameLogin"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="130dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="130dp"
+        android:layout_marginStart="129dp"
+        android:layout_marginTop="388dp"
+        android:layout_marginEnd="131dp"
         android:backgroundTint="@color/mid_green"
         android:text="Login" />
 
@@ -91,8 +90,29 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="149dp"
-        android:layout_marginTop="418dp"
+        android:layout_marginTop="467dp"
         android:layout_marginEnd="146dp"
         android:text="New User?" />
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="348dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="305dp"
+        android:ems="10"
+        android:inputType="textPassword" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="319dp"
+        app:srcCompat="@android:drawable/ic_lock_idle_lock" />
 
 </RelativeLayout>
