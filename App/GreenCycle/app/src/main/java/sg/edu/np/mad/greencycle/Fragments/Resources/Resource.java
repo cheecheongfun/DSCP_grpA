@@ -9,6 +9,15 @@ public class Resource{
     private int resourceid;
     private String resourceinfo,resourcetitle, resourcelink, imageurl;
 
+
+    public Resource(int resourceid, String resourceinfo, String resourcetitle, String resourcelink, String imageurl) {
+        this.resourceid = resourceid;
+        this.resourceinfo = resourceinfo;
+        this.resourcetitle = resourcetitle;
+        this.resourcelink = resourcelink;
+        this.imageurl = imageurl;
+    }
+
     public int getResourceid() {
         return resourceid;
     }
@@ -49,12 +58,6 @@ public class Resource{
         this.imageurl = imageurl;
     }
 
-    public Resource(int resourceid, String resourceinfo, String resourcetitle, String resourcelink, String imageurl) {
-        this.resourceid = resourceid;
-        this.resourceinfo = resourceinfo;
-        this.resourcetitle = resourcetitle;
-        this.resourcelink = resourcelink;
-        this.imageurl = imageurl;
-    }
+
 }
 

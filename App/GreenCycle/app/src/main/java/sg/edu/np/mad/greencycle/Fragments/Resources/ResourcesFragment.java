@@ -4,11 +4,20 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 import sg.edu.np.mad.greencycle.R;
@@ -109,15 +118,32 @@ public class ResourcesFragment extends Fragment {
 
 
     private void setData() {
-        List<Resource> newResourceList = new ArrayList<>();
-        newResourceList.add(new Resource(1,"1","1","https://www.apple.com/sg/","1"));
-        newResourceList.add(new Resource(2,"1","2","https://www.apple.com/sg/","1"));
-        // Add more items as needed
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Resource");
 
-        resourceList.addAll(newResourceList);
-        filteredResourceList.addAll(newResourceList);
-        adapter.notifyDataSetChanged();
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Resource> newResourceList = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String title = snapshot.child("title").getValue(String.class);
+                    String info = snapshot.child("info").getValue(String.class);
+                    String link = snapshot.child("link").getValue(String.class);
+                    String url = snapshot.child("image").getValue(String.class);
+                    newResourceList.add(new Resource(newResourceList.size() + 1,info, title, link, url));
+                }
+
+                resourceList.addAll(newResourceList);
+                filteredResourceList.addAll(newResourceList);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle possible errors here
+            }
+        });
     }
+
 
     private void filter(String text) {
         filteredResourceList.clear();

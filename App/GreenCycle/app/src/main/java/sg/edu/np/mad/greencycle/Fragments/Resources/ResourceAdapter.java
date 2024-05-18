@@ -3,12 +3,15 @@ package sg.edu.np.mad.greencycle.Fragments.Resources;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -35,9 +38,15 @@ public class ResourceAdapter extends RecyclerView.Adapter<ResourceViewHolder> {
         Resource resource = resourceList.get(position);
         holder.resourceinfo.setText(resource.getResourceinfo());
         holder.resourcetitle.setText(resource.getResourcetitle());
+        // Load image with Picasso and resize it to fit the ImageView
+        Picasso.get()
+                .load(resource.getImageurl())
+                .resize(500, 500) // Adjust the size as needed
+                .centerCrop()
+                .into(holder.resourceimage);
 
         // Handle click event on resourcetitle TextView
-        holder.resourcetitle.setOnClickListener(new View.OnClickListener() {
+        holder.link.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Open the link here
@@ -47,7 +56,6 @@ public class ResourceAdapter extends RecyclerView.Adapter<ResourceViewHolder> {
                 context.startActivity(intent);
             }
         });
-
 
     }
 
