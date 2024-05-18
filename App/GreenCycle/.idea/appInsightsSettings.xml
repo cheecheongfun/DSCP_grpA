@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="sg.edu.np.mad.greencycle" />
+                  <option name="mobileSdkAppId" value="1:72458660609:android:585fc515421bd07edd4900" />
+                  <option name="projectId" value="greencycle-67abc" />
+                  <option name="projectNumber" value="72458660609" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

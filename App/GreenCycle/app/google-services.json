@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "72458660609",
+    "project_id": "greencycle-67abc",
+    "storage_bucket": "greencycle-67abc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72458660609:android:585fc515421bd07edd4900",
+        "android_client_info": {
+          "package_name": "sg.edu.np.mad.greencycle"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlzd8zCzJ-1OoIsY7JwqTL56q62LzWVo0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
