@@ -127,7 +127,7 @@ public class ResourcesFragment extends Fragment {
         } else {
             text = text.toLowerCase();
             for (Resource item : resourceList) {
-                if (item.getResourcelink().toLowerCase().contains(text)) {
+                if (item.getResourcetitle().toLowerCase().contains(text)) {
                     filteredResourceList.add(item);
                 }
             }
