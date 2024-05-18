@@ -20,20 +20,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:padding="8dp">
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/backgroundDrawable"
-            android:background="@drawable/rounded_corners"
-            android:padding="8dp">
+            android:layout_margin="8dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp">
 
-            <!-- Achievement 1 -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/resource_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                android:background="@drawable/rounded_corners"
                 android:padding="8dp">
 
                 <TextView
@@ -105,6 +105,6 @@
 
             <!-- Add more achievements as needed -->
 
-        </LinearLayout>
+        </androidx.cardview.widget.CardView>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
