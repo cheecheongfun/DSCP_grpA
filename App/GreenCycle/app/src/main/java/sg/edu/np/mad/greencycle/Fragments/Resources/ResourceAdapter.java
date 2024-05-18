@@ -3,7 +3,6 @@ package sg.edu.np.mad.greencycle.Fragments.Resources;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +43,12 @@ public class ResourceAdapter extends RecyclerView.Adapter<ResourceViewHolder> {
                 .resize(500, 500) // Adjust the size as needed
                 .centerCrop()
                 .into(holder.resourceimage);
+
+        // Set background drawable based on the item's position
+        int backgroundDrawable = (position % 2 == 0) ?
+                R.drawable.rounded_corner_mid_green :
+                R.drawable.rounded_corners;
+        holder.backgrounddrawable.setBackgroundResource(backgroundDrawable);
 
         // Handle click event on resourcetitle TextView
         holder.link.setOnClickListener(new View.OnClickListener() {
