@@ -18,7 +18,7 @@ import java.util.concurrent.Executor;
 
 public class LoginPage extends AppCompatActivity {
 
-    Button btnAuth, loginButton;
+    Button btnAuth, loginButton,registerButton;
     TextView tvAuthStatus;
     private Executor executor;
     private BiometricPrompt.PromptInfo promptInfo;
@@ -34,6 +34,7 @@ public class LoginPage extends AppCompatActivity {
         btnAuth = findViewById(R.id.btnAuth);
         tvAuthStatus = findViewById(R.id.tvAuthStatus);
         loginButton = findViewById(R.id.loginButton);
+        registerButton = findViewById(R.id.register);
         executor = ContextCompat.getMainExecutor(this);
         biometricPrompt = new BiometricPrompt(LoginPage.this, executor, new BiometricPrompt.AuthenticationCallback() {
             @Override
@@ -83,6 +84,16 @@ public class LoginPage extends AppCompatActivity {
                 Log.i(null,"login button pressed");
                 Intent intent = new Intent(LoginPage.this, MainActivity.class);
                 intent.putExtra("tab","home_tab");
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(null,"register button pressed");
+                Intent intent = new Intent(LoginPage.this, RegistrationPage.class);
                 startActivity(intent);
                 finish();
             }

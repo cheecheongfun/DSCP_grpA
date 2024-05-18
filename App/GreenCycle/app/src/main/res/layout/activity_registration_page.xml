@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/registerpage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_background"
+    android:theme="@style/Theme.GreenCycle">
+
+    <TextView
+        android:id="@+id/Registertext"
+        android:layout_width="179dp"
+        android:layout_height="47dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="38dp"
+        android:accessibilityLiveRegion="assertive"
+        android:text="Register Here"
+        android:textSize="28sp" />
+
+    <EditText
+        android:id="@+id/registerusername"
+        android:layout_width="302dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="154dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Username" />
+
+    <EditText
+        android:id="@+id/Registerpassword"
+        android:layout_width="301dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="222dp"
+        android:ems="10"
+        android:inputType="textPassword" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="226dp"
+        app:srcCompat="@android:drawable/ic_lock_lock" />
+
+    <Button
+        android:id="@+id/registerbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="286dp"
+        android:layout_marginEnd="160dp"
+        android:text="Register" />
+</RelativeLayout>

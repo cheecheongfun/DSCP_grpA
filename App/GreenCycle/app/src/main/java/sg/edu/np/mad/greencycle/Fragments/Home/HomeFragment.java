@@ -1,19 +1,13 @@
 package sg.edu.np.mad.greencycle.Fragments.Home;
 
-import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 
-import sg.edu.np.mad.greencycle.LiveData.TankSelection;
 import sg.edu.np.mad.greencycle.R;
 
 /**
@@ -31,8 +25,6 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    ImageButton liveDataBtn, feedingLogBtn, analyticsBtn, goalsBtn, identifierBtn, soilTypeBtn;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -68,28 +60,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        EdgeToEdge.enable(getActivity());
         // Inflate the layout for this fragment
-        View view;
-        view =  inflater.inflate(R.layout.fragment_home, container, false);
-
-        // Calling layout elements
-        liveDataBtn = view.findViewById(R.id.liveDataButton);
-        feedingLogBtn = view.findViewById(R.id.feedingLogButton);
-        analyticsBtn = view.findViewById(R.id.analyticsButton);
-        goalsBtn = view.findViewById(R.id.goalsButton);
-        identifierBtn = view.findViewById(R.id.identifierButton);
-        soilTypeBtn = view.findViewById(R.id.soilTypeButton);
-
-        // buttons to different pages
-        liveDataBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent liveData = new Intent(getContext(), TankSelection.class);
-                startActivity(liveData);
-            }
-        });
-
-        return view;
+        return inflater.inflate(R.layout.fragment_home, container, false);
     }
 }

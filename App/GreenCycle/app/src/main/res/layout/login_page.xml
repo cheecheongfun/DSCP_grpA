@@ -83,4 +83,16 @@
         android:backgroundTint="@color/mid_green"
         android:text="Login" />
 
+    <Button
+        android:id="@+id/register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="149dp"
+        android:layout_marginTop="418dp"
+        android:layout_marginEnd="146dp"
+        android:text="New User?" />
+
 </RelativeLayout>

@@ -15,7 +15,7 @@
         android:theme="@style/Theme.GreenCycle"
         tools:targetApi="31">
         <activity
-            android:name=".LiveData.TankSelection"
+            android:name=".StartUp.RegistrationPage"
             android:exported="false" />
         <activity
             android:name=".StartUp.LoginPage"
