@@ -2,6 +2,8 @@ package sg.edu.np.mad.greencycle.Classes;
 
 import java.util.ArrayList;
 
+import sg.edu.np.mad.greencycle.LiveData.Tank;
+
 public class User {
     private String username, password;
     private ArrayList<Tank> tanks;
