@@ -26,7 +26,12 @@
         <activity
             android:name=".Fragments.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name" />
+
+        <!-- Declaration for npk_value Activity -->
+        <activity
+            android:name=".Fragments.Home.NPKvalue.npk_value"
+            android:exported="true" /> <!-- Set exported to true if this activity can be started from other apps or false if it is internal -->
     </application>
 
 </manifest>
