@@ -2,9 +2,140 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.Home.NPKvalue.npk_value">
+    android:background="@color/main_background"
+    android:theme="@style/Theme.GreenCycle">
+
+    <TextView
+        android:id="@+id/header_soil_type"
+        android:layout_width="292dp"
+        android:layout_height="46dp"
+
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/rounded_corners"
+        android:text="Soil Type"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/soilTypeButtons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/soilTypeButtons"
+        android:layout_width="306dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:layout_marginBottom="30dp"
+        android:background="@color/main_background"
+        android:orientation="vertical"
+        android:theme="@style/Theme.GreenCycle"
+        app:layout_constraintBottom_toTopOf="@+id/header_recommendations"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.561"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Buttons for selecting soil type -->
+
+        <Button
+            android:id="@+id/btn_balanced"
+            android:layout_width="285dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/corners"
+            android:text="Balanced"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/btn_high_nitrogen"
+            android:layout_width="285dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/corners"
+            android:text="High Nitrogen"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/btn_high_phosphorous"
+            android:layout_width="285dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/corners"
+            android:text="High Phosphorous"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/btn_high_potassium"
+            android:layout_width="285dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/corners"
+            android:text="High Potassium"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="417dp"
+        android:layout_height="521dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/soilTypeButtons"
+        app:layout_constraintVertical_bias="0.578"
+        app:srcCompat="@drawable/top_rounded_beidge" />
+
+    <TextView
+        android:id="@+id/header_recommendations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Recommendations"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/txt_recommendation"
+        app:layout_constraintEnd_toEndOf="@+id/imageView5"
+        app:layout_constraintStart_toStartOf="@+id/imageView5" />
+
+    <TextView
+        android:id="@+id/txt_recommendation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="37dp"
+        android:text="placeholder"
+        app:layout_constraintEnd_toEndOf="@+id/header_recommendations"
+        app:layout_constraintHorizontal_bias="0.988"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_recommendations" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="361dp"
+        android:layout_height="444dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView4"
+        app:layout_constraintVertical_bias="0.822"
+        app:srcCompat="@drawable/top_rounded_dark_beige" />
+
+    <ImageButton
+        android:id="@+id/backbuttonnpk"
+        android:layout_width="47dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_arrow_back_ios_new_24" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
