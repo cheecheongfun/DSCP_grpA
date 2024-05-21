@@ -16,9 +16,9 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="74dp"
-        android:layout_marginTop="142dp"
-        android:layout_marginEnd="47dp"
+        android:layout_marginStart="77dp"
+        android:layout_marginTop="139dp"
+        android:layout_marginEnd="44dp"
         android:layout_marginBottom="30dp"
         android:background="@color/main_background"
         android:orientation="vertical"
@@ -71,14 +71,6 @@
         android:layout_marginTop="-21dp"
         app:srcCompat="@drawable/top_rounded_beidge" />
 
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="387dp"
-        android:layout_height="511dp"
-        android:layout_below="@+id/imageView4"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="-490dp"
-        app:srcCompat="@drawable/top_rounded_dark_beige" />
 
     <ImageButton
         android:id="@+id/backbuttonnpk"
@@ -96,7 +88,7 @@
         android:layout_height="39dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="73dp"
+        android:layout_marginStart="76dp"
         android:layout_marginTop="89dp"
         android:background="@drawable/rounded_corners"
         android:text="Soil Type"
@@ -116,6 +108,28 @@
         android:layout_marginTop="17dp"
         android:layout_marginEnd="179dp"
         android:text="TextView" />
+
+    <FrameLayout
+        android:id="@+id/npkfragmentContainer"
+        android:layout_width="364dp"
+        android:layout_height="488dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="401dp"
+        android:layout_marginEnd="30dp">
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="match_parent"
+            android:layout_height="491dp"
+            android:layout_below="@+id/imageView4"
+            android:layout_centerHorizontal="true"
+            app:srcCompat="@drawable/top_rounded_dark_beige" />
+
+    </FrameLayout>
 
 
 </RelativeLayout>
