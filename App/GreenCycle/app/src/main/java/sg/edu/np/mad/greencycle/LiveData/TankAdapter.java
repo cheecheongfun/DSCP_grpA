@@ -2,6 +2,8 @@ package sg.edu.np.mad.greencycle.LiveData;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
+import sg.edu.np.mad.greencycle.Classes.User;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,9 +25,11 @@ public class TankAdapter extends RecyclerView.Adapter<TankViewHolder>{
     Context context;
     ArrayList<Tank> tankList;
     public TextView noTankText;
-    public TankAdapter(ArrayList<Tank> tankList, Context context){
+    User user;
+    public TankAdapter(ArrayList<Tank> tankList, Context context, User user){
         this.tankList=tankList;
         this.context = context;
+        this.user = user;
     }
     @Override
     public int getItemViewType(int position)
@@ -37,17 +41,15 @@ public class TankAdapter extends RecyclerView.Adapter<TankViewHolder>{
     public int getItemCount() {
         return tankList.size();
     }
-    public void updateEmptyView(){
-        if (getItemCount() == 0) {
-            noTankText.setVisibility(VISIBLE);
-        }
-        else noTankText.setVisibility(INVISIBLE);
+    public void setFilteredList(ArrayList<Tank> filteredList){
+        this.tankList = filteredList;
+        notifyDataSetChanged();
     }
     @Override
     public TankViewHolder onCreateViewHolder(
             ViewGroup parent,
             int viewType) {
-        return new TankViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.tank_selection, parent, false));
+        return new TankViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.tank, parent, false));
     }
     @Override
     public void onBindViewHolder(
@@ -55,14 +57,17 @@ public class TankAdapter extends RecyclerView.Adapter<TankViewHolder>{
             int position) {
         Tank tank = tankList.get(position);
         holder.tankName.setText(tank.getTankName());
-        holder.numberOfWorms.setText(tank.getNumberOfWorms());
-        holder.dateCreated.setText(tank.getDateCreated());
+        holder.numberOfWorms.setText("Number of worms: " + String.valueOf(tank.getNumberOfWorms()));
+        holder.dateCreated.setText("Date Started: " +tank.getDateCreated());
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent viewTank = new Intent(context, TankSelection.class);
+                Intent viewTank = new Intent(context, TankView.class);
                 Bundle info = new Bundle();
-                info.putParcelable("Tank", tank);
+                info.putParcelable("tank", tank);
+                info.putParcelable("user", user);
+                viewTank.putExtras(info);
+                context.startActivity(viewTank);
             }
         });
     }

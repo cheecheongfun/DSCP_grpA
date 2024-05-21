@@ -17,10 +17,10 @@ public class TankViewHolder  extends RecyclerView.ViewHolder{
 
     public TankViewHolder(@NonNull View itemView) {
         super(itemView);
-        tankName = itemView.findViewById(R.id.tankName);
+        tankName = itemView.findViewById(R.id.tankName); // tankName
         dateCreated = itemView.findViewById(R.id.dateCreatedText);
         numberOfWorms = itemView.findViewById(R.id.numberOfWormsText);
         tankImage = itemView.findViewById(R.id.tankImage);
-        card = itemView.findViewById(R.id.tankCard);
+        card = itemView.findViewById(R.id.tankCard); // tank card itself (contains all the info)
     }
 }

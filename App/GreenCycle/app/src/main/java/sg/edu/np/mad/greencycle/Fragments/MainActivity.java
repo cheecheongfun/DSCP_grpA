@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.Fragments.Chatbot.ChatBotFragment;
 import sg.edu.np.mad.greencycle.Fragments.Home.HomeFragment;
 import sg.edu.np.mad.greencycle.Fragments.Resources.ResourcesFragment;
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent receivingEnd = getIntent();
         String tab = receivingEnd.getExtras().getString("tab");
+        // User user = receivingEnd.getParcelableExtra("user");
 
 
         if (tab.equals("resources_tab")){

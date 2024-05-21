@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LiveData.TankView"
+    android:theme="@style/AppBackgroundColour">
+
+    <TextView
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/back_button"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="15dp"
+        android:theme="@style/DrawableTint" />
+
+    <TextView
+        android:id="@+id/tankName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tank Name"
+        android:layout_below="@+id/backButton"
+        android:layout_centerHorizontal="true"
+        android:textSize="30sp"/>
+
+    <RelativeLayout
+        android:id="@+id/liveData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tankName"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:theme="@style/TankRecyclerCard"
+        android:elevation="20dp">
+
+        <TextView
+            android:id="@+id/refreshText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="sans-serif-condensed-light"
+            android:text="Next refresh: 9:45 am"
+            android:textSize="15sp"
+            android:layout_marginTop="15dp"/>
+
+        <TextView
+            android:id="@+id/temperatureData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/refreshText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="125dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/home_page_buttons"
+            android:drawableStart="@drawable/baseline_device_thermostat_24"
+            android:drawablePadding="15dp"
+            android:padding="15dp"
+            android:text="Temperature: 27.2"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/humidityData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/temperatureData"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="125dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/home_page_buttons"
+            android:drawableStart="@drawable/baseline_cloud_queue_24"
+            android:drawablePadding="15dp"
+            android:padding="15dp"
+            android:text="Humidity: 70%"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/phData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/humidityData"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="125dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/home_page_buttons"
+            android:drawableStart="@drawable/baseline_water_24"
+            android:drawablePadding="15dp"
+            android:padding="15dp"
+            android:text="pH Level: 7"
+            android:textSize="16sp" />
+
+        <RelativeLayout
+            android:id="@+id/npk"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/phData"
+            android:layout_marginStart="125dp"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/home_page_buttons"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:id="@+id/npkIcon"
+                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/light_green"
+                android:drawableStart="@drawable/baseline_local_drink_24"
+                android:padding="10sp"
+                android:layout_centerVertical="true"/>
+
+            <TextView
+                android:id="@+id/nitrogenData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/npkIcon"
+                android:background="@color/light_green"
+                android:text="Nitrogen: 175"
+                android:layout_marginTop="10dp"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/phosphorousData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nitrogenData"
+                android:layout_toEndOf="@+id/npkIcon"
+                android:background="@color/light_green"
+                android:text="Phosphorous: 170"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/potassiumData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/phosphorousData"
+                android:layout_toEndOf="@+id/npkIcon"
+                android:background="@color/light_green"
+                android:text="Potassium: 169"
+                android:layout_marginBottom="10dp"
+                android:textSize="16sp"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/feedbackBox"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/liveData"
+        android:theme="@style/TankRecyclerCard"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="50dp"
+        android:elevation="20dp">
+
+        <TextView
+            android:id="@+id/box"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/home_page_buttons"
+            android:backgroundTint="@color/mid_green"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="75dp"
+            android:layout_marginTop="60dp"/>
+
+        <TextView
+            android:id="@+id/feedbackText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/box"
+            android:layout_alignStart="@+id/box"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:text="Feedback"
+            android:background="@color/mid_green"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-condensed-light"/>
+
+        <TextView
+            android:id="@+id/point1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/feedbackText"
+            android:layout_alignStart="@+id/feedbackText"
+            android:layout_alignEnd="@id/box"
+            android:layout_marginEnd="10dp"
+            android:background="@color/mid_green"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:text="- Nutrient Balance: The NPK ratio is 1:1:1 which is ideal for diverse plant growth, supporting roots, flowers, and fruits effectively."/>
+
+        <TextView
+            android:id="@+id/point2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/point1"
+            android:layout_alignStart="@+id/point1"
+            android:layout_alignEnd="@id/point1"
+            android:layout_marginTop="15dp"
+            android:background="@color/mid_green"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:text="- Suggested Action: Continue with your current mix of green and brown materials to maintain this balance."/>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

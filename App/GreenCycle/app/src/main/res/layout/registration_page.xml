@@ -2,44 +2,33 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/loginpage"
+    android:id="@+id/registerpage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/AppBackgroundColour">
 
     <TextView
-        android:id="@+id/LoginText"
+        android:id="@+id/Registertext"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="47dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="50dp"
+        android:accessibilityLiveRegion="assertive"
+        android:text="Create Account"
         android:fontFamily="sans-serif-condensed-medium"
-        android:layout_marginStart="25dp"
-        android:textSize="35sp"
-        android:text="GreenCycle"
-        android:layout_centerHorizontal="true"/>
-
-<!--    <TextView-->
-<!--        android:id="@+id/LoginDescription"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@+id/LoginText"-->
-<!--        android:layout_marginTop="5dp"-->
-<!--        android:layout_marginStart="25dp"-->
-<!--        android:layout_marginEnd="25dp"-->
-<!--        android:textSize="17sp"-->
-<!--        android:text="Enter your username and password to access your account" />-->
+        android:layout_centerHorizontal="true"
+        android:textSize="28sp" />
 
     <RelativeLayout
         android:id="@+id/editName"
-        android:layout_below="@id/LoginText"
-        android:layout_marginTop="100dp"
+        android:layout_below="@id/Registertext"
+        android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/etUsername"
+            android:id="@+id/registerusername"
             android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_marginStart="10dp"
@@ -70,7 +59,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/etPassword"
+            android:id="@+id/registerpassword"
             android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_marginStart="10dp"
@@ -91,50 +80,33 @@
             android:textSize="18sp" />
     </RelativeLayout>
 
-
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/registerFingerprint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editPass"
+        android:layout_below="@id/editPass"
         android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
         android:backgroundTint="@color/mid_green"
-        android:textSize="20sp"
-        android:text="Login" />
+        android:text="Register Fingerprint" />
+
+    <TextView
+        android:id="@+id/authStatus"
+        android:layout_width="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/registerFingerprint"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text=" "
+        android:textSize="18sp" />
 
     <Button
-        android:id="@+id/register"
+        android:id="@+id/registerbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/loginButton"
-        android:layout_marginTop="25dp"
-        android:textSize="12sp"
+        android:layout_below="@id/registerFingerprint"
+        android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
-        android:text="Create Account" />
-<!--    <Button-->
-<!--        android:id="@+id/btnAuth"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@+id/register"-->
-<!--        android:layout_alignParentStart="true"-->
-<!--        android:layout_alignParentEnd="true"-->
-<!--        android:layout_marginStart="130dp"-->
-<!--        android:layout_marginTop="40dp"-->
-<!--        android:layout_marginEnd="130dp"-->
-<!--        android:backgroundTint="@color/mid_green"-->
-<!--        android:text="Fingerprint" />-->
-    <TextView
-        android:id="@+id/tvAuthStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=" "
-        android:layout_below="@+id/register"
-        android:gravity="center"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="25dp"/>
-
+        android:text="Create" />
 </RelativeLayout>

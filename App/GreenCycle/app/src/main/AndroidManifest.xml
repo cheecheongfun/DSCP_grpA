@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <!-- Include permissions here -->
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
 
     <application
         android:allowBackup="true"
@@ -15,6 +16,9 @@
         android:theme="@style/Theme.GreenCycle"
         tools:targetApi="31">
         <activity
+            android:name=".LiveData.TankView"
+            android:exported="false" />
+        <activity
             android:name=".StartUp.RegistrationPage"
             android:exported="false" />
         <activity
@@ -24,9 +28,12 @@
             android:name=".StartUp.LandingPage"
             android:exported="true" />
         <activity
+            android:name=".LiveData.TankSelection"
+            android:exported="false" />
+        <activity
             android:name=".Fragments.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name" />
     </application>
 
 </manifest>

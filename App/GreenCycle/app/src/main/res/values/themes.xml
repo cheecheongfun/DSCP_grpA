@@ -26,7 +26,33 @@
 
     <style name="ButtonHome" parent="@style/Widget.Material3.ExtendedFloatingActionButton.Icon.Secondary">
         <item name="colorAccent">@color/light_green</item>
-
     </style>
 
+    <!-- Sets the App Background Colour -->
+    <style name="AppBackgroundColour">
+        <item name="android:background">@color/main_background</item>
+        <item name="android:textColor">@color/textColour</item>
+        <item name="fontFamily">sans-serif-condensed-medium</item>
+    </style>
+
+    <!-- Tank list cards -->
+    <style name="TankRecyclerCard">
+        <item name="android:background">@drawable/tank_card_light</item>
+        <item name="android:textColor">@color/textColour</item>
+        <item name="fontFamily">sans-serif-condensed-medium</item>
+    </style>
+
+    <!-- Basic drawables (black/white) -->
+    <style name="DrawableTint">
+        <item name="drawableTint">@color/black</item>
+    </style>
+
+    <!-- Search view -->
+    <style name="Search" parent="Widget.AppCompat.SearchView">
+        <item name="android:textColorPrimary">@color/textColour</item>
+        <item name="android:textColorHint">@color/textColour</item>
+        <item name="tint">@color/textColour</item>
+        <item name="fontFamily">sans-serif-condensed-medium</item>
+        <item name="background">@drawable/search_view_black</item>
+    </style>
 </resources>

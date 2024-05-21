@@ -6,16 +6,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LiveData.TankSelection"
-    android:background="@color/main_background"
-    android:theme="@style/Theme.GreenCycle">
+    android:theme="@style/AppBackgroundColour">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/back_button"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="15dp"
+            android:theme="@style/DrawableTint" />
+
         <SearchView
             android:id="@+id/searchTank"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
@@ -23,23 +31,15 @@
             android:iconifiedByDefault="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_below="@+id/backButton"
+            android:background="@drawable/search_view_black"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/tankList"
             android:layout_below="@+id/searchTank"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="15dp"/>
-
-        <TextView
-            android:id="@+id/noTankText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/searchTank"
-            android:gravity="center"
-            android:text="No tanks registered. Create one now"
-            android:visibility="visible"
+            android:theme="@style/AppBackgroundColour"
             android:layout_marginTop="15dp"/>
 
 
@@ -54,6 +54,25 @@
             android:backgroundTint="@color/light_green"
             android:clickable="true"
             android:src="@drawable/baseline_add_circle_outline_24" />
+        <TextView
+            android:id="@+id/noTankText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/searchTank"
+            android:gravity="center"
+            android:text="No tanks registered. Create one now"
+            android:visibility="visible"
+            android:layout_marginTop="15dp"/>
+
+        <TextView
+            android:id="@+id/notFound"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/searchTank"
+            android:gravity="center"
+            android:text="No tanks found"
+            android:visibility="visible"
+            android:layout_marginTop="15dp"/>
     </RelativeLayout>
 
 </FrameLayout>

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class Tank implements Parcelable {
     private int tankID, numberOfWorms;
-    private double pHValue, temperature;
+    private double pHValue, temperature, humidity;
     private ArrayList<Double> npkValues; // Using ArrayList to store NPK values
     private String tankName, dateCreated, description;
 
@@ -21,13 +21,14 @@ public class Tank implements Parcelable {
 
     // Full Constructor
     public Tank(int tankID, String tankName, String description, int numberOfWorms,
-                ArrayList<Double> npkValues, double temperature, double pHValue, String dateCreated) {
+                ArrayList<Double> npkValues, double temperature, double humidity, double pHValue, String dateCreated) {
         this.tankID = tankID;
         this.tankName = tankName;
         this.description = description;
         this.numberOfWorms = numberOfWorms;
         this.npkValues = npkValues;
         this.temperature = temperature;
+        this.humidity = humidity;
         this.pHValue = pHValue;
         this.dateCreated = dateCreated;
     }
@@ -41,6 +42,7 @@ public class Tank implements Parcelable {
         dateCreated = in.readString();
         pHValue = in.readDouble();
         temperature = in.readDouble();
+        humidity = in.readDouble();
         npkValues = new ArrayList<>();
         in.readList(this.npkValues, Double.class.getClassLoader()); // Read the list of NPK values
     }
@@ -71,6 +73,7 @@ public class Tank implements Parcelable {
         dest.writeString(dateCreated);
         dest.writeDouble(pHValue);
         dest.writeDouble(temperature);
+        dest.writeDouble(humidity);
         dest.writeList(npkValues); // Write the list of NPK values
     }
 
@@ -87,6 +90,8 @@ public class Tank implements Parcelable {
     public void setNpkValues(ArrayList<Double> npkValues) { this.npkValues = npkValues; }
     public double getTemperature() { return temperature; }
     public void setTemperature(double temperature) { this.temperature = temperature; }
+    public double getHumidity() {return humidity;}
+    public void setHumidity(double humidity) {this.humidity = humidity;}
     public double getPHValue() { return pHValue; }
     public void setPHValue(double pHValue) { this.pHValue = pHValue; }
     public String getDateCreated() { return dateCreated; }
