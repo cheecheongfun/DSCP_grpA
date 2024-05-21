@@ -62,8 +62,7 @@ public class HomeFragment extends Fragment {
         goalsBtn = view.findViewById(R.id.goalsButton);
         identifierBtn = view.findViewById(R.id.identifierButton);
         soilTypeBtn = view.findViewById(R.id.soilTypeButton);
-        npkButton = view.findViewById(R.id.soilTypeButton);
-        npkButton.setOnClickListener(new View.OnClickListener() {
+        soilTypeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), npk_value.class);
