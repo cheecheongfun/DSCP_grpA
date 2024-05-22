@@ -42,12 +42,15 @@
                 <SearchView
                     android:id="@+id/search"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/baseline_search_24"
-                    android:gravity="start"
-                    android:theme="@style/CustomSearchView"
-                    android:paddingLeft="8dp"
-                    android:textSize="20dp" />
+                    android:layout_height="50dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:iconifiedByDefault="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_below="@+id/backButton"
+                    android:background="@drawable/search_view_black"/>
 
             </LinearLayout>
 
