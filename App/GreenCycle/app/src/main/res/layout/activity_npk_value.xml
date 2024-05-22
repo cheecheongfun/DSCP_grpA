@@ -2,26 +2,31 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relativeLayout"
+    android:id="@+id/npkRelative"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_background"
-    android:theme="@style/Theme.GreenCycle">
+    android:theme="@style/AppBackgroundColour">
 
+    <TextView
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/back_button"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="15dp"
+        android:theme="@style/DrawableTint" />
 
     <LinearLayout
         android:id="@+id/soilTypeButtons"
         android:layout_width="290dp"
         android:layout_height="wrap_content"
-
         android:layout_centerHorizontal="true"
         android:layout_marginStart="77dp"
         android:layout_marginTop="139dp"
         android:layout_marginEnd="44dp"
         android:layout_marginBottom="30dp"
-        android:background="@color/main_background"
         android:orientation="vertical"
-        android:theme="@style/Theme.GreenCycle">
+        android:theme="@style/AppBackgroundColour">
 
         <!-- Buttons for selecting soil type -->
 
@@ -58,29 +63,10 @@
             android:layout_height="50dp"
             android:backgroundTint="@color/mid_green"
             android:text="High Potassium"
+
             android:textColor="@android:color/white"
             app:cornerRadius="5dp" />
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="match_parent"
-        android:layout_height="550dp"
-        android:layout_below="@+id/soilTypeButtons"
-        android:layout_marginTop="-21dp"
-        app:srcCompat="@drawable/top_rounded_beidge"
-        android:layout_centerHorizontal="true"/>
-
-
-    <ImageButton
-        android:id="@+id/backbuttonnpk"
-        android:layout_width="47dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        app:srcCompat="@drawable/baseline_arrow_back_ios_new_24" />
 
     <TextView
         android:id="@+id/header_soil_type"
@@ -94,43 +80,55 @@
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="20sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="176dp"
-        android:layout_height="33dp"
-        android:layout_alignTop="@+id/imageView4"
-        android:layout_marginStart="123dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="112dp"
-        android:text="@string/recommendations"
-        android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_centerHorizontal="true"/>
+        android:gravity="center"/>
 
-    <FrameLayout
-        android:id="@+id/npkfragmentContainer"
-        android:layout_width="364dp"
-        android:layout_height="488dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+    <RelativeLayout
+        android:id="@+id/reccoBox"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/soilTypeButtons"
+        android:layout_marginTop="20dp"
+        android:theme="@style/TankRecyclerCard"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="100dp">
 
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="401dp"
-        android:layout_marginEnd="30dp">
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="176dp"
+            android:layout_height="33dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="123dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="112dp"
+            android:text="@string/recommendations"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"/>
 
-        <ImageView
-            android:id="@+id/imageView5"
+        <FrameLayout
+            android:id="@+id/npkfragmentContainer"
             android:layout_width="match_parent"
-            android:layout_height="491dp"
-            android:layout_below="@+id/imageView4"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/textView"
             android:layout_centerHorizontal="true"
-            app:srcCompat="@drawable/top_rounded_dark_beige"
-            />
+            android:layout_marginStart="40dp"
+            android:layout_marginBottom="20dp">
 
-    </FrameLayout>
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/textView"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/home_page_buttons"
+                android:scrollbars="vertical"
+                android:scrollIndicators="right"
+                />
+
+        </FrameLayout>
+    </RelativeLayout>
 
 
 </RelativeLayout>

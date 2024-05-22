@@ -63,6 +63,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), npk_value.class);
+                intent.putExtra("user", user);
                 startActivity(intent);
             }
         });

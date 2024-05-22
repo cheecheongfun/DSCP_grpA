@@ -50,7 +50,9 @@
             android:ems="10"
             android:fontFamily="sans-serif-condensed-medium"
             android:hint="Username"
+            android:textColorHint="@color/textColour"
             android:inputType="text"
+            android:textColor="@color/textColour"
             android:paddingStart="5dp" />
 
         <!--        <TextView-->
@@ -80,8 +82,10 @@
             android:ems="10"
             android:fontFamily="sans-serif-condensed-medium"
             android:hint="Password"
+            android:textColorHint="@color/textColour"
             android:inputType="text"
-            android:paddingStart="5dp" />
+            android:paddingStart="5dp"
+            android:textColor="@color/textColour"/>
 
         <!--        <TextView-->
         <!--            android:id="@+id/textView3"-->

@@ -22,11 +22,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import sg.edu.np.mad.greencycle.Fragments.MainActivity;
+import sg.edu.np.mad.greencycle.LiveData.TankSelection;
 import sg.edu.np.mad.greencycle.R;
 import sg.edu.np.mad.greencycle.Classes.User;
 
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import java.util.UUID;
 import java.util.concurrent.Executor;
@@ -48,7 +52,22 @@ public class RegistrationPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.registration_page);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.registerpage), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
         Intent receivingEnd = getIntent();
+
+        TextView backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegistrationPage.this, LoginPage.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         registerusername = findViewById(R.id.registerusername);
         registerpassword = findViewById(R.id.registerpassword);
