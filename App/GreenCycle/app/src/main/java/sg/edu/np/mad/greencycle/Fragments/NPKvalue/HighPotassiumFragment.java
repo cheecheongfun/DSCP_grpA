@@ -36,14 +36,11 @@ public class HighPotassiumFragment extends Fragment {
         View view;
         view = inflater.inflate(R.layout.fragment_high_potassium, container, false);
         PotRec = view.findViewById(R.id.potassium_rec);
-        String highPotassiumSoilInfo = "• Use a high potassium fertilizer with a higher K ratio (e.g., 1:1:3)\n"
+        String highPotassiumSoilInfo = "• 1:1:3\n"
                 + "• Add banana peels, wood ash, and greensand to your vermicompost\n"
                 + "• Include composted seaweed which is high in potassium\n"
                 + "• Avoid adding too many nitrogen-rich materials to maintain high potassium levels\n"
-                + "• Regularly turn the compost to ensure even decomposition and aeration\n"
-                + "• Keep the compost moist but not waterlogged\n"
                 + "• Use vermicompost tea or diluted vermicompost leachate high in potassium as a natural fertilizer\n"
-                + "• Test soil potassium levels and adjust as needed\n"
                 + "• Rotate crops to maintain soil health and prevent nutrient depletion\n\n"
                 + "Uses of High Potassium Fertilizer\n"
                 + "• Promotes overall plant health and disease resistance\n"
