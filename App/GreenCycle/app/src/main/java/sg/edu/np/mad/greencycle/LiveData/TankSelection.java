@@ -100,7 +100,7 @@ public class TankSelection extends AppCompatActivity {
                 npk.add(100.0);
                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                 String today = formatter.format(new Date());
-                Tank tank = new Tank(tankList.size(), "Test", "Testing", 30, npk, 30.2, 89.9, 7.0, today);
+                Tank tank = new Tank(tankList.size(), "Test", "Testing", 30, npk, 30.2, 89.9, 7.0, today, null);
                 tankList.add(tank);
                 user.setTanks(tankList);
                 reference.child(user.getUsername()).setValue(user)

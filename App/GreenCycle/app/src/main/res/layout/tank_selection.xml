@@ -20,6 +20,13 @@
             android:layout_marginTop="15dp"
             android:layout_marginStart="15dp"
             android:theme="@style/DrawableTint" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30dp"
+            android:text="Tank List"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="6dp"/>
 
         <SearchView
             android:id="@+id/searchTank"

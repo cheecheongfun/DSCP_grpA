@@ -43,10 +43,6 @@ public class TankAdapter extends RecyclerView.Adapter<TankViewHolder>{
     public int getItemCount() {
         return tankList.size();
     }
-    public void setFilteredList(ArrayList<Tank> filteredList){
-        this.tankList = filteredList;
-        notifyDataSetChanged();
-    }
     @Override
     public TankViewHolder onCreateViewHolder(
             ViewGroup parent,
@@ -66,7 +62,6 @@ public class TankAdapter extends RecyclerView.Adapter<TankViewHolder>{
             public void onClick(View v) {
                 Log.i(null, purpose);
                 if (purpose.equals("LiveData")){
-                    Log.i(null, "purpose: livedata");
                     Intent viewTank = new Intent(context, TankView.class);
                     Bundle info = new Bundle();
                     info.putParcelable("tank", tank);

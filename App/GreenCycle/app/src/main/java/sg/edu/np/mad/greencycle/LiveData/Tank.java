@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import android.os.Parcel;
 import android.os.Parcelable;
+import sg.edu.np.mad.greencycle.FeedingLog.Log;
 
 import java.util.ArrayList;
 
@@ -12,6 +13,7 @@ public class Tank implements Parcelable {
     private int tankID, numberOfWorms;
     private double pHValue, temperature, humidity;
     private ArrayList<Double> npkValues; // Using ArrayList to store NPK values
+    private ArrayList<Log> feedingLog;
     private String tankName, dateCreated, description;
 
     // Default Constructor
@@ -21,7 +23,7 @@ public class Tank implements Parcelable {
 
     // Full Constructor
     public Tank(int tankID, String tankName, String description, int numberOfWorms,
-                ArrayList<Double> npkValues, double temperature, double humidity, double pHValue, String dateCreated) {
+                ArrayList<Double> npkValues, double temperature, double humidity, double pHValue, String dateCreated, ArrayList<Log>feedingLog) {
         this.tankID = tankID;
         this.tankName = tankName;
         this.description = description;
@@ -31,6 +33,7 @@ public class Tank implements Parcelable {
         this.humidity = humidity;
         this.pHValue = pHValue;
         this.dateCreated = dateCreated;
+        this.feedingLog = feedingLog;
     }
 
     // Parcelable Constructor
@@ -45,6 +48,8 @@ public class Tank implements Parcelable {
         humidity = in.readDouble();
         npkValues = new ArrayList<>();
         in.readList(this.npkValues, Double.class.getClassLoader()); // Read the list of NPK values
+        feedingLog = new ArrayList<>();
+        in.readList(this.feedingLog, Log.class.getClassLoader());
     }
 
     public static final Creator<Tank> CREATOR = new Creator<Tank>() {
@@ -75,6 +80,7 @@ public class Tank implements Parcelable {
         dest.writeDouble(temperature);
         dest.writeDouble(humidity);
         dest.writeList(npkValues); // Write the list of NPK values
+        dest.writeList(feedingLog);
     }
 
     // Getters and Setters
@@ -96,6 +102,15 @@ public class Tank implements Parcelable {
     public void setPHValue(double pHValue) { this.pHValue = pHValue; }
     public String getDateCreated() { return dateCreated; }
     public void setDateCreated(String dateCreated) { this.dateCreated = dateCreated; }
+
+    public ArrayList<Log> getFeedingLog() {return feedingLog;}
+    public void setFeedingLog(ArrayList<Log> feedingLog) { this.feedingLog = feedingLog;}
+    public void addLog(Log log) {
+        feedingLog.add(log);
+    }
+    public void removeLog(Log log) {
+        feedingLog.remove(log);
+    }
 }
 
 
