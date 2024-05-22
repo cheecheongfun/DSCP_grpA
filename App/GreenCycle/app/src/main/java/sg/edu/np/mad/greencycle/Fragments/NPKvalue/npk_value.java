@@ -1,9 +1,10 @@
-package sg.edu.np.mad.greencycle.Fragments.Home.NPKvalue;
+package sg.edu.np.mad.greencycle.Fragments.NPKvalue;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,9 +12,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import sg.edu.np.mad.greencycle.Fragments.Home.HomeFragment;
 import sg.edu.np.mad.greencycle.R;
 
 public class npk_value extends AppCompatActivity {
+    Button btnBalanced,btnHighNitrogen,btnHighPhosphorous,btnHighPotassium;
+    ImageButton npkBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,10 +26,20 @@ public class npk_value extends AppCompatActivity {
         setContentView(R.layout.activity_npk_value);
 
         // Get buttons from layout
-        Button btnBalanced = findViewById(R.id.btn_balanced);
-        Button btnHighNitrogen = findViewById(R.id.btn_high_nitrogen);
-        Button btnHighPhosphorous = findViewById(R.id.btn_high_phosphorous);
-        Button btnHighPotassium = findViewById(R.id.btn_high_potassium);
+        btnBalanced = findViewById(R.id.btn_balanced);
+        btnHighNitrogen = findViewById(R.id.btn_high_nitrogen);
+        btnHighPhosphorous = findViewById(R.id.btn_high_phosphorous);
+        btnHighPotassium = findViewById(R.id.btn_high_potassium);
+        npkBack = findViewById(R.id.backbuttonnpk);
+
+        npkBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent backhome = new Intent(npk_value.this, HomeFragment.class);
+                startActivity(backhome);
+            }
+        });
+
 
         // Set click listeners
         btnBalanced.setOnClickListener(new View.OnClickListener() {
