@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="0dp"
+    android:id="@+id/constraint"
+    android:theme="@style/AppBackgroundColour"
+    android:background="@color/white">
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints"
+        android:background="@android:color/transparent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/white_square_with_rounded_corners"
+            android:padding="8dp"
+            >
+
+            <!-- Achievement 1 -->
+            <RelativeLayout
+                android:id="@+id/achievement1_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/achievement_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Save 5KG of Food Waste"
+                    android:textColor="@color/dark_green"
+                    android:textStyle="bold"
+                    android:textSize="16sp" />
+
+
+
+                <!-- Reward Text -->
+                <LinearLayout
+                    android:id="@+id/reward_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_below="@id/achievement_title"
+                    android:layout_alignParentStart="true"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="15 Days Left"
+                        android:textSize="14sp"
+                        android:textColor="@color/dark_green"
+                        android:layout_marginTop="4dp"/>
+
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <!-- Linear Progress Bar -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp">
+
+                <!-- Your progress bar and related views go here -->
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="50"
+                    android:progress="10"
+                    android:indeterminate="false"
+                    android:progressDrawable="@drawable/rounded_corners"/>
+
+                <!-- Progress Text -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:id="@+id/progress_text"
+                    android:text="100%"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+            <!-- Add more achievements as needed -->
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

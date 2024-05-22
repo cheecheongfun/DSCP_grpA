@@ -35,13 +35,10 @@ public class HighNitrogenFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_high_nitrogen, container, false);
         HighNitroRec = view.findViewById(R.id.nitrogen_rec);
-        String highNitrogenSoilInfo = "• Use a high nitrogen fertilizer with a higher N ratio (e.g., 3:1:1)\n"
+        String highNitrogenSoilInfo = "• 3:1:1\n"
                 + "• Add green materials like grass clippings, kitchen scraps, and coffee grounds to your compost\n"
                 + "• Avoid adding too many brown materials (carbon-rich) to maintain high nitrogen levels\n"
-                + "• Regularly turn the compost to ensure even decomposition and aeration\n"
-                + "• Keep the compost moist but not waterlogged\n"
                 + "• Use vermicompost tea or diluted vermicompost leachate high in nitrogen as a natural fertilizer\n"
-                + "• Test soil nitrogen levels and adjust as needed\n"
                 + "• Rotate nitrogen-fixing crops like legumes to maintain soil health\n\n"
                 + "Uses of High Nitrogen Fertilizer\n"
                 + "• Promotes vigorous leafy growth\n"

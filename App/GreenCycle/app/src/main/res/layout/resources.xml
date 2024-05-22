@@ -7,6 +7,7 @@
     android:layout_height="wrap_content"
     android:paddingTop="0dp"
     android:id="@+id/constraint"
+    android:theme="@style/AppBackgroundColour"
     android:background="@color/main_background">
 
     <ScrollView
@@ -21,8 +22,6 @@
         android:padding="8dp">
 
         <androidx.cardview.widget.CardView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -39,7 +38,7 @@
                 <TextView
                     android:id="@+id/resource_title"
                     android:layout_width="273dp"
-                    android:layout_height="20dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
                     android:gravity="center_horizontal"
                     android:text="Solar Panel"
@@ -55,15 +54,16 @@
                     android:id="@+id/resource_info"
                     android:layout_width="273dp"
                     android:layout_height="125dp"
-                    android:layout_marginTop="25dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="4dp"
+                    android:textSize="15dp"
                     android:gravity="center_horizontal"
                     android:textColor="@color/white"
-                    android:text="For best results, tilt solar panels in Singapore between 10 to 15 degrees from horizontal. This angle maximizes energy capture while preventing dirt buildup. Avoid tilting below 10 degrees to prevent dirt accumulation and above 20 degrees to minimize glare."
                     android:background="@color/light_green"
+                    android:text="For best results, tilt solar panels in Singapore between 10 to 15 degrees from horizontal. This angle maximizes energy capture while preventing dirt buildup. Avoid tilting below 10 degrees to prevent dirt accumulation and above 20 degrees to minimize glare."
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/resource_title"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toEndOf="@+id/resource_image"
+                    app:layout_constraintTop_toBottomOf="@id/resource_title" />
 
                 <Button
                     android:id="@+id/link"
@@ -87,9 +87,10 @@
                     android:layout_height="85dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/resource_info"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.5"
+                    app:layout_constraintVertical_bias="0.4"
                     app:srcCompat="@color/white" />
 
                 <LinearLayout

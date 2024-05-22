@@ -37,14 +37,11 @@ public class HighPhosphorousFragment extends Fragment {
         View view;
         view = inflater.inflate(R.layout.fragment_high_phosphorous, container, false);
         PhosRec = view.findViewById(R.id.phos_rec );
-        String highPhosphorusSoilInfo = "• Use a high phosphorus fertilizer with a higher P ratio (e.g., 1:3:1)\n"
+        String highPhosphorusSoilInfo = "• 1:3:1\n"
                 + "• Add bone meal, rock phosphate, and composted manure to your vermicompost\n"
                 + "• Include fish meal and crab shells which are high in phosphorus\n"
                 + "• Avoid adding too many green materials (nitrogen-rich) to maintain high phosphorus levels\n"
-                + "• Regularly turn the compost to ensure even decomposition and aeration\n"
-                + "• Keep the compost moist but not waterlogged\n"
                 + "• Use vermicompost tea or diluted vermicompost leachate high in phosphorus as a natural fertilizer\n"
-                + "• Test soil phosphorus levels and adjust as needed\n"
                 + "• Rotate crops to maintain soil health and prevent nutrient depletion\n\n"
                 + "Uses of High Phosphorus Fertilizer\n"
                 + "• Promotes strong root development\n"
