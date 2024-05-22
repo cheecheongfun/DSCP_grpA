@@ -55,4 +55,5 @@
         <item name="fontFamily">sans-serif-condensed-medium</item>
         <item name="background">@drawable/search_view_black</item>
     </style>
+
 </resources>
