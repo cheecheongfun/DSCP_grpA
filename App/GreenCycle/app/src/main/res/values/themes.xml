@@ -33,6 +33,8 @@
         <item name="android:background">@color/main_background</item>
         <item name="android:textColor">@color/textColour</item>
         <item name="fontFamily">sans-serif-condensed-medium</item>
+
+
     </style>
 
     <!-- Tank list cards -->
@@ -55,5 +57,12 @@
         <item name="fontFamily">sans-serif-condensed-medium</item>
         <item name="background">@drawable/search_view_black</item>
     </style>
+
+    <style name="CustomSearchView" parent="Widget.AppCompat.SearchView">
+        <item name="android:background">@drawable/grey_square_wth_rounded_corners</item>
+        <item name="android:textColor">@color/textColour</item>
+    </style>
+
+
 
 </resources>

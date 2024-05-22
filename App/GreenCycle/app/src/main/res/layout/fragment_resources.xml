@@ -14,13 +14,14 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_view"
+            android:theme="@style/AppBackgroundColour"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="25dp"
             app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
+            app:cardElevation="15dp">
 
         </androidx.cardview.widget.CardView>
 
@@ -33,9 +34,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:paddingTop="15dp">
 
                 <SearchView
                     android:id="@+id/search"
@@ -43,6 +45,7 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/baseline_search_24"
                     android:gravity="start"
+                    android:theme="@style/CustomSearchView"
                     android:paddingLeft="8dp"
                     android:textSize="20dp" />
 
