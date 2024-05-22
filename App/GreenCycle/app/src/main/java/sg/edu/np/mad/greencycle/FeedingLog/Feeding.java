@@ -69,6 +69,7 @@ public class Feeding extends AppCompatActivity {
         user = receivingEnd.getParcelableExtra("user");
         tank = receivingEnd.getParcelableExtra("tank");
         targetTankId = tank.getTankID();
+        Log.i(null, "Tank ID: " + targetTankId);
         tankList = user.getTanks();
 
         logRecycler = findViewById(R.id.log);
@@ -135,11 +136,13 @@ public class Feeding extends AppCompatActivity {
                     if (updatedUser != null && updatedUser.getTanks() != null) {
                         user.setTanks(updatedUser.getTanks());
                         for (Tank tank : user.getTanks()) {
-                            if (tank.getTankID() == targetTankId && tank.getFeedingLog()!=null) {
-                                feedingLog = tank.getFeedingLog();
-                            }
-                            else {
-                                feedingLog = new ArrayList<sg.edu.np.mad.greencycle.FeedingLog.Log>();
+                            if (tank.getTankID() == targetTankId) {
+                                if (tank.getFeedingLog()!=null){
+                                    feedingLog = tank.getFeedingLog();
+                                }
+                                else {
+                                    feedingLog = new ArrayList<sg.edu.np.mad.greencycle.FeedingLog.Log>();
+                                }
                             }
                         }
                     } else {
@@ -167,7 +170,10 @@ public class Feeding extends AppCompatActivity {
             noLogText.setVisibility(View.INVISIBLE);
         }
         mAdapter = new LogAdapter(feedingLog, this);
-        logRecycler.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        logRecycler.setLayoutManager(linearLayoutManager);
         logRecycler.setAdapter(mAdapter);
     }
 }

@@ -60,7 +60,7 @@ public class TankAdapter extends RecyclerView.Adapter<TankViewHolder>{
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(null, purpose);
+                Log.i(null, "Tank ID: " + tank.getTankID());
                 if (purpose.equals("LiveData")){
                     Intent viewTank = new Intent(context, TankView.class);
                     Bundle info = new Bundle();

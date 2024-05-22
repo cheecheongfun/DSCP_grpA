@@ -193,7 +193,7 @@ public class TankSelection extends AppCompatActivity {
             tankNotFound.setVisibility(View.INVISIBLE);
         }
 
-        Log.i("TankSelection", "tanklist size : " + list.size() + purpose);
+        Log.i("TankSelection", "tanklist size : " + list.size() +" from " + purpose);
         mAdapter = new TankAdapter(list, this, user, purpose);
         tankRecycler.setLayoutManager(new LinearLayoutManager(this));
         tankRecycler.setAdapter(mAdapter);
