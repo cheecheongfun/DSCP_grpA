@@ -19,17 +19,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import sg.edu.np.mad.greencycle.FeedingLog.Feeding;
 import sg.edu.np.mad.greencycle.R;
 
 public class TankAdapter extends RecyclerView.Adapter<TankViewHolder>{
     Context context;
     ArrayList<Tank> tankList;
-    public TextView noTankText;
+    String purpose;
     User user;
-    public TankAdapter(ArrayList<Tank> tankList, Context context, User user){
+    public TankAdapter(ArrayList<Tank> tankList, Context context, User user, String purpose){
         this.tankList=tankList;
         this.context = context;
         this.user = user;
+        this.purpose = purpose;
     }
     @Override
     public int getItemViewType(int position)
@@ -62,12 +64,23 @@ public class TankAdapter extends RecyclerView.Adapter<TankViewHolder>{
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent viewTank = new Intent(context, TankView.class);
-                Bundle info = new Bundle();
-                info.putParcelable("tank", tank);
-                info.putParcelable("user", user);
-                viewTank.putExtras(info);
-                context.startActivity(viewTank);
+                Log.i(null, purpose);
+                if (purpose.equals("LiveData")){
+                    Log.i(null, "purpose: livedata");
+                    Intent viewTank = new Intent(context, TankView.class);
+                    Bundle info = new Bundle();
+                    info.putParcelable("tank", tank);
+                    info.putParcelable("user", user);
+                    viewTank.putExtras(info);
+                    context.startActivity(viewTank);
+                } else if (purpose.equals("Feeding")) {
+                    Intent feed = new Intent(context, Feeding.class);
+                    Bundle info = new Bundle();
+                    info.putParcelable("tank", tank);
+                    info.putParcelable("user", user);
+                    feed.putExtras(info);
+                    context.startActivity(feed);
+                }
             }
         });
     }

@@ -15,7 +15,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import sg.edu.np.mad.greencycle.Classes.User;
-import sg.edu.np.mad.greencycle.Fragments.MainActivity;
 import sg.edu.np.mad.greencycle.R;
 
 public class TankView extends AppCompatActivity {
@@ -28,7 +27,7 @@ public class TankView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.tank_view);
+        setContentView(R.layout.live_data);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

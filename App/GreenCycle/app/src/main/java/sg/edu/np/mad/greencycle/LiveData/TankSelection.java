@@ -46,6 +46,7 @@ public class TankSelection extends AppCompatActivity {
     SearchView searchView;
     TankAdapter mAdapter;
     FloatingActionButton add;
+    String purpose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,7 @@ public class TankSelection extends AppCompatActivity {
 
         Intent receivingEnd = getIntent();
         user = receivingEnd.getParcelableExtra("user");
+        purpose = receivingEnd.getExtras().getString("where");
 
         tankRecycler = findViewById(R.id.tankList);
         noTankText = findViewById(R.id.noTankText);
@@ -191,8 +193,8 @@ public class TankSelection extends AppCompatActivity {
             tankNotFound.setVisibility(View.INVISIBLE);
         }
 
-        Log.i("TankSelection", "tanklist size : " + list.size());
-        mAdapter = new TankAdapter(list, this, user);
+        Log.i("TankSelection", "tanklist size : " + list.size() + purpose);
+        mAdapter = new TankAdapter(list, this, user, purpose);
         tankRecycler.setLayoutManager(new LinearLayoutManager(this));
         tankRecycler.setAdapter(mAdapter);
     }

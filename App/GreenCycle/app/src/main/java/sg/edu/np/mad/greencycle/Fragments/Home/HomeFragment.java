@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import sg.edu.np.mad.greencycle.Classes.User;
+import sg.edu.np.mad.greencycle.FeedingLog.Feeding;
 import sg.edu.np.mad.greencycle.LiveData.TankSelection;
 import sg.edu.np.mad.greencycle.Fragments.Home.NPKvalue.npk_value;
 import sg.edu.np.mad.greencycle.Fragments.MainActivity;
@@ -76,9 +77,20 @@ public class HomeFragment extends Fragment {
         liveDataBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent liveData = new Intent(getContext(), TankSelection.class);
-                liveData.putExtra("user", user);
-                startActivity(liveData);
+                Intent tankSelect = new Intent(getContext(), TankSelection.class);
+                tankSelect.putExtra("user", user);
+                tankSelect.putExtra("where", "LiveData");
+                startActivity(tankSelect);
+            }
+        });
+
+        feedingLogBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent tankSelect = new Intent(getContext(), TankSelection.class);
+                tankSelect.putExtra("user", user);
+                tankSelect.putExtra("where", "Feeding");
+                startActivity(tankSelect);
             }
         });
 
