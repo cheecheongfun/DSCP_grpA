@@ -14,9 +14,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import sg.edu.np.mad.greencycle.Classes.User;
-import sg.edu.np.mad.greencycle.FeedingLog.Feeding;
 import sg.edu.np.mad.greencycle.LiveData.TankSelection;
-import sg.edu.np.mad.greencycle.Fragments.NPKvalue.npk_value;
+import sg.edu.np.mad.greencycle.NPKvalue.npk_value;
 import sg.edu.np.mad.greencycle.R;
 
 public class HomeFragment extends Fragment {

@@ -13,91 +13,84 @@
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/back_button"
         android:layout_marginTop="15dp"
-        android:layout_marginStart="15dp"
+
         android:theme="@style/DrawableTint" />
 
     <TextView
         android:id="@+id/Registertext"
         android:layout_width="wrap_content"
         android:layout_height="47dp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="50dp"
-        android:accessibilityLiveRegion="assertive"
-        android:text="Create Account"
-        android:fontFamily="sans-serif-condensed-medium"
         android:layout_centerHorizontal="true"
+        android:layout_marginStart="113dp"
+        android:layout_marginTop="82dp"
+        android:accessibilityLiveRegion="assertive"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Create Account"
         android:textSize="28sp" />
 
     <RelativeLayout
         android:id="@+id/editName"
+        android:layout_width="345dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/Registertext"
-        android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/greyrounded">
 
         <EditText
             android:id="@+id/registerusername"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="10dp"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/textView2"
+            android:layout_marginStart="10dp"
             android:ems="10"
             android:fontFamily="sans-serif-condensed-medium"
             android:hint="Input Username"
+            android:textColorHint="@color/textColour"
             android:inputType="text"
-            android:paddingStart="5dp"/>
+            android:textColor="@color/textColour"
+            android:paddingStart="5dp" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:text="Username"
-            android:textSize="18sp" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/editPass"
         android:layout_below="@id/editName"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="345dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/greyrounded">
 
         <EditText
             android:id="@+id/registerpassword"
-            android:layout_width="200dp"
+            android:layout_width="300dp"
             android:layout_height="50dp"
             android:layout_marginStart="10dp"
-            android:layout_toEndOf="@id/textView3"
             android:ems="10"
             android:fontFamily="sans-serif-condensed-medium"
-            android:hint="Input Password"
+            android:hint="Password"
+            android:textColorHint="@color/textColour"
             android:inputType="text"
-            android:paddingStart="5dp"/>
+            android:paddingStart="5dp"
+            android:textColor="@color/textColour" />
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:text="Password"
-            android:textSize="18sp" />
     </RelativeLayout>
 
     <Button
         android:id="@+id/registerFingerprint"
-        android:layout_width="wrap_content"
+        android:layout_width="259dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editPass"
-        android:layout_marginTop="50dp"
+        android:layout_below="@+id/editPass"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
         android:backgroundTint="@color/mid_green"
-        android:text="Register Fingerprint" />
+        android:text="Register Fingerprint"
+        android:textSize="15sp"
+        app:cornerRadius="5dp" />
 
     <TextView
         android:id="@+id/authStatus"
@@ -115,7 +108,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/registerFingerprint"
-        android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
-        android:text="Create" />
+        android:layout_marginTop="1dp"
+        android:backgroundTint="@color/light_green"
+        android:text="Create"
+        android:textSize="12sp"
+        app:cornerRadius="5dp" />
+
 </RelativeLayout>

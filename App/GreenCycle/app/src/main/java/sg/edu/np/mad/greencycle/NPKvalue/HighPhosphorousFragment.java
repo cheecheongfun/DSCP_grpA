@@ -1,4 +1,4 @@
-package sg.edu.np.mad.greencycle.Fragments.NPKvalue;
+package sg.edu.np.mad.greencycle.NPKvalue;
 
 import android.os.Bundle;
 

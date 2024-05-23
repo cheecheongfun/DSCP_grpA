@@ -126,12 +126,12 @@
     <Button
         android:id="@+id/register"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/loginButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="1dp"
         android:backgroundTint="@color/light_green"
-        android:text="Create Account"
+        android:text="New User?"
         android:textSize="12sp"
         app:cornerRadius="5dp" />
 
