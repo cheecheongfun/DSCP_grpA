@@ -76,6 +76,12 @@
         <item name="android:textColorPrimaryInverse">@color/black</item> <!-- Set the text color for selected date -->
     </style>
 
+    <style name="NoUnderlineHint" parent="Widget.AppCompat.EditText">
+        <item name="android:textColorHint">@color/light_grey</item>
+        <item name="android:background">@null</item>
+    </style>
+
+
 
 
 </resources>
