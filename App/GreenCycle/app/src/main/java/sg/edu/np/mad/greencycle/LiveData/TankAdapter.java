@@ -1,20 +1,16 @@
 package sg.edu.np.mad.greencycle.LiveData;
-import static android.view.View.INVISIBLE;
-import static android.view.View.VISIBLE;
 
+import sg.edu.np.mad.greencycle.Analytics.Analytics;
 import sg.edu.np.mad.greencycle.Classes.User;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -70,6 +66,13 @@ public class TankAdapter extends RecyclerView.Adapter<TankViewHolder>{
                     context.startActivity(viewTank);
                 } else if (purpose.equals("Feeding")) {
                     Intent feed = new Intent(context, Feeding.class);
+                    Bundle info = new Bundle();
+                    info.putParcelable("tank", tank);
+                    info.putParcelable("user", user);
+                    feed.putExtras(info);
+                    context.startActivity(feed);
+                }else if (purpose.equals("Analytics")) {
+                    Intent feed = new Intent(context, Analytics.class);
                     Bundle info = new Bundle();
                     info.putParcelable("tank", tank);
                     info.putParcelable("user", user);

@@ -90,7 +90,19 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        analyticsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent tankSelect = new Intent(getContext(), TankSelection.class);
+                tankSelect.putExtra("user", user);
+                tankSelect.putExtra("where", "Analytics");
+                startActivity(tankSelect);
+            }
+        });
+
         return view;
     }
+
+
 
 }

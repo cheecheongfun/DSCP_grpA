@@ -50,6 +50,10 @@
     <string name="hello_balanced">hello balanced</string>
     <string name="recommendations">Recommendations</string>
     <string name="Login_Instructions">Enter your username and password to access your account</string>
+    <string name="year">YEAR</string>
+    <string name="month">MONTH</string>
+    <string name="week">WEEK</string>
+    <string name="day">DAY</string>
     <string-array name="goal_options">
         <item>Increase worm population</item>
         <item>Reduce waste</item>
