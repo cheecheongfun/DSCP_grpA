@@ -46,4 +46,12 @@
         <item name="fontFamily">sans-serif-condensed-medium</item>
         <item name="background">@drawable/search_view_white</item>
     </style>
+
+    <!-- Bottom Page for Feeding Log -->
+    <style name="FeedingLogBottom">
+        <item name="android:background">@drawable/top_rounded</item>
+        <item name="android:backgroundTint">#11161C</item>
+        <item name="android:fontFamily">sans-serif-condensed-medium</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 </resources>

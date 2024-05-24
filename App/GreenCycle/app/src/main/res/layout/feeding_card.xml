@@ -1,155 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/feedCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:theme="@style/TankRecyclerCard"
+    android:theme="@style/Theme.GreenCycle"
     android:clickable="true"
-    android:elevation="10dp"
-    android:layout_marginTop="20dp"
+    android:layout_marginTop="5dp"
     android:layout_marginStart="15dp"
     android:layout_marginEnd="15dp">
 
     <TextView
-        android:id="@+id/feedingDate"
-        android:layout_width="match_parent"
+        android:id="@+id/dateFed"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/home_page_buttons"
-        android:backgroundTint="@color/mid_green"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="200dp"
-        android:layout_marginTop="10dp"
-        android:text="2/5/2024"
-        android:gravity="center"
-        android:textSize="25sp"
-        android:textColor="@color/white"/>
+        android:drawableBottom="@drawable/outline_circle_24"
+        android:theme="@style/DrawableTint"
+        android:text="25 May"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textSize="20sp"/>
 
     <RelativeLayout
-        android:id="@+id/greenBox"
+        android:id="@+id/line"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/home_page_buttons"
-        android:layout_below="@+id/feedingDate"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="10dp">
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@id/logCard"
+        android:layout_below="@+id/dateFed"
+        android:layout_alignStart="@+id/dateFed"
+        android:layout_alignEnd="@+id/dateFed"
+        android:theme="@style/Theme.GreenCycle">
 
-        <TextView
-            android:id="@+id/greenText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+        <View
+            android:layout_width="1dp"
+            android:layout_marginTop="-3dp"
+            android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:text="Greens:"
-            android:background="@color/light_green"
-            android:textColor="@color/white"
-            android:textSize="20sp"/>
+            android:background="@drawable/line"/>
 
-        <EditText
-            android:id="@+id/greenDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/greenText"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="80dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"
-            android:textSize="15sp"
-            android:elevation="5sp"
-            android:background="@drawable/home_page_buttons"
-            android:backgroundTint="@color/white"/>
     </RelativeLayout>
+
 
     <RelativeLayout
-        android:id="@+id/brownBox"
+        android:id="@+id/logCard"
+        android:layout_toEndOf="@+id/dateFed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/home_page_buttons"
-        android:layout_below="@+id/greenBox"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="20dp">
-
-        <TextView
-            android:id="@+id/brownText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:text="Browns:"
-            android:background="@color/light_green"
-            android:textColor="@color/white"
-            android:textSize="20sp"/>
-
-        <EditText
-            android:id="@+id/brownDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/brownText"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="80dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"
-            android:textSize="15sp"
-            android:elevation="5sp"
-            android:background="@drawable/home_page_buttons"
-            android:backgroundTint="@color/white"
-            />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/noteBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/home_page_buttons"
-        android:layout_below="@+id/brownBox"
-        android:backgroundTint="@color/mid_green"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="20dp">
-
-        <TextView
-            android:id="@+id/noteText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:text="Notes:"
-            android:background="@color/mid_green"
-            android:textColor="@color/white"
-            android:textSize="20sp"/>
-
-        <EditText
-            android:id="@+id/noteDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/noteText"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="80dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"
-            android:textSize="15sp"
-            android:elevation="5sp"
-            android:background="@drawable/home_page_buttons"
-            android:backgroundTint="@color/white"
-            android:fadeScrollbars="true"/>
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/nextFeed"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/noteBox"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="120dp"
-        android:padding="10dp"
+        android:theme="@style/TankRecyclerCard"
+        android:clickable="true"
         android:layout_marginTop="20dp"
-        android:background="@drawable/home_page_buttons"
-        android:backgroundTint="#E1DDDD"
-        android:layout_marginBottom="10dp"
-        android:text="Next Feeding Date: "/>
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp">
+
+        <RelativeLayout
+            android:id="@+id/greenBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/home_page_buttons"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/greenText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:text="Greens:"
+                android:background="@color/light_green"
+                android:textColor="@color/white"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/greenDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/greenText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="15sp"
+                android:elevation="5sp"
+                android:background="@drawable/home_page_buttons"
+                android:backgroundTint="@color/white"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/brownBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/home_page_buttons"
+            android:backgroundTint="@color/brown"
+            android:layout_below="@+id/greenBox"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/brownText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:text="Browns:"
+                android:background="@color/brown"
+                android:textColor="@color/white"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/brownDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/brownText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="15sp"
+                android:elevation="5sp"
+                android:background="@drawable/home_page_buttons"
+                android:backgroundTint="@color/white"
+                />
+        </RelativeLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

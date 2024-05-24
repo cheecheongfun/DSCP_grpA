@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/foodCard"
+    android:theme="@style/AppBackgroundColour">
+
+    <CheckBox
+        android:id="@+id/check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/foodText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/check"
+        android:text="Food"
+        android:layout_alignTop="@+id/check"
+        android:layout_alignBottom="@+id/check"
+        android:gravity="center"
+        android:textSize="20sp" />
+    <EditText
+        android:id="@+id/editAmt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/foodText"
+        android:hint="input amount"
+        android:textSize="15sp"
+        android:visibility="invisible"
+        android:layout_centerVertical="true"/>
+
+</RelativeLayout>

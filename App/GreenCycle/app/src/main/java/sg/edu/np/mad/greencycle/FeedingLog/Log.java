@@ -5,8 +5,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 public class Log implements Parcelable {
-    private int logId;
-    private int tankId;
+    private int logId, tankId, waterAmt;
     private String logDate;
     private ArrayList<String> greens;
     private ArrayList<String> browns;
@@ -15,13 +14,14 @@ public class Log implements Parcelable {
     public Log() {
     }
 
-    public Log(int logId, int tankId, String logDate, ArrayList<String> green, ArrayList<String> brown, String note) {
+    public Log(int logId, int tankId, String logDate, ArrayList<String> green, ArrayList<String> brown, String note, int waterAmt) {
         this.logId = logId;
         this.tankId = tankId;
         this.logDate = logDate;
         this.greens = green;
         this.browns = brown;
         this.notes = note;
+        this.waterAmt = waterAmt;
     }
 
     protected Log(Parcel in) {
@@ -31,6 +31,7 @@ public class Log implements Parcelable {
         greens = in.createStringArrayList();
         browns = in.createStringArrayList();
         notes = in.readString();
+        waterAmt = in.readInt();
     }
 
     public static final Creator<Log> CREATOR = new Creator<Log>() {
@@ -58,6 +59,7 @@ public class Log implements Parcelable {
         parcel.writeStringList(greens);
         parcel.writeStringList(browns);
         parcel.writeString(notes);
+        parcel.writeInt(waterAmt);
     }
 
     // Getters and Setters
@@ -101,12 +103,12 @@ public class Log implements Parcelable {
         this.browns = browns;
     }
 
-    public String getNotes() {
-        return notes;
-    }
+    public String getNotes() { return notes; }
 
     public void setNotes(String notes) {
         this.notes = notes;
     }
+    public int getWaterAmt() {return waterAmt;}
+    public void setWaterAmt(int waterAmt) {this.waterAmt = waterAmt;}
 }
 

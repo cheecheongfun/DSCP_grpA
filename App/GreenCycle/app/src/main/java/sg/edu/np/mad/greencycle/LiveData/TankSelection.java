@@ -94,6 +94,7 @@ public class TankSelection extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 npk = new ArrayList<>();
                 npk.add(180.0);
                 npk.add(100.0);
@@ -168,6 +169,7 @@ public class TankSelection extends AppCompatActivity {
     }
 
     private void filterList(String text) {
+        Log.i(null, "In filter List");
         ArrayList<Tank> filteredList = new ArrayList<>();
         for (Tank tank : tankList) {
             if (tank.getTankName().toLowerCase().contains(text.toLowerCase())) {

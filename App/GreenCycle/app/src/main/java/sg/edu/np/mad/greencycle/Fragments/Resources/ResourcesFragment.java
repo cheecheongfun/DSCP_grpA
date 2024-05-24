@@ -99,6 +99,8 @@ public class ResourcesFragment extends Fragment {
 
         // Set initial data
         setData();
+        searchView.setQueryHint("Search Resource");
+        searchView.clearFocus();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override

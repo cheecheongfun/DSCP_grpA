@@ -18,7 +18,7 @@
             android:name=".FeedingLog.Feeding"
             android:exported="false" />
         <activity
-            android:name=".LiveData.TankView"
+            android:name=".LiveData.LiveData"
             android:exported="false" />
         <activity
             android:name=".StartUp.RegistrationPage"

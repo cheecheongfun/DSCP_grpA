@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/bottom_sheet"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="300dp"
+    android:elevation="10dp"
+    android:theme="@style/FeedingLogBottom">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="20dp"
+            android:text="22 May"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:clickable="true"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/baseline_edit_calendar_24"
+            android:layout_toEndOf="@id/date"
+            android:layout_alignBottom="@+id/date"
+            android:layout_alignTop="@id/date"
+            android:layout_marginStart="10dp"/>
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/greens"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="80dp"
+        android:maxHeight="300dp">
+
+        <TextView
+            android:id="@+id/greenText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Greens"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:textSize="25dp"
+            android:layout_marginStart="5dp"/>
+
+        <TextView
+            android:id="@+id/addGreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/greenText"
+            android:layout_alignTop="@id/greenText"
+            android:layout_toEndOf="@id/greenText"
+            android:layout_marginStart="20dp"
+            android:drawableStart="@drawable/baseline_add_24"
+            android:theme="@style/DrawableTint"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/greenRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/greenText"
+            android:layout_alignStart="@+id/greenText"
+            android:layout_marginBottom="10dp"
+            android:theme="@style/Border"
+            android:layout_marginEnd="5dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/browns"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/greens"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="80dp"
+        android:maxHeight="300dp">
+
+        <TextView
+            android:id="@+id/brownText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Browns"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:textSize="25dp"
+            android:layout_marginStart="5dp"/>
+
+        <TextView
+            android:id="@+id/addBrown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/brownText"
+            android:layout_alignTop="@id/brownText"
+            android:layout_toEndOf="@id/brownText"
+            android:layout_marginStart="20dp"
+            android:drawableStart="@drawable/baseline_add_24"
+            android:theme="@style/DrawableTint"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/brownRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/brownText"
+            android:layout_alignStart="@+id/brownText"
+            android:layout_marginBottom="10dp"
+            android:theme="@style/Border"
+            android:layout_marginEnd="5dp"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/waterText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/browns"
+        android:layout_alignStart="@id/browns"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="5dp"
+        android:text="Water: "
+        android:textSize="25dp"
+        android:theme="@style/AppBackgroundColour"
+        android:layout_alignBottom="@id/editWater"
+        android:gravity="center"/>
+
+    <EditText
+        android:id="@+id/editWater"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/browns"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@id/waterText"
+        android:inputType="text"
+        android:hint="input amount"
+        android:layout_marginStart="10dp"/>
+
+    <TextView
+        android:id="@+id/notesText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/waterText"
+        android:text="Notes"
+        android:layout_alignStart="@id/waterText"
+        android:textSize="25dp"
+        android:layout_marginTop="10dp"/>
+
+    <EditText
+        android:id="@+id/notesDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/notesText"
+        android:layout_alignStart="@id/notesText"
+        android:layout_alignEnd="@id/browns"
+        android:layout_marginEnd="5dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:gravity="start|top"
+        android:inputType="text|textMultiLine"
+        android:hint="Add notes"
+        android:scrollbars="vertical"/>
+
+</RelativeLayout>

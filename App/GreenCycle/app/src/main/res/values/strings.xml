@@ -55,4 +55,7 @@
         <item>Reduce waste</item>
         <item>Improve compost quality</item>
     </string-array>
+
+    <string name="food_item">%s:</string>
+
 </resources>

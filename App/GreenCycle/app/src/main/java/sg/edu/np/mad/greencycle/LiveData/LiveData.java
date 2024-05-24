@@ -17,7 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.R;
 
-public class TankView extends AppCompatActivity {
+public class LiveData extends AppCompatActivity {
     User user;
     Tank tank;
     FirebaseDatabase database;
@@ -55,8 +55,9 @@ public class TankView extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(TankView.this, TankSelection.class);
+                Intent intent = new Intent(LiveData.this, TankSelection.class);
                 intent.putExtra("user", user);
+                intent.putExtra("where", "LiveData");
                 startActivity(intent);
                 finish();
             }
