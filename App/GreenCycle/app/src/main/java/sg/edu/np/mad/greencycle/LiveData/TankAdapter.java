@@ -1,5 +1,6 @@
 package sg.edu.np.mad.greencycle.LiveData;
 
+import sg.edu.np.mad.greencycle.Analytics.Analytics;
 import sg.edu.np.mad.greencycle.Classes.User;
 
 import android.content.Context;
@@ -65,6 +66,13 @@ public class TankAdapter extends RecyclerView.Adapter<TankViewHolder>{
                     context.startActivity(viewTank);
                 } else if (purpose.equals("Feeding")) {
                     Intent feed = new Intent(context, Feeding.class);
+                    Bundle info = new Bundle();
+                    info.putParcelable("tank", tank);
+                    info.putParcelable("user", user);
+                    feed.putExtras(info);
+                    context.startActivity(feed);
+                }else if (purpose.equals("Analytics")) {
+                    Intent feed = new Intent(context, Analytics.class);
                     Bundle info = new Bundle();
                     info.putParcelable("tank", tank);
                     info.putParcelable("user", user);

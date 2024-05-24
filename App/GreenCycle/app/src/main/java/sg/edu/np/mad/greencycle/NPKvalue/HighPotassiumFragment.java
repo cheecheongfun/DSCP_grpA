@@ -1,4 +1,4 @@
-package sg.edu.np.mad.greencycle.Fragments.NPKvalue;
+package sg.edu.np.mad.greencycle.NPKvalue;
 
 import android.os.Bundle;
 
@@ -31,7 +31,7 @@ public class HighPotassiumFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        EdgeToEdge.enable(getActivity());
+        EdgeToEdge.enable(requireActivity());
         // Inflate the layout for this fragment
         View view;
         view = inflater.inflate(R.layout.fragment_high_potassium, container, false);
@@ -40,13 +40,11 @@ public class HighPotassiumFragment extends Fragment {
                 + "• Add banana peels, wood ash, and greensand to your vermicompost\n"
                 + "• Include composted seaweed which is high in potassium\n"
                 + "• Avoid adding too many nitrogen-rich materials to maintain high potassium levels\n"
-                + "• Use vermicompost tea or diluted vermicompost leachate high in potassium as a natural fertilizer\n"
                 + "• Rotate crops to maintain soil health and prevent nutrient depletion\n\n"
                 + "Uses of High Potassium Fertilizer\n"
                 + "• Promotes overall plant health and disease resistance\n"
                 + "• Ideal for flowering plants, root vegetables, and fruiting plants\n"
-                + "• Enhances drought tolerance\n"
-                + "• Supports the development of strong, healthy plants";
+                + "• Enhances drought tolerance\n";
 
         PotRec.setText(highPotassiumSoilInfo);
         PotRec.setTypeface(null, android.graphics.Typeface.BOLD);  // Make text bold

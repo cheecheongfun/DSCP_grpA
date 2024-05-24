@@ -1,4 +1,4 @@
-package sg.edu.np.mad.greencycle.Fragments.NPKvalue;
+package sg.edu.np.mad.greencycle.NPKvalue;
 
 import android.os.Bundle;
 
@@ -24,18 +24,17 @@ public class BalancedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        EdgeToEdge.enable(getActivity());
+        EdgeToEdge.enable(requireActivity());
         // Inflate the layout for this fragment
         View view;
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_balanced, container, false);
         BalRec = view.findViewById(R.id.balanced_rec);
-        String balancedSoilInfo = "• (1:1:1)\n"
+        String balancedSoilInfo = "1:1:1\n"
                 + "• Maintain a pH level between 6.0 and 7.0\n"
                 + "• Add a mix of green (nitrogen-rich) and brown (carbon-rich) materials to your compost\n"
-                + "• Use compost tea or diluted vermicompost leachate as a natural fertilizer\n"
                 + "• Rotate crops to maintain soil health and prevent nutrient depletion\n\n"
-                + "Uses of a Balanced Fertilizer (1:1:1)\n"
+                + "Uses of a Balanced Fertilizer\n"
                 + "• Promotes even growth of roots, stems, and leaves\n"
                 + "• Ideal for general garden use and all-purpose feeding\n"
                 + "• Supports healthy flowering and fruiting\n"

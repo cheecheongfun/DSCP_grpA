@@ -1,4 +1,4 @@
-package sg.edu.np.mad.greencycle.Fragments.NPKvalue;
+package sg.edu.np.mad.greencycle.NPKvalue;
 
 import android.os.Bundle;
 
@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import java.util.Objects;
 
 import sg.edu.np.mad.greencycle.R;
 
@@ -33,7 +35,7 @@ public class HighPhosphorousFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        EdgeToEdge.enable(getActivity());
+        EdgeToEdge.enable(requireActivity());
         View view;
         view = inflater.inflate(R.layout.fragment_high_phosphorous, container, false);
         PhosRec = view.findViewById(R.id.phos_rec );
@@ -41,13 +43,10 @@ public class HighPhosphorousFragment extends Fragment {
                 + "• Add bone meal, rock phosphate, and composted manure to your vermicompost\n"
                 + "• Include fish meal and crab shells which are high in phosphorus\n"
                 + "• Avoid adding too many green materials (nitrogen-rich) to maintain high phosphorus levels\n"
-                + "• Use vermicompost tea or diluted vermicompost leachate high in phosphorus as a natural fertilizer\n"
                 + "• Rotate crops to maintain soil health and prevent nutrient depletion\n\n"
                 + "Uses of High Phosphorus Fertilizer\n"
                 + "• Promotes strong root development\n"
-                + "• Ideal for root vegetables, flowers, and fruiting plants\n"
-                + "• Enhances blooming and fruiting\n"
-                + "• Supports the development of strong, healthy plants";
+                + "• Ideal for root vegetables, flowers, and fruiting plants\n";
 
         // Make the text bold and set a larger font size
         PhosRec.setText(highPhosphorusSoilInfo);

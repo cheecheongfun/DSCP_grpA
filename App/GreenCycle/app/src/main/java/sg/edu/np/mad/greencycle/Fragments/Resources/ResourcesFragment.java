@@ -163,4 +163,7 @@ public class ResourcesFragment extends Fragment {
 
         adapter.notifyDataSetChanged();
     }
+
+
+    
 }

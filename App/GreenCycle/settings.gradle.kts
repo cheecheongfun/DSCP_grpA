@@ -14,6 +14,7 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        maven(url = "https://jitpack.io")
         google()
         mavenCentral()
     }
@@ -21,4 +22,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "GreenCycle"
 include(":app")
- 

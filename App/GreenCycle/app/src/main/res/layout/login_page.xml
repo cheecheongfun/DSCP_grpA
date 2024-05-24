@@ -34,7 +34,7 @@
     <RelativeLayout
         android:id="@+id/editName"
         android:layout_width="345dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_below="@+id/textView5"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
@@ -43,6 +43,7 @@
 
         <EditText
             android:id="@+id/etUsername"
+            style="@style/NoUnderlineHint"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -50,7 +51,7 @@
             android:ems="10"
             android:fontFamily="sans-serif-condensed-medium"
             android:hint="Username"
-            android:textColorHint="@color/textColour"
+            android:textColorHint="@color/light_grey"
             android:inputType="text"
             android:textColor="@color/textColour"
             android:paddingStart="5dp" />
@@ -76,16 +77,18 @@
 
         <EditText
             android:id="@+id/etPassword"
+            style="@style/NoUnderlineHint"
             android:layout_width="300dp"
             android:layout_height="50dp"
             android:layout_marginStart="10dp"
             android:ems="10"
             android:fontFamily="sans-serif-condensed-medium"
             android:hint="Password"
-            android:textColorHint="@color/textColour"
+            android:textColorHint="@color/light_grey"
             android:inputType="text"
             android:paddingStart="5dp"
-            android:textColor="@color/textColour"/>
+            android:textColor="@color/textColour"
+            />
 
         <!--        <TextView-->
         <!--            android:id="@+id/textView3"-->
@@ -126,12 +129,12 @@
     <Button
         android:id="@+id/register"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/loginButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="1dp"
         android:backgroundTint="@color/light_green"
-        android:text="Create Account"
+        android:text="New User?"
         android:textSize="12sp"
         app:cornerRadius="5dp" />
 
