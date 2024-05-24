@@ -37,7 +37,10 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="16dp"
-                android:paddingTop="15dp">
+                android:paddingTop="15dp"
+                android:orientation="vertical">
+
+
 
                 <SearchView
                     android:id="@+id/search"
@@ -48,13 +51,19 @@
                     android:layout_marginEnd="5dp"
                     android:iconifiedByDefault="false"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:queryHint="Search here"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_below="@+id/backButton"
+                    android:theme="@style/CustomSearchView"
                     android:background="@drawable/search_view_black"/>
+
+
 
             </LinearLayout>
 
         </LinearLayout>
+
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
