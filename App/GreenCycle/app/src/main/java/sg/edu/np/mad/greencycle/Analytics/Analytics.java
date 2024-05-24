@@ -43,7 +43,11 @@ public class Analytics extends AppCompatActivity {
         tvWeek.setOnClickListener(listener);
         tvMonth.setOnClickListener(listener);
         tvYear.setOnClickListener(listener);
+
+        loadFragment(new Analytics_day());
+        highlightTextView(tvDay);
     }
+
 
     private void handleTextViewClick(View view) {
         resetTextViewColors();
