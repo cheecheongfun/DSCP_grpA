@@ -113,6 +113,38 @@
 
     </style>
 
+    <style name="CustomSpinner" parent="Widget.AppCompat.Spinner">
+        <item name="android:popupBackground">@android:color/white</item>
+        <item name="android:dropDownSelector">?android:attr/selectableItemBackground</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="Theme.AppCompat.Dialog">
+        <!-- Customize the theme attributes as needed -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowCloseOnTouchOutside">false</item>
+        <item name="android:windowAnimationStyle">@style/PopupAnimation</item>
+        <!-- Set the window layout to include app name -->
+        <item name="android:windowActionBar">true</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowTitleStyle">@style/AppWindowTitle</item>
+    </style>
+
+
+    <style name="PopupAnimation" parent="@android:style/Animation.Dialog">
+        <!-- Customize popup animation if desired -->
+    </style>
+    <style name="AppWindowTitle">
+        <item name="android:textColor">@color/transparent</item>
+
+    </style>
+
+
+
+
 
 
 

@@ -74,7 +74,7 @@ public class ViewGoals extends AppCompatActivity {
                 .child(user.getUsername())
                 .child("tanks")
                 .child(String.valueOf(tank.getTankID()))
-                .child("Goals");
+                .child("goals");
 
 
         // Initialize the goals list
@@ -122,12 +122,12 @@ public class ViewGoals extends AppCompatActivity {
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     // Extract data from the snapshot
-                    String goalName = snapshot.child("goalname").getValue(String.class);
-                    String goalsCompletion = snapshot.child("goalscompletion").getValue(String.class);
+                    String goalName = snapshot.child("goal_name").getValue(String.class);
+                    String goalsCompletion = snapshot.child("goals_completion").getValue(String.class);
                     String createdDate = snapshot.child("create_date").getValue(String.class);
                     String endDate = snapshot.child("end_date").getValue(String.class);
                     int goalsId = snapshot.child("goalid").getValue(Integer.class);
-                    int goalsNumber = snapshot.child("goalsnumber").getValue(Integer.class);
+                    int goalsNumber = snapshot.child("goals_number").getValue(Integer.class);
 
 
                     // Create a Goals object from Firebase data

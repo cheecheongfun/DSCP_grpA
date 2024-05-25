@@ -48,7 +48,7 @@
             android:exported="false" />
         <activity
             android:name=".Goals.CreateGoals"
-            android:exported="false" />
+            android:theme="@style/AppTheme.PopupOverlay" />
     </application>
 
 </manifest>
