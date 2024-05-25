@@ -57,7 +57,7 @@
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/barChart_nitrogen"
                 android:layout_width="match_parent"
-                android:layout_height="400dp"/>
+                android:layout_height="400dp" />
         </androidx.cardview.widget.CardView>
 
         <!-- CardView for Line Chart for Potassium -->

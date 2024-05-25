@@ -1,11 +1,13 @@
 package sg.edu.np.mad.greencycle.Analytics;
 
+import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -54,6 +56,8 @@ public class Week_charts extends Fragment {
         btnNextWeek = view.findViewById(R.id.btnNextWeek);
         ImageButton btnPreviousWeek = view.findViewById(R.id.btnPreviousWeek);
 
+        weekDateTextView.setOnClickListener(v -> showDatePickerDialog());
+
         btnPreviousWeek.setOnClickListener(v -> {
             adjustWeek(-1);
             setupCharts(view); // Refresh charts with new data
@@ -67,6 +71,35 @@ public class Week_charts extends Fragment {
         updateDateDisplay();
         setupCharts(view);
         return view;
+    }
+
+    private void showDatePickerDialog() {
+        // Get the current date
+        Calendar today = Calendar.getInstance();
+        int year = today.get(Calendar.YEAR);
+        int month = today.get(Calendar.MONTH);
+        int day = today.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                Calendar selectedDate = Calendar.getInstance();
+                selectedDate.set(Calendar.YEAR, year);
+                selectedDate.set(Calendar.MONTH, month);
+                selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                adjustToSelectedWeek(selectedDate);
+                setupCharts(getView());
+            }
+        }, year, month, day);
+
+        datePickerDialog.show();
+    }
+
+    private void adjustToSelectedWeek(Calendar selectedDate) {
+        int dayOfWeek = selectedDate.get(Calendar.DAY_OF_WEEK) - selectedDate.getFirstDayOfWeek();
+        selectedDate.add(Calendar.DAY_OF_MONTH, -dayOfWeek);
+        currentWeek.setTime(selectedDate.getTime());
+        updateDateDisplay();
     }
 
     private void adjustWeek(int amount) {
