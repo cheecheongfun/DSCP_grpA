@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import sg.edu.np.mad.greencycle.Classes.User;
+import sg.edu.np.mad.greencycle.Goals.ViewGoals;
 import sg.edu.np.mad.greencycle.LiveData.TankSelection;
 import sg.edu.np.mad.greencycle.NPKvalue.npk_value;
 import sg.edu.np.mad.greencycle.R;
@@ -97,6 +98,15 @@ public class HomeFragment extends Fragment {
                 tankSelect.putExtra("user", user);
                 tankSelect.putExtra("where", "Analytics");
                 startActivity(tankSelect);
+            }
+        });
+
+        goalsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goals = new Intent(getContext(), ViewGoals.class);
+                goals.putExtra("user", user);
+                startActivity(goals);
             }
         });
 

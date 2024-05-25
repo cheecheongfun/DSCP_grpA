@@ -43,6 +43,12 @@
         <activity
             android:name=".NPKvalue.npk_value"
             android:exported="true" />
+        <activity
+            android:name=".Goals.ViewGoals"
+            android:exported="false" />
+        <activity
+            android:name=".Goals.CreateGoals"
+            android:exported="false" />
     </application>
 
 </manifest>

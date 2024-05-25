@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import sg.edu.np.mad.greencycle.Classes.User;
+import sg.edu.np.mad.greencycle.Goals.ViewGoals;
 import sg.edu.np.mad.greencycle.R;
 
 public class LiveData extends AppCompatActivity {
@@ -22,7 +23,7 @@ public class LiveData extends AppCompatActivity {
     Tank tank;
     FirebaseDatabase database;
     DatabaseReference reference;
-    TextView backButton, temp, humidity, pH, nitrogen,phosphorous,potassium, feedback1, feedback2, tankName;
+    TextView backButton, temp, humidity, pH, nitrogen,phosphorous,potassium, feedback1, feedback2, tankName,goalbutton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +52,7 @@ public class LiveData extends AppCompatActivity {
         potassium = findViewById(R.id.potassiumData);
         feedback1 = findViewById(R.id.point1);
         feedback2 = findViewById(R.id.point2);
+        goalbutton = findViewById(R.id.goalbutton);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +64,19 @@ public class LiveData extends AppCompatActivity {
                 finish();
             }
         });
+
+        goalbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LiveData.this, ViewGoals.class);
+                intent.putExtra("user", user);
+                intent.putExtra("tank", tank);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+
 
         tankName.setText(tank.getTankName());
         temp.setText("Temperature: " + tank.getTemperature() + "°C");
