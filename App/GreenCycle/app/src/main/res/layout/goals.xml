@@ -102,6 +102,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"
                     android:id="@+id/progress_text"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
                     android:text="20/100"
                     android:backgroundTint="@color/transparent"
                     android:textSize="12sp" />

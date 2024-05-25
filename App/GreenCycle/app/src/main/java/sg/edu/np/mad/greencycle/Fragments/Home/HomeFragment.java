@@ -2,17 +2,14 @@ package sg.edu.np.mad.greencycle.Fragments.Home;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.activity.EdgeToEdge;
 import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.Goals.ViewGoals;
 import sg.edu.np.mad.greencycle.LiveData.TankSelection;
@@ -23,6 +20,7 @@ public class HomeFragment extends Fragment {
     
     ImageButton npkButton, liveDataBtn, feedingLogBtn, analyticsBtn, goalsBtn, identifierBtn, soilTypeBtn;
     TextView username;
+
 
     
 
@@ -112,7 +110,5 @@ public class HomeFragment extends Fragment {
 
         return view;
     }
-
-
 
 }

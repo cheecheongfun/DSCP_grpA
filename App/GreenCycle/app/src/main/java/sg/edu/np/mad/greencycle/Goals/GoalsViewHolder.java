@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import sg.edu.np.mad.greencycle.R;
 
 public class GoalsViewHolder  extends RecyclerView.ViewHolder{
-    TextView goalstitle, goalsremaining,goaltext;
+    TextView goalstitle, goalsremaining,progressText;
     ProgressBar progressBar;
     ImageView deleteImageview;
 
@@ -23,7 +23,7 @@ public class GoalsViewHolder  extends RecyclerView.ViewHolder{
         goalsremaining = itemView.findViewById(R.id.days_remaining);
         progressBar = itemView.findViewById(R.id.progress_bar);
         deleteImageview = itemView.findViewById(R.id.delete);
-        goaltext = itemView.findViewById(R.id.goals_textview);
+        progressText = itemView.findViewById(R.id.progress_text);
 
     }
 }

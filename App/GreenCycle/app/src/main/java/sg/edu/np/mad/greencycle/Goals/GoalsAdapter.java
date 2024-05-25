@@ -51,24 +51,34 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull GoalsViewHolder holder, int position) {
+
         Goals goals = GoalsList.get(position);
-        holder.goalstitle.setText(goals.getGoal_name());
-        Log.v("user",user.getUsername());
-        Log.v("tank",tank.getTankName());
+        if (goals.getGoals_completion().contains("Incomplete"))
+        {
+            holder.goalstitle.setText(goals.getGoal_name());
+            Log.v("user", user.getUsername());
+            Log.v("tank", tank.getTankName());
 
-        LocalDate today = LocalDate.now(); // Current date
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate today = LocalDate.now(); // Current date
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        LocalDate enddate= LocalDate.parse(goals.getEnd_date(), formatter);
+            LocalDate enddate = LocalDate.parse(goals.getEnd_date(), formatter);
 
-        // Calculate the difference in days
-        long daysBetween = ChronoUnit.DAYS.between(today,enddate);
+            // Calculate the difference in days
+            long daysBetween = ChronoUnit.DAYS.between(today, enddate);
 
-        // Set the remaining days of Goals
-        holder.goalsremaining.setText(String.valueOf(daysBetween) + " " +"Days Remaining");
+            // Set the remaining days of Goals
+            holder.goalsremaining.setText(String.valueOf(daysBetween) + " " + "Days Remaining");
 
-        // Set the maximum value for the ProgressBar
-        holder.progressBar.setMax(goals.getGoals_number());
+            // Set the maximum value for the ProgressBar
+            holder.progressBar.setMax(goals.getGoals_number());
+
+
+            if (goals.getGoal_name().toLowerCase().contains("worm")) {
+                holder.progressBar.setProgress(tank.getNumberOfWorms());
+                holder.progressText.setText(tank.getNumberOfWorms() + "/" + goals.getGoals_number());
+            }
+        }
 
         // Set OnClickListener for the delete ImageView
         holder.deleteImageview.setOnClickListener(new View.OnClickListener() {
@@ -113,10 +123,6 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsViewHolder> {
                 }
             }
         });
-
-
-
-
     }
 
     @Override
