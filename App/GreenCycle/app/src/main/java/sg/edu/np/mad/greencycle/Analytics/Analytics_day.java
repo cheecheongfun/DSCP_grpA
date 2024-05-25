@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
@@ -18,12 +19,16 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 
 import sg.edu.np.mad.greencycle.R;
 
 public class Analytics_day extends Fragment {
+    TextView todaydate;
 
     public Analytics_day() {
         // Required empty public constructor
@@ -40,6 +45,11 @@ public class Analytics_day extends Fragment {
         View view = inflater.inflate(R.layout.fragment_analytics_day, container, false);
 
         setupCharts(view);
+
+        todaydate = view.findViewById(R.id.Date);
+        String currentDate = new SimpleDateFormat("EEE, MMM d, yyyy", Locale.getDefault()).format(new Date());
+        todaydate.setText(currentDate);
+
         return view;
     }
 
@@ -49,27 +59,27 @@ public class Analytics_day extends Fragment {
         // Setting up each chart with specific settings
         setupChart((LineChart) view.findViewById(R.id.chart_nitrogen),
                 generateFakeData(20, 80, hours), "Nitrogen Levels",
-                Color.parseColor("#FFC0CB"), Color.WHITE, "Nitrogen");
+                Color.parseColor("#FFC0CB"), Color.WHITE, "Nitrogen Chart");
 
         setupChart((LineChart) view.findViewById(R.id.chart_potassium),
                 generateFakeData(10, 60, hours), "Potassium Levels",
-                Color.parseColor("#FF69B4"), Color.WHITE, "Potassium");
+                Color.parseColor("#FF69B4"), Color.WHITE, "Potassium Chart");
 
         setupChart((LineChart) view.findViewById(R.id.chart_phosphorous),
                 generateFakeData(15, 50, hours), "Phosphorous Levels",
-                Color.parseColor("#DB7093"), Color.WHITE, "Phosphorous");
+                Color.parseColor("#DB7093"), Color.WHITE, "Phosphorous Chart");
 
         setupChart((LineChart) view.findViewById(R.id.chart_temperature),
                 generateFakeData(10, 30, hours), "Temperature Levels",
-                Color.parseColor("#32CD32"), Color.WHITE, "Temperature");
+                Color.parseColor("#32CD32"), Color.WHITE, "Temperature Chart");
 
         setupChart((LineChart) view.findViewById(R.id.chart_humidity),
                 generateFakeData(40, 100, hours), "Humidity Levels",
-                Color.parseColor("#00FF7F"), Color.WHITE, "Humidity");
+                Color.parseColor("#00FF7F"), Color.WHITE, "Humidity Chart");
 
         setupChart((LineChart) view.findViewById(R.id.chart_ph),
                 generateFakeData(4, 9, hours), "pH Levels",
-                Color.parseColor("#90EE90"), Color.WHITE, "pH");
+                Color.parseColor("#90EE90"), Color.WHITE, "pH Chart");
     }
 
     private void setupChart(LineChart chart, ArrayList<Entry> data, String label, int color, int backgroundColor, String title) {
