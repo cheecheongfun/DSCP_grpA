@@ -3,99 +3,144 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_background"
-    android:padding="16dp"
+    android:background="@color/transparent"
     android:theme="@style/AppBackgroundColour">
 
-    <ImageButton
-        android:id="@+id/back_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Back"
-        android:src="@drawable/baseline_arrow_back_ios_new_24" />
+    <RelativeLayout
+        android:layout_width="600dp"
+        android:layout_height="600dp"
+        android:layout_centerVertical="true"
+        android:theme="@style/AppBackgroundColour">
 
-    <TextView
-        android:id="@+id/select_goal_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/back_button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:text="Select Goal"
-        android:textColor="@color/black"
-        android:textSize="24sp" />
 
-    <Spinner
-        android:id="@+id/goal_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_below="@+id/select_goal_label"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/white_square_with_rounded_corners"
-        android:layout_marginRight="30dp" />
 
-    <TextView
-        android:id="@+id/set_number_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/goal_spinner"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="30dp"
-        android:text="Set Number for Goal"
-        android:textColor="@color/black"
-        android:textSize="24sp" />
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Close"
+            android:src="@drawable/baseline_close_24" />
 
-    <EditText
-        android:id="@+id/goal_number"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/set_number_label"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/white_square_with_rounded_corners"
-        android:inputType="number"
-        android:textAlignment="center"
-        android:textSize="30dp"
-        android:textColor="@color/black" />
 
-    <TextView
-        android:id="@+id/select_end_date_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/goal_number"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:text="Select End Date"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/select_goal_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/back_button"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:text="Select Goal"
+            android:textColor="@color/black"
+            android:textSize="28sp" />
 
-    <!-- Adjusted layout attributes for DatePicker -->
-    <DatePicker
-        android:id="@+id/goal_date_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/select_end_date_label"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:scaleX="1.25"
-        android:scaleY="1.25"
-        android:theme="@style/CustomDatePickerDialog" />
+        <Spinner
+            android:id="@+id/goal_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/select_goal_label"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp"
+            android:theme="@style/AppBackgroundColour2"
+            android:background="@drawable/spinner_background"
+            android:spinnerMode="dropdown" />
 
-    <Button
-        android:id="@+id/save_goal_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/goal_date_picker"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="30dp"
-        android:backgroundTint="@color/light_green"
-        android:text="Save Goal"
-        android:textColor="@color/black" />
+        <TextView
+            android:id="@+id/set_number_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/goal_spinner"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="30dp"
+            android:text="Set Number for Goal"
+            android:textColor="@color/black"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/goal_number"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/set_number_label"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/spinner_background"
+            android:inputType="number"
+            android:textAlignment="center"
+            android:textSize="16dp"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/select_end_date_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/goal_number"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:text="Select End Date"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <Spinner
+            android:id="@+id/day_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/select_end_date_label"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_toStartOf="@+id/month_spinner"
+            android:background="@drawable/spinner_background"
+            android:theme="@style/AppBackgroundColour2"
+            android:prompt="@string/day"
+            android:spinnerMode="dropdown" />
+
+        <Spinner
+            android:id="@+id/month_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/select_end_date_label"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/spinner_background"
+            android:theme="@style/AppBackgroundColour2"
+            android:prompt="@string/month"
+            android:spinnerMode="dropdown" />
+
+        <Spinner
+            android:id="@+id/year_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/select_end_date_label"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/month_spinner"
+            android:background="@drawable/spinner_background"
+            android:theme="@style/AppBackgroundColour2"
+            android:prompt="@string/year"
+            android:spinnerMode="dropdown" />
+
+        <Button
+            android:id="@+id/save_goal_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/year_spinner"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="50dp"
+            android:layout_marginLeft="30dp"
+            android:backgroundTint="@color/light_green"
+            android:text="Save Goal"
+            android:textColor="@color/black" />
+
+        <!-- Your existing views here -->
+
+    </RelativeLayout>
+
+
 
 </RelativeLayout>

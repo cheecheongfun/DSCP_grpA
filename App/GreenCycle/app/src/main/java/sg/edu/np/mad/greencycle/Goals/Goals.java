@@ -65,4 +65,9 @@ public class Goals {
         this.created_date = created_date;
         this.end_date = end_date;
     }
+
+    // Default constructor (no-argument constructor)
+    public Goals() {
+        // Required by Firebase for deserialization
+    }
 }
