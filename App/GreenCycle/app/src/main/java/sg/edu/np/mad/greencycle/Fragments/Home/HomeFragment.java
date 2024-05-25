@@ -99,6 +99,18 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        identifierBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent tankSelect = new Intent(getContext(), TankSelection.class);
+                tankSelect.putExtra("user", user);
+                tankSelect.putExtra("where", "Identify");
+                startActivity(tankSelect);
+            }
+        });
+
+
+
         goalsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -3,7 +3,6 @@ package sg.edu.np.mad.greencycle.StartUp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import sg.edu.np.mad.greencycle.Classes.User;
-import sg.edu.np.mad.greencycle.Fragments.MainActivity;
 import sg.edu.np.mad.greencycle.R;
 import androidx.biometric.BiometricPrompt;
 
@@ -25,7 +23,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Map;
 import java.util.concurrent.Executor;
 public class LoginPage extends AppCompatActivity {
 

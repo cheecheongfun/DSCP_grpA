@@ -16,7 +16,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import sg.edu.np.mad.greencycle.Classes.User;
-import sg.edu.np.mad.greencycle.Fragments.MainActivity;
+import sg.edu.np.mad.greencycle.StartUp.MainActivity;
 import sg.edu.np.mad.greencycle.R;
 
 public class npk_value extends AppCompatActivity {

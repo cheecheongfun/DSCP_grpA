@@ -1,4 +1,4 @@
-package sg.edu.np.mad.greencycle.Fragments;
+package sg.edu.np.mad.greencycle.StartUp;
 
 import android.content.Intent;
 import android.os.Bundle;
