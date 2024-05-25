@@ -107,7 +107,7 @@ public class ViewGoals extends AppCompatActivity {
                 intent.putExtra("user", user);
                 intent.putExtra("tank",tank);
                 startActivity(intent);
-                finish();
+
             }
         });
 

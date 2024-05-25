@@ -94,7 +94,7 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsViewHolder> {
                                     .child(user.getUsername())
                                     .child("tanks")
                                     .child(String.valueOf(tank.getTankID()))
-                                    .child("Goals")
+                                    .child("goals")
                                     .child(String.valueOf(goals.getGoalid()));
                             goalsRef.removeValue();
 

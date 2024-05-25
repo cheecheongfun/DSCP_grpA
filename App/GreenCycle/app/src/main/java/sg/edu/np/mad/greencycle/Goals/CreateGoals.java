@@ -233,6 +233,7 @@ public class CreateGoals extends AppCompatActivity {
         });
 
         Toast.makeText(this, "Goal saved successfully!", Toast.LENGTH_SHORT).show();
+        finish();
 
     }
 
