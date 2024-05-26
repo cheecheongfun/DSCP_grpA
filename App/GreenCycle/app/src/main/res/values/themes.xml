@@ -131,6 +131,12 @@
 
     </style>
 
+    <style name="AppBackgroundColour2">
+        <item name="android:background">@color/white</item>
+        <item name="android:textColor">@color/textColour</item>
+        <item name="fontFamily">sans-serif-condensed-medium</item>
+    </style>
+
 
 
 
