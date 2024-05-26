@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +38,9 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         Map<String, String> imageData = imageDataList.get(position);
         Glide.with(context)
                 .load(imageData.get("imageUrl"))
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.imageView);
+
         holder.dateText.setText(imageData.get("timestamp"));
     }
 

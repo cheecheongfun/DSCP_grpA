@@ -1,29 +1,39 @@
 package sg.edu.np.mad.greencycle.ImageLog;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.LiveData.Tank;
 import sg.edu.np.mad.greencycle.LiveData.TankSelection;
+import sg.edu.np.mad.greencycle.NPKvalue.npk_value;
 import sg.edu.np.mad.greencycle.R;
+import sg.edu.np.mad.greencycle.StartUp.MainActivity;
 
 public class UploadImage extends AppCompatActivity {
     private StorageReference mStorageRef;
@@ -52,6 +62,7 @@ public class UploadImage extends AppCompatActivity {
         findViewById(R.id.btnUploadImage).setOnClickListener(v -> {
             uploadImage();
         });
+
         btnCancel.setOnClickListener(v -> {
             resetImageView();
             btnCancel.setVisibility(View.GONE);  // Hide the cancel button again after reset
@@ -75,20 +86,43 @@ public class UploadImage extends AppCompatActivity {
         }
     }
 
+
     private void uploadImage() {
         btnCancel.setVisibility(View.VISIBLE);
         Toast.makeText(UploadImage.this, "Uploading Image", Toast.LENGTH_LONG).show();
         if (imageUri != null) {
-            StorageReference fileRef = mStorageRef.child("images/" + System.currentTimeMillis() + ".jpg");
-            fileRef.putFile(imageUri).addOnSuccessListener(taskSnapshot ->
-                    fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        uploadImageDetailsToFirestore(uri.toString());
-                    }).addOnFailureListener(e -> {
-                        Toast.makeText(UploadImage.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    })
-            );
-        } else {
+            // Use Glide to load the image as a bitmap
+            Glide.with(this)
+                    .asBitmap()
+                    .load(imageUri)
+                    .into(new CustomTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                            // Resize and compress the image
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            resource.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+                            byte[] data = baos.toByteArray();
 
+                            // Create a reference to the Firebase Storage
+                            StorageReference fileRef = FirebaseStorage.getInstance().getReference().child("images/" + System.currentTimeMillis() + ".jpg");
+
+                            // Upload the byte array to Firebase Storage
+                            fileRef.putBytes(data).addOnSuccessListener(taskSnapshot ->
+                                    fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                        uploadImageDetailsToFirestore(uri.toString());
+                                    }).addOnFailureListener(e -> {
+                                        Toast.makeText(UploadImage.this, "Failed to get image URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    })
+                            ).addOnFailureListener(e -> {
+                                Toast.makeText(UploadImage.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
+                        }
+
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+                        }
+                    });
+        } else {
             Toast.makeText(this, "Please Select an Image", Toast.LENGTH_SHORT).show();
         }
     }
@@ -108,12 +142,6 @@ public class UploadImage extends AppCompatActivity {
                     Toast.makeText(UploadImage.this, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show();
                     resetImageView();
                     btnCancel.setVisibility(View.GONE);
-                    Intent image = new Intent(getApplicationContext(), DisplayImage.class);
-                    Bundle info = new Bundle();
-                    info.putParcelable("tank", tank);
-                    info.putParcelable("user", user);
-                    image.putExtras(info);
-                    startActivity(image);
                 })
                 .addOnFailureListener(e -> Toast.makeText(UploadImage.this, "Upload Error", Toast.LENGTH_SHORT).show());
     }

@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import java.util.List;
 import java.util.Map;
 import sg.edu.np.mad.greencycle.R;
@@ -52,6 +54,7 @@ public class galleryAdapter extends BaseAdapter {
         Map<String, String> imageData = imageDataList.get(position);
         Glide.with(context)
                 .load(imageData.get("imageUrl"))
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.uploadicon)
                 .into(holder.imageView);
 

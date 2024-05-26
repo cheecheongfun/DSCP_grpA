@@ -11,6 +11,16 @@
     <!-- ImageView to display the selected image -->
 
     <!-- Button to choose an image -->
+    <TextView
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/back_button"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="15dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:theme="@style/DrawableTint" />
 
     <ImageView
         android:id="@+id/imageView"

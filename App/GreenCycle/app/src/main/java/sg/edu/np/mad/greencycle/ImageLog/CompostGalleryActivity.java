@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -25,6 +26,8 @@ public class CompostGalleryActivity extends AppCompatActivity {
     User user;
     Tank tank;
 
+    ImageButton recycle;
+
     private GridView gridView;
     private galleryAdapter adapter; // Assume ImageAdapter is adjusted to work with GridView
 
@@ -39,6 +42,7 @@ public class CompostGalleryActivity extends AppCompatActivity {
 
 
         gridView = findViewById(R.id.gridView);
+        recycle = findViewById(R.id.imageButton);
 
         fetchImages();
 
@@ -51,6 +55,20 @@ public class CompostGalleryActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        recycle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent feed = new Intent(getApplicationContext(), DisplayImage.class);
+                Bundle info = new Bundle();
+                info.putParcelable("tank", tank);
+                info.putParcelable("user", user);
+                feed.putExtras(info);
+                startActivity(feed);
+
+            }
+        });
+
     }
 
     private void fetchImages() {
