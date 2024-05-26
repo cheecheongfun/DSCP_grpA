@@ -58,7 +58,7 @@ public class Analytics extends AppCompatActivity {
 
         }
         else if (view.getId() == R.id.tvWeek){
-            loadFragment(new Analytics_week());
+            loadFragment(new Week_charts());
         }
         else if (view.getId() == R.id.tvMonth){
             loadFragment(new Analytics_month());

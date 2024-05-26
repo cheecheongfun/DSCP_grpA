@@ -1,5 +1,6 @@
 package sg.edu.np.mad.greencycle.Analytics;
 
+import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
@@ -18,12 +20,17 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 
 import sg.edu.np.mad.greencycle.R;
 
 public class Analytics_day extends Fragment {
+    TextView todaydate;
 
     public Analytics_day() {
         // Required empty public constructor
@@ -38,10 +45,47 @@ public class Analytics_day extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_analytics_day, container, false);
-
         setupCharts(view);
+
+        todaydate = view.findViewById(R.id.Date);
+        updateCurrentDate();
+
+        // Add click listener to the date TextView
+        todaydate.setOnClickListener(v -> showDatePickerDialog());
+
         return view;
     }
+
+    private void updateCurrentDate() {
+        String currentDate = new SimpleDateFormat("EEE, MMM d, yyyy", Locale.getDefault()).format(new Date());
+        todaydate.setText(currentDate);
+    }
+
+    private void showDatePickerDialog() {
+        // Create a Calendar object to get the current year, month, and day
+        Calendar today = Calendar.getInstance();
+        int year = today.get(Calendar.YEAR);
+        int month = today.get(Calendar.MONTH);
+        int day = today.get(Calendar.DAY_OF_MONTH);
+
+        // Create a DatePickerDialog that sets the date
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), (view, year1, monthOfYear, dayOfMonth) -> {
+            Calendar selectedDate = Calendar.getInstance();
+            selectedDate.set(year1, monthOfYear, dayOfMonth);
+            updateDate(selectedDate.getTime());
+        }, year, month, day);
+
+        datePickerDialog.show();
+    }
+
+    private void updateDate(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, MMM d, yyyy", Locale.getDefault());
+        todaydate.setText(dateFormat.format(date));
+
+        // Update your data based on the selected date
+        setupCharts(getView());
+    }
+
 
     private void setupCharts(View view) {
         int hours = 100; // Increased number of hours to demonstrate scrolling
@@ -49,27 +93,27 @@ public class Analytics_day extends Fragment {
         // Setting up each chart with specific settings
         setupChart((LineChart) view.findViewById(R.id.chart_nitrogen),
                 generateFakeData(20, 80, hours), "Nitrogen Levels",
-                Color.parseColor("#FFC0CB"), Color.WHITE, "Nitrogen");
+                Color.parseColor("#FFC0CB"), Color.WHITE, "Nitrogen Chart");
 
         setupChart((LineChart) view.findViewById(R.id.chart_potassium),
                 generateFakeData(10, 60, hours), "Potassium Levels",
-                Color.parseColor("#FF69B4"), Color.WHITE, "Potassium");
+                Color.parseColor("#FF69B4"), Color.WHITE, "Potassium Chart");
 
         setupChart((LineChart) view.findViewById(R.id.chart_phosphorous),
                 generateFakeData(15, 50, hours), "Phosphorous Levels",
-                Color.parseColor("#DB7093"), Color.WHITE, "Phosphorous");
+                Color.parseColor("#DB7093"), Color.WHITE, "Phosphorous Chart");
 
         setupChart((LineChart) view.findViewById(R.id.chart_temperature),
                 generateFakeData(10, 30, hours), "Temperature Levels",
-                Color.parseColor("#32CD32"), Color.WHITE, "Temperature");
+                Color.parseColor("#32CD32"), Color.WHITE, "Temperature Chart");
 
         setupChart((LineChart) view.findViewById(R.id.chart_humidity),
                 generateFakeData(40, 100, hours), "Humidity Levels",
-                Color.parseColor("#00FF7F"), Color.WHITE, "Humidity");
+                Color.parseColor("#00FF7F"), Color.WHITE, "Humidity Chart");
 
         setupChart((LineChart) view.findViewById(R.id.chart_ph),
                 generateFakeData(4, 9, hours), "pH Levels",
-                Color.parseColor("#90EE90"), Color.WHITE, "pH");
+                Color.parseColor("#90EE90"), Color.WHITE, "pH Chart");
     }
 
     private void setupChart(LineChart chart, ArrayList<Entry> data, String label, int color, int backgroundColor, String title) {

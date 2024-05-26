@@ -13,9 +13,21 @@
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
         android:drawableStart="@drawable/back_button"
         android:layout_marginTop="15dp"
         android:layout_marginStart="15dp"
+        android:theme="@style/DrawableTint" />
+    <TextView
+        android:id="@+id/goalbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/baseline_scoreboard_24"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
         android:theme="@style/DrawableTint" />
 
     <TextView

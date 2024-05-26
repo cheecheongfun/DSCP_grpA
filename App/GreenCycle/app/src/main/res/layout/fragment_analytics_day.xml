@@ -18,6 +18,20 @@
             android:padding="16dp">
 
             <!-- CardView for Nitrogen Chart -->
+
+
+            <TextView
+                android:id="@+id/Date"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="TextView"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textAlignment="center"
+                android:background="@color/light_green"
+                />
+
+
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

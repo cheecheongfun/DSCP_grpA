@@ -58,4 +58,6 @@ dependencies {
     implementation ("com.squareup.picasso:picasso:2.71828")
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation ("com.google.code.gson:gson:2.8.9")
+    implementation ("com.google.firebase:firebase-firestore:24.1.0")
+
 }

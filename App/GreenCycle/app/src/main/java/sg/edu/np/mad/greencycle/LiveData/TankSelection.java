@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -31,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import sg.edu.np.mad.greencycle.Classes.User;
-import sg.edu.np.mad.greencycle.Fragments.MainActivity;
+import sg.edu.np.mad.greencycle.StartUp.MainActivity;
 import sg.edu.np.mad.greencycle.R;
 
 public class TankSelection extends AppCompatActivity {
