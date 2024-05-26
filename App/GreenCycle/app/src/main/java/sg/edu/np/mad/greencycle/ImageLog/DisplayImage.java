@@ -20,12 +20,13 @@ import java.util.Map;
 
 import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.LiveData.Tank;
+import sg.edu.np.mad.greencycle.LiveData.TankSelection;
 import sg.edu.np.mad.greencycle.R;
 
 public class DisplayImage extends AppCompatActivity {
     User user;
     Tank tank;
-    ImageButton upload;
+    ImageButton upload,back,gallery;
     RecyclerView recyclerView;
     ImageAdapter adapter;
 
@@ -42,6 +43,18 @@ public class DisplayImage extends AppCompatActivity {
 
         upload = findViewById(R.id.Compostcamera);
         recyclerView = findViewById(R.id.rvTanks);
+        gallery = findViewById(R.id.gallery);
+
+
+//        back = findViewById(R.id.imageButton2);
+
+//        back.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent feed = new Intent(getApplicationContext(), TankSelection.class);
+//                startActivity(feed);
+//            }
+//        });
 
         upload.setOnClickListener(view -> {
             Intent feed = new Intent(getApplicationContext(), UploadImage.class);
@@ -50,6 +63,19 @@ public class DisplayImage extends AppCompatActivity {
             info.putParcelable("user", user);
             feed.putExtras(info);
             startActivity(feed);
+        });
+
+        gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent feed = new Intent(getApplicationContext(), CompostGalleryActivity.class);
+                Bundle info = new Bundle();
+                info.putParcelable("tank", tank);
+                info.putParcelable("user", user);
+                feed.putExtras(info);
+                startActivity(feed);
+
+            }
         });
 
         adapter = new ImageAdapter(this, new ArrayList<>());

@@ -1,5 +1,6 @@
 package sg.edu.np.mad.greencycle.ImageLog;
 
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

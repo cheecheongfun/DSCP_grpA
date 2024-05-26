@@ -24,7 +24,6 @@
             android:layout_marginEnd="0dp"
             android:padding="16dp"
             android:textSize="20dp"
-            android:textStyle="bold"
             tools:text="Date" />
 
         <ImageView
@@ -32,7 +31,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="80dp"
             android:src="@drawable/uploadicon" />
+
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

@@ -8,6 +8,13 @@
     tools:context=".ImageLog.DisplayImage"
     android:theme="@style/AppBackgroundColour">
 
+    <ImageButton
+        android:id="@+id/gallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/transparent"
+        app:srcCompat="@drawable/baseline_grid_view_24" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTanks"
         android:layout_width="match_parent"
@@ -16,23 +23,12 @@
 
     <ImageButton
         android:id="@+id/Compostcamera"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="64dp"
+        android:layout_height="53dp"
         android:layout_gravity="end|top"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
-        app:srcCompat="@drawable/baseline_file_upload_24"
-        android:backgroundTint="@color/transparent"/>
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="321dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/manrope"
-        android:text="Image Log"
-        android:textAlignment="center"
-        android:textColor="@color/light_green"
-        android:textSize="30dp"
-        android:layout_marginTop="15dp"/>
+        android:backgroundTint="@color/transparent"
+        app:srcCompat="@drawable/baseline_file_upload_24" />
 
 </FrameLayout>
