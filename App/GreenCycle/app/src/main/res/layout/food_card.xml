@@ -28,7 +28,9 @@
         android:layout_toEndOf="@+id/check"
         android:textSize="15sp"
         android:hint="Food"
-        android:visibility="visible"/>
+        android:visibility="visible"
+        android:layout_alignTop="@+id/check"
+        android:layout_alignBottom="@+id/check"/>
     <EditText
         android:id="@+id/editAmt"
         android:layout_width="wrap_content"
@@ -38,6 +40,8 @@
         android:inputType="number"
         android:textSize="15sp"
         android:visibility="invisible"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true"
+        android:layout_alignTop="@+id/check"
+        android:layout_alignBottom="@+id/check"/>
 
 </RelativeLayout>

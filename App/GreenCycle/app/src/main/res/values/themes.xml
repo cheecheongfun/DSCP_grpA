@@ -33,8 +33,6 @@
         <item name="android:background">@color/main_background</item>
         <item name="android:textColor">@color/textColour</item>
         <item name="fontFamily">sans-serif-condensed-medium</item>
-
-
     </style>
 
     <!-- Tank list cards -->
