@@ -15,14 +15,13 @@ public class FoodViewHolder extends RecyclerView.ViewHolder{
 
     TextView foodText;
     CheckBox check;
-    EditText editAmt;
-    RelativeLayout foodCard;
+    EditText editAmt, editFood;
 
     public FoodViewHolder(@NonNull View itemView) {
         super(itemView);
         foodText = itemView.findViewById(R.id.foodText);
         check = itemView.findViewById(R.id.check);
         editAmt = itemView.findViewById(R.id.editAmt);
-        foodCard = itemView.findViewById(R.id.foodCard);
+        editFood = itemView.findViewById(R.id.editFood);
     }
 }

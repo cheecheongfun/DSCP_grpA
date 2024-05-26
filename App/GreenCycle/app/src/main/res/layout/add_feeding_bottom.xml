@@ -139,7 +139,7 @@
         android:layout_below="@id/browns"
         android:layout_marginTop="10dp"
         android:layout_toEndOf="@id/waterText"
-        android:inputType="text"
+        android:inputType="number"
         android:hint="input amount"
         android:layout_marginStart="10dp"/>
 

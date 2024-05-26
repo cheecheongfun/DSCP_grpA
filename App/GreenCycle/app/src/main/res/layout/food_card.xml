@@ -20,12 +20,22 @@
         android:layout_alignBottom="@+id/check"
         android:gravity="center"
         android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/editFood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/check"
+        android:textSize="15sp"
+        android:hint="Food"
+        android:visibility="visible"/>
     <EditText
         android:id="@+id/editAmt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/foodText"
         android:hint="input amount"
+        android:inputType="number"
         android:textSize="15sp"
         android:visibility="invisible"
         android:layout_centerVertical="true"/>

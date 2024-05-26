@@ -51,14 +51,14 @@ public class Feeding extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference reference;
     RecyclerView logRecycler, greenRecycler, brownRecycler;
-    TextView noLogText, backButton, date, editNote, waterAmt,calendar;
+    TextView noLogText, backButton, date, editNote, waterAmt,calendar, addGreen, addBrown ;
     ArrayList<String> green,brown, greenFood, brownFood;
     ArrayList<sg.edu.np.mad.greencycle.FeedingLog.Log> feedingLog;
     ArrayList<Tank> tankList;
     FloatingActionButton add;
     LogAdapter mAdapter;
     FoodAdapter gAdapter, bAdapter;
-    int targetTankId;
+    int targetTankId, water;
     String dateFed;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,9 +113,13 @@ public class Feeding extends AppCompatActivity {
                 brownRecycler = addLog.findViewById(R.id.brownRecycler);
                 waterAmt = addLog.findViewById(R.id.editWater);
                 editNote = addLog.findViewById(R.id.notesDescription);
+                addGreen = addLog.findViewById(R.id.addGreen);
+                addBrown = addLog.findViewById(R.id.addBrown);
+
                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                 String today = formatter.format(new Date());
                 date.setText(today);
+                dateFed = date.getText().toString().trim();
 
                 // date selection or put todays date
                 calendar.setOnClickListener(new View.OnClickListener() {
@@ -138,7 +142,7 @@ public class Feeding extends AppCompatActivity {
                                     month1 = "0" + month1;
                                 }
                                 date.setText(day1 + "/" + month1 + "/" + year); // sets the text to the chosen date
-                                dateFed = date.getText().toString(); // setting the dueDate variable for the task object
+                                dateFed = date.getText().toString();
                             }
                         },
                                 year, month, day);
@@ -149,10 +153,12 @@ public class Feeding extends AppCompatActivity {
                 });
 
 
-
+                Log.i(null, waterAmt.getText().toString());
                 // water amount
-                String water = waterAmt.getText().toString().trim();
-
+                if (!waterAmt.getText().toString().isEmpty()){
+                    water =  Integer.parseInt(waterAmt.getText().toString().trim());
+                }
+                else water = 0;
                 // add notes
                 editNote.addTextChangedListener(new TextWatcher() {
                     @Override
@@ -170,13 +176,24 @@ public class Feeding extends AppCompatActivity {
 
                     }
                 });
-                gAdapter = new FoodAdapter(greenFood, greenRecycler);
+
+                String notes = editNote.getText().toString().trim();
+
+                addGreen.setOnClickListener(v -> gAdapter.addItem());
+                addBrown.setOnClickListener(v -> bAdapter.addItem());
+
+                sg.edu.np.mad.greencycle.FeedingLog.Log log = new sg.edu.np.mad.greencycle.FeedingLog.Log(feedingLog.size(), targetTankId, dateFed, new ArrayList<>(), new ArrayList<>(), notes, water);
+                Log.i(null, "Log id: " + log.getLogId() + log.getLogDate());
+                gAdapter = new FoodAdapter(greenFood, greenRecycler, "green", user, log);
                 greenRecycler.setLayoutManager(new LinearLayoutManager(Feeding.this));
                 greenRecycler.setAdapter(gAdapter);
 
-                bAdapter = new FoodAdapter(brownFood, brownRecycler);
+                bAdapter = new FoodAdapter(brownFood, brownRecycler, "brown", user, log);
                 brownRecycler.setLayoutManager(new LinearLayoutManager(Feeding.this));
                 brownRecycler.setAdapter(bAdapter);
+                if (!log.getGreens().isEmpty()){
+                    Log.i(null, "GreenLog: " + log.getGreens().get(0));
+                }
                 addLog.show();
                 // show bottom view
 //                green = new ArrayList<>();
