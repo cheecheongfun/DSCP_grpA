@@ -9,13 +9,14 @@ import android.net.Uri;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-import com.google.firebase.Timestamp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +27,8 @@ import sg.edu.np.mad.greencycle.R;
 public class UploadImage extends AppCompatActivity {
     private StorageReference mStorageRef;
     private Uri imageUri;
-    int targetTankId;
+    private ImageView imageView;
+    private Button btnCancel;
 
     User user;
     Tank tank;
@@ -37,18 +39,26 @@ public class UploadImage extends AppCompatActivity {
         setContentView(R.layout.activity_upload_image);
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
+        imageView = findViewById(R.id.imageView);
+        btnCancel = findViewById(R.id.btnCancel);
+        btnCancel.setVisibility(View.GONE);
 
         Intent receivingEnd = getIntent();
         user = receivingEnd.getParcelableExtra("user");
         tank = receivingEnd.getParcelableExtra("tank");
-        targetTankId = tank.getTankID();
-        Log.i(null, "Tank ID: " + targetTankId);
 
         findViewById(R.id.btnChooseImage).setOnClickListener(v -> chooseImage());
-        findViewById(R.id.btnUploadImage).setOnClickListener(v -> uploadImage());
+        findViewById(R.id.btnUploadImage).setOnClickListener(v -> {
+            uploadImage();
+        });
+        btnCancel.setOnClickListener(v -> {
+            resetImageView();
+            btnCancel.setVisibility(View.GONE);  // Hide the cancel button again after reset
+        });
     }
 
     private void chooseImage() {
+        btnCancel.setVisibility(View.VISIBLE);
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -60,58 +70,50 @@ public class UploadImage extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
-            ImageView imageView = findViewById(R.id.imageView);
             imageView.setImageURI(imageUri);
         }
     }
 
     private void uploadImage() {
+        btnCancel.setVisibility(View.VISIBLE);
+        Toast.makeText(UploadImage.this, "Uploading Image", Toast.LENGTH_LONG).show();
         if (imageUri != null) {
-            // Setting up the reference for the image in Firebase Storage
-            StorageReference fileRef = mStorageRef.child("images/" + user.getUsername() + ".jpg");
-
-            // Uploading the image to Firebase Storage
+            StorageReference fileRef = mStorageRef.child("images/" + System.currentTimeMillis() + ".jpg");
             fileRef.putFile(imageUri).addOnSuccessListener(taskSnapshot ->
                     fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        // Getting the download URL of the uploaded image
-                        String imageUrl = uri.toString();
-
-                        // Properly creating the Timestamp from System.currentTimeMillis()
-                        long currentTimeMillis = System.currentTimeMillis();
-                        long seconds = currentTimeMillis / 1000; // Convert milliseconds to seconds
-                        int nanoseconds = (int) ((currentTimeMillis % 1000) * 1000000); // Convert the leftover milliseconds to nanoseconds
-
-                        // Creating the Timestamp object for Firestore
-                        Timestamp timestamp = new Timestamp(seconds, nanoseconds);
-
-                        // Preparing data to be saved in Firestore
-                        Map<String, Object> imageDetails = new HashMap<>();
-                        imageDetails.put("image_url", imageUrl);
-                        imageDetails.put("timestamp", timestamp);
-
-                        // Assume you already have the user and tank objects from the intent or another source
-                        if (user != null && tank != null) {
-                            // Get user ID and Tank ID
-                            String userId = user.getUsername() ;// Ensure you have getUserId() in your User class
-                            int tankId = tank.getTankID();
-
-                            // Saving the data in Firestore under the user and tank specific document
-                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            db.collection("Users").document(userId)
-                                    .collection("Tanks").document(String.valueOf(tankId))
-                                    .collection("Images").document()  // Auto-generating document ID for the image
-                                    .set(imageDetails)
-                                    .addOnSuccessListener(aVoid -> Toast.makeText(UploadImage.this, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show())
-                                    .addOnFailureListener(e -> Toast.makeText(UploadImage.this, "Upload Error", Toast.LENGTH_SHORT).show());
-                        } else {
-                            Toast.makeText(UploadImage.this, "User or Tank data not found", Toast.LENGTH_SHORT).show();
-                        }
-                    })).addOnFailureListener(e -> {
-                Toast.makeText(UploadImage.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            });
+                        uploadImageDetailsToFirestore(uri.toString());
+                    }).addOnFailureListener(e -> {
+                        Toast.makeText(UploadImage.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    })
+            );
         } else {
+
             Toast.makeText(this, "Please Select an Image", Toast.LENGTH_SHORT).show();
         }
     }
 
+    private void uploadImageDetailsToFirestore(String imageUrl) {
+        Map<String, Object> imageDetails = new HashMap<>();
+        imageDetails.put("image_url", imageUrl);
+        imageDetails.put("timestamp", new Timestamp(new java.util.Date()));
+        btnCancel.setVisibility(View.GONE);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Users").document(user.getUsername())
+                .collection("Tanks").document(String.valueOf(tank.getTankID()))
+                .collection("Images").document()
+                .set(imageDetails)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(UploadImage.this, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show();
+                    resetImageView();
+                    btnCancel.setVisibility(View.GONE);
+                })
+                .addOnFailureListener(e -> Toast.makeText(UploadImage.this, "Upload Error", Toast.LENGTH_SHORT).show());
+    }
+
+    private void resetImageView() {
+        imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.uploadicon));
+        imageUri = null; // Clear the image URI
+        btnCancel.setVisibility(View.GONE);  // Ensure the cancel button is hidden after reset
+    }
 }
