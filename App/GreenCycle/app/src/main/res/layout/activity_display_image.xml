@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ImageLog.DisplayImage"
+    android:theme="@style/AppBackgroundColour">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTanks"
+        android:layout_width="match_parent"
+        android:layout_height="652dp"
+        android:layout_marginTop="80dp" />
+
+    <ImageButton
+        android:id="@+id/Compostcamera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|top"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        app:srcCompat="@drawable/baseline_file_upload_24"
+        android:backgroundTint="@color/transparent"/>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="321dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/manrope"
+        android:text="Image Log"
+        android:textAlignment="center"
+        android:textColor="@color/light_green"
+        android:textSize="30dp"
+        android:layout_marginTop="15dp"/>
+
+</FrameLayout>

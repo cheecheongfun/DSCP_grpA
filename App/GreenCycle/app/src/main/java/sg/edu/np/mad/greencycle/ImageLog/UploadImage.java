@@ -22,6 +22,7 @@ import java.util.Map;
 
 import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.LiveData.Tank;
+import sg.edu.np.mad.greencycle.LiveData.TankSelection;
 import sg.edu.np.mad.greencycle.R;
 
 public class UploadImage extends AppCompatActivity {
@@ -107,6 +108,12 @@ public class UploadImage extends AppCompatActivity {
                     Toast.makeText(UploadImage.this, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show();
                     resetImageView();
                     btnCancel.setVisibility(View.GONE);
+                    Intent image = new Intent(getApplicationContext(), DisplayImage.class);
+                    Bundle info = new Bundle();
+                    info.putParcelable("tank", tank);
+                    info.putParcelable("user", user);
+                    image.putExtras(info);
+                    startActivity(image);
                 })
                 .addOnFailureListener(e -> Toast.makeText(UploadImage.this, "Upload Error", Toast.LENGTH_SHORT).show());
     }

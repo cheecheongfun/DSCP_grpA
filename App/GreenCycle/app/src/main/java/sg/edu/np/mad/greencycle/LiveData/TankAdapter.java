@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import sg.edu.np.mad.greencycle.FeedingLog.Feeding;
+import sg.edu.np.mad.greencycle.ImageLog.DisplayImage;
 import sg.edu.np.mad.greencycle.ImageLog.UploadImage;
 import sg.edu.np.mad.greencycle.R;
 
@@ -80,7 +81,7 @@ public class TankAdapter extends RecyclerView.Adapter<TankViewHolder>{
                     feed.putExtras(info);
                     context.startActivity(feed);
                 }else if (purpose.equals("Identify")) {
-                    Intent feed = new Intent(context, UploadImage.class);
+                    Intent feed = new Intent(context, DisplayImage.class);
                     Bundle info = new Bundle();
                     info.putParcelable("tank", tank);
                     info.putParcelable("user", user);
