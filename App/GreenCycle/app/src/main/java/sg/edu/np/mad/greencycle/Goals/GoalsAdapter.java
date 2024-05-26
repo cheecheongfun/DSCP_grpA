@@ -53,8 +53,7 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsViewHolder> {
     public void onBindViewHolder(@NonNull GoalsViewHolder holder, int position) {
 
         Goals goals = GoalsList.get(position);
-        if (goals.getGoals_completion().contains("Incomplete"))
-        {
+
             holder.goalstitle.setText(goals.getGoal_name());
             Log.v("user", user.getUsername());
             Log.v("tank", tank.getTankName());
@@ -78,7 +77,17 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsViewHolder> {
                 holder.progressBar.setProgress(tank.getNumberOfWorms());
                 holder.progressText.setText(tank.getNumberOfWorms() + "/" + goals.getGoals_number());
             }
-        }
+
+            if (goals.getGoal_name().toLowerCase().contains("waste")) {
+                holder.progressBar.setProgress(0);
+                holder.progressText.setText("0/" + goals.getGoals_number());
+            }
+            if (goals.getGoal_name().toLowerCase().contains("compost")) {
+                holder.progressBar.setProgress(0);
+                holder.progressText.setText("0/" + goals.getGoals_number());
+            }
+
+
 
         // Set OnClickListener for the delete ImageView
         holder.deleteImageview.setOnClickListener(new View.OnClickListener() {

@@ -55,9 +55,9 @@
     <string name="week">WEEK</string>
     <string name="day">DAY</string>
     <string-array name="goal_options">
-        <item>Increase worm population</item>
-        <item>Reduce waste</item>
-        <item>Improve compost quality</item>
+        <item>Increase worm population(Per)</item>
+        <item>Reduce waste(Grams)</item>
+        <item> Create Compost(Grams)</item>
     </string-array>
 
     <string name="food_item">%s:</string>

@@ -129,11 +129,14 @@ public class ViewGoals extends AppCompatActivity {
                     int goalsId = snapshot.child("goalid").getValue(Integer.class);
                     int goalsNumber = snapshot.child("goals_number").getValue(Integer.class);
 
+                    if (goalsCompletion.contains("Incomplete")) {
 
-                    // Create a Goals object from Firebase data
-                    Goals goal = new Goals(goalsId, goalsNumber, goalsCompletion, goalName, createdDate, endDate);
-                    goalsList.add(goal);
 
+                        // Create a Goals object from Firebase data
+                        Goals goal = new Goals(goalsId, goalsNumber, goalsCompletion, goalName, createdDate, endDate);
+                        goalsList.add(goal);
+
+                    }
                 }
 
                 adapter.notifyDataSetChanged();
