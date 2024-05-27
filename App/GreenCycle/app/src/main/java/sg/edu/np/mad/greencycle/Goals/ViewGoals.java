@@ -29,13 +29,14 @@ import java.util.List;
 import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.LiveData.LiveData;
 import sg.edu.np.mad.greencycle.LiveData.Tank;
+import sg.edu.np.mad.greencycle.LiveData.TankSelection;
 import sg.edu.np.mad.greencycle.R;
 
 public class ViewGoals extends AppCompatActivity {
     private RecyclerView recyclerView;
     private GoalsAdapter adapter;
     private TextView goaltext, back;
-    private ImageView backbutton,editbutton;
+    private TextView editbutton;
     private List<Goals> goalsList;
     User user;
     Tank tank;
@@ -89,12 +90,12 @@ public class ViewGoals extends AppCompatActivity {
 
         // Fetch data from Firebase Realtime Database
         fetchGoalsData();
-        backbutton.setOnClickListener(new View.OnClickListener() {
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ViewGoals.this, LiveData.class);
+                Intent intent = new Intent(ViewGoals.this, TankSelection.class);
                 intent.putExtra("user", user);
-                intent.putExtra("tank",tank);
+                intent.putExtra("where", "GOALS");
                 startActivity(intent);
                 finish();
             }
@@ -107,13 +108,9 @@ public class ViewGoals extends AppCompatActivity {
                 intent.putExtra("user", user);
                 intent.putExtra("tank",tank);
                 startActivity(intent);
-
             }
         });
-
-
     }
-
     private void fetchGoalsData() {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -130,8 +127,6 @@ public class ViewGoals extends AppCompatActivity {
                     int goalsNumber = snapshot.child("goals_number").getValue(Integer.class);
 
                     if (goalsCompletion.contains("Incomplete")) {
-
-
                         // Create a Goals object from Firebase data
                         Goals goal = new Goals(goalsId, goalsNumber, goalsCompletion, goalName, createdDate, endDate);
                         goalsList.add(goal);

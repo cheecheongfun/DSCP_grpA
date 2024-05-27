@@ -53,7 +53,6 @@ public class LiveData extends AppCompatActivity {
         potassium = findViewById(R.id.potassiumData);
         feedback1 = findViewById(R.id.point1);
         feedback2 = findViewById(R.id.point2);
-        goalbutton = findViewById(R.id.goalbutton);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,19 +64,7 @@ public class LiveData extends AppCompatActivity {
                 finish();
             }
         });
-
-        goalbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LiveData.this, ViewGoals.class);
-                intent.putExtra("user", user);
-                intent.putExtra("tank", tank);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-
+        
 
         tankName.setText(tank.getTankName());
         temp.setText("Temperature: " + tank.getTemperature() + "°C");

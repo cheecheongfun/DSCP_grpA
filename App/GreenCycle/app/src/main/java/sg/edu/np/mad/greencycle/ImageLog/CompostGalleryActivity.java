@@ -79,7 +79,7 @@ public class CompostGalleryActivity extends AppCompatActivity {
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Map<String, String>> imageDataList = new ArrayList<>();
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
                     queryDocumentSnapshots.forEach(document -> {
                         Map<String, String> imageData = new HashMap<>();
                         imageData.put("imageUrl", document.getString("image_url"));

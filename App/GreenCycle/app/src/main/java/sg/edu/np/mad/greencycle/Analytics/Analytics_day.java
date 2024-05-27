@@ -75,8 +75,12 @@ public class Analytics_day extends Fragment {
             updateDate(selectedDate.getTime());
         }, year, month, day);
 
+        // Set the maximum date to today to prevent selection of future dates
+        datePickerDialog.getDatePicker().setMaxDate(today.getTimeInMillis());
+
         datePickerDialog.show();
     }
+
 
     private void updateDate(Date date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, MMM d, yyyy", Locale.getDefault());

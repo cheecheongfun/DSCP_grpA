@@ -59,7 +59,7 @@
 
     <style name="CustomSearchView" parent="Widget.AppCompat.SearchView">
         <item name="android:background">@drawable/grey_square_wth_rounded_corners</item>
-        <item name="android:textColor">@color/textColour</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <!-- Custom DatePicker theme -->
@@ -116,7 +116,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowCloseOnTouchOutside">false</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
         <item name="android:windowAnimationStyle">@style/PopupAnimation</item>
         <!-- Set the window layout to include app name -->
         <item name="android:windowActionBar">true</item>
@@ -138,6 +138,21 @@
         <item name="android:textColor">@color/textColour</item>
         <item name="fontFamily">sans-serif-condensed-medium</item>
     </style>
+
+    <style name="layout">
+        <item name="android:background">@drawable/main_color_rounded</item>
+    </style>
+
+    <style name="AppBackgroundColour3">
+        <item name="android:background">@color/main_background</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="textcolor">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+
 
 
 

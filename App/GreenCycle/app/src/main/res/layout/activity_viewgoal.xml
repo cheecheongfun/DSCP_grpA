@@ -30,7 +30,7 @@
         android:layout_marginTop="6dp"/>
 
     <!-- Create Button -->
-    <ImageButton
+    <TextView
         android:id="@+id/create_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,8 +40,20 @@
         android:layout_marginEnd="15dp"
         android:background="@android:color/transparent"
         android:contentDescription="create_button"
-        android:src="@drawable/baseline_create_24"
-        android:theme="@style/DrawableTint"/>
+        android:theme="@style/DrawableTint"
+        android:drawableStart="@drawable/baseline_add_circle_24" />
+
+    <!-- Goals TextView -->
+    <TextView
+        android:id="@+id/goals_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="VermiCompost Goals"
+        android:textSize="40sp"
+        android:layout_below="@id/backButton"
+        android:layout_centerHorizontal="true" />
 
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
@@ -54,5 +66,6 @@
         android:layout_marginEnd="15dp"
         android:background="@drawable/white_square_with_rounded_corners"
         android:layout_below="@id/title"
+        android:theme="@style/TankRecyclerCard"
         android:layout_alignParentBottom="true" />
 </RelativeLayout>
