@@ -101,8 +101,36 @@ public class Analytics_month extends Fragment {
     }
 
     private void setupCharts(View view) {
-        setupBarChart((BarChart) view.findViewById(R.id.barChart_nitrogen), generateMonthlyBarData(20, 80), "Nitrogen", Color.parseColor("#FFC0CB"));
-        setupLineChart((LineChart) view.findViewById(R.id.lineChart_potassium), generateMonthlyLineData(10, 60), "Potassium", Color.parseColor("#FF69B4"));
+        // Setup Bar and Line Charts with appropriate data generation for each month
+        setupBarChart((BarChart) view.findViewById(R.id.barChart_nitrogen),
+                generateMonthlyBarData(20, 80),
+                "Nitrogen",
+                Color.parseColor("#FFC0CB"));
+
+        setupLineChart((LineChart) view.findViewById(R.id.lineChart_potassium),
+                generateMonthlyLineData(10, 60),
+                "Potassium",
+                Color.parseColor("#FF69B4"));
+
+        setupBarChart((BarChart) view.findViewById(R.id.barChart_phosphorous),
+                generateMonthlyBarData(15, 55),
+                "Phosphorous",
+                Color.parseColor("#DB7093"));
+
+        setupLineChart((LineChart) view.findViewById(R.id.lineChart_temperature),
+                generateMonthlyLineData(10, 30),
+                "Temperature",
+                Color.parseColor("#FFC0CB"));
+
+        setupBarChart((BarChart) view.findViewById(R.id.barChart_humidity),
+                generateMonthlyBarData(40, 100),
+                "Humidity",
+                Color.parseColor("#FF69B4"));
+
+        setupLineChart((LineChart) view.findViewById(R.id.lineChart_ph),
+                generateMonthlyLineData(4, 9),
+                "pH Level",
+                Color.parseColor("#DB7093"));
     }
 
     private ArrayList<BarEntry> generateMonthlyBarData(float min, float max) {

@@ -95,8 +95,20 @@ public class Week_charts extends Fragment {
     }
 
     private void setupCharts(View view) {
+        int maxDayIndex = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 2; // Monday as 0
+        if (!btnNextWeek.isEnabled()) {
+            // If showing the current week and today is not Sunday, only show data up to today
+            maxDayIndex = Math.min(maxDayIndex, Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 2);
+        } else {
+            maxDayIndex = 6; // Full week
+        }
+
         setupBarChart((BarChart) view.findViewById(R.id.barChart_nitrogen), generateWeeklyBarData(20, 80), "Nitrogen", Color.parseColor("#FFC0CB"));
         setupLineChart((LineChart) view.findViewById(R.id.lineChart_potassium), generateWeeklyLineData(10, 60), "Potassium", Color.parseColor("#FF69B4"));
+        setupBarChart((BarChart) view.findViewById(R.id.barChart_phosphorous), generateWeeklyBarData(15, 55), "Phosphorous", Color.parseColor("#DB7093"));
+        setupLineChart((LineChart) view.findViewById(R.id.lineChart_temperature), generateWeeklyLineData(10, 30), "Temperature", Color.parseColor("#FFC0CB"));
+        setupBarChart((BarChart) view.findViewById(R.id.barChart_humidity), generateWeeklyBarData(40, 100), "Humidity", Color.parseColor("#FF69B4"));
+        setupLineChart((LineChart) view.findViewById(R.id.lineChart_ph), generateWeeklyLineData(4, 9), "pH Level", Color.parseColor("#DB7093"));
     }
 
     private ArrayList<BarEntry> generateWeeklyBarData(float min, float max) {
