@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:paddingTop="0dp"
     android:id="@+id/constraint"
-    android:theme="@style/AppBackgroundColour2"
+    android:theme="@style/AppBackgroundColour"
     android:backgroundTint="@color/white"
     android:elevation="10dp"
     android:layout_marginTop="20dp"
@@ -16,13 +16,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:ignore="MissingConstraints"
-        android:backgroundTint="@color/white">
+        android:backgroundTint="@color/light_green">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/light_green"
             >
 
             <!-- Achievement 1 -->
@@ -46,7 +46,7 @@
                     android:id="@+id/delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_delete_24"
+                    android:src="@drawable/black_baseline_delete_24"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
                     android:contentDescription="Image in top right" />
