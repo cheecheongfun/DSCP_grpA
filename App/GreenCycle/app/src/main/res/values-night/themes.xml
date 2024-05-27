@@ -19,6 +19,11 @@
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
 
+    <style name="ButtonHome" parent="@style/Widget.Material3.ExtendedFloatingActionButton.Icon.Secondary">
+        <item name="colorAccent">@color/dark_green</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <!-- Sets the App Background Colour -->
     <style name="AppBackgroundColour">
         <item name="android:background">#11161C</item>

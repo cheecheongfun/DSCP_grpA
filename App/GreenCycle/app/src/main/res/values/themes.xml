@@ -26,6 +26,7 @@
 
     <style name="ButtonHome" parent="@style/Widget.Material3.ExtendedFloatingActionButton.Icon.Secondary">
         <item name="colorAccent">@color/light_green</item>
+        <item name="android:textColor">@color/textColour</item>
     </style>
 
     <!-- Sets the App Background Colour -->
@@ -93,6 +94,7 @@
         <item name="android:backgroundTint">@color/main_background</item>
         <item name="android:fontFamily">sans-serif-condensed-medium</item>
         <item name="android:textColor">@color/textColour</item>
+        <item name="android:buttonTint">@color/light_green</item>
     </style>
 
 

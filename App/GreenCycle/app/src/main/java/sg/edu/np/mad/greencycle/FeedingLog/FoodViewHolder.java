@@ -13,9 +13,10 @@ import sg.edu.np.mad.greencycle.R;
 
 public class FoodViewHolder extends RecyclerView.ViewHolder{
 
-    TextView foodText;
+    TextView foodText, colon;
     CheckBox check;
     EditText editAmt, editFood;
+    RelativeLayout editCard;
 
     public FoodViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -23,5 +24,7 @@ public class FoodViewHolder extends RecyclerView.ViewHolder{
         check = itemView.findViewById(R.id.check);
         editAmt = itemView.findViewById(R.id.editAmt);
         editFood = itemView.findViewById(R.id.editFood);
+        colon = itemView.findViewById(R.id.colon);
+        editCard = itemView.findViewById(R.id.foodCardEdit);
     }
 }

@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
@@ -20,6 +21,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -46,15 +49,18 @@ public class Feeding extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference reference;
     RecyclerView logRecycler, greenRecycler, brownRecycler;
-    TextView noLogText, backButton, date, editNote, waterAmt,calendar, addGreen, addBrown ;
+    public TextView noLogText, backButton, date, editNote, waterAmt,calendar, addGreen, addBrown ;
     ArrayList<String> green,brown, greenFood, brownFood;
-    ArrayList<sg.edu.np.mad.greencycle.FeedingLog.Log> feedingLog;
+    public ArrayList<sg.edu.np.mad.greencycle.FeedingLog.Log> feedingLog;
     ArrayList<Tank> tankList;
     FloatingActionButton add;
     LogAdapter mAdapter;
     FoodAdapter gAdapter, bAdapter;
     int targetTankId, water;
-    String dateFed;
+    String dateFed, notes;
+    public Button confirm;
+    public BottomSheetDialog addLog;
+    sg.edu.np.mad.greencycle.FeedingLog.Log log;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +102,7 @@ public class Feeding extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BottomSheetDialog addLog = new BottomSheetDialog(Feeding.this);
+                addLog = new BottomSheetDialog(Feeding.this);
                 addLog.setContentView(R.layout.add_feeding_bottom);
                 addLog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 addLog.setCancelable(true);
@@ -110,13 +116,15 @@ public class Feeding extends AppCompatActivity {
                 editNote = addLog.findViewById(R.id.notesDescription);
                 addGreen = addLog.findViewById(R.id.addGreen);
                 addBrown = addLog.findViewById(R.id.addBrown);
+                confirm = addLog.findViewById(R.id.confirm);
 
                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                 String today = formatter.format(new Date());
+                // set todays date first
                 date.setText(today);
                 dateFed = date.getText().toString().trim();
 
-                // date selection or put todays date
+                // date selection
                 calendar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -137,23 +145,14 @@ public class Feeding extends AppCompatActivity {
                                     month1 = "0" + month1;
                                 }
                                 date.setText(day1 + "/" + month1 + "/" + year); // sets the text to the chosen date
-                                dateFed = date.getText().toString();
                             }
                         },
                                 year, month, day);
-                        datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis()); // minimum date will be day of creation, selection of days before will be restricted
+                        datePickerDialog.getDatePicker().setMaxDate(c.getTimeInMillis()); // max date will be day of creation, selection of days after will be restricted
                         datePickerDialog.show();
                     }
 
                 });
-
-
-                Log.i(null, waterAmt.getText().toString());
-                // water amount
-                if (!waterAmt.getText().toString().isEmpty()){
-                    water =  Integer.parseInt(waterAmt.getText().toString().trim());
-                }
-                else water = 0;
                 // add notes
                 editNote.addTextChangedListener(new TextWatcher() {
                     @Override
@@ -168,69 +167,39 @@ public class Feeding extends AppCompatActivity {
 
                     @Override
                     public void afterTextChanged(Editable editable) {
-
                     }
                 });
 
-                String notes = editNote.getText().toString().trim();
-
+                // green and brown foods
                 addGreen.setOnClickListener(v -> gAdapter.addItem());
                 addBrown.setOnClickListener(v -> bAdapter.addItem());
 
-                sg.edu.np.mad.greencycle.FeedingLog.Log log = new sg.edu.np.mad.greencycle.FeedingLog.Log(feedingLog.size(), targetTankId, dateFed, new ArrayList<>(), new ArrayList<>(), notes, water);
-                Log.i(null, "Log id: " + log.getLogId() + log.getLogDate());
-                gAdapter = new FoodAdapter(greenFood, greenRecycler, "green", user, log);
+                log = new sg.edu.np.mad.greencycle.FeedingLog.Log(feedingLog.size(), targetTankId, dateFed, new ArrayList<>(), new ArrayList<>(), notes, water);
+                Log.i(null, "Log id: " + log.getLogId() + log.getWaterAmt());
+                gAdapter = new FoodAdapter(greenFood, greenRecycler, "green", user, log, Feeding.this);
                 greenRecycler.setLayoutManager(new LinearLayoutManager(Feeding.this));
                 greenRecycler.setAdapter(gAdapter);
 
-                bAdapter = new FoodAdapter(brownFood, brownRecycler, "brown", user, log);
+                bAdapter = new FoodAdapter(brownFood, brownRecycler, "brown", user, log, Feeding.this);
                 brownRecycler.setLayoutManager(new LinearLayoutManager(Feeding.this));
                 brownRecycler.setAdapter(bAdapter);
                 if (!log.getGreens().isEmpty()){
                     Log.i(null, "GreenLog: " + log.getGreens().get(0));
                 }
+                // to add the log
+                confirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        handleConfirmClick();
+                        addLog.dismiss();
+                    }
+                });
                 addLog.show();
-                // show bottom view
-//                green = new ArrayList<>();
-//                green.add("1 leaf");
-//                green.add("5 coffee ground");
-//                brown = new ArrayList<>();
-//                brown.add("2 cardboard");
-//                brown.add("2 paper");
-//                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-//                String today = formatter.format(new Date());
-//                sg.edu.np.mad.greencycle.FeedingLog.Log log = new sg.edu.np.mad.greencycle.FeedingLog.Log(feedingLog.size(), targetTankId, today, green, brown, null);
-//                Log.i(null, "Log: " + log.getLogDate());
-//                feedingLog.add(log);
-//                for (Tank tank : user.getTanks()){
-//                    if (targetTankId == tank.getTankID()){
-//                        tank.setFeedingLog(feedingLog);
-//                        tankList.set(targetTankId,tank);
-//                        user.setTanks(tankList);
-//                        break;
-//                    }
-//                }
-//                reference.child(user.getUsername()).setValue(user)
-//                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                            @Override
-//                            public void onSuccess(Void aVoid) {
-//                                // update success
-//                                Log.i("FirebaseUpdate", "User tank list updated. Log ID: " + tank.getFeedingLog().size());
-//                                Log.i(null, "Check list" + user.getTanks().get(0).getFeedingLog());
-//                                refreshLogRecyclerView();
-//                            }
-//                        })
-//                        .addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                // update failed
-//                                Log.e("FirebaseUpdate", "Failed to update user tank list.", e);
-//                            }
-//                        });
             }
         });
     }
     public void refreshLogRecyclerView() {
+        Log.i(null, "in refresh log");
         reference.child(user.getUsername()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -264,27 +233,32 @@ public class Feeding extends AppCompatActivity {
                 Log.e("Firebase", "Failed to read user data.", error.toException());
             }
         });
+        Log.i(null, "after firebase");
         greenFood = new ArrayList<>();
         brownFood = new ArrayList<>();
         for (Tank tank : user.getTanks()){
             if (tank.getFeedingLog() != null){
                 for (sg.edu.np.mad.greencycle.FeedingLog.Log log : tank.getFeedingLog()){
-                    greenFood.addAll(log.getGreens());
-                    brownFood.addAll(log.getBrowns());
-                    break;
+                    if (log.getGreens() != null){
+                        greenFood.addAll(log.getGreens());
+                    }
+                    if (log.getBrowns() != null) {
+                        brownFood.addAll(log.getBrowns());
+                    }
                 }
             }
         }
         if (greenFood != null){
             for (String s : greenFood){
                 int index = greenFood.indexOf(s);
-                greenFood.set(index, s.replaceAll("[^a-zA-Z]", ""));
+                greenFood.set(index, s.replaceAll("[^a-zA-Z ]", "").trim());
+
             }
         }
         if (brownFood != null){
             for (String s : brownFood){
                 int index = brownFood.indexOf(s);
-                brownFood.set(index, s.replaceAll("[^a-zA-Z]", ""));
+                brownFood.set(index, s.replaceAll("[^a-zA-Z ]", "").trim());
             }
         }
         // get foods from all feeding log
@@ -310,5 +284,59 @@ public class Feeding extends AppCompatActivity {
         linearLayoutManager.setStackFromEnd(true);
         logRecycler.setLayoutManager(linearLayoutManager);
         logRecycler.setAdapter(mAdapter);
+    }
+    private void handleConfirmClick() {
+        Log.i(null, "in confirm Click");
+        ArrayList<String> selectedGreens = gAdapter.getSelectedFoods();
+        ArrayList<String> selectedBrowns = bAdapter.getSelectedFoods();
+
+        if (selectedGreens != null){
+            log.getGreens().addAll(selectedGreens);
+        }
+        if (selectedBrowns != null){
+            log.getBrowns().addAll(selectedBrowns);
+        }
+        if (!waterAmt.getText().toString().isEmpty()){
+             water = Integer.parseInt(waterAmt.getText().toString());
+        } else water = 0;
+
+        String date = this.date.getText().toString();
+        String notes = editNote.getText().toString();
+        Log.i(null, "after get texts");
+        log.setLogDate(date);
+        log.setWaterAmt(water);
+        log.setNotes(notes);
+
+        feedingLog.add(log);
+        Log.i(null, "after add log");
+        // Assuming User and DatabaseReference setup is done
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference("users");
+
+        for (Tank tank : user.getTanks()) {
+            if (log.getTankId() == tank.getTankID()) {
+                Log.i(null, "feedingLog size: " + feedingLog.size());
+                tank.setFeedingLog(feedingLog);
+                user.getTanks().set(log.getTankId(), tank);
+                user.setTanks(user.getTanks());
+                break;
+            }
+        }
+        Log.i(null, "after set tank");
+        reference.child(user.getUsername()).setValue(user)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.i(null, "Check list" + user.getTanks().get(0).getFeedingLog().size());
+                        // Dismiss the dialog or close the activity
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("FirebaseUpdate", "Failed to update user tank list.", e);
+                    }
+                });
+        refreshLogRecyclerView();
     }
 }
