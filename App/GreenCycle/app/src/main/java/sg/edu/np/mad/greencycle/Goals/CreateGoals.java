@@ -112,6 +112,11 @@ public class CreateGoals extends AppCompatActivity {
             }
         });
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){finish();};
+        });
+
     }
 
     private void saveGoal() {
@@ -164,6 +169,7 @@ public class CreateGoals extends AppCompatActivity {
         }
 
         String sday;
+        String smonth;
 
         // Create a date string in dd/MM/yyyy format
         // month+1 since datepicker is zero-based
@@ -172,7 +178,13 @@ public class CreateGoals extends AppCompatActivity {
         else {
             sday = String.valueOf(day);
         }
-        String endDate = sday + "/" + month  + "/" + year;
+
+        if (month < 10){
+            smonth = "0" + String.valueOf(month);}
+        else {
+            smonth = String.valueOf(month);
+        }
+        String endDate = sday + "/" + smonth  + "/" + year;
 
         System.out.println("Selected Goal: " + selectedGoal);
         System.out.println("Goal Number: " + goalNumberInt);

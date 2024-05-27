@@ -3,8 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
     <!-- Include permissions here -->
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-feature android:name="android.hardware.camera" android:required="true"/>
 
 
     <application
@@ -17,6 +20,23 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GreenCycle"
         tools:targetApi="31">
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="sg.edu.np.mad.greencycle.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+
+        <activity
+            android:name=".ImageLog.CompostGalleryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ImageLog.DisplayImage"
+            android:exported="false" />
         <activity
             android:name=".ImageLog.UploadImage"
             android:exported="false" />
@@ -59,7 +79,6 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
     </application>
 
 </manifest>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ImageLog.DisplayImage"
+    android:theme="@style/AppBackgroundColour">
+
+    <ImageButton
+        android:id="@+id/gallery"
+        android:layout_width="wrap_content"
+        android:layout_height="95dp"
+        android:backgroundTint="@color/transparent"
+        app:srcCompat="@drawable/baseline_grid_view_24" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTanks"
+        android:layout_width="match_parent"
+        android:layout_height="548dp"
+        android:layout_marginTop="150dp" />
+
+    <ImageButton
+        android:id="@+id/Compostcamera"
+        android:layout_width="64dp"
+        android:layout_height="84dp"
+        android:layout_gravity="end|top"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/transparent"
+        app:srcCompat="@drawable/baseline_file_upload_24" />
+
+</FrameLayout>
