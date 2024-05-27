@@ -3,38 +3,23 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/transparent"
-    android:theme="@style/AppBackgroundColour">
+    android:theme="@style/AppBackgroundColour3">
 
     <RelativeLayout
         android:layout_width="600dp"
         android:layout_height="600dp"
         android:layout_centerVertical="true"
-        android:theme="@style/AppBackgroundColour">
-
-
-
-        <ImageButton
-            android:id="@+id/back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="30dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Close"
-            android:src="@drawable/baseline_close_24" />
-
+>
 
         <TextView
             android:id="@+id/select_goal_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/back_button"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="70dp"
             android:text="Select Goal"
             android:textColor="@color/black"
+            android:theme="@style/textcolor"
             android:textSize="28sp" />
 
         <Spinner
@@ -57,6 +42,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
             android:layout_marginLeft="30dp"
+            android:theme="@style/textcolor"
             android:text="Set Number for Goal"
             android:textColor="@color/black"
             android:textSize="24sp" />
@@ -84,6 +70,7 @@
             android:layout_marginTop="30dp"
             android:text="Select End Date"
             android:textColor="@color/black"
+            android:theme="@style/textcolor"
             android:textSize="20sp" />
 
         <Spinner

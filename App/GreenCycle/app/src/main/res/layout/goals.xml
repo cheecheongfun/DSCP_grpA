@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:paddingTop="0dp"
     android:id="@+id/constraint"
-    android:theme="@style/AppBackgroundColour"
-    android:backgroundTint="@color/white"
+    android:background="@drawable/main_color_rounded"
+    android:theme="@style/layout"
     android:elevation="10dp"
     android:layout_marginTop="20dp"
     android:layout_marginStart="15dp"
@@ -16,13 +16,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:ignore="MissingConstraints"
-        android:backgroundTint="@color/light_green">
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:backgroundTint="@color/light_green"
             >
 
             <!-- Achievement 1 -->

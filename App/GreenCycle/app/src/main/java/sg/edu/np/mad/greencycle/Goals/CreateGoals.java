@@ -50,7 +50,6 @@ public class CreateGoals extends AppCompatActivity {
         setContentView(R.layout.activity_create_goals);
 
         // Initialize views
-        backButton = findViewById(R.id.back_button);
         selectGoalLabel = findViewById(R.id.select_goal_label);
         goalSpinner = findViewById(R.id.goal_spinner);
         setNumberLabel = findViewById(R.id.set_number_label);
@@ -111,12 +110,6 @@ public class CreateGoals extends AppCompatActivity {
                 saveGoal();
             }
         });
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){finish();};
-        });
-
     }
 
     private void saveGoal() {

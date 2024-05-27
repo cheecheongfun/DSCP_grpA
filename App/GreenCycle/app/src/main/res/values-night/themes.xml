@@ -67,4 +67,17 @@
         <item name="android:fontFamily">sans-serif-condensed-medium</item>
         <item name="android:textColor">@color/white</item>
     </style>
+    <style name="layout">
+        <item name="android:background">@drawable/main_color_rounded</item>
+    </style>
+
+    <style name="CustomSearchView" parent="Widget.AppCompat.SearchView">
+        <item name="android:background">@null</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:drawableTint">@color/black</item>
+    </style>
+    <style name="textcolor">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
 </resources>

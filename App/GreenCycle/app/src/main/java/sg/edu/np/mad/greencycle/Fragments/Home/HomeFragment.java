@@ -1,5 +1,6 @@
 package sg.edu.np.mad.greencycle.Fragments.Home;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.activity.EdgeToEdge;
@@ -23,6 +24,7 @@ import sg.edu.np.mad.greencycle.Goals.ViewGoals;
 import sg.edu.np.mad.greencycle.LiveData.TankSelection;
 import sg.edu.np.mad.greencycle.NPKvalue.npk_value;
 import sg.edu.np.mad.greencycle.R;
+import sg.edu.np.mad.greencycle.Goals.Goals_Notification;
 
 public class HomeFragment extends Fragment {
 
@@ -58,7 +60,8 @@ public class HomeFragment extends Fragment {
         User user = receivingEnd.getParcelableExtra("user");
 
         Log.v("test",user.getUsername());
-        updateGoalsCompletion(user);
+        Goals_Notification goalsNotification = new Goals_Notification();
+        goalsNotification.updateGoalsCompletion(user,getContext());
 
 
         // Calling layout elements
@@ -126,106 +129,14 @@ public class HomeFragment extends Fragment {
         goalsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent goals = new Intent(getContext(), ViewGoals.class);
+                Intent goals = new Intent(getContext(), TankSelection.class);
                 goals.putExtra("user", user);
+                goals.putExtra("where", "GOALS");
                 startActivity(goals);
             }
         });
 
         return view;
     }
-
-    public void updateGoalsCompletion(User user) {
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference tanksRef = database.child("users").child(user.getUsername()).child("tanks");
-
-        tanksRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot tankSnapshot : dataSnapshot.getChildren()) {
-                    String tankId = tankSnapshot.getKey(); // Get tank ID
-                    String tankName = tankSnapshot.child("tankName").getValue(String.class); // Get tank name
-                    int numberOfWorms = tankSnapshot.child("numberOfWorms").getValue(Integer.class);
-
-                    DatabaseReference tankRef = tanksRef.child(tankId);
-
-                    for (DataSnapshot goalSnapshot : tankSnapshot.child("goals").getChildren()) {
-                        DatabaseReference goalRef = tankRef.child("goals").child(goalSnapshot.getKey());
-
-                        int goalsNumber = goalSnapshot.child("goals_number").getValue(Integer.class);
-                        String goals_completion = goalSnapshot.child("goals_completion").getValue(String.class);
-                        String goals_name = goalSnapshot.child("goal_name").getValue(String.class);
-
-                        if (goals_name.contains("worm")) {
-
-                            if (numberOfWorms >= goalsNumber && !goals_completion.equals("Complete")) {
-                                // Update goals_completion, include tank ID and tank name
-                                goalRef.child("goals_completion").setValue("Complete");
-                                String text = "Tank " + tankName + "'s desired worms population of " + goalsNumber + " has been achieved!";
-                                showCustomToast(text,1);
-
-                            }
-                        }
-
-                        if (goals_name.contains("Compost")) {
-
-                            //currently placeholder value
-                            int compost = 0;
-
-                            if (compost >= goalsNumber && !goals_completion.equals("Complete")) {
-                                // Update goals_completion, include tank ID and tank name
-                                goalRef.child("goals_completion").setValue("Complete");
-                                String text = "Tank " + tankName + " has produced the desired amount of " + goalsNumber + " grams of Compost!";
-                                showCustomToast(text,2);
-
-                            }
-                        }
-
-                        if (goals_name.contains("waste")) {
-
-                            //currently placeholder value
-                            int waste = 0;
-
-                            if (waste >= goalsNumber && !goals_completion.equals("Complete")) {
-                                // Update goals_completion, include tank ID and tank name
-                                goalRef.child("goals_completion").setValue("Complete");
-                                String text = "Tank " + tankName + " have helped reduce the desired waste of " + goalsNumber + " grams!";
-                                showCustomToast(text,3);
-                            }
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Handle errors
-            }
-        });
-    }
-
-    private void showCustomToast(String text,int choice) {
-        // Inflate custom layout for the toast
-        LayoutInflater inflater = getLayoutInflater();
-        View customToastView = inflater.inflate(R.layout.toast, null);
-
-        // Set text for the custom toast
-        TextView toastTextView = customToastView.findViewById(R.id.toast_text);
-        ImageView toastImageView = customToastView.findViewById(R.id.toast_image);
-
-        if (choice == 1){toastImageView.setImageResource(R.drawable.thumbs_up_worm);}
-        else if (choice == 2){toastImageView.setImageResource(R.drawable.compost);}
-        else{toastImageView.setImageResource(R.drawable.food_waste);}
-
-        toastTextView.setText(text);
-
-        // Create and show the custom toast
-        Toast customToast = new Toast(getContext());
-        customToast.setDuration(Toast.LENGTH_LONG);
-        customToast.setView(customToastView);
-        customToast.setGravity(Gravity.TOP | Gravity.FILL_HORIZONTAL, 0, 0);
-        customToast.show();
-    }
-
 
 }

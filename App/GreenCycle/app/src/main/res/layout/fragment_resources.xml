@@ -54,6 +54,7 @@
                     android:queryHint="Search here"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_below="@+id/backButton"
+                    android:forceDarkAllowed="false"
                     android:theme="@style/CustomSearchView"
                     android:background="@drawable/search_view_black"/>
 
