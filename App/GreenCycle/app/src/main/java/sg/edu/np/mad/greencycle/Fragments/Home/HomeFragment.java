@@ -23,10 +23,11 @@ import sg.edu.np.mad.greencycle.Goals.ViewGoals;
 import sg.edu.np.mad.greencycle.LiveData.TankSelection;
 import sg.edu.np.mad.greencycle.NPKvalue.npk_value;
 import sg.edu.np.mad.greencycle.R;
+import sg.edu.np.mad.greencycle.SolarForecast.Forecast;
 
 public class HomeFragment extends Fragment {
 
-    ImageButton npkButton, liveDataBtn, feedingLogBtn, analyticsBtn, goalsBtn, identifierBtn, soilTypeBtn;
+    ImageButton npkButton, liveDataBtn, feedingLogBtn, analyticsBtn, goalsBtn, imageLogBtn, soilTypeBtn, solarForecastBtn;
     TextView username;
 
 
@@ -67,8 +68,9 @@ public class HomeFragment extends Fragment {
         feedingLogBtn = view.findViewById(R.id.feedingLogButton);
         analyticsBtn = view.findViewById(R.id.analyticsButton);
         goalsBtn = view.findViewById(R.id.goalsButton);
-        identifierBtn = view.findViewById(R.id.imageLog);
+        imageLogBtn = view.findViewById(R.id.imageLog);
         soilTypeBtn = view.findViewById(R.id.soilTypeButton);
+        solarForecastBtn = view.findViewById(R.id.solarForecast);
         soilTypeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,7 +113,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        identifierBtn.setOnClickListener(new View.OnClickListener() {
+        imageLogBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent tankSelect = new Intent(getContext(), TankSelection.class);
@@ -121,14 +123,21 @@ public class HomeFragment extends Fragment {
             }
         });
 
-
-
         goalsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent goals = new Intent(getContext(), ViewGoals.class);
                 goals.putExtra("user", user);
                 startActivity(goals);
+            }
+        });
+
+        solarForecastBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent forecast = new Intent(getContext(), Forecast.class);
+                forecast.putExtra("user", user);
+                startActivity(forecast);
             }
         });
 

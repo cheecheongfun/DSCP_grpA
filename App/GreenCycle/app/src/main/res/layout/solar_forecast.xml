@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/forecastPage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Goals.ViewGoals"
-    android:id="@+id/main"
+    tools:context=".SolarForecast.Forecast"
     android:theme="@style/AppBackgroundColour">
 
-    <!-- Back Button -->
     <TextView
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
@@ -18,41 +17,34 @@
         android:layout_marginTop="15dp"
         android:layout_marginStart="15dp"
         android:theme="@style/DrawableTint" />
-
-    <!-- Page Title -->
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Vermicompost Goals"
+        android:text="Forecasting"
         android:textSize="30dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="6dp"/>
+        android:layout_below="@+id/backButton"/>
 
-    <!-- Create Button -->
-    <ImageButton
-        android:id="@+id/create_button"
+    <TextView
+        android:id="@+id/refresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/backButton"
         android:layout_alignBottom="@+id/backButton"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="15dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="create_button"
-        android:src="@drawable/baseline_create_24"
-        android:theme="@style/DrawableTint"/>
+        android:drawableStart="@drawable/baseline_refresh_24"
+        android:theme="@style/DrawableTint" />
 
-    <!-- RecyclerView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
+
+
+    <TextView
+        android:id="@+id/humidity"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:background="@drawable/white_square_with_rounded_corners"
-        android:layout_below="@id/title"
-        android:layout_alignParentBottom="true" />
+        android:layout_below="@+id/title"
+        android:layout_centerHorizontal="true" />
+
+
 </RelativeLayout>

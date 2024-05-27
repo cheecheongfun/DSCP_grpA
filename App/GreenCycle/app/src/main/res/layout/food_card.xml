@@ -32,7 +32,6 @@
         android:layout_alignTop="@+id/foodText"
         android:gravity="center"
         android:visibility="invisible"
-        android:textColor="@color/black"
         android:textSize="17sp"/>
 
     <EditText

@@ -1,6 +1,7 @@
 package sg.edu.np.mad.greencycle.Analytics;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -13,24 +14,45 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import sg.edu.np.mad.greencycle.Classes.User;
+import sg.edu.np.mad.greencycle.Goals.ViewGoals;
+import sg.edu.np.mad.greencycle.LiveData.LiveData;
+import sg.edu.np.mad.greencycle.LiveData.Tank;
+import sg.edu.np.mad.greencycle.LiveData.TankSelection;
 import sg.edu.np.mad.greencycle.R;
+import sg.edu.np.mad.greencycle.StartUp.MainActivity;
 
 public class Analytics extends AppCompatActivity {
-    TextView tvDay, tvWeek, tvMonth, tvYear;
-
+    TextView tvDay, tvWeek, tvMonth, tvYear, back;
+    User user;
+    Tank tank;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_analytics);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.analyticsPage), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        Intent receivingEnd = getIntent();
+        user = receivingEnd.getParcelableExtra("user");
+        tank = receivingEnd.getParcelableExtra("tank");
+
         tvDay = findViewById(R.id.tvDay);
         tvWeek = findViewById(R.id.tvWeek);
         tvMonth = findViewById(R.id.tvMonth);
         tvYear = findViewById(R.id.tvYear);
+        back = findViewById(R.id.backButton);
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -46,6 +68,16 @@ public class Analytics extends AppCompatActivity {
 
         loadFragment(new Analytics_day());
         highlightTextView(tvDay);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Analytics.this, TankSelection.class);
+                intent.putExtra("user", user);
+                intent.putExtra("where", "Analytics");
+                startActivity(intent);
+            }
+        });
     }
 
 

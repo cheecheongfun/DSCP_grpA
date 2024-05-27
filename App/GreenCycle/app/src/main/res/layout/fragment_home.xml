@@ -256,7 +256,7 @@
             android:textStyle="bold" />
 
         <ImageButton
-            android:id="@+id/solar1"
+            android:id="@+id/solarForecast"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_below="@+id/sectionSolar"
@@ -271,9 +271,9 @@
             android:id="@+id/solarText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/solar1"
-            android:layout_alignStart="@+id/goalsButton"
-            android:layout_alignEnd="@+id/goalsButton"
+            android:layout_below="@+id/solarForecast"
+            android:layout_alignStart="@+id/solarForecast"
+            android:layout_alignEnd="@+id/solarForecast"
             android:gravity="center"
             android:text="Forecast" />
     </RelativeLayout>

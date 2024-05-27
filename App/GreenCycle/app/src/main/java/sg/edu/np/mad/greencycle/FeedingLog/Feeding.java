@@ -34,6 +34,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -224,6 +226,7 @@ public class Feeding extends AppCompatActivity {
                 } else {
                     feedingLog = new ArrayList<sg.edu.np.mad.greencycle.FeedingLog.Log>();
                 }
+
                 updateRecyclerView(feedingLog);
             }
 
@@ -278,6 +281,13 @@ public class Feeding extends AppCompatActivity {
             Log.i(null, "not empty");
             noLogText.setVisibility(View.INVISIBLE);
         }
+
+        Collections.sort(feedingLog, new Comparator<sg.edu.np.mad.greencycle.FeedingLog.Log>() {
+            @Override
+            public int compare(sg.edu.np.mad.greencycle.FeedingLog.Log l1, sg.edu.np.mad.greencycle.FeedingLog.Log l2) {
+                return l1.getLogDate().compareTo(l2.getLogDate()); // For descending order
+            }
+        });
         mAdapter = new LogAdapter(feedingLog, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setReverseLayout(true);

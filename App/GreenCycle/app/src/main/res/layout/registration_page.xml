@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/back_button"
         android:layout_marginTop="15dp"
-
+        android:layout_marginStart="15dp"
         android:theme="@style/DrawableTint" />
 
     <TextView
