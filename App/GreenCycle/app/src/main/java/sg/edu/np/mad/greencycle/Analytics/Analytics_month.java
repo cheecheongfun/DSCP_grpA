@@ -1,11 +1,8 @@
 package sg.edu.np.mad.greencycle.Analytics;
 
 import android.app.DatePickerDialog;
-import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,45 +34,23 @@ import sg.edu.np.mad.greencycle.R;
 public class Analytics_month extends Fragment {
     private Calendar currentMonth = Calendar.getInstance();
     private TextView monthDateTextView;
-    private ImageButton btnNextMonth;
-
-    public Analytics_month() {
-        // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    private ImageButton btnNextMonth, btnPreviousMonth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_analytics_month, container, false);
 
         monthDateTextView = view.findViewById(R.id.Monthdate);
-        if (monthDateTextView == null) {
-            Log.e("AnalyticsMonth", "monthDateTextView is null");
-        } else {
-            monthDateTextView.setOnClickListener(v -> showDatePickerDialog());
-        }
-
         btnNextMonth = view.findViewById(R.id.btnNextMonth);
-        if (btnNextMonth == null) {
-            Log.e("AnalyticsMonth", "btnNextMonth is null");
-        }
+        btnPreviousMonth = view.findViewById(R.id.btnPreviousMonth);
 
-        ImageButton btnPreviousMonth = view.findViewById(R.id.btnPreviousMonth);
-        if (btnPreviousMonth == null) {
-            Log.e("AnalyticsMonth", "btnPreviousMonth is null");
-        } else {
-            btnPreviousMonth.setOnClickListener(v -> adjustMonth(-1));
-        }
+        monthDateTextView.setOnClickListener(v -> showDatePickerDialog());
+        btnPreviousMonth.setOnClickListener(v -> adjustMonth(-1));
+        btnNextMonth.setOnClickListener(v -> adjustMonth(1));
 
-        currentMonth = Calendar.getInstance(); // Initialize currentMonth
-        updateDateDisplay(); // Update display initially
+        updateDateDisplay();
         setupCharts(view);
-        checkButtonState(); // Check the state of the next month button
-
+        checkButtonState();
         return view;
     }
 
@@ -83,13 +58,16 @@ public class Analytics_month extends Fragment {
         Calendar today = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), (view, year, monthOfYear, dayOfMonth) -> {
             Calendar selectedDate = Calendar.getInstance();
-            selectedDate.set(year, monthOfYear, 1); // Set to the first day of the month selected
-            adjustToSelectedMonth(selectedDate);
-            setupCharts(getView());
-        }, today.get(Calendar.YEAR), today.get(Calendar.MONTH), 1);
+            selectedDate.set(year, monthOfYear, 1);
+            if (!selectedDate.after(today)) {
+                adjustToSelectedMonth(selectedDate);
+                setupCharts(getView());
+            }
+        }, today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
 
         datePickerDialog.getDatePicker().setCalendarViewShown(false);
         datePickerDialog.getDatePicker().setSpinnersShown(true);
+        datePickerDialog.getDatePicker().setMaxDate(today.getTimeInMillis());
         datePickerDialog.show();
     }
 
@@ -107,10 +85,14 @@ public class Analytics_month extends Fragment {
     }
 
     private void checkButtonState() {
-        // Only enable the next month button if the currentMonth is before the actual current month
         Calendar nextMonth = (Calendar) currentMonth.clone();
         nextMonth.add(Calendar.MONTH, 1);
-        btnNextMonth.setEnabled(!nextMonth.after(Calendar.getInstance()));
+        Calendar today = Calendar.getInstance();
+
+        boolean isNextMonthAllowed = (nextMonth.get(Calendar.YEAR) < today.get(Calendar.YEAR)) ||
+                (nextMonth.get(Calendar.YEAR) == today.get(Calendar.YEAR) && nextMonth.get(Calendar.MONTH) <= today.get(Calendar.MONTH));
+
+        btnNextMonth.setEnabled(isNextMonthAllowed);
     }
 
     private void updateDateDisplay() {
@@ -118,59 +100,28 @@ public class Analytics_month extends Fragment {
         monthDateTextView.setText(dateFormat.format(currentMonth.getTime()));
     }
 
-
     private void setupCharts(View view) {
-        // Setup Bar and Line Charts with appropriate data generation for each month
-        setupBarChart((BarChart) view.findViewById(R.id.barChart_nitrogen),
-                generateMonthlyBarData(20, 80),
-                "Nitrogen",
-                Color.parseColor("#FFC0CB"));
-
-        setupLineChart((LineChart) view.findViewById(R.id.lineChart_potassium),
-                generateMonthlyLineData(10, 60),
-                "Potassium",
-                Color.parseColor("#FF69B4"));
-
-        setupBarChart((BarChart) view.findViewById(R.id.barChart_phosphorous),
-                generateMonthlyBarData(15, 55),
-                "Phosphorous",
-                Color.parseColor("#DB7093"));
-
-        setupLineChart((LineChart) view.findViewById(R.id.lineChart_temperature),
-                generateMonthlyLineData(10, 30),
-                "Temperature",
-                Color.parseColor("#FFC0CB"));
-
-        setupBarChart((BarChart) view.findViewById(R.id.barChart_humidity),
-                generateMonthlyBarData(40, 100),
-                "Humidity",
-                Color.parseColor("#FF69B4"));
-
-        setupLineChart((LineChart) view.findViewById(R.id.lineChart_ph),
-                generateMonthlyLineData(4, 9),
-                "pH Level",
-                Color.parseColor("#DB7093"));
+        setupBarChart((BarChart) view.findViewById(R.id.barChart_nitrogen), generateMonthlyBarData(20, 80), "Nitrogen", Color.parseColor("#FFC0CB"));
+        setupLineChart((LineChart) view.findViewById(R.id.lineChart_potassium), generateMonthlyLineData(10, 60), "Potassium", Color.parseColor("#FF69B4"));
     }
 
     private ArrayList<BarEntry> generateMonthlyBarData(float min, float max) {
         ArrayList<BarEntry> entries = new ArrayList<>();
         Random random = new Random();
-        for (int i = 0; i < 12; i++) { // Assumes data for 12 months
+        for (int i = 0; i < 12; i++) {
             entries.add(new BarEntry(i, min + random.nextFloat() * (max - min)));
         }
         return entries;
     }
 
-
     private ArrayList<Entry> generateMonthlyLineData(float min, float max) {
         ArrayList<Entry> entries = new ArrayList<>();
         Random random = new Random();
-        for (int i = 0; i < 12; i++) { // Assumes data for 12 months
+        for (int i = 0; i < 12; i++) {
             entries.add(new Entry(i, min + random.nextFloat() * (max - min)));
         }
         return entries;
     }
-
 
     private void setupBarChart(BarChart chart, ArrayList<BarEntry> data, String label, int color) {
         BarDataSet dataSet = new BarDataSet(data, label);
@@ -178,7 +129,7 @@ public class Analytics_month extends Fragment {
         dataSet.setValueTextColor(Color.WHITE);
         BarData barData = new BarData(dataSet);
         chart.setData(barData);
-        customizeChart(chart, label);
+        customizeChart(chart);
     }
 
     private void setupLineChart(LineChart chart, ArrayList<Entry> data, String label, int color) {
@@ -190,21 +141,28 @@ public class Analytics_month extends Fragment {
         dataSet.setCircleColor(color);
         LineData lineData = new LineData(dataSet);
         chart.setData(lineData);
-        customizeChart(chart, label);
+        customizeChart(chart);
     }
 
-    private void customizeChart(Chart<?> chart, String title) {
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"}));
-        xAxis.setGranularity(1f);
-        chart.getLeft();
-        chart.getRight();
-        chart.getDescription().setText(title);
-        chart.getDescription().setTextSize(16f);
-        chart.getDescription().setTextAlign(Paint.Align.CENTER);
-        chart.setNoDataText("No data for the current month");
-        chart.setBackgroundColor(Color.WHITE);
-        chart.invalidate(); // Refresh the chart
+    private void customizeChart(BarChart chart) {
+        chart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        chart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"}));
+        chart.getAxisLeft().setEnabled(true);
+        chart.getAxisRight().setEnabled(false);
+        chart.getDescription().setEnabled(false);
+        chart.setDrawGridBackground(true);
+        chart.setGridBackgroundColor(Color.WHITE);
+        chart.invalidate();
+    }
+
+    private void customizeChart(LineChart chart) {
+        chart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        chart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"}));
+        chart.getAxisLeft().setEnabled(true);
+        chart.getAxisRight().setEnabled(false);
+        chart.getDescription().setEnabled(false);
+        chart.setDrawGridBackground(true);
+        chart.setGridBackgroundColor(Color.WHITE);
+        chart.invalidate();
     }
 }
