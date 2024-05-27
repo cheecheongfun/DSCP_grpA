@@ -155,12 +155,13 @@ public class UploadImage extends AppCompatActivity {
             }
         }
     }
-
     private void uploadImage() {
         if (imageUri != null) {
             Glide.with(this)
                     .asBitmap()
                     .load(imageUri)
+                    .centerCrop() // This ensures the image is cropped to fill the bounds.
+                    .override(500, 500) // Adjust these values to your needs.
                     .into(new CustomTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
@@ -187,6 +188,7 @@ public class UploadImage extends AppCompatActivity {
             Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private void uploadImageDetailsToFirestore(String imageUrl) {
         Map<String, Object> imageDetails = new HashMap<>();
