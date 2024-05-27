@@ -201,7 +201,7 @@
             android:text="Goals" />
 
         <ImageButton
-            android:id="@+id/identifierButton"
+            android:id="@+id/imageLog"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_alignTop="@+id/goalsButton"
@@ -209,17 +209,17 @@
             android:background="@drawable/home_page_buttons"
             android:padding="10dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/baseline_search_24" />
+            android:src="@drawable/baseline_image_search_24" />
 
         <TextView
-            android:id="@+id/identifierText"
+            android:id="@+id/imageText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/identifierButton"
-            android:layout_alignStart="@+id/identifierButton"
-            android:layout_alignEnd="@+id/identifierButton"
+            android:layout_below="@+id/imageLog"
+            android:layout_alignStart="@+id/imageLog"
+            android:layout_alignEnd="@+id/imageLog"
             android:gravity="center"
-            android:text="Identifier" />
+            android:text="Image Log" />
 
         <ImageButton
             android:id="@+id/soilTypeButton"
@@ -254,5 +254,27 @@
             android:text="Solar Panels"
             android:textSize="20dp"
             android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/solar1"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_below="@+id/sectionSolar"
+            android:layout_alignStart="@+id/sectionVermi"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/home_page_buttons"
+            android:padding="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/baseline_solar_power_24" />
+
+        <TextView
+            android:id="@+id/solarText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/solar1"
+            android:layout_alignStart="@+id/goalsButton"
+            android:layout_alignEnd="@+id/goalsButton"
+            android:gravity="center"
+            android:text="Forecast" />
     </RelativeLayout>
 </FrameLayout>

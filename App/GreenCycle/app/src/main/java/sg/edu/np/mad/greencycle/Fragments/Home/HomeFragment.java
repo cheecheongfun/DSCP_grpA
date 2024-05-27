@@ -67,7 +67,7 @@ public class HomeFragment extends Fragment {
         feedingLogBtn = view.findViewById(R.id.feedingLogButton);
         analyticsBtn = view.findViewById(R.id.analyticsButton);
         goalsBtn = view.findViewById(R.id.goalsButton);
-        identifierBtn = view.findViewById(R.id.identifierButton);
+        identifierBtn = view.findViewById(R.id.imageLog);
         soilTypeBtn = view.findViewById(R.id.soilTypeButton);
         soilTypeBtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -89,9 +89,11 @@ public class UploadImage extends AppCompatActivity {
     }
 
     private void requestCameraPermission() {
+        Log.i(null, "in use camera");
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
         } else {
+            Log.i(null, "in permission else");
             launchCamera();
         }
     }
@@ -99,18 +101,22 @@ public class UploadImage extends AppCompatActivity {
     private void launchCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getPackageManager()) != null) {
+            Log.e("Camera", "in if 1");
             File photoFile = null;
             try {
+                Log.e("Camera", "in try");
                 photoFile = createImageFile();
             } catch (IOException ex) {
                 Log.e("Camera", "Error creating file", ex);
             }
             if (photoFile != null) {
+                Log.e("Camera", "in if 2");
                 imageUri = FileProvider.getUriForFile(this, getPackageName() + ".provider", photoFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                 startActivityForResult(intent, CAPTURE_IMAGE_REQUEST);
             }
         }
+        Log.i(null, "in else launch");
     }
 
     private File createImageFile() throws IOException {
