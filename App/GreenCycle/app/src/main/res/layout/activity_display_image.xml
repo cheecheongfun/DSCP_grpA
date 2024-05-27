@@ -11,20 +11,20 @@
     <ImageButton
         android:id="@+id/gallery"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="95dp"
         android:backgroundTint="@color/transparent"
         app:srcCompat="@drawable/baseline_grid_view_24" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTanks"
         android:layout_width="match_parent"
-        android:layout_height="652dp"
-        android:layout_marginTop="80dp" />
+        android:layout_height="548dp"
+        android:layout_marginTop="150dp" />
 
     <ImageButton
         android:id="@+id/Compostcamera"
         android:layout_width="64dp"
-        android:layout_height="53dp"
+        android:layout_height="84dp"
         android:layout_gravity="end|top"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
