@@ -53,7 +53,7 @@ public class Goals_Notification {
 
                             if (enddate.isBefore(today)) {
                                 goalRef.child("goals_completion").setValue("Expired");
-                                String text = "Tank " + tankName + "'s desired worms population of " + goalsNumber + " goal has been achieved!";
+                                String text = "Tank " + tankName + "'s desired worms population of " + goalsNumber + " goal has expired!";
                                 showCustomToast(text,4,context);
                             }
 
@@ -139,9 +139,9 @@ public class Goals_Notification {
             toastImageView.setImageResource(R.drawable.compost);
         } else if (choice == 3){
             toastImageView.setImageResource(R.drawable.food_waste);
-        } else if (choice ==4){
+        }
 
-        }else{
+        else{
             toastImageView.setImageResource(R.drawable.thumbs_down);
             toastTextView.setTextColor(context.getResources().getColor(R.color.red ));
         }

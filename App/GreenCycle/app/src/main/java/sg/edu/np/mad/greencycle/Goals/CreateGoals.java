@@ -171,7 +171,7 @@ public class CreateGoals extends AppCompatActivity {
         // Validate that the selected date is after today's date
         if (!selectedDate.after(today)) {
             Toast.makeText(this, "End date must be after today's date", Toast.LENGTH_SHORT).show();
-            return;
+            //return;
         }
 
         String sday;
