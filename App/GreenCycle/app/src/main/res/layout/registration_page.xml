@@ -23,12 +23,13 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="113dp"
+        android:layout_marginStart="137dp"
         android:layout_marginTop="82dp"
         android:accessibilityLiveRegion="assertive"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="Create Account"
-        android:textSize="28sp" />
+        android:textSize="28sp"
+        android:textColor="@color/mid_green"/>
 
     <RelativeLayout
         android:id="@+id/editName"
