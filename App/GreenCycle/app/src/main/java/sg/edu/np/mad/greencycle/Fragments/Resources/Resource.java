@@ -7,15 +7,26 @@ import androidx.annotation.NonNull;
 
 public class Resource{
     private int resourceid;
-    private String resourceinfo,resourcetitle, resourcelink, imageurl;
+    private String resourceinfo,resourcetitle, resourcelink, imageurl,type;
 
 
-    public Resource(int resourceid, String resourceinfo, String resourcetitle, String resourcelink, String imageurl) {
+
+
+    public Resource(int resourceid, String resourceinfo, String resourcetitle, String resourcelink, String imageurl, String type) {
         this.resourceid = resourceid;
         this.resourceinfo = resourceinfo;
         this.resourcetitle = resourcetitle;
         this.resourcelink = resourcelink;
         this.imageurl = imageurl;
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public int getResourceid() {

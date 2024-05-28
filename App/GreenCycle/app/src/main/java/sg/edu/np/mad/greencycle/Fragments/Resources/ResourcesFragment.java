@@ -20,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import sg.edu.np.mad.greencycle.Goals.Goals;
 import sg.edu.np.mad.greencycle.R;
 
 /**
@@ -33,7 +34,7 @@ public class ResourcesFragment extends Fragment {
     private ResourceAdapter adapter;
     private List<Resource> resourceList;
     private List<Resource> filteredResourceList;
-    private TextView noResource;
+    private TextView noResource,all,solar,vermi;
     private SearchView searchView;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -88,6 +89,9 @@ public class ResourcesFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view);
         searchView = view.findViewById(R.id.search);
         noResource = view.findViewById(R.id.noResourceTextView);
+        all = view.findViewById(R.id.all);
+        solar = view.findViewById(R.id.solar);
+        vermi = view.findViewById(R.id.vermi);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         resourceList = new ArrayList<>();
@@ -114,6 +118,11 @@ public class ResourcesFragment extends Fragment {
                 return true;
             }
         });
+
+        all.setOnClickListener(v -> filterResourcesByType("all"));
+        solar.setOnClickListener(v -> filterResourcesByType("solar"));
+        vermi.setOnClickListener(v -> filterResourcesByType("vermi"));
+
         return view;
 
     }
@@ -131,7 +140,8 @@ public class ResourcesFragment extends Fragment {
                     String info = snapshot.child("info").getValue(String.class);
                     String link = snapshot.child("link").getValue(String.class);
                     String url = snapshot.child("image").getValue(String.class);
-                    newResourceList.add(new Resource(newResourceList.size() + 1,info, title, link, url));
+                    String type = snapshot.child("type").getValue(String.class);
+                    newResourceList.add(new Resource(newResourceList.size() + 1,info, title, link, url,type));
                 }
 
                 resourceList.addAll(newResourceList);
@@ -164,6 +174,21 @@ public class ResourcesFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
+    private void filterResourcesByType(String type) {
+        filteredResourceList.clear();
+        if (type.contains("all")) {
+            filteredResourceList.addAll(resourceList);
+        } else {
+            for (Resource resource : resourceList) {
+                if (resource.getType().equals(type)) {
+                    filteredResourceList.add(resource);
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
 
-    
+
+
+
 }

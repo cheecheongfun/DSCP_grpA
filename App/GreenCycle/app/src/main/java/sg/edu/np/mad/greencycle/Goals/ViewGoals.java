@@ -35,7 +35,7 @@ import sg.edu.np.mad.greencycle.R;
 public class ViewGoals extends AppCompatActivity {
     private RecyclerView recyclerView;
     private GoalsAdapter adapter;
-    private TextView goaltext, back;
+    private TextView goaltext, back,all,solar,vermi;
     private TextView editbutton;
     private List<Goals> goalsList;
     User user;
@@ -60,6 +60,7 @@ public class ViewGoals extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         back = findViewById(R.id.backButton);
         editbutton = findViewById(R.id.create_button);
+
 
         database = FirebaseDatabase.getInstance();
 
@@ -110,6 +111,7 @@ public class ViewGoals extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
     private void fetchGoalsData() {
         reference.addValueEventListener(new ValueEventListener() {
