@@ -26,7 +26,7 @@ import sg.edu.np.mad.greencycle.NPKvalue.npk_value;
 import sg.edu.np.mad.greencycle.R;
 import sg.edu.np.mad.greencycle.SolarForecast.Forecast;
 import sg.edu.np.mad.greencycle.Goals.Goals_Notification;
-
+// Fionn, S10240073K
 public class HomeFragment extends Fragment {
 
     ImageButton npkButton, liveDataBtn, feedingLogBtn, analyticsBtn, goalsBtn, imageLogBtn, soilTypeBtn, solarForecastBtn;

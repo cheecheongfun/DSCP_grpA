@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -45,13 +46,15 @@ import sg.edu.np.mad.greencycle.LiveData.Tank;
 import sg.edu.np.mad.greencycle.LiveData.TankSelection;
 import sg.edu.np.mad.greencycle.R;
 
+// Fionn, S12040073K
 public class Feeding extends AppCompatActivity {
     User user;
     Tank tank;
     FirebaseDatabase database;
     DatabaseReference reference;
     RecyclerView logRecycler, greenRecycler, brownRecycler;
-    public TextView noLogText, backButton, date, editNote, waterAmt,calendar, addGreen, addBrown ;
+    public TextView noLogText, backButton, date, editNote, waterAmt,calendar ;
+    ImageButton addGreen, addBrown;
     ArrayList<String> green,brown, greenFood, brownFood;
     public ArrayList<sg.edu.np.mad.greencycle.FeedingLog.Log> feedingLog;
     ArrayList<Tank> tankList;

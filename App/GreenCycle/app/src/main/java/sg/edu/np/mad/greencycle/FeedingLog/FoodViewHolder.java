@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import sg.edu.np.mad.greencycle.R;
-
+// Fionn, S10240073K
 public class FoodViewHolder extends RecyclerView.ViewHolder{
 
     TextView foodText, colon;

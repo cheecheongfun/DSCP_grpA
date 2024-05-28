@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import sg.edu.np.mad.greencycle.R;
-
+// Fionn, S10240073K
 public class LogAdapter extends RecyclerView.Adapter<LogViewHolder> {
     Context context;
     ArrayList<Log> feedingLog;

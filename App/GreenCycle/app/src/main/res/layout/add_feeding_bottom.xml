@@ -47,32 +47,34 @@
         android:layout_marginStart="80dp"
         android:maxHeight="300dp">
 
-        <TextView
-            android:id="@+id/greenText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Greens"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:textSize="25dp"
-            android:layout_marginStart="5dp"/>
 
-        <TextView
+        <ImageButton
             android:id="@+id/addGreen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/greenText"
-            android:layout_alignTop="@id/greenText"
-            android:layout_toEndOf="@id/greenText"
-            android:layout_marginStart="20dp"
-            android:drawableStart="@drawable/baseline_add_24"
-            android:theme="@style/DrawableTint"/>
+            android:layout_marginStart="5dp"
+            android:gravity="center"
+            android:padding="6dp"
+            app:tint="@color/textColour"
+            android:src="@drawable/baseline_add_circle_outline_24" />
+
+        <TextView
+            android:id="@+id/greenText"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignTop="@id/addGreen"
+            android:layout_alignBottom="@id/addGreen"
+            android:layout_toEndOf="@id/addGreen"
+            android:text="Greens"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:textSize="25dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/greenRecycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/greenText"
-            android:layout_alignStart="@+id/greenText"
+            android:layout_alignStart="@+id/addGreen"
             android:layout_marginBottom="10dp"
             android:theme="@style/Border"
             android:layout_marginEnd="5dp"/>
@@ -88,32 +90,34 @@
         android:layout_marginStart="80dp"
         android:maxHeight="300dp">
 
+        <ImageButton
+            android:id="@+id/addBrown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:gravity="center"
+            android:padding="6dp"
+            app:tint="@color/textColour"
+            android:src="@drawable/baseline_add_circle_outline_24" />
+
         <TextView
             android:id="@+id/brownText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Browns"
+            android:layout_alignTop="@id/addBrown"
+            android:layout_alignBottom="@id/addBrown"
+            android:layout_toEndOf="@id/addBrown"
             android:fontFamily="sans-serif-condensed-medium"
-            android:textSize="25dp"
-            android:layout_marginStart="5dp"/>
-
-        <TextView
-            android:id="@+id/addBrown"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/brownText"
-            android:layout_alignTop="@id/brownText"
-            android:layout_toEndOf="@id/brownText"
-            android:layout_marginStart="20dp"
-            android:drawableStart="@drawable/baseline_add_24"
-            android:theme="@style/DrawableTint"/>
+            android:gravity="center"
+            android:text="Browns"
+            android:textSize="25dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/brownRecycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/brownText"
-            android:layout_alignStart="@+id/brownText"
+            android:layout_alignStart="@+id/addBrown"
             android:layout_marginBottom="10dp"
             android:theme="@style/Border"
             android:layout_marginEnd="5dp"/>

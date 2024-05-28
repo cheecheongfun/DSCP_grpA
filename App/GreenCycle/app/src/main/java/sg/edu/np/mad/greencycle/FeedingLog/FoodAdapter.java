@@ -23,6 +23,7 @@ import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.LiveData.Tank;
 import sg.edu.np.mad.greencycle.R;
 
+// Fionn, S10240073K
 public class FoodAdapter extends RecyclerView.Adapter<FoodViewHolder> {
     private ArrayList<String> foodList;
     private ArrayList<Boolean> checkedStateArray;
@@ -105,6 +106,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodViewHolder> {
                 checkedStateArray.set(position, isChecked);
                 holder.editCard.setVisibility(isChecked ? View.VISIBLE : View.GONE);
                 foodList.remove(position);
+                notifyDataSetChanged();
             });
             holder.editAmt.addTextChangedListener(new TextWatcher() {
                 @Override

@@ -3,7 +3,7 @@ package sg.edu.np.mad.greencycle.FeedingLog;
 import android.os.Parcel;
 import android.os.Parcelable;
 import java.util.ArrayList;
-
+// Fionn, S10240073K
 public class Log implements Parcelable {
     private int logId, tankId, waterAmt;
     private String logDate;

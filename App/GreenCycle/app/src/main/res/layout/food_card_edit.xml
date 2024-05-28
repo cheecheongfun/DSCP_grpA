@@ -42,9 +42,7 @@
         android:layout_toEndOf="@+id/colon"
         android:hint="amount"
         android:inputType="number"
-        android:textSize="15sp"
         android:visibility="invisible"
-        android:layout_centerVertical="true"
         android:layout_alignTop="@+id/check"
         android:layout_alignBottom="@+id/check"/>
 
