@@ -13,7 +13,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import java.util.List;
 import java.util.Map;
 import sg.edu.np.mad.greencycle.R;
-
+// Oh Ern Qi S10243067K
 public class galleryAdapter extends BaseAdapter {
     private Context context;
     private List<Map<String, String>> imageDataList;

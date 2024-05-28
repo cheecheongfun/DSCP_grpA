@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import sg.edu.np.mad.greencycle.R;
 
-
+// Oh Ern Qi S10243067K
 public class HighPotassiumFragment extends Fragment {
     TextView PotRec;
 

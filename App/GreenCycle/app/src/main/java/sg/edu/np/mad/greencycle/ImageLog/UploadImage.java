@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -43,8 +44,9 @@ import java.util.Map;
 
 import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.LiveData.Tank;
+import sg.edu.np.mad.greencycle.LiveData.TankSelection;
 import sg.edu.np.mad.greencycle.R;
-
+// Oh Ern Qi S10243067K
 public class UploadImage extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int CAPTURE_IMAGE_REQUEST = 2;
@@ -54,6 +56,7 @@ public class UploadImage extends AppCompatActivity {
     private Uri imageUri;
     private ImageView imageView;
     private Button btnCancel;
+    private TextView back;
 
     User user;
     Tank tank;
@@ -66,6 +69,7 @@ public class UploadImage extends AppCompatActivity {
         mStorageRef = FirebaseStorage.getInstance().getReference();
         imageView = findViewById(R.id.imageView);
         btnCancel = findViewById(R.id.btnCancel);
+        back = findViewById(R.id.backButton);
         btnCancel.setVisibility(View.GONE);
 
         Intent receivingEnd = getIntent();
@@ -80,6 +84,16 @@ public class UploadImage extends AppCompatActivity {
             resetImageView();
             btnCancel.setVisibility(View.GONE);
         });
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(UploadImage.this, DisplayImage.class);
+                intent.putExtra("user", user);
+                intent.putExtra("tank",tank);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void chooseImage() {

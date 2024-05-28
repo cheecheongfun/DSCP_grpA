@@ -30,6 +30,7 @@ import java.util.Random;
 
 import sg.edu.np.mad.greencycle.R;
 
+// Oh Ern Qi S10243067K
 public class Week_charts extends Fragment {
     private Calendar currentWeek = Calendar.getInstance();
     private TextView weekDateTextView;
@@ -82,11 +83,19 @@ public class Week_charts extends Fragment {
         selectedDate.add(Calendar.DAY_OF_MONTH, -dayOfWeek);
         currentWeek.setTime(selectedDate.getTime());
         updateDateDisplay();
+        checkButtonState();
     }
 
     private void adjustWeek(int amount) {
         currentWeek.add(Calendar.WEEK_OF_YEAR, amount);
         updateDateDisplay();
+        checkButtonState();
+    }
+
+    private void checkButtonState() {
+        Calendar nextWeek = (Calendar) currentWeek.clone();
+        nextWeek.add(Calendar.WEEK_OF_YEAR, 1);
+        btnNextWeek.setEnabled(!nextWeek.after(Calendar.getInstance()));
     }
 
     private void updateDateDisplay() {

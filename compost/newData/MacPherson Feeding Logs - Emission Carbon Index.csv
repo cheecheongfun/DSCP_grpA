@@ -1,0 +1,86 @@
+List of emission indices (in kg CO2 equivalent per kg of food waste) for various types of food waste:,,,,
+S/N,Food Name,Emissions (kg CO2/kg),Category,pH Value
+1,Bread crusts,0.14,Brown,Neutral
+2,Cauliflower leaves,0.07,Brown,Acidic
+3,Cheese rinds,1.20,Brown,Acidic
+4,Coffee grounds,0.20,Brown,Acidic
+5,Ground coffee,0.23,Brown,Acidic
+6,Onion skins,0.07,Brown,Alkaline
+7,Pasta scraps,0.24,Brown,Neutral
+8,Pizza crust,0.30,Brown,Neutral
+9,Potato peels,0.06,Brown,Alkaline
+10,Rice leftovers,0.25,Brown,Neutral
+11,Shrimp shells,0.35,Brown,Alkaline
+12,Steak bones,0.50,Brown,Neutral
+13,Tea leaves,0.15,Brown,Acidic
+14,Turkey bones,0.40,Brown,Neutral
+15,Yoghurt container,0.35,Brown,Acidic
+16,Avocado pits,0.14,Brown,Alkaline
+17,Biscuit crumbs,0.20,Brown,Acidic
+18,Cake scraps,0.40,Brown,Acidic
+19,Chicken skin,0.35,Brown,Acidic
+20,Chocolate scraps,0.40,Brown,Neutral
+21,Cookie crumbs,0.22,Brown,Acidic
+22,Cottage cheese container,0.45,Brown,Acidic
+23,Cardboard,0.20,Brown,Neutral
+24,Apple cores,0.13,Green,Acidic
+25,Banana peels,0.10,Green,Alkaline
+26,Broccoli stems,0.08,Green,Alkaline
+27,Carrot tops,0.09,Green,Alkaline
+28,Chicken bones,0.30,Green,Neutral
+29,Eggshells,0.05,Green,Alkaline
+30,Fish bones,0.40,Green,Neutral
+31,Grape stems,0.12,Green,Acidic
+32,Lettuce leaves,0.10,Green,Neutral
+33,Mango pits,0.17,Green,Acidic
+34,Meat scraps,1.50,Green,Acidic
+35,Orange peels,0.11,Green,Acidic
+36,Pear cores,0.13,Green,Acidic
+37,Pineapple cores,0.15,Green,Acidic
+38,Salad greens,0.11,Green,Neutral
+39,Strawberry tops,0.09,Green,Acidic
+40,Tomato cores,0.10,Green,Acidic
+41,Watermelon rinds,0.12,Green,Neutral
+42,Black bean leftovers,0.18,Green,Neutral
+43,Cantaloupe rinds,0.11,Green,Alkaline
+44,Celery ends,0.08,Green,Alkaline
+45,Corn cobs,0.15,Green,Neutral
+46,Kimchi,0.20,Green,Acidic
+47,Sushi rice,0.30,Green,Neutral
+48,Pho broth,0.25,Green,Neutral
+49,Dim sum wrappers,0.18,Green,Neutral
+50,Spring roll skins,0.15,Green,Neutral
+51,Miso paste,0.35,Green,Acidic
+52,Blueberry,0.25,Green,Neutral
+53,Udon noodles,0.20,Green,Neutral
+54,Matcha powder,0.28,Green,Alkaline
+55,Turmeric,0.12,Green,Alkaline
+56,Ginger,0.11,Green,Acidic
+57,Lemongrass,0.10,Green,Acidic
+58,Thai basil,0.09,Green,Alkaline
+59,Jasmine rice,0.22,Green,Neutral
+60,Sticky rice,0.24,Green,Neutral
+61,Durian,0.60,Green,Alkaline
+62,Lychee,0.17,Green,Acidic
+63,Dragon fruit,0.16,Green,Acidic
+64,Rambutan,0.18,Green,Acidic
+65,Mangosteen,0.14,Green,Acidic
+66,Longan,0.13,Green,Acidic
+67,Jackfruit,0.25,Green,Alkaline
+68,Papaya,0.19,Green,Alkaline
+69,Guava,0.20,Green,Acidic
+70,Asian pear,0.16,Green,Acidic
+71,Bok choy,0.08,Green,Alkaline
+72,Napa cabbage,0.10,Green,Alkaline
+73,Daikon radish,0.07,Green,Alkaline
+74,Bean sprouts,0.12,Green,Alkaline
+75,Snow peas,0.09,Green,Alkaline
+76,Chinese broccoli,0.11,Green,Alkaline
+77,Lotus root,0.14,Green,Alkaline
+78,Bamboo shoots,0.10,Green,Alkaline
+79,Thai eggplant,0.13,Green,Alkaline
+80,Okra,0.08,Green,Alkaline
+81,Cardboard,0.20,Brown,Neutral
+82,Chye Sim,0.13,Green,Neutral
+83,Kai Lan,0.13,Green,Neutral
+82,Mint Leaves,0.21,Green,Neutral
