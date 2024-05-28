@@ -16,7 +16,7 @@ import sg.edu.np.mad.greencycle.Fragments.Home.HomeFragment;
 import sg.edu.np.mad.greencycle.Fragments.Resources.ResourcesFragment;
 import sg.edu.np.mad.greencycle.R;
 import sg.edu.np.mad.greencycle.databinding.ActivityMainBinding;
-
+// Fionn, S10240073K
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;

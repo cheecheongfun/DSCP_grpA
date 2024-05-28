@@ -9,6 +9,7 @@ import sg.edu.np.mad.greencycle.FeedingLog.Log;
 
 import java.util.ArrayList;
 
+// Fionn, S10240073K
 public class Tank implements Parcelable {
     private int tankID, numberOfWorms;
     private double pHValue, temperature, humidity;

@@ -2,7 +2,7 @@ package sg.edu.np.mad.greencycle.SolarForecast;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
+// Fionn, S1040073K
 public class RetrofitClient {
     private static final String BASE_URL = "https://api.data.gov.sg/";  // Base URL
     private static Retrofit retrofit = null;

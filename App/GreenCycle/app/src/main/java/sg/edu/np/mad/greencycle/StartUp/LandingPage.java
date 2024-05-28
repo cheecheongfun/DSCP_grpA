@@ -11,7 +11,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import sg.edu.np.mad.greencycle.R;
-
+// Fionn, S10240073K
 public class LandingPage extends AppCompatActivity {
     private ImageView animationView;
     private AnimationDrawable animationDrawable;

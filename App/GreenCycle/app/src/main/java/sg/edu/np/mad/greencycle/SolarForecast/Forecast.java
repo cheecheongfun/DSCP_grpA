@@ -21,7 +21,7 @@ import sg.edu.np.mad.greencycle.StartUp.MainActivity;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
+// Fionn, S10240073K
 public class Forecast extends AppCompatActivity {
 
     TextView refresh, back, humidity;

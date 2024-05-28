@@ -69,8 +69,8 @@ public class RegistrationPage extends AppCompatActivity {
         registerusername = findViewById(R.id.registerusername);
         registerpassword = findViewById(R.id.registerpassword);
         successfulregister = findViewById(R.id.registerbutton);
-        fingerprint = findViewById(R.id.registerFingerprint);
-        authStatus = findViewById(R.id.authStatus);
+//        fingerprint = findViewById(R.id.registerFingerprint);
+//        authStatus = findViewById(R.id.authStatus);
         executor = ContextCompat.getMainExecutor(this); // Initialize executor
 
         // Initialize BiometricPrompt
@@ -91,13 +91,13 @@ public class RegistrationPage extends AppCompatActivity {
                 .setNegativeButtonText("Cancel")
                 .build();
 
-        fingerprint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Authenticate the user to register their fingerprint
-                biometricPrompt.authenticate(promptInfo);
-            }
-        });
+//        fingerprint.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Authenticate the user to register their fingerprint
+//                biometricPrompt.authenticate(promptInfo);
+//            }
+//        });
 
         successfulregister.setOnClickListener(new View.OnClickListener() {
             @Override

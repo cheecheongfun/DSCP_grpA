@@ -12,7 +12,7 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
+// Fionn, S10240073K
 public class WeatherViewModel extends ViewModel {
     private MutableLiveData<ArrayList<HumidityResponse.StationReading>> humidityLiveData = new MutableLiveData<>();
 
