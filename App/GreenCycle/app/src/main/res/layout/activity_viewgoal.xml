@@ -43,17 +43,6 @@
         android:theme="@style/DrawableTint"
         android:drawableStart="@drawable/baseline_add_circle_24" />
 
-    <!-- Goals TextView -->
-    <TextView
-        android:id="@+id/goals_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="VermiCompost Goals"
-        android:textSize="40sp"
-        android:layout_below="@id/backButton"
-        android:layout_centerHorizontal="true" />
 
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
