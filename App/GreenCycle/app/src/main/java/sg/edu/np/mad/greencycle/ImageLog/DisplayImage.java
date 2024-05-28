@@ -1,5 +1,6 @@
 package sg.edu.np.mad.greencycle.ImageLog;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -32,6 +33,7 @@ public class DisplayImage extends AppCompatActivity {
 
 
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,17 +46,18 @@ public class DisplayImage extends AppCompatActivity {
         upload = findViewById(R.id.Compostcamera);
         recyclerView = findViewById(R.id.rvTanks);
         gallery = findViewById(R.id.gallery);
+        back = findViewById(R.id.imageButton3);
 
 
-//        back = findViewById(R.id.imageButton2);
-
-//        back.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent feed = new Intent(getApplicationContext(), TankSelection.class);
-//                startActivity(feed);
-//            }
-//        });
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DisplayImage.this, TankSelection.class);
+                intent.putExtra("user", user);
+                intent.putExtra("where", "Identify");
+                startActivity(intent);
+            }
+        });
 
         upload.setOnClickListener(view -> {
             Intent feed = new Intent(getApplicationContext(), UploadImage.class);

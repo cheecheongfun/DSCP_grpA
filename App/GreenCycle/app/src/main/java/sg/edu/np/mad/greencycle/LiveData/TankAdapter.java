@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import sg.edu.np.mad.greencycle.FeedingLog.Feeding;
 import sg.edu.np.mad.greencycle.Goals.ViewGoals;
 import sg.edu.np.mad.greencycle.ImageLog.DisplayImage;
-import sg.edu.np.mad.greencycle.ImageLog.UploadImage;
 import sg.edu.np.mad.greencycle.R;
 
 public class TankAdapter extends RecyclerView.Adapter<TankViewHolder>{

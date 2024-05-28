@@ -1,4 +1,5 @@
 package sg.edu.np.mad.greencycle.Goals;
+//Lee Jun Rong S10242663
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -6,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -64,6 +64,16 @@ public class CreateGoals extends AppCompatActivity {
         user = receivingEnd.getParcelableExtra("user");
         tank = receivingEnd.getParcelableExtra("tank");
 
+        // Get the current date
+        Calendar today = Calendar.getInstance();
+
+        String tyear = String.valueOf(today.get(Calendar.YEAR));
+        int tmonthsnnum = today.get(Calendar.MONTH) + 1;
+        // Get the full month name for the current month
+        String tmonths = new DateFormatSymbols().getMonths()[today.get(Calendar.MONTH)];
+        String tday = String.valueOf(today.get(Calendar.DAY_OF_MONTH));
+
+
         // Set Goal spinner items
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.goal_options, R.layout.spinner_items);
@@ -83,6 +93,7 @@ public class CreateGoals extends AppCompatActivity {
         ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(this, R.layout.spinner_items, yearOptionsList);
         yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         yearspinner.setAdapter(yearAdapter);
+        setDefaultSpinnerValue(tyear,yearOptionsList,yearspinner);
 
         //Set Up Month Spinner items
 
@@ -91,6 +102,7 @@ public class CreateGoals extends AppCompatActivity {
         ArrayAdapter<String> monthAdapter = new ArrayAdapter<>(this, R.layout.spinner_items, monthOptionsList);
         monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         monthspinner.setAdapter(monthAdapter);
+        setDefaultSpinnerValue(tmonths,monthOptionsList,monthspinner);
 
 
 
@@ -102,6 +114,7 @@ public class CreateGoals extends AppCompatActivity {
         ArrayAdapter<String> dayAdapter = new ArrayAdapter<>(this, R.layout.spinner_items, dayOptionsList);
         dayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dayspinner.setAdapter(dayAdapter);
+        setDefaultSpinnerValue(tday,dayOptionsList,dayspinner);
 
         // Set onClickListener for save button
         saveGoalButton.setOnClickListener(new View.OnClickListener() {
@@ -240,6 +253,16 @@ public class CreateGoals extends AppCompatActivity {
         Toast.makeText(this, "Goal saved successfully!", Toast.LENGTH_SHORT).show();
         finish();
 
+    }
+
+    // Method to set the default value in the Spinner
+    private void setDefaultSpinnerValue(String value,List list,Spinner spinner) {
+        // Find the position of the defaultYear in the yearOptionsList
+        int defaultPosition = list.indexOf(value);
+        // Set the Spinner selection to the defaultPosition
+        if (defaultPosition != -1) {
+            spinner.setSelection(defaultPosition);
+        }
     }
 
 }

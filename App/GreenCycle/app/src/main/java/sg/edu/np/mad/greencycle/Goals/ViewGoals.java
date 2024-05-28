@@ -1,12 +1,10 @@
 package sg.edu.np.mad.greencycle.Goals;
-
+//Lee Jun Rong S10242663
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -24,10 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import sg.edu.np.mad.greencycle.Classes.User;
-import sg.edu.np.mad.greencycle.LiveData.LiveData;
 import sg.edu.np.mad.greencycle.LiveData.Tank;
 import sg.edu.np.mad.greencycle.LiveData.TankSelection;
 import sg.edu.np.mad.greencycle.R;
@@ -35,7 +31,7 @@ import sg.edu.np.mad.greencycle.R;
 public class ViewGoals extends AppCompatActivity {
     private RecyclerView recyclerView;
     private GoalsAdapter adapter;
-    private TextView goaltext, back;
+    private TextView goaltext, back,all,solar,vermi;
     private TextView editbutton;
     private List<Goals> goalsList;
     User user;
@@ -60,6 +56,7 @@ public class ViewGoals extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         back = findViewById(R.id.backButton);
         editbutton = findViewById(R.id.create_button);
+
 
         database = FirebaseDatabase.getInstance();
 
@@ -110,6 +107,7 @@ public class ViewGoals extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
     private void fetchGoalsData() {
         reference.addValueEventListener(new ValueEventListener() {

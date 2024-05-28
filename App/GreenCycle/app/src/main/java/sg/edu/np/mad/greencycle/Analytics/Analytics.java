@@ -1,6 +1,5 @@
 package sg.edu.np.mad.greencycle.Analytics;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.style.UnderlineSpan;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -21,12 +19,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import sg.edu.np.mad.greencycle.Classes.User;
-import sg.edu.np.mad.greencycle.Goals.ViewGoals;
-import sg.edu.np.mad.greencycle.LiveData.LiveData;
 import sg.edu.np.mad.greencycle.LiveData.Tank;
 import sg.edu.np.mad.greencycle.LiveData.TankSelection;
 import sg.edu.np.mad.greencycle.R;
-import sg.edu.np.mad.greencycle.StartUp.MainActivity;
 
 public class Analytics extends AppCompatActivity {
     TextView tvDay, tvWeek, tvMonth, tvYear, back;

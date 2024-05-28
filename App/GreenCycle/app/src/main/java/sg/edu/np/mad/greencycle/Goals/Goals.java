@@ -1,7 +1,5 @@
 package sg.edu.np.mad.greencycle.Goals;
-
-
-import java.util.Date;
+//Lee Jun Rong S10242663
 
 public class Goals {
     private int goalid, goals_number;
