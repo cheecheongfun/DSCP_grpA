@@ -1,11 +1,10 @@
 package sg.edu.np.mad.greencycle.Fragments.Resources;
-
+//Lee Jun Rong S10242663
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import sg.edu.np.mad.greencycle.Goals.Goals;
+
 import sg.edu.np.mad.greencycle.R;
 
 /**

@@ -1,7 +1,5 @@
 package sg.edu.np.mad.greencycle.Goals;
-
-import static java.security.AccessController.getContext;
-
+//Lee Jun Rong S10242663
 import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -10,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
