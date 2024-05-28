@@ -23,7 +23,7 @@ import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.LiveData.Tank;
 import sg.edu.np.mad.greencycle.LiveData.TankSelection;
 import sg.edu.np.mad.greencycle.R;
-
+// Oh Ern Qi S10243067K
 public class DisplayImage extends AppCompatActivity {
     User user;
     Tank tank;

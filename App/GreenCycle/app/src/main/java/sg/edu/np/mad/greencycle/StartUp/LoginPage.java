@@ -1,5 +1,5 @@
 package sg.edu.np.mad.greencycle.StartUp;
-
+// Oh Ern Qi S10243067K
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;

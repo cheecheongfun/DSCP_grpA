@@ -30,6 +30,7 @@ import java.util.Random;
 
 import sg.edu.np.mad.greencycle.R;
 
+// Oh Ern Qi S10243067K
 public class Week_charts extends Fragment {
     private Calendar currentWeek = Calendar.getInstance();
     private TextView weekDateTextView;

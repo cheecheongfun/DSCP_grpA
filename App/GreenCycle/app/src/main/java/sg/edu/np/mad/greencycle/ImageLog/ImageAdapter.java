@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import sg.edu.np.mad.greencycle.R;
-
+// Oh Ern Qi S10243067K
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
     private Context context;
     private List<Map<String, String>> imageDataList;

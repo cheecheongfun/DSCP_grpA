@@ -31,7 +31,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.UUID;
 import java.util.concurrent.Executor;
-
+// Oh Ern Qi S10243067K
 public class RegistrationPage extends AppCompatActivity {
 
     EditText registerusername, registerpassword;
