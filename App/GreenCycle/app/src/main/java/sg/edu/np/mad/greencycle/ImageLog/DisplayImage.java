@@ -27,9 +27,10 @@ import sg.edu.np.mad.greencycle.R;
 public class DisplayImage extends AppCompatActivity {
     User user;
     Tank tank;
-    ImageButton upload,back,gallery;
+    ImageButton upload,gallery;
     RecyclerView recyclerView;
     ImageAdapter adapter;
+    TextView back;
 
 
 
@@ -46,7 +47,7 @@ public class DisplayImage extends AppCompatActivity {
         upload = findViewById(R.id.Compostcamera);
         recyclerView = findViewById(R.id.rvTanks);
         gallery = findViewById(R.id.gallery);
-        back = findViewById(R.id.imageButton3);
+        back = findViewById(R.id.backButton);
 
 
         back.setOnClickListener(new View.OnClickListener() {

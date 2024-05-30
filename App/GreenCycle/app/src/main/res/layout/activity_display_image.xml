@@ -34,12 +34,13 @@
         android:backgroundTint="@color/transparent"
         app:srcCompat="@drawable/baseline_file_upload_24" />
 
-    <ImageButton
-        android:id="@+id/imageButton3"
-        android:layout_width="66dp"
-        android:layout_height="66dp"
+    <TextView
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/back_button"
         android:layout_marginTop="15dp"
-        android:backgroundTint="@color/transparent"
-        app:srcCompat="@drawable/baseline_arrow_back_ios_new_24" />
+        android:layout_marginStart="15dp"
+        android:theme="@style/DrawableTint" />
 
 </FrameLayout>
