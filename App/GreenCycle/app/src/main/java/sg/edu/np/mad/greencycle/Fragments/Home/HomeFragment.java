@@ -4,12 +4,14 @@ package sg.edu.np.mad.greencycle.Fragments.Home;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.activity.EdgeToEdge;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import sg.edu.np.mad.greencycle.Classes.User;
@@ -21,8 +23,10 @@ import sg.edu.np.mad.greencycle.Goals.Goals_Notification;
 // Fionn, S10240073K
 public class HomeFragment extends Fragment {
 
-    ImageButton npkButton, liveDataBtn, feedingLogBtn, analyticsBtn, goalsBtn, imageLogBtn, soilTypeBtn, solarForecastBtn;
-    TextView username;
+    ImageButton liveDataBtn, feedingLogBtn, analyticsBtn, goalsBtn, imageLogBtn, soilTypeBtn, solarForecastBtn, communityBtn, converterBtn;
+    NumberPicker inputNo, inputUnit, outputUnit;
+    TextView username, outputNo;
+    String newInputNo, newInputUnit, newOutputUnit;
 
 
 
@@ -65,6 +69,12 @@ public class HomeFragment extends Fragment {
         goalsBtn = view.findViewById(R.id.goalsButton);
         imageLogBtn = view.findViewById(R.id.imageLog);
         soilTypeBtn = view.findViewById(R.id.soilTypeButton);
+        communityBtn = view.findViewById(R.id.communityButton);
+        converterBtn = view.findViewById(R.id.conversionButton);
+        inputNo = view.findViewById(R.id.inputNo);
+        inputUnit = view.findViewById(R.id.inputUnit);
+        outputNo = view.findViewById(R.id.outputNo);
+        outputUnit = view.findViewById(R.id.outputUnit);
         solarForecastBtn = view.findViewById(R.id.solarForecast);
         soilTypeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +137,51 @@ public class HomeFragment extends Fragment {
                 startActivity(goals);
             }
         });
+
+
+        // Conversion section
+
+        // For input amount
+        inputNo.setTextColor(ContextCompat.getColor(getContext(), R.color.textColour));
+        inputNo.setMaxValue(999);
+        inputNo.setMinValue(0);
+        inputNo.setValue(0);
+        inputNo.setWrapSelectorWheel(true);
+        inputNo.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                newInputNo = String.valueOf(i1);
+            }
+        });
+
+        // For input unit measurement
+        String units[] = {"ml", "g", "tbsp", "tsp", "cup"};
+        inputUnit.setTextColor(ContextCompat.getColor(getContext(), R.color.textColour));
+        inputUnit.setMinValue(0);
+        inputUnit.setMaxValue(units.length - 1);
+        inputUnit.setDisplayedValues(units);
+        inputUnit.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        outputUnit.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                newInputUnit = units[i1];
+            }
+        });
+
+        // For output unit measurement
+        outputUnit.setMinValue(0);
+        outputUnit.setTextColor(ContextCompat.getColor(getContext(), R.color.textColour));
+        outputUnit.setMaxValue(units.length - 1);
+        outputUnit.setDisplayedValues(units);
+        outputUnit.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+        outputUnit.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                newOutputUnit = units[i1];
+            }
+        });
+
 
         solarForecastBtn.setOnClickListener(new View.OnClickListener() {
             @Override

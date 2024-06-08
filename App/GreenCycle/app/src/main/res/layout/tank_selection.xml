@@ -56,9 +56,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/light_green"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
+            android:backgroundTint="@color/mid_green"
             android:clickable="true"
             android:src="@drawable/baseline_add_circle_outline_24" />
         <TextView
@@ -67,7 +67,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/searchTank"
             android:gravity="center"
-            android:text="No tanks registered. Create one now"
+            android:text="No tanks registered"
             android:visibility="visible"
             android:layout_marginTop="15dp"/>
 

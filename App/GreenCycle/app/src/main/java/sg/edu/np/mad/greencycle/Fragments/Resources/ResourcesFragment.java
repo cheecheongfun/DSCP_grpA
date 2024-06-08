@@ -1,6 +1,9 @@
 package sg.edu.np.mad.greencycle.Fragments.Resources;
 //Lee Jun Rong S10242663
+import android.content.res.ColorStateList;
 import android.os.Bundle;
+
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -118,10 +121,51 @@ public class ResourcesFragment extends Fragment {
             }
         });
 
-        all.setOnClickListener(v -> filterResourcesByType("all"));
-        solar.setOnClickListener(v -> filterResourcesByType("solar"));
-        vermi.setOnClickListener(v -> filterResourcesByType("vermi"));
+        // Filter by type (changes colour to show indication of filter chosen)
+        all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int active = ContextCompat.getColor(getContext(), R.color.icon_brown_dark);
+                all.setBackgroundTintList(ColorStateList.valueOf(active));
+                all.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                int inactive = ContextCompat.getColor(getContext(), R.color.light_grey);
+                solar.setTextColor(ContextCompat.getColor(getContext(), R.color.textColour));
+                solar.setBackgroundTintList(ColorStateList.valueOf(inactive));
+                vermi.setTextColor(ContextCompat.getColor(getContext(), R.color.textColour));
+                vermi.setBackgroundTintList(ColorStateList.valueOf(inactive));
+                filterResourcesByType("all");
+            }
+        });
+        solar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int active = ContextCompat.getColor(getContext(), R.color.icon_brown_dark);
+                solar.setBackgroundTintList(ColorStateList.valueOf(active));
+                solar.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                int inactive = ContextCompat.getColor(getContext(), R.color.light_grey);
+                all.setTextColor(ContextCompat.getColor(getContext(), R.color.textColour));
+                all.setBackgroundTintList(ColorStateList.valueOf(inactive));
+                vermi.setTextColor(ContextCompat.getColor(getContext(), R.color.textColour));
+                vermi.setBackgroundTintList(ColorStateList.valueOf(inactive));
+                filterResourcesByType("solar");
+            }
+        });
 
+
+        vermi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int active = ContextCompat.getColor(getContext(), R.color.icon_brown_dark);
+                vermi.setBackgroundTintList(ColorStateList.valueOf(active));
+                vermi.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                int inactive = ContextCompat.getColor(getContext(), R.color.light_grey);
+                all.setTextColor(ContextCompat.getColor(getContext(), R.color.textColour));
+                all.setBackgroundTintList(ColorStateList.valueOf(inactive));
+                solar.setTextColor(ContextCompat.getColor(getContext(), R.color.textColour));
+                solar.setBackgroundTintList(ColorStateList.valueOf(inactive));
+                filterResourcesByType("vermi");
+            }
+        });
         return view;
 
     }

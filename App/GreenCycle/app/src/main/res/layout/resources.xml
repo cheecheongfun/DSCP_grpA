@@ -31,7 +31,7 @@
                 android:id="@+id/resource_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_corners"
+                android:background="@drawable/rounded_corners_brown_dark"
                 android:padding="8dp">
 
                 <ImageView

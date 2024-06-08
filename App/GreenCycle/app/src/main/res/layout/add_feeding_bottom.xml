@@ -180,7 +180,7 @@
         android:layout_below="@id/notesDescription"
         android:text="Confirm"
         android:layout_marginTop="30dp"
-        android:backgroundTint="@color/dark_green"
+        android:backgroundTint="@color/mid_green"
         />
 
 </RelativeLayout>

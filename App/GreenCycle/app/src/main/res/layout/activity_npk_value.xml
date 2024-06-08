@@ -75,7 +75,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginStart="76dp"
         android:layout_marginTop="89dp"
-        android:background="@drawable/rounded_corners"
+        android:background="@drawable/rounded_corners_brown_dark"
+        android:backgroundTint="@color/icon_brown_dark"
         android:text="Soil Type"
         android:textAlignment="center"
         android:textColor="@color/white"
@@ -89,25 +90,27 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/soilTypeButtons"
         android:layout_marginTop="5dp"
-        android:theme="@style/TankRecyclerCard"
+        android:theme="@style/AppBackgroundColour"
+        android:background="@drawable/rounded_corner_mid_green"
+        android:backgroundTint="@color/white"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="40dp"
         android:layout_marginBottom="100dp"
+        android:elevation="20dp"
         >
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="25dp"
             android:text="@string/recommendations"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="22sp"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/rounded_corners"
-            android:textColor="@color/white"
+            android:background="@drawable/rounded_corners_brown_dark"
+            android:backgroundTint="@color/transparent"
             android:textAlignment="center"/>
 
         <FrameLayout
@@ -117,7 +120,7 @@
             android:layout_below="@+id/textView"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="40dp"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="25dp">
 
             <ImageView
                 android:id="@+id/imageView5"
@@ -126,6 +129,7 @@
                 android:layout_below="@+id/textView"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/home_page_buttons"
+                android:backgroundTint="@color/mid_green"
                 android:scrollbars="vertical"
                 android:scrollIndicators="right"
                 />

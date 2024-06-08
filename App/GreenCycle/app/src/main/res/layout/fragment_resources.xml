@@ -50,8 +50,7 @@
                     android:iconifiedByDefault="false"
                     android:queryHint="Search here"
                     android:forceDarkAllowed="false"
-                    android:theme="@style/CustomSearchView"
-                    android:background="@drawable/search_view_black" />
+                    android:theme="@style/CustomSearchView" />
 
                 <!-- Adding a horizontal LinearLayout for the TextViews -->
                 <LinearLayout
@@ -69,8 +68,9 @@
                         android:text="ALL"
                         android:padding="10dp"
                         android:background="@drawable/grey_square_wth_rounded_corners"
+                        android:backgroundTint="@color/icon_brown_dark"
+                        android:textColor="@color/white"
                         android:textSize="16sp"
-                        android:textColor="@android:color/white"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"/>
@@ -84,7 +84,7 @@
                         android:padding="10dp"
                         android:background="@drawable/grey_square_wth_rounded_corners"
                         android:textSize="16sp"
-                        android:textColor="@android:color/white"
+                        android:textColor="@color/textColour"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"/>
@@ -98,7 +98,7 @@
                         android:textSize="16sp"
                         android:padding="10dp"
                         android:background="@drawable/grey_square_wth_rounded_corners"
-                        android:textColor="@android:color/white"
+                        android:textColor="@color/textColour"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"/>
@@ -113,7 +113,6 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"/>
 
     </LinearLayout>

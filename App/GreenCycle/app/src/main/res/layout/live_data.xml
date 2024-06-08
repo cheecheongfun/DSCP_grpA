@@ -52,8 +52,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tankName"
         android:layout_marginTop="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:theme="@style/TankRecyclerCard"
         android:elevation="20dp">
 
@@ -76,11 +76,13 @@
             android:layout_marginStart="125dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/home_page_buttons"
+            android:backgroundTint="@color/icon_brown_light"
             android:drawableStart="@drawable/baseline_device_thermostat_24"
             android:drawablePadding="15dp"
             android:padding="15dp"
             android:text="Temperature: 27.2"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:textColor="@color/textColour"/>
 
         <TextView
             android:id="@+id/humidityData"
@@ -95,7 +97,8 @@
             android:drawablePadding="15dp"
             android:padding="15dp"
             android:text="Humidity: 70%"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textColor="@color/textColour"/>
 
         <TextView
             android:id="@+id/phData"
@@ -110,7 +113,8 @@
             android:drawablePadding="15dp"
             android:padding="15dp"
             android:text="pH Level: 7"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textColor="@color/textColour"/>
 
         <RelativeLayout
             android:id="@+id/npk"
@@ -128,10 +132,11 @@
                 android:layout_margin="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/light_green"
+                android:background="@color/transparent"
                 android:drawableStart="@drawable/baseline_local_drink_24"
                 android:padding="10sp"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:textColor="@color/textColour"/>
 
             <TextView
                 android:id="@+id/nitrogenData"
@@ -139,10 +144,11 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_toEndOf="@+id/npkIcon"
-                android:background="@color/light_green"
+                android:background="@color/transparent"
                 android:text="Nitrogen: 175"
                 android:layout_marginTop="10dp"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:textColor="@color/textColour"/>
 
             <TextView
                 android:id="@+id/phosphorousData"
@@ -150,19 +156,21 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/nitrogenData"
                 android:layout_toEndOf="@+id/npkIcon"
-                android:background="@color/light_green"
+                android:background="@color/transparent"
                 android:text="Phosphorous: 170"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:textColor="@color/textColour"/>
             <TextView
                 android:id="@+id/potassiumData"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/phosphorousData"
                 android:layout_toEndOf="@+id/npkIcon"
-                android:background="@color/light_green"
+                android:background="@color/transparent"
                 android:text="Potassium: 169"
                 android:layout_marginBottom="10dp"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:textColor="@color/textColour"/>
         </RelativeLayout>
 
     </RelativeLayout>
@@ -173,9 +181,9 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/liveData"
         android:theme="@style/TankRecyclerCard"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="50dp"
         android:elevation="20dp">
 
@@ -229,6 +237,19 @@
             android:textColor="@color/white"
             android:textSize="16sp"
             android:text="- Suggested Action: Continue with your current mix of green and brown materials to maintain this balance."/>
+
+        <TextView
+            android:id="@+id/mlOutput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/point2"
+            android:layout_alignStart="@+id/point1"
+            android:layout_alignEnd="@id/point1"
+            android:layout_marginTop="15dp"
+            android:background="@color/mid_green"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:text="Testing"/>
 
     </RelativeLayout>
 

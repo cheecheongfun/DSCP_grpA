@@ -47,12 +47,12 @@ public class ResourceAdapter extends RecyclerView.Adapter<ResourceViewHolder> {
         // Set background drawable based on the item's position
         int backgroundDrawable = (position % 2 == 0) ?
                 R.drawable.rounded_corner_mid_green :
-                R.drawable.rounded_corners;
+                R.drawable.rounded_corners_brown_dark;
 
         // Set background color of texts based on drawable
         int backgroundColor = (position % 2 == 0) ?
                 R.color.mid_green :
-                R.color.light_green;
+                R.color.icon_brown_dark;
 
         holder.resourceinfo.setBackgroundColor(holder.resourceinfo.getContext().getResources().getColor(backgroundColor));
         holder.resourcetitle.setBackgroundColor(holder.resourcetitle.getContext().getResources().getColor(backgroundColor));

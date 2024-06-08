@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:theme="@style/TankRecyclerCard"
+    android:backgroundTint="#FAF9F8"
     android:clickable="true"
     android:elevation="10dp"
     android:layout_marginTop="20dp"
@@ -21,8 +22,9 @@
         android:layout_marginEnd="15dp"
         android:gravity="center"
         android:text="Tank 0"
-        android:textSize="20sp"
-        android:textColor="@color/light_green"
+        android:textSize="22sp"
+        android:background="@color/transparent"
+        android:textColor="@color/mid_green"
         />
 
     <ImageView
@@ -38,6 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/home_page_buttons"
+        android:backgroundTint="@color/mid_green"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="15dp"
         android:layout_below="@+id/tankName"
@@ -52,8 +55,10 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="5dp"
             android:layout_marginStart="5dp"
-            android:background="@color/light_green"
-            android:text="Date Created: 1/1/2024"/>
+            android:background="@color/mid_green"
+            android:text="Date Created: 1/1/2024"
+            android:textColor="@color/white"
+            android:textSize="17sp"/>
 
         <TextView
             android:id="@+id/numberOfWormsText"
@@ -61,8 +66,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/dateCreatedText"
             android:layout_marginStart="5dp"
-            android:background="@color/light_green"
-            android:text="Number of worms: 30"/>
+            android:background="@color/mid_green"
+            android:text="Number of worms: 30"
+            android:textColor="@color/white"
+            android:textSize="17sp"/>
 
 
 

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="light_green">#7ac365</color>
-    <color name="brown">#AA8869</color>
-    <color name="mid_green">#3ea049</color>
-    <color name="dark_green">#258730</color>
-    <color name="main_background">#F3F8E2</color>
+    <color name="light_green">#CAD9BD</color>
+    <color name="active_tab">#FEFAEC</color>
+    <color name="mid_green">#84A98C</color>
+    <color name="dark_green">#258730</color> <!-- find a new colour -->
+    <color name="main_background">#FFFFFFFF</color>
+    <color name="icon_brown_dark">#C58544</color>
+    <color name="icon_brown_light">#F9EBC1</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="light_grey">#D3D3D3</color>
@@ -13,4 +15,5 @@
     <color name="transparent">#00000000</color>
     <color name="red">#FF0000</color>
     <color name="light_yellow">#FFFF2E</color>
+
 </resources>

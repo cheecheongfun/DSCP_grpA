@@ -11,8 +11,21 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.ml.modeldownloader.CustomModel;
+import com.google.firebase.ml.modeldownloader.CustomModelDownloadConditions;
+import com.google.firebase.ml.modeldownloader.DownloadType;
+import com.google.firebase.ml.modeldownloader.FirebaseModelDownloader;
+
+import org.tensorflow.lite.Interpreter;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 
 import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.R;
@@ -23,7 +36,9 @@ public class LiveData extends AppCompatActivity {
     Tank tank;
     FirebaseDatabase database;
     DatabaseReference reference;
-    TextView backButton, temp, humidity, pH, nitrogen,phosphorous,potassium, feedback1, feedback2, tankName,goalbutton;
+    Interpreter tflite;
+    String soil;
+    TextView backButton, temp, humidity, pH, nitrogen,phosphorous,potassium, feedback1, feedback2, tankName, mlOutput;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +67,7 @@ public class LiveData extends AppCompatActivity {
         potassium = findViewById(R.id.potassiumData);
         feedback1 = findViewById(R.id.point1);
         feedback2 = findViewById(R.id.point2);
+        mlOutput = findViewById(R.id.mlOutput);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,5 +88,58 @@ public class LiveData extends AppCompatActivity {
         nitrogen.setText("Nitrogen: " + tank.getNpkValues().get(0));
         phosphorous.setText("Phosphorous: " + tank.getNpkValues().get(1));
         potassium.setText("Potassium: " + tank.getNpkValues().get(2));
+
+        CustomModelDownloadConditions conditions = new CustomModelDownloadConditions.Builder()
+                .requireWifi()
+                .build();
+        FirebaseModelDownloader.getInstance()
+                .getModel("Soil_Classifier", DownloadType.LOCAL_MODEL, conditions)
+                .addOnSuccessListener(new OnSuccessListener<CustomModel>() {
+                    @Override
+                    public void onSuccess(CustomModel model) {
+                        // Download complete. Depending on your app, you could enable
+                        // the ML feature, or switch from the local model to the remote
+                        // model, etc.
+                        File modelFile = model.getFile();
+                        if (modelFile != null) {
+                            // Load the TensorFlow Lite model
+                            tflite = new Interpreter(loadModelFile(modelFile));
+
+                            // Prepare input data
+                            float[][] input = new float[1][3]; // Example input
+                            input[0][0] = (float) tank.getTemperature(); // Actual temperature data
+                            input[0][1] = (float) tank.getHumidity(); // Actual humidity data
+                            input[0][2] = 1.0f; // Third input, could be any constant value
+
+                            // Prepare output buffer
+                            float[][] output = new float[1][4];
+
+                            // Run inference
+                            tflite.run(input, output);
+
+                            // Interpret the model output and display predicted class label
+                            int[] predictedLabels = new int[output[0].length];
+                            for (int i = 0; i < output[0].length; i++) {
+                                predictedLabels[i] = Math.round(output[0][i]);
+                            }
+                            String[] classLabels = {"Balanced", "High Nitrogen", "High Phosphorous", "High Potassium"};
+                            String predictedClass = classLabels[predictedLabels[0]];
+
+                            // Update the UI with the predicted class label
+                            mlOutput.setText(predictedClass);
+                        }
+                    }
+                });
+    }
+    public MappedByteBuffer loadModelFile(File modelFile) {
+        try (FileInputStream inputStream = new FileInputStream(modelFile)) {
+            FileChannel fileChannel = inputStream.getChannel();
+            long startOffset = 0;
+            long declaredLength = modelFile.length();
+            return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

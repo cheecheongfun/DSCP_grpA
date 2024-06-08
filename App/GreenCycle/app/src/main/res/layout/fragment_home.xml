@@ -12,91 +12,59 @@
         android:layout_height="match_parent"
         android:theme="@style/Theme.GreenCycle">
 
+        <TextView
+            android:id="@+id/helper"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"/>
+
         <!-- Welcome segment -->
+        <ImageView
+            android:id="@+id/homeProfile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/baseline_person_24" />
+
+        <TextView
+            android:id="@+id/userWelcome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/homeProfile"
+            android:layout_alignBottom="@+id/homeProfile"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_toEndOf="@+id/homeProfile"
+            android:gravity="center_vertical"
+            android:text="Welcome, User"
+            android:textSize="20dp"
+            android:textStyle="bold" />
 
         <RelativeLayout
             android:id="@+id/welcomeTab"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="0dp"
-            android:background="@drawable/filled_bottomrounded_maingreen">
-
-            <ImageView
-                android:id="@+id/homeProfile"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="35dp"
-                app:srcCompat="@drawable/baseline_person_24"
-                android:background="@color/light_green"/>
+            android:layout_height="wrap_content"
+            android:layout_below="@id/userWelcome"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/rounded_corner_mid_green">
 
             <TextView
-                android:id="@+id/userWelcome"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="35dp"
-                android:layout_marginEnd="20dp"
-                android:layout_toEndOf="@+id/homeProfile"
-                android:text="Welcome, User"
-                android:background="@color/light_green"
-                android:textColor="@color/white"
-                android:textSize="25dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/welcomeMsg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/userWelcome"
-                android:layout_alignBottom="@+id/homeProfile"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_toEndOf="@+id/homeProfile"
-                android:background="@color/light_green"
-                android:text="What would you like to do today?"
-                android:textColor="@color/white"
-                android:textSize="15dp" />
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="358dp"
-                android:layout_height="177dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="33dp"
-                android:layout_marginBottom="-2dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/bottom_rounded_brown" />
-
-            <ImageView
-                android:id="@+id/imageView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="49dp"
-                android:layout_marginTop="131dp"
-                android:src="@drawable/bottom_rounded_brown" />
-
-            <ImageView
-                android:id="@+id/imageView8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="97dp"
-                android:layout_marginBottom="1dp"
-                android:src="@drawable/bottom_rounded_brown" />
-
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="80dp"
+                android:layout_marginBottom="80dp"
+                android:background="#84a98c"
+                android:gravity="center"
+                android:text="Energy Generated"
+                android:textColor="@color/white" />
         </RelativeLayout>
+
 
         <TextView
             android:id="@+id/sectionVermi"
@@ -104,24 +72,26 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/welcomeTab"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:text="Vermicompost"
-            android:textSize="20dp"
+            android:textSize="23dp"
             android:textStyle="bold" />
 
         <!-- First row of buttons and label, left to right -->
         <ImageButton
             android:id="@+id/liveDataButton"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_below="@+id/sectionVermi"
-            android:layout_alignStart="@+id/sectionVermi"
             android:layout_marginTop="15dp"
+            android:layout_marginEnd="40dp"
+            android:layout_toStartOf="@+id/feedingLogButton"
             android:background="@drawable/home_page_buttons"
+            android:elevation="2dp"
             android:padding="10dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/outline_bigtop_updates_24" />
+            android:theme="@style/LiveDataBtn" />
 
         <TextView
             android:id="@+id/liveDataText"
@@ -135,81 +105,42 @@
 
         <ImageButton
             android:id="@+id/feedingLogButton"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_below="@+id/sectionVermi"
             android:layout_alignTop="@+id/liveDataButton"
-            android:layout_centerHorizontal="true"
             android:background="@drawable/home_page_buttons"
             android:padding="10dp"
+            android:elevation="2dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/outline_grass_24" />
+            android:layout_toStartOf="@+id/helper"
+            android:layout_marginEnd="20dp"
+            android:theme="@style/FeedingLogBtn"/>
 
         <TextView
             android:id="@+id/feedingLogText"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/feedingLogButton"
-            android:layout_alignStart="@+id/feedingLogButton"
-            android:layout_alignEnd="@+id/feedingLogButton"
+            android:layout_alignTop="@+id/liveDataText"
+            android:layout_alignBottom="@+id/liveDataText"
+            android:layout_toStartOf="@+id/imageText"
+            android:layout_toEndOf="@+id/liveDataText"
             android:gravity="center"
             android:text="Feeding Log" />
 
         <ImageButton
-            android:id="@+id/analyticsButton"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_below="@+id/sectionVermi"
-            android:layout_alignTop="@+id/liveDataButton"
-            android:layout_alignEnd="@+id/sectionVermi"
-            android:background="@drawable/home_page_buttons"
-            android:padding="10dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/outline_analytics_24" />
-
-        <TextView
-            android:id="@+id/analyticsText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/analyticsButton"
-            android:layout_alignStart="@+id/analyticsButton"
-            android:layout_alignEnd="@+id/analyticsButton"
-            android:gravity="center"
-            android:text="Analytics" />
-
-        <!-- Second row of buttons and labels, left to right -->
-        <ImageButton
-            android:id="@+id/goalsButton"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_below="@+id/liveDataText"
-            android:layout_alignStart="@+id/sectionVermi"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/home_page_buttons"
-            android:padding="10dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/baseline_scoreboard_24" />
-
-        <TextView
-            android:id="@+id/goalsText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/goalsButton"
-            android:layout_alignStart="@+id/goalsButton"
-            android:layout_alignEnd="@+id/goalsButton"
-            android:gravity="center"
-            android:text="Goals" />
-
-        <ImageButton
             android:id="@+id/imageLog"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_alignTop="@+id/goalsButton"
-            android:layout_centerHorizontal="true"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignTop="@+id/liveDataButton"
             android:background="@drawable/home_page_buttons"
             android:padding="10dp"
+            android:elevation="2dp"
+            android:layout_toEndOf="@+id/helper"
+            android:layout_marginStart="20dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/baseline_image_search_24" />
+            android:theme="@style/ImageLogBtn" />
 
         <TextView
             android:id="@+id/imageText"
@@ -222,15 +153,112 @@
             android:text="Image Log" />
 
         <ImageButton
-            android:id="@+id/soilTypeButton"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_alignTop="@+id/goalsButton"
-            android:layout_alignEnd="@+id/sectionVermi"
-            android:background="@drawable/rounded_corners"
+            android:id="@+id/analyticsButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_below="@+id/sectionVermi"
+            android:layout_alignTop="@+id/liveDataButton"
+            android:layout_marginTop="0dp"
+            android:elevation="2dp"
+            android:layout_toEndOf="@+id/imageLog"
+            android:layout_marginStart="40dp"
+            android:background="@drawable/home_page_buttons"
             android:padding="10dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/outline_grass_24" />
+            android:theme="@style/AnalyticsBtn" />
+
+        <TextView
+            android:id="@+id/analyticsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/analyticsButton"
+            android:layout_alignStart="@+id/analyticsButton"
+            android:layout_alignEnd="@+id/analyticsButton"
+            android:gravity="center"
+            android:text="Analytics" />
+
+        <!-- Second row of buttons and labels, left to right -->
+
+        <ImageButton
+            android:id="@+id/goalsButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_below="@+id/liveDataText"
+            android:layout_alignStart="@+id/liveDataButton"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/home_page_buttons"
+            android:padding="10dp"
+            android:elevation="2dp"
+            android:scaleType="centerCrop"
+            android:theme="@style/GoalsBtn" />
+
+        <TextView
+            android:id="@+id/goalsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/goalsButton"
+            android:layout_alignStart="@+id/goalsButton"
+            android:layout_alignEnd="@+id/goalsButton"
+            android:gravity="center"
+            android:text="Goals" />
+
+        <ImageButton
+            android:id="@+id/conversionButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_below="@+id/feedingLogText"
+            android:layout_alignStart="@+id/feedingLogButton"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/home_page_buttons"
+            android:padding="10dp"
+            android:elevation="2dp"
+            android:scaleType="centerCrop"
+            android:theme="@style/ConverterBtn" />
+
+        <TextView
+            android:id="@+id/conversionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/conversionButton"
+            android:layout_toEndOf="@+id/goalsText"
+            android:layout_toStartOf="@+id/communityText"
+            android:gravity="center"
+            android:text="Unit Converter" />
+
+        <ImageButton
+            android:id="@+id/communityButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_below="@+id/imageText"
+            android:layout_alignStart="@+id/imageText"
+            android:layout_marginTop="25dp"
+            android:elevation="2dp"
+            android:background="@drawable/home_page_buttons"
+            android:padding="10dp"
+            android:scaleType="centerCrop"
+            android:theme="@style/CommunityBtn" />
+
+        <TextView
+            android:id="@+id/communityText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/conversionButton"
+            android:layout_alignStart="@+id/communityButton"
+            android:layout_alignEnd="@+id/communityButton"
+            android:gravity="center"
+            android:text="Forum"/>
+
+        <ImageButton
+            android:id="@+id/soilTypeButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignTop="@+id/goalsButton"
+            android:layout_alignEnd="@+id/analyticsButton"
+            android:background="@drawable/home_page_buttons"
+            android:padding="10dp"
+            android:elevation="2dp"
+            android:scaleType="centerCrop"
+            android:theme="@style/SoilBtn" />
 
         <TextView
             android:id="@+id/soilTypeText"
@@ -242,30 +270,143 @@
             android:gravity="center"
             android:text="Soil Type" />
 
+        <!-- Widget -->
+
+        <RelativeLayout
+            android:id="@+id/widget"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_below="@+id/goalsText"
+            android:layout_marginTop="30dp"
+            android:layout_alignStart="@+id/sectionVermi"
+            android:layout_alignEnd="@+id/sectionVermi"
+            android:background="@drawable/rounded_corner_mid_green"
+            android:backgroundTint="@color/light_green">
+
+
+            <TextView
+                android:id="@+id/convert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/baseline_arrow_forward_24"
+                android:drawableTint="@color/textColour"
+                android:background="@color/transparent"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:layout_alignTop="@+id/inputUnit"
+                android:layout_alignBottom="@+id/inputUnit"/>
+
+            <TextView
+                android:id="@+id/inputUnitText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Unit"
+                android:textColor="@color/textColour"
+                android:background="@color/transparent"
+                android:layout_alignEnd="@+id/inputUnit"
+                android:layout_alignStart="@+id/inputUnit"
+                android:gravity="center"
+                android:layout_above="@+id/inputUnit"
+                android:layout_marginBottom="-22dp"/>
+
+            <NumberPicker
+                android:id="@+id/inputUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:layout_marginEnd="20dp"
+                android:layout_toStartOf="@+id/convert"
+                android:theme="@style/WidgetPicker"
+                android:layout_marginTop="20dp" />
+
+            <TextView
+                android:id="@+id/inputAmtText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Amount"
+                android:textColor="@color/textColour"
+                android:background="@color/transparent"
+                android:layout_alignEnd="@+id/inputNo"
+                android:layout_alignStart="@+id/inputNo"
+                android:gravity="center"
+                android:layout_above="@+id/inputNo"
+                android:layout_marginBottom="-22dp"/>
+
+            <NumberPicker
+                android:id="@+id/inputNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:layout_marginTop="20dp"
+                android:layout_toStartOf="@+id/inputUnit"
+                android:theme="@style/WidgetPicker"/>
+
+            <TextView
+                android:id="@+id/outputNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10"
+                android:textColor="@color/textColour"
+                android:background="@color/transparent"
+                android:layout_toEndOf="@+id/convert"
+                android:layout_alignTop="@+id/inputUnit"
+                android:layout_alignBottom="@+id/inputUnit"
+                android:gravity="center"
+                android:layout_marginStart="20dp"
+                android:textSize="20dp"/>
+
+            <TextView
+                android:id="@+id/outputUnitText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Unit"
+                android:textColor="@color/textColour"
+                android:background="@color/transparent"
+                android:layout_alignEnd="@+id/outputUnit"
+                android:layout_alignStart="@+id/outputUnit"
+                android:gravity="center"
+                android:layout_above="@+id/outputUnit"
+                android:layout_marginBottom="-22dp"/>
+
+            <NumberPicker
+                android:id="@+id/outputUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:layout_marginTop="20dp"
+                android:layout_toEndOf="@+id/outputNo"
+                android:theme="@style/WidgetPicker"
+                android:layout_marginStart="10dp"
+                />
+
+        </RelativeLayout>
+
         <!-- Solar Section -->
+
         <TextView
             android:id="@+id/sectionSolar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/goalsText"
-            android:layout_marginStart="20dp"
+            android:layout_below="@+id/widget"
+            android:layout_alignStart="@+id/sectionVermi"
             android:layout_marginTop="30dp"
-            android:layout_marginEnd="20dp"
+            android:layout_alignEnd="@+id/sectionVermi"
             android:text="Solar Panels"
-            android:textSize="20dp"
+            android:textSize="23dp"
             android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/solarForecast"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_below="@+id/sectionSolar"
-            android:layout_alignStart="@+id/sectionVermi"
+            android:layout_alignStart="@+id/goalsButton"
             android:layout_marginTop="15dp"
             android:background="@drawable/home_page_buttons"
             android:padding="10dp"
+            android:elevation="2dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/baseline_solar_power_24" />
+            android:theme="@style/ForecastBtn"/>
 
         <TextView
             android:id="@+id/solarText"

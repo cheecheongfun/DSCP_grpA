@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.GreenCycle" parent="Theme.Material3.Light.NoActionBar">
+    <style name="Theme.GreenCycle" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/mid_green</item>
         <item name="colorPrimaryVariant">@color/light_green</item>
@@ -16,7 +16,6 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:background">@color/main_background</item>
         <item name="android:textColor">@color/textColour</item>
-
     </style>
     <!-- Base application theme. -->
     <style name="Base.Theme.GreenCycle" parent="Theme.Material3.DayNight.NoActionBar">
@@ -27,11 +26,12 @@
     <style name="ButtonHome" parent="@style/Widget.Material3.ExtendedFloatingActionButton.Icon.Secondary">
         <item name="colorAccent">@color/light_green</item>
         <item name="android:textColor">@color/textColour</item>
+        <item name="backgroundTint">#d4a373</item>
     </style>
 
     <!-- Sets the App Background Colour -->
     <style name="AppBackgroundColour">
-        <item name="android:background">@color/main_background</item>
+        <item name="android:background">@color/white</item>
         <item name="android:textColor">@color/textColour</item>
         <item name="fontFamily">sans-serif-condensed-medium</item>
     </style>
@@ -57,9 +57,10 @@
         <item name="background">@drawable/search_view_black</item>
     </style>
 
+    <!-- Resource Search View -->
     <style name="CustomSearchView" parent="Widget.AppCompat.SearchView">
         <item name="android:background">@drawable/grey_square_wth_rounded_corners</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/textColour</item>
     </style>
 
     <!-- Custom DatePicker theme -->
@@ -73,8 +74,7 @@
         <item name="android:textColorSecondary">@color/black</item>
         <item name="android:datePickerMode">calendar</item>
         <item name="android:textColorPrimaryInverse">@color/black</item>
-        <item name="android:background">@color/white
-        </item> <!-- Set the text color for selected date -->
+        <item name="android:background">@color/white</item> <!-- Set the text color for selected date -->
         <item name="android:buttonBarPositiveButtonStyle">@style/Button</item>
         <item name="android:buttonBarNegativeButtonStyle">@style/Button</item>
     </style>
@@ -89,6 +89,7 @@
         <item name="android:textColorPrimaryInverse">@color/black</item> <!-- Set the text color for selected date -->
     </style>
 
+    <!-- Bottom Page for Feeding Log -->
     <style name="FeedingLogBottom">
         <item name="android:background">@drawable/top_rounded</item>
         <item name="android:backgroundTint">@color/main_background</item>
@@ -97,11 +98,9 @@
         <item name="android:buttonTint">@color/light_green</item>
     </style>
 
-
     <!-- Border -->
     <style name="Border">
         <item name="background">@drawable/search_view_black</item>
-
     </style>
 
     <style name="CustomSpinner" parent="Widget.AppCompat.Spinner">
@@ -152,12 +151,70 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <!-- Basic drawables (black/white) -->
+    <style name="HomePageButtons">
+        <item name="android:backgroundTint">#faedcd</item>
+        <item name="android:src"></item>
+    </style>
+
+    <!-- Number Picker -->
+    <style name="WidgetPicker">
+        <item name="fontFamily">sans-serif-condensed-medium</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">@color/textColour</item>
+    </style>
 
 
+    <!-- Home buttons-->
 
+    <!-- Live Data-->
+    <style name="LiveDataBtn">
+        <item name="android:backgroundTint">@color/icon_brown_light</item>
+        <item name="android:src">@drawable/outline_bigtop_updates_24_dark</item>
+    </style>
+    <!-- Feeding Log-->
+    <style name="FeedingLogBtn">
+        <item name="android:backgroundTint">@color/icon_brown_light</item>
+        <item name="android:src">@drawable/outline_coffee_24_dark</item>
+    </style>
+    <!-- Image Log-->
+    <style name="ImageLogBtn">
+        <item name="android:backgroundTint">@color/icon_brown_light</item>
+        <item name="android:src">@drawable/outline_image_search_24_dark</item>
+    </style>
+    <!-- Analytics -->
+    <style name="AnalyticsBtn">
+        <item name="android:backgroundTint">@color/icon_brown_light</item>
+        <item name="android:src">@drawable/outline_analytics_24_dark</item>
+    </style>
+    <!-- Goals -->
+    <style name="GoalsBtn">
+        <item name="android:backgroundTint">@color/icon_brown_light</item>
+        <item name="android:src">@drawable/outline_scoreboard_24_dark</item>
+    </style>
+    <!-- Converter -->
+    <style name="ConverterBtn">
+        <item name="android:backgroundTint">@color/icon_brown_light</item>
+        <item name="android:src">@drawable/outline_calculate_24_dark</item>
+    </style>
+    <!-- Community -->
+    <style name="CommunityBtn">
+        <item name="android:backgroundTint">@color/icon_brown_light</item>
+        <item name="android:src">@drawable/outline_forum_24_dark</item>
+    </style>
+    <!-- Soil Type -->
+    <style name="SoilBtn">
+        <item name="android:backgroundTint">@color/icon_brown_light</item>
+        <item name="android:src">@drawable/outline_grass_24_dark</item>
+    </style>
+    <!-- Solar Forecast -->
+    <style name="ForecastBtn">
+        <item name="android:backgroundTint">@color/icon_brown_light</item>
+        <item name="android:src">@drawable/outline_solar_power_24_dark</item>
+    </style>
 
-
-
-
-
+    <!-- Resource filter by type -->
+    <style name="ResourceFilter">
+        <item name="android:backgroundTint">@color/light_green</item>
+    </style>
 </resources>

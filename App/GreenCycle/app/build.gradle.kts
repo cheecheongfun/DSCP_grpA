@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "sg.edu.np.mad.greencycle"
-        minSdk = 26
+        minSdk = 29
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -54,6 +54,8 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-database")
+    implementation("com.google.firebase:firebase-ml-modeldownloader")
+    implementation("org.tensorflow:tensorflow-lite:2.3.0")
     implementation ("com.google.firebase:firebase-database:20.1.0")
     implementation ("com.squareup.picasso:picasso:2.71828")
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
@@ -63,6 +65,8 @@ dependencies {
     annotationProcessor ("com.github.bumptech.glide:compiler:4.14.1")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-
+    implementation("androidx.compose.material3:material3:1.2.1")
+    implementation("androidx.compose.material3:material3-window-size-class:1.2.1")
+    implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.3.0-beta02")
 
 }
