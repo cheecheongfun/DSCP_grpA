@@ -10,26 +10,27 @@ import sg.edu.np.mad.greencycle.LiveData.Tank;
 public class User implements Parcelable {
     private String username;
     private String password;
-    private String fingerprintId;
+    private String displayname; // Including displayname field
     private ArrayList<Tank> tanks;
 
     public User() {
-//        tanks = new ArrayList<>();
+        // Initialize tanks ArrayList
+        tanks = new ArrayList<>();
     }
 
-    public User(String username, String password, ArrayList<Tank> tanks) {
+    public User(String username, String password, String displayname, ArrayList<Tank> tanks) {
         this.username = username;
         this.password = password;
+        this.displayname = displayname; // Setting displayname in constructor
         this.tanks = tanks;
-//        this.fingerprintId = fingerprintId;
     }
 
     protected User(Parcel in) {
         username = in.readString();
         password = in.readString();
+        displayname = in.readString(); // Reading displayname from Parcel
         tanks = new ArrayList<>();
         in.readList(tanks, Tank.class.getClassLoader());
-//        fingerprintId = in.readString();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -53,8 +54,8 @@ public class User implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(username);
         dest.writeString(password);
+        dest.writeString(displayname); // Writing displayname to Parcel
         dest.writeList(tanks);
-//        dest.writeString(fingerprintId);
     }
 
     // Method to add a tank to the user's list
@@ -91,6 +92,16 @@ public class User implements Parcelable {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getDisplayname() {
+        return displayname;
+    }
+
+    public void setDisplayname(String displayname) {
+        this.displayname = displayname;
+    }
+}
+
 //    public String getFingerprintId() {
 //        return fingerprintId;
 //    }
@@ -98,4 +109,4 @@ public class User implements Parcelable {
 //    public void setFingerprintId(String fingerprintId) {
 //        this.password = password;
 //    }
-}
+

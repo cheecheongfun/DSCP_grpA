@@ -117,7 +117,7 @@ public class RegistrationPage extends AppCompatActivity {
                             Toast.makeText(RegistrationPage.this, "Username already exists!", Toast.LENGTH_SHORT).show();
                         } else {
                             // Username does not exist, create new user
-                            User newuser = new User(username, password, null); // Assuming User class handles password securely
+                            User newuser = new User(username, password, username,null); // Assuming User class handles password securely
                             reference.child(username).setValue(newuser)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override

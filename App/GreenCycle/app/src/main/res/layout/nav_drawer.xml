@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- nav_drawer.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="150dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="end"
+    android:background="@color/light_green"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Profile option with an icon -->
+    <LinearLayout
+        android:id="@+id/nav_profile_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/baseline_person"
+            android:contentDescription="@string/profile"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:text="@string/profile"
+            android:textSize="18sp"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+
+    <!-- Option 2 with an icon -->
+    <LinearLayout
+        android:id="@+id/nav_option_two_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginTop="16dp"
+        android:background="?attr/selectableItemBackground">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:text="Option 2"
+            android:textSize="18sp"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+
+    <!-- Add more options as needed -->
+</LinearLayout>

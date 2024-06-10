@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <Button
+        android:id="@+id/btn_choose_from_library"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose from library"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/transparent"/>
+
+    <Button
+        android:id="@+id/btn_take_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Take photo"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/transparent"/>
+
+    <Button
+        android:id="@+id/btn_remove_picture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Remove current picture"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/transparent"/>
+</LinearLayout>

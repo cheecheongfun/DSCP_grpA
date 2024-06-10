@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.Home.HomeFragment">
+<FrameLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.Home.HomeFragment"
@@ -19,29 +24,33 @@
             android:layout_centerInParent="true"/>
 
         <!-- Welcome segment -->
-        <ImageView
-            android:id="@+id/homeProfile"
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profileImageView"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="40dp"
-            android:src="@drawable/baseline_person_24" />
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="348dp"
+            android:src="@drawable/green_cycle_icon"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="2dp" />
 
         <TextView
             android:id="@+id/userWelcome"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/homeProfile"
-            android:layout_alignBottom="@+id/homeProfile"
+            android:layout_width="272dp"
+            android:layout_height="52dp"
+            android:layout_alignTop="@+id/profileImageView"
+            android:layout_alignBottom="@+id/profileImageView"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="20dp"
-            android:layout_toEndOf="@+id/homeProfile"
+            android:layout_marginTop="-2dp"
+            android:layout_marginEnd="59dp"
             android:gravity="center_vertical"
             android:text="Welcome, User"
             android:textSize="20dp"
             android:textStyle="bold" />
+
 
         <RelativeLayout
             android:id="@+id/welcomeTab"
@@ -49,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/userWelcome"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/rounded_corner_mid_green">
 
@@ -64,7 +73,6 @@
                 android:text="Energy Generated"
                 android:textColor="@color/white" />
         </RelativeLayout>
-
 
         <TextView
             android:id="@+id/sectionVermi"
@@ -417,5 +425,22 @@
             android:layout_alignEnd="@+id/solarForecast"
             android:gravity="center"
             android:text="Forecast" />
+
+        <ImageButton
+            android:id="@+id/settings"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="6dp"
+            android:backgroundTint="@color/transparent"
+            android:src="@drawable/baseline_settings_24" />
+
     </RelativeLayout>
 </FrameLayout>
+    <include layout="@layout/nav_drawer"
+        android:layout_width="180dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end" />
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -61,5 +61,6 @@
     </string-array>
 
     <string name="food_item">%s:</string>
+    <string name="profile">Profile</string>
 
 </resources>
