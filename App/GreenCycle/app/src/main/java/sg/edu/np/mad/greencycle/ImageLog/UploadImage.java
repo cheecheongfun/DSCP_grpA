@@ -86,7 +86,7 @@ public class UploadImage extends AppCompatActivity {
         });
 
         back.setOnClickListener(view -> {
-            Intent intent = new Intent(UploadImage.this, TankSelection.class);
+            Intent intent = new Intent(UploadImage.this, DisplayImage.class);
             startActivity(intent);
         });
     }
