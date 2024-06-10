@@ -5,22 +5,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.appcompat.app.AlertDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 import java.util.Map;
 import sg.edu.np.mad.greencycle.R;
-// Oh Ern Qi S10243067K
+
 public class galleryAdapter extends BaseAdapter {
     private Context context;
-    private List<Map<String, String>> imageDataList;
+    public List<Map<String, String>> imageDataList;
+    private ImageDeletionListener deletionListener;
 
-    public galleryAdapter(Context context, List<Map<String, String>> imageDataList) {
+    public interface ImageDeletionListener {
+        void onDeleteImage(Map<String, String> imageData);
+    }
+
+    public galleryAdapter(Context context, List<Map<String, String>> imageDataList, ImageDeletionListener deletionListener) {
         this.context = context;
         this.imageDataList = imageDataList;
+        this.deletionListener = deletionListener;
     }
 
     @Override
@@ -45,7 +53,8 @@ public class galleryAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.image_item, parent, false);
             holder = new ViewHolder();
             holder.imageView = convertView.findViewById(R.id.compostimage);
-            holder.dateText = convertView.findViewById(R.id.tvDate); // If you want to show the date
+            holder.dateText = convertView.findViewById(R.id.tvDate);
+            holder.deleteButton = convertView.findViewById(R.id.deleteimage);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -62,11 +71,18 @@ public class galleryAdapter extends BaseAdapter {
             holder.dateText.setText(imageData.get("timestamp"));
         }
 
+        holder.deleteButton.setOnClickListener(v -> {
+            if (deletionListener != null) {
+                deletionListener.onDeleteImage(imageData);
+            }
+        });
+
         return convertView;
     }
 
-    private static class ViewHolder {
+    static class ViewHolder {
         ImageView imageView;
-        TextView dateText;  // Optional: Only if you included a TextView in image_item.xml
+        TextView dateText;
+        ImageButton deleteButton;
     }
 }
