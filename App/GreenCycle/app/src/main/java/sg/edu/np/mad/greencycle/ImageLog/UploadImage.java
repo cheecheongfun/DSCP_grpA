@@ -2,7 +2,6 @@ package sg.edu.np.mad.greencycle.ImageLog;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -21,7 +20,6 @@ import androidx.core.content.FileProvider;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,7 +44,7 @@ import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.LiveData.Tank;
 import sg.edu.np.mad.greencycle.LiveData.TankSelection;
 import sg.edu.np.mad.greencycle.R;
-// Oh Ern Qi S10243067K
+
 public class UploadImage extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int CAPTURE_IMAGE_REQUEST = 2;
@@ -55,11 +53,12 @@ public class UploadImage extends AppCompatActivity {
     private StorageReference mStorageRef;
     private Uri imageUri;
     private ImageView imageView;
-    private Button btnCancel;
+    private Button btnCancel, btnUpload;
     private TextView back;
 
     User user;
     Tank tank;
+    private boolean isCancelled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +68,7 @@ public class UploadImage extends AppCompatActivity {
         mStorageRef = FirebaseStorage.getInstance().getReference();
         imageView = findViewById(R.id.imageView);
         btnCancel = findViewById(R.id.btnCancel);
+        btnUpload = findViewById(R.id.btnUploadImage);
         back = findViewById(R.id.backButton);
         btnCancel.setVisibility(View.GONE);
 
@@ -77,23 +77,18 @@ public class UploadImage extends AppCompatActivity {
         tank = receivingEnd.getParcelableExtra("tank");
 
         findViewById(R.id.btnChooseImage).setOnClickListener(v -> chooseImage());
-        findViewById(R.id.btnUploadImage).setOnClickListener(v -> uploadImage());
+        btnUpload.setOnClickListener(v -> uploadImage());
         findViewById(R.id.btnUseCamera).setOnClickListener(v -> requestCameraPermission());
 
         btnCancel.setOnClickListener(v -> {
+            isCancelled = true;
             resetImageView();
-            btnCancel.setVisibility(View.GONE);
-        });
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(UploadImage.this, DisplayImage.class);
-                intent.putExtra("user", user);
-                intent.putExtra("tank",tank);
-                startActivity(intent);
-            }
         });
 
+        back.setOnClickListener(view -> {
+            Intent intent = new Intent(UploadImage.this, TankSelection.class);
+            startActivity(intent);
+        });
     }
 
     private void chooseImage() {
@@ -104,11 +99,9 @@ public class UploadImage extends AppCompatActivity {
     }
 
     private void requestCameraPermission() {
-        Log.i(null, "in use camera");
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
         } else {
-            Log.i(null, "in permission else");
             launchCamera();
         }
     }
@@ -116,33 +109,24 @@ public class UploadImage extends AppCompatActivity {
     private void launchCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getPackageManager()) != null) {
-            Log.e("Camera", "in if 1");
             File photoFile = null;
             try {
-                Log.e("Camera", "in try");
                 photoFile = createImageFile();
             } catch (IOException ex) {
                 Log.e("Camera", "Error creating file", ex);
             }
             if (photoFile != null) {
-                Log.e("Camera", "in if 2");
                 imageUri = FileProvider.getUriForFile(this, getPackageName() + ".provider", photoFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                 startActivityForResult(intent, CAPTURE_IMAGE_REQUEST);
             }
         }
-        Log.i(null, "in else launch");
     }
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                "JPEG_" + timeStamp + "_",
-                ".jpg",
-                storageDir
-        );
-        return image;
+        return File.createTempFile("JPEG_" + timeStamp + "_", ".jpg", storageDir);
     }
 
     @Override
@@ -170,29 +154,38 @@ public class UploadImage extends AppCompatActivity {
             }
         }
     }
+
     private void uploadImage() {
         if (imageUri != null) {
+            isCancelled = false;
+            btnUpload.setEnabled(false);
             Glide.with(this)
                     .asBitmap()
                     .load(imageUri)
-                    .centerCrop() // This ensures the image is cropped to fill the bounds.
-                    .override(500, 500) // Adjust these values to your needs.
+                    .centerCrop()
+                    .override(500, 500)
                     .into(new CustomTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            resource.compress(Bitmap.CompressFormat.JPEG, 70, baos);
-                            byte[] data = baos.toByteArray();
-                            StorageReference fileRef = mStorageRef.child("images/" + System.currentTimeMillis() + ".jpg");
-                            fileRef.putBytes(data).addOnSuccessListener(taskSnapshot ->
-                                    fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                                        uploadImageDetailsToFirestore(uri.toString());
-                                    }).addOnFailureListener(e -> {
-                                        Toast.makeText(UploadImage.this, "Failed to get image URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    })
-                            ).addOnFailureListener(e -> {
-                                Toast.makeText(UploadImage.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            });
+                            if (!isCancelled) {
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                resource.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+                                byte[] data = baos.toByteArray();
+                                StorageReference fileRef = mStorageRef.child("images/" + System.currentTimeMillis() + ".jpg");
+                                fileRef.putBytes(data).addOnSuccessListener(taskSnapshot ->
+                                        fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                            if (!isCancelled) {
+                                                uploadImageDetailsToFirestore(uri.toString());
+                                            }
+                                        }).addOnFailureListener(e -> {
+                                            Toast.makeText(UploadImage.this, "Failed to get image URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            btnUpload.setEnabled(true);
+                                        })
+                                ).addOnFailureListener(e -> {
+                                    Toast.makeText(UploadImage.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    btnUpload.setEnabled(true);
+                                });
+                            }
                         }
 
                         @Override
@@ -204,24 +197,30 @@ public class UploadImage extends AppCompatActivity {
         }
     }
 
-
     private void uploadImageDetailsToFirestore(String imageUrl) {
-        Map<String, Object> imageDetails = new HashMap<>();
-        imageDetails.put("image_url", imageUrl);
-        imageDetails.put("timestamp", new Timestamp(new Date()));
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Users").document(user.getUsername())
-                .collection("Tanks").document(String.valueOf(tank.getTankID()))
-                .collection("Images").document()
-                .set(imageDetails)
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(UploadImage.this, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show();
-                    resetImageView();
-                })
-                .addOnFailureListener(e -> Toast.makeText(UploadImage.this, "Upload Error", Toast.LENGTH_SHORT).show());
+        if (!isCancelled) {
+            Map<String, Object> imageDetails = new HashMap<>();
+            imageDetails.put("image_url", imageUrl);
+            imageDetails.put("timestamp", new Timestamp(new Date()));
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("Users").document(user.getUsername())
+                    .collection("Tanks").document(String.valueOf(tank.getTankID()))
+                    .collection("Images").document()
+                    .set(imageDetails)
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(UploadImage.this, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show();
+                        resetImageView();
+                        btnUpload.setEnabled(true);
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(UploadImage.this, "Upload Error", Toast.LENGTH_SHORT).show();
+                        btnUpload.setEnabled(true);
+                    });
+        }
     }
 
     private void resetImageView() {
+        btnUpload.setEnabled(true);
         imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.uploadicon));
         imageUri = null;
         btnCancel.setVisibility(View.GONE);
