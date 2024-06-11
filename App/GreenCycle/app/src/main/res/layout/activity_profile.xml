@@ -122,7 +122,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@id/displayNameText"
-                android:layout_marginStart="125dp"
+                android:layout_marginStart="61dp"
                 android:layout_marginTop="-22dp"
                 android:layout_toEndOf="@id/displayNameText"
                 android:background="@android:color/transparent"

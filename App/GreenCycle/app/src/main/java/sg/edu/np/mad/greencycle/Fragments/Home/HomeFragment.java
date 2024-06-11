@@ -1,6 +1,8 @@
 package sg.edu.np.mad.greencycle.Fragments.Home;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.activity.EdgeToEdge;
 import androidx.core.content.ContextCompat;
@@ -86,7 +88,7 @@ public class HomeFragment extends Fragment {
         LinearLayout profileLayout = view.findViewById(R.id.nav_profile_layout);
         imageView = view.findViewById(R.id.profileImageView);
 
-        username.setText("Welcome, " + user.getUsername());
+        username.setText("Welcome, " + user.getDisplayname());
         loadProfileImage(user);
 
         profileLayout.setOnClickListener(v -> {
@@ -178,6 +180,8 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+
+
     private void loadProfileImage(User user) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Users").document(user.getUsername())
@@ -205,4 +209,15 @@ public class HomeFragment extends Fragment {
                 .error(R.drawable.green_cycle_icon)       // Shown on error
                 .into(imageView);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+        String displayName = sharedPref.getString("DisplayName", "User"); // Default value if not found
+        username.setText("Welcome, " + displayName);
+    }
+
+
+
 }

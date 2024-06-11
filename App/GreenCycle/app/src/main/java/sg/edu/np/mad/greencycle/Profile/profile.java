@@ -2,6 +2,7 @@ package sg.edu.np.mad.greencycle.Profile;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -45,6 +46,8 @@ public class profile extends AppCompatActivity {
     private static final int CAPTURE_IMAGE_REQUEST = 2;
     private static final int REQUEST_CAMERA_PERMISSION = 101;
 
+    private static final int EDIT_DISPLAY_NAME_REQUEST = 100;
+
     private Uri imageUri;
     private User user;
 
@@ -52,7 +55,7 @@ public class profile extends AppCompatActivity {
     private TextView displayNameTextView;
     private CircleImageView imageView;
 
-    ImageButton back,editusername;
+    ImageButton back,editusername,editDisplayName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,22 +65,49 @@ public class profile extends AppCompatActivity {
         back = findViewById(R.id.backButton);
         usernameTextView = findViewById(R.id.usernameText);
         displayNameTextView = findViewById(R.id.displayNameText);
+        editDisplayName = findViewById(R.id.editDisplayNameBtn);
 
         user = getIntent().getParcelableExtra("user");
         if (user != null) {
             usernameTextView.setText(user.getUsername());
-            displayNameTextView.setText(user.getDisplayname());
+            updateDisplayNameFromPreferences();
         }
         loadProfileImage();
 
         findViewById(R.id.editProfilePictureBtn).setOnClickListener(view -> showBottomSheetDialog());
+
+        editDisplayName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(profile.this,EditDisplayName.class);
+                intent.putExtra("user", user);
+                startActivityForResult(intent, EDIT_DISPLAY_NAME_REQUEST);
+            }
+        });
 
 
         back.setOnClickListener(view -> {
             finish(); // Just finish the current activity to go back
         });
 
+
+
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh display name each time the activity resumes
+        updateDisplayNameFromPreferences();
+    }
+
+    private void updateDisplayNameFromPreferences() {
+        SharedPreferences sharedPref = getSharedPreferences("AppSettings", MODE_PRIVATE);
+        String displayName = sharedPref.getString("DisplayName", "User"); // "User" is default value
+        displayNameTextView.setText(displayName);
+        user.setDisplayname(displayName); // Update the user object if necessary
+    }
+
+
     private void loadProfileImage() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Users").document(user.getUsername())
@@ -179,6 +209,11 @@ public class profile extends AppCompatActivity {
                 uploadImageToStorage(imageUri);
             }
         }
+        if (requestCode == EDIT_DISPLAY_NAME_REQUEST && resultCode == RESULT_OK) {
+            String newDisplayName = data.getStringExtra("newDisplayName");
+            displayNameTextView.setText(newDisplayName);
+            user.setDisplayname(newDisplayName);
+        }
     }
 
     @Override
@@ -208,9 +243,15 @@ public class profile extends AppCompatActivity {
                 .document("Profile Image ID").set(new HashMap<String, Object>() {{
                     put("imageUrl", uri.toString());
                 }})
-                .addOnSuccessListener(aVoid -> Toast.makeText(profile.this, "Profile Picture Updated", Toast.LENGTH_SHORT).show())
+                .addOnSuccessListener(aVoid -> {
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("newProfileUri", uri.toString());
+                    setResult(RESULT_OK, returnIntent);
+                    Toast.makeText(profile.this, "Profile Picture Updated", Toast.LENGTH_SHORT).show();
+                })
                 .addOnFailureListener(e -> Toast.makeText(profile.this, "Failed to update profile", Toast.LENGTH_SHORT).show());
     }
+
 
     private void removeProfilePicture() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
