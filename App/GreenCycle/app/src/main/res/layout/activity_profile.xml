@@ -85,16 +85,6 @@
                 android:text="dfghjkhjkl"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-            <ImageButton
-                android:id="@+id/editUsernameBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@id/usernameText"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="136dp"
-                android:layout_marginTop="-22dp"
-                android:background="@android:color/transparent"
-                app:srcCompat="@drawable/baseline_mode_edit" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 

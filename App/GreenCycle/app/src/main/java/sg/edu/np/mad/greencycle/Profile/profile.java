@@ -60,7 +60,6 @@ public class profile extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         imageView = findViewById(R.id.profileImageView);
         back = findViewById(R.id.backButton);
-        editusername = findViewById(R.id.editUsernameBtn);
         usernameTextView = findViewById(R.id.usernameText);
         displayNameTextView = findViewById(R.id.displayNameText);
 
@@ -72,15 +71,7 @@ public class profile extends AppCompatActivity {
         loadProfileImage();
 
         findViewById(R.id.editProfilePictureBtn).setOnClickListener(view -> showBottomSheetDialog());
-        editusername.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(profile.this , EditUsername.class);
-                intent.putExtra("user", user);
-                startActivity(intent);
 
-            }
-        });
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
