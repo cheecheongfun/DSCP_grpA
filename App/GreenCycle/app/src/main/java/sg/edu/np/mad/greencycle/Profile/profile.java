@@ -73,14 +73,10 @@ public class profile extends AppCompatActivity {
         findViewById(R.id.editProfilePictureBtn).setOnClickListener(view -> showBottomSheetDialog());
 
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(profile.this , HomeFragment.class);
-                intent.putExtra("user", user);
-                startActivity(intent);
-            }
+        back.setOnClickListener(view -> {
+            finish(); // Just finish the current activity to go back
         });
+
     }
     private void loadProfileImage() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();

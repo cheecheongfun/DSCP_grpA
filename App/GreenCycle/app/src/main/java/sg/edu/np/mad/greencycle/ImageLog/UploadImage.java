@@ -86,8 +86,7 @@ public class UploadImage extends AppCompatActivity {
         });
 
         back.setOnClickListener(view -> {
-            Intent intent = new Intent(UploadImage.this, DisplayImage.class);
-            startActivity(intent);
+            finish(); // Just finish the current activity to go back
         });
     }
 
