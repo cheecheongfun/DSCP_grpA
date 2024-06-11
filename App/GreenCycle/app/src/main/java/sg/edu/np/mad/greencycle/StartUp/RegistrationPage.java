@@ -22,6 +22,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.NoSuchAlgorithmException;
+
+import sg.edu.np.mad.greencycle.Classes.HashUtils;
 import sg.edu.np.mad.greencycle.R;
 import sg.edu.np.mad.greencycle.Classes.User;
 
@@ -117,20 +120,29 @@ public class RegistrationPage extends AppCompatActivity {
     }
 
     private void registerNewUser(String username, String password) {
-        User newUser = new User(username, password, username, null);
-        reference.child(username).setValue(newUser)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(RegistrationPage.this, "Successful Sign Up!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(RegistrationPage.this, LoginPage.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            Toast.makeText(RegistrationPage.this, "Sign Up Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+        try {
+            String salt = HashUtils.getSalt();
+            String hashedPassword = HashUtils.hashPassword(password, salt);
+
+            User newUser = new User(username, hashedPassword, username, null, salt);
+            reference.child(username).setValue(newUser)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(RegistrationPage.this, "Successful Sign Up!", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(RegistrationPage.this, MainActivity.class);
+                                intent.putExtra("user", newUser);
+                                intent.putExtra("tab", "home_tab");
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(RegistrationPage.this, "Sign Up Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            }
                         }
-                    }
-                });
+                    });
+        } catch (NoSuchAlgorithmException e) {
+            Toast.makeText(RegistrationPage.this, "Error generating salt", Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import sg.edu.np.mad.greencycle.Classes.HashUtils;
 import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.R;
 import androidx.biometric.BiometricPrompt;
@@ -24,7 +25,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.concurrent.Executor;
-// Fionn, S10240073K
 public class LoginPage extends AppCompatActivity {
 
     EditText etUsername, etPassword;
@@ -63,15 +63,27 @@ public class LoginPage extends AppCompatActivity {
                 reference.child(username).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists() && dataSnapshot.child("password").getValue(String.class).equals(password)) {
+                        if (dataSnapshot.exists()) {
                             Log.i(null, "Login success");
                             User user = dataSnapshot.getValue(User.class);
-                            Log.d(null, "Value is: " + user);
-                            Intent intent = new Intent(LoginPage.this, MainActivity.class);
-                            intent.putExtra("user", user);
-                            intent.putExtra("tab", "home_tab");
-                            startActivity(intent);
-                            finish();
+                            String storedSalt = user.getSalt();
+                            Log.i(null, "StoredSalt: " + storedSalt);
+                            String storedHashedPassword = user.getPassword();
+                            Log.i(null, "storedHashedPassword: " + storedHashedPassword);
+                            String hashedEnteredPassword = HashUtils.hashPassword(password, storedSalt);
+                            Log.i(null, "enteredHash: " + hashedEnteredPassword);
+
+                            if (storedHashedPassword.equals(hashedEnteredPassword)) {
+                                Log.i(null, "Login success");
+                                Intent intent = new Intent(LoginPage.this, MainActivity.class);
+                                intent.putExtra("user", user);
+                                intent.putExtra("tab", "home_tab");
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                tvAuthStatus.setText("Login Failed: Invalid username or password");
+                                Log.i(null, "Login failed");
+                            }
                         } else {
                             tvAuthStatus.setText("Login Failed: Invalid username or password");
                             Log.i(null, "Login failed");

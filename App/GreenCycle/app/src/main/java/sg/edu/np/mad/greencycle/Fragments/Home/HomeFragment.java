@@ -67,6 +67,7 @@ public class HomeFragment extends Fragment {
 
 
         Log.v("test", user.getUsername());
+        Log.v("test", user.getDisplayname());
         Goals_Notification goalsNotification = new Goals_Notification();
         goalsNotification.updateGoalsCompletion(user, getContext());
 

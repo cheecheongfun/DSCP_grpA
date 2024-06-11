@@ -12,17 +12,19 @@ public class User implements Parcelable {
     private String password;
     private String displayname; // Including displayname field
     private ArrayList<Tank> tanks;
+    private String salt;
 
     public User() {
         // Initialize tanks ArrayList
         tanks = new ArrayList<>();
     }
 
-    public User(String username, String password, String displayname, ArrayList<Tank> tanks) {
+    public User(String username, String password, String displayname, ArrayList<Tank> tank, String salt) {
         this.username = username;
         this.password = password;
         this.displayname = displayname; // Setting displayname in constructor
         this.tanks = tanks;
+        this.salt = salt; // for security
     }
 
     protected User(Parcel in) {
@@ -31,6 +33,7 @@ public class User implements Parcelable {
         displayname = in.readString(); // Reading displayname from Parcel
         tanks = new ArrayList<>();
         in.readList(tanks, Tank.class.getClassLoader());
+        salt = in.readString();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -56,6 +59,7 @@ public class User implements Parcelable {
         dest.writeString(password);
         dest.writeString(displayname); // Writing displayname to Parcel
         dest.writeList(tanks);
+        dest.writeString(salt);
     }
 
     // Method to add a tank to the user's list
@@ -100,6 +104,9 @@ public class User implements Parcelable {
     public void setDisplayname(String displayname) {
         this.displayname = displayname;
     }
+
+    public String getSalt() {return salt;}
+    public void setSalt(String salt) {this.salt = salt;}
 }
 
 //    public String getFingerprintId() {
