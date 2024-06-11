@@ -26,6 +26,11 @@ import androidx.core.content.FileProvider;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -52,7 +57,7 @@ public class profile extends AppCompatActivity {
     private User user;
 
     private TextView usernameTextView;
-    private TextView displayNameTextView;
+    private TextView displayNameTextView,name;
     private CircleImageView imageView;
 
     ImageButton back,editusername,editDisplayName;
@@ -66,11 +71,13 @@ public class profile extends AppCompatActivity {
         usernameTextView = findViewById(R.id.usernameText);
         displayNameTextView = findViewById(R.id.displayNameText);
         editDisplayName = findViewById(R.id.editDisplayNameBtn);
+        name = findViewById(R.id.nametext);
+
 
         user = getIntent().getParcelableExtra("user");
         if (user != null) {
             usernameTextView.setText(user.getUsername());
-            updateDisplayNameFromPreferences();
+
         }
         loadProfileImage();
 
@@ -93,19 +100,32 @@ public class profile extends AppCompatActivity {
 
 
     }
+    private void loadDisplayName() {
+        if (user != null && user.getUsername() != null) {
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(user.getUsername()).child("displayname");
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String displayName = dataSnapshot.getValue(String.class);
+                    displayNameTextView.setText(displayName);
+                    name.setText(displayName);
+                    user.setDisplayname(displayName); // Update user object
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.d("DatabaseError", databaseError.getMessage()); // Don't ignore errors
+                }
+            });
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        // Refresh display name each time the activity resumes
-        updateDisplayNameFromPreferences();
+        loadDisplayName(); // Refresh display name each time the activity resumes
     }
 
-    private void updateDisplayNameFromPreferences() {
-        SharedPreferences sharedPref = getSharedPreferences("AppSettings", MODE_PRIVATE);
-        String displayName = sharedPref.getString("DisplayName", "User"); // "User" is default value
-        displayNameTextView.setText(displayName);
-        user.setDisplayname(displayName); // Update the user object if necessary
-    }
 
 
     private void loadProfileImage() {

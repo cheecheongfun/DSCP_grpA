@@ -47,10 +47,10 @@ public class EditDisplayName extends AppCompatActivity {
         if (user != null && user.getUsername() != null) {
             mDatabase.child("users").child(user.getUsername()).child("displayname").setValue(displayName)
                     .addOnSuccessListener(aVoid -> {
-                        // Save display name in Shared Preferences
+                        // Save display name in Shared Preferences with username as part of the key
                         SharedPreferences sharedPref = getSharedPreferences("AppSettings", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putString("DisplayName", displayName);
+                        editor.putString(user.getUsername() + "_DisplayName", displayName);
                         editor.apply();
 
                         Intent returnIntent = new Intent();
@@ -61,5 +61,6 @@ public class EditDisplayName extends AppCompatActivity {
                     .addOnFailureListener(e -> Toast.makeText(EditDisplayName.this, "Failed to update display name", Toast.LENGTH_SHORT).show());
         }
     }
+
 
 }

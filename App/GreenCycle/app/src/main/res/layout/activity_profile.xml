@@ -10,40 +10,46 @@
         android:layout_height="301dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="-1dp"
-        android:layout_marginEnd="0dp"
+        android:layout_marginTop="-3dp"
+        android:layout_marginEnd="-3dp"
         app:srcCompat="@drawable/bottom_rounded_green" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profileImageView"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="79dp"
-        android:layout_marginEnd="131dp"
+        android:layout_marginStart="129dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="132dp"
         android:src="@drawable/green_cycle_icon"
-        app:civ_border_width="2dp"
-        app:civ_border_color="#FF000000"/>
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="25dp"
         android:text="Profile"
         android:textColor="@color/white"
         android:textSize="20sp"/>
 
     <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
+        android:id="@+id/nametext"
+        android:layout_width="390dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/profileImageView"
+        android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
+        android:layout_marginStart="13dp"
         android:layout_marginTop="7dp"
-        android:layout_marginEnd="178dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center_horizontal"
+
         android:text="Name"
         android:textColor="@color/white"
         android:textSize="20sp" />
@@ -52,8 +58,8 @@
         android:id="@+id/editNameBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/textView3"
-        android:layout_alignTop="@id/textView3"
+        android:layout_toEndOf="@id/nametext"
+        android:layout_alignTop="@id/nametext"
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/baseline_create_24" />
 
@@ -74,7 +80,8 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="13dp"
                 android:text="Username"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/usernameText"
@@ -106,7 +113,8 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="13dp"
                 android:text="Display Name"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/displayNameText"
@@ -122,9 +130,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@id/displayNameText"
-                android:layout_marginStart="61dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="14dp"
                 android:layout_marginTop="-22dp"
-                android:layout_toEndOf="@id/displayNameText"
+                android:layout_marginEnd="208dp"
+                android:layout_toEndOf="@+id/displayNameLabel"
                 android:background="@android:color/transparent"
                 app:srcCompat="@drawable/baseline_mode_edit" />
         </RelativeLayout>
@@ -148,7 +158,8 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="13dp"
                 android:text="Email"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/emailText"

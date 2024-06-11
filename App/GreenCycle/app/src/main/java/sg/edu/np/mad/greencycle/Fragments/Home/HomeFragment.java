@@ -39,6 +39,8 @@ public class HomeFragment extends Fragment {
     TextView username, outputNo;
     String newInputNo, newInputUnit, newOutputUnit;
 
+    User user;
+
     private DrawerLayout drawerLayout;
     private CircleImageView imageView;
 
@@ -60,7 +62,7 @@ public class HomeFragment extends Fragment {
         // Receiving intent
         Intent receivingEnd = getActivity().getIntent();
         String tab = receivingEnd.getExtras().getString("tab");
-        User user = receivingEnd.getParcelableExtra("user");
+        user = receivingEnd.getParcelableExtra("user");
 
 
 
@@ -213,10 +215,17 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        SharedPreferences sharedPref = getActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
-        String displayName = sharedPref.getString("DisplayName", "User"); // Default value if not found
-        username.setText("Welcome, " + displayName);
+
+        // Assuming 'user' is a class variable that holds the current user's data
+        if (user != null && user.getUsername() != null) {
+            SharedPreferences sharedPref = getActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+            // Use username as part of the key to make it user-specific
+            String displayNameKey = user.getUsername() + "_DisplayName";
+            String displayName = sharedPref.getString(displayNameKey, "User"); // Default to "User" if not found
+            username.setText("Welcome, " + displayName);
+        }
     }
+
 
 
 
