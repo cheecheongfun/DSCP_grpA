@@ -123,7 +123,7 @@ public class profile extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadDisplayName(); // Refresh display name each time the activity resumes
+        loadDisplayName();
     }
 
 

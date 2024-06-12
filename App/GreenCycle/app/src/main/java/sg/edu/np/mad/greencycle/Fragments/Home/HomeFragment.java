@@ -25,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import sg.edu.np.mad.greencycle.Classes.User;
+import sg.edu.np.mad.greencycle.Forum.Forum;
 import sg.edu.np.mad.greencycle.LiveData.TankSelection;
 import sg.edu.np.mad.greencycle.NPKvalue.npk_value;
 import sg.edu.np.mad.greencycle.Profile.profile;
@@ -99,8 +100,9 @@ public class HomeFragment extends Fragment {
 
 
 
+
+
         profileLayout.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Profile clicked", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getActivity(), profile.class);
             intent.putExtra("user", user);
             startActivity(intent);
@@ -156,6 +158,16 @@ public class HomeFragment extends Fragment {
             goals.putExtra("user", user);
             goals.putExtra("where", "GOALS");
             startActivity(goals);
+        });
+
+        communityBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), Forum.class);
+                intent.putExtra("user", user);
+                startActivity(intent);
+
+            }
         });
 
         inputNo.setTextColor(ContextCompat.getColor(getContext(), R.color.textColour));
