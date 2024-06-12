@@ -55,7 +55,7 @@ dependencies {
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-ml-modeldownloader")
-    implementation ("com.google.firebase:firebase-auth:21.0.6'")
+    implementation ("com.google.firebase:firebase-auth:21.0.6")
     implementation("org.tensorflow:tensorflow-lite:2.3.0")
     implementation ("com.google.firebase:firebase-database:20.1.0")
     implementation ("com.squareup.picasso:picasso:2.71828")
@@ -71,8 +71,7 @@ dependencies {
     implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.3.0-beta02")
     implementation ("com.google.android.material:material:1.4.0")
     implementation ("de.hdodenhof:circleimageview:3.1.0")
-    implementation ("com.kizitonwose.calendar:view:2.0.0>")
-    implementation ("com.kizitonwose.calendar:compose:1.2.0")
+    implementation ("com.kizitonwose.calendar:view:2.0.0")
 
 
 }

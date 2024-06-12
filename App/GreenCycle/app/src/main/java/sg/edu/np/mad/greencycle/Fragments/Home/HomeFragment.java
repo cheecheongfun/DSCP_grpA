@@ -66,6 +66,7 @@ public class HomeFragment extends Fragment {
 
 
 
+
         Log.v("test", user.getUsername());
         Log.v("test", user.getDisplayname());
         Goals_Notification goalsNotification = new Goals_Notification();
@@ -91,8 +92,12 @@ public class HomeFragment extends Fragment {
         LinearLayout profileLayout = view.findViewById(R.id.nav_profile_layout);
         imageView = view.findViewById(R.id.profileImageView);
 
-        username.setText("Welcome, " + user.getDisplayname());
-        loadProfileImage(user);
+        if (username != null) {
+            username.setText("Welcome, " + user.getDisplayname());
+            loadProfileImage(user);
+        }
+
+
 
         profileLayout.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Profile clicked", Toast.LENGTH_SHORT).show();
