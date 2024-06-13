@@ -54,7 +54,7 @@ public class NewPost extends AppCompatActivity {
     private Uri imageUri;
     private StorageReference mStorageRef;
     private EditText editPostTitle, editPostBody;
-    private ImageButton btnCamera, btnGallery,back;
+    private ImageButton btnCamera, btnGallery, back;
     private Button btnPost;
     private ViewPager viewPager;
     private User user;
@@ -78,14 +78,9 @@ public class NewPost extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPager);
         back = findViewById(R.id.backButton);
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        back.setOnClickListener(view -> finish());
 
-        user = (User) getIntent().getParcelableExtra("user");
+        user = getIntent().getParcelableExtra("user");
 
         viewPagerAdapter = new ViewPagerAdapter(imageUris, this, position -> {
             if (position >= 0 && position < imageUris.size()) {
@@ -102,7 +97,11 @@ public class NewPost extends AppCompatActivity {
             if (editPostTitle.getText().toString().trim().isEmpty()) {
                 Toast.makeText(NewPost.this, "Title is required", Toast.LENGTH_SHORT).show();
             } else {
-                uploadImageAndSavePost();
+                if (imageUris.isEmpty()) {
+                    savePost(editPostTitle.getText().toString(), editPostBody.getText().toString(), new ArrayList<>());
+                } else {
+                    uploadImageAndSavePost();
+                }
             }
         });
     }
@@ -177,6 +176,10 @@ public class NewPost extends AppCompatActivity {
     private void uploadImageAndSavePost() {
         btnPost.setEnabled(false);
         List<String> uploadedUrls = new ArrayList<>();
+        if (imageUris.isEmpty()) {
+            savePost(editPostTitle.getText().toString(), editPostBody.getText().toString(), uploadedUrls);
+            return;
+        }
         for (Uri uri : imageUris) {
             StorageReference fileRef = mStorageRef.child("post_images/" + System.currentTimeMillis() + ".jpg");
             fileRef.putFile(uri)

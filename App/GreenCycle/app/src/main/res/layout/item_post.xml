@@ -1,0 +1,113 @@
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/authorProfilePicture"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="340dp"
+            android:src="@drawable/green_cycle_icon"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="2dp" />
+
+        <TextView
+            android:id="@+id/authorDisplayName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/authorProfilePicture"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="50dp"
+            android:layout_alignParentTop="true"
+            android:textSize="16sp"
+            android:layout_marginTop="14dp"
+            android:text="fddgfdgfgfd"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/postTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/authorProfilePicture"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="0dp"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/postImagePager"
+            android:layout_width="match_parent"
+            android:layout_height="232dp"
+            android:layout_below="@id/postTitle"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="10dp"
+            android:visibility="gone" />
+
+        <me.relex.circleindicator.CircleIndicator
+            android:id="@+id/indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/postImagePager"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/postContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/indicator"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="28dp"
+            android:textSize="14sp" />
+
+        <ImageButton
+            android:id="@+id/likeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/postContent"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="8dp"
+            android:background="@null"
+            app:srcCompat="@drawable/heart_svgrepo_com" />
+
+        <TextView
+            android:id="@+id/likeCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/postContent"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@id/likeButton"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/postdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="9dp"
+            android:layout_marginEnd="17dp"
+            android:textSize="12sp" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
