@@ -12,23 +12,59 @@
         android:layout_height="40dp"
         android:layout_alignParentTop="true"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="82dp"
         android:layout_marginEnd="5dp"
         android:forceDarkAllowed="false"
         android:iconifiedByDefault="false"
         android:queryHint="Search here"
         android:theme="@style/CustomSearchView" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="193dp"
-        android:text="Trending Posts"
-        android:textSize="20dp" />
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="183dp"
+        android:layout_marginBottom="20dp">
+
+
+        <TextView
+            android:id="@+id/Hot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Hot"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:clickable="true"
+            android:focusable="true"
+            android:textColor="@color/text_color_selector"/>
+
+        <TextView
+            android:id="@+id/New"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="New"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:clickable="true"
+            android:focusable="true"
+            android:textColor="@color/text_color_selector"/>
+
+        <TextView
+            android:id="@+id/Top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Top"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:clickable="true"
+            android:focusable="true"
+            android:textColor="@color/text_color_selector"/>
+    </LinearLayout>
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
@@ -79,7 +115,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="667dp"
+        android:layout_height="682dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="0dp"
@@ -91,8 +127,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="183dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginTop="171dp"
+        android:layout_marginEnd="7dp"
         android:backgroundTint="@color/transparent"
         app:srcCompat="@drawable/baseline_add_circle_outline_24" />
 

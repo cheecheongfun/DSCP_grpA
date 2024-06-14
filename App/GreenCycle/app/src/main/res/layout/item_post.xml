@@ -19,12 +19,12 @@
             android:layout_height="50dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="0dp"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="0dp"
             android:layout_marginEnd="340dp"
             android:src="@drawable/green_cycle_icon"
             app:civ_border_color="#FF000000"
-            app:civ_border_width="2dp" />
+            app:civ_border_width="1dp" />
 
         <TextView
             android:id="@+id/authorDisplayName"
@@ -32,11 +32,11 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/authorProfilePicture"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="50dp"
             android:layout_alignParentTop="true"
-            android:textSize="16sp"
+            android:layout_marginStart="50dp"
             android:layout_marginTop="14dp"
             android:text="fddgfdgfgfd"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/postContent"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:background="@null"
             app:srcCompat="@drawable/heart_svgrepo_com" />
@@ -109,5 +109,6 @@
             android:layout_marginTop="9dp"
             android:layout_marginEnd="17dp"
             android:textSize="12sp" />
+
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

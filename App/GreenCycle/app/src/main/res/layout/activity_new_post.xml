@@ -7,17 +7,6 @@
     tools:context=".Forum.NewPost">
 
     <ImageButton
-        android:id="@+id/camera"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/EditPostbody"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="0dp"
-        android:layout_toEndOf="@+id/gallery"
-        android:backgroundTint="@color/transparent"
-        app:srcCompat="@drawable/outline_camera_alt_24" />
-
-    <ImageButton
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -85,11 +74,45 @@
         android:id="@+id/gallery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/EditPostbody"
+        android:layout_below="@id/EditPostbody"
         android:layout_alignParentStart="true"
         android:layout_marginStart="18dp"
         android:layout_marginTop="0dp"
         android:backgroundTint="@color/transparent"
         app:srcCompat="@drawable/baseline_image_search_24" />
+
+    <ImageButton
+        android:id="@+id/camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/EditPostbody"
+        android:layout_toEndOf="@id/gallery"
+        android:layout_marginStart="-4dp"
+        android:layout_marginTop="0dp"
+        android:backgroundTint="@color/transparent"
+        app:srcCompat="@drawable/outline_camera_alt_24" />
+
+    <ImageButton
+        android:id="@+id/btnShowTags"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/EditPostbody"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="102dp"
+        android:layout_marginTop="0dp"
+        android:backgroundTint="@color/transparent"
+        app:srcCompat="@drawable/tags_solid_svgrepo_com"
+        android:onClick="showTagDialog"/>
+
+    <TextView
+        android:id="@+id/selectedTags"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/EditPostbody"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="13dp"
+        android:layout_toEndOf="@id/btnShowTags"
+        android:textColor="@color/light_grey" />
 
 </RelativeLayout>

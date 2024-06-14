@@ -1,0 +1,62 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+        <GridLayout
+            android:id="@+id/tagsContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:columnCount="3"
+            android:padding="8dp"
+            android:layout_marginTop="8dp"/>
+
+    </ScrollView>
+
+    <EditText
+        android:id="@+id/newTagInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Create New Label"
+        android:inputType="text"
+        android:layout_below="@id/scrollView"/>
+
+    <Button
+        android:id="@+id/btnAddTag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/newTagInput"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/icon_brown_light"
+        android:text="Add Tag"
+        app:cornerRadius="5dp" />
+
+    <Button
+        android:id="@+id/btnDone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnAddTag"
+        android:layout_marginTop="8dp"
+        android:text="Done"
+        app:cornerRadius="5dp"
+        android:backgroundTint="@color/icon_brown_dark"/>
+
+    <TextView
+        android:id="@+id/removelabels"
+        android:layout_width="213dp"
+        android:layout_height="23dp"
+        android:layout_below="@id/btnDone"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="84dp"
+        android:gravity="center_horizontal"
+        android:text="Remove All Custom Labels"
+        android:textColor="@color/light_grey"/>
+
+</RelativeLayout>

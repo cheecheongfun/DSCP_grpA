@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -40,6 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -58,6 +60,9 @@ public class NewPost extends AppCompatActivity {
     private Button btnPost;
     private ViewPager viewPager;
     private User user;
+    private TextView selectedTagsView;
+
+    private List<String> postTags = new ArrayList<>();
 
     private ArrayList<Uri> imageUris = new ArrayList<>();
     private ViewPagerAdapter viewPagerAdapter;
@@ -77,6 +82,7 @@ public class NewPost extends AppCompatActivity {
         btnPost = findViewById(R.id.post);
         viewPager = findViewById(R.id.viewPager);
         back = findViewById(R.id.backButton);
+        selectedTagsView = findViewById(R.id.selectedTags);
 
         back.setOnClickListener(view -> finish());
 
@@ -104,6 +110,29 @@ public class NewPost extends AppCompatActivity {
                 }
             }
         });
+
+        ImageButton btnShowTags = findViewById(R.id.btnShowTags);
+        btnShowTags.setOnClickListener(v -> showTagDialog());
+    }
+
+    private void showTagDialog() {
+        TagDialogFragment tagDialog = new TagDialogFragment();
+        tagDialog.setSelectedTags(new HashSet<>(postTags)); // Pass the current tags to the dialog
+        tagDialog.setTagDialogListener(tags -> {
+            postTags.clear();
+            postTags.addAll(tags);
+            updateSelectedTagsView();
+        });
+        tagDialog.show(getSupportFragmentManager(), "tagDialog");
+    }
+
+
+    private void updateSelectedTagsView() {
+        StringBuilder tagsText = new StringBuilder("Selected Tags: ");
+        for (String tag : postTags) {
+            tagsText.append(tag).append(" ");
+        }
+        selectedTagsView.setText(tagsText.toString().trim());
     }
 
     private void chooseImage() {
@@ -203,6 +232,7 @@ public class NewPost extends AppCompatActivity {
         post.put("timestamp", new Timestamp(new Date()));
         post.put("user", user.getUsername());
         post.put("imageUrls", imageUrls);
+        post.put("tags", postTags);
 
         FirebaseFirestore.getInstance()
                 .collection("Post")
