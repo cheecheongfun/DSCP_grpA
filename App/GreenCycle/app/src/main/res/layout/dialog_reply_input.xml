@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/reply_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Write a reply..."
+        android:padding="10dp"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/post_reply_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/reply_input"
+        android:layout_alignParentEnd="true"
+        android:text="Reply"
+        android:layout_marginTop="8dp" />
+</RelativeLayout>

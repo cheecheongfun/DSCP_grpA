@@ -58,14 +58,20 @@ public class TagDialogFragment extends BottomSheetDialogFragment {
         loadTags();
 
         btnAddTag.setOnClickListener(v -> {
-            String newTag = "#" + newTagInput.getText().toString().trim();
-            if (!newTag.isEmpty() && !tempSelectedTags.contains(newTag)) {
-                addTag(newTag, true);
-                newTagInput.setText("");
+            String inputText = newTagInput.getText().toString().trim();
+            if (!inputText.isEmpty()) {
+                String newTag = "#" + inputText;
+                if (!tempSelectedTags.contains(newTag)) {
+                    addTag(newTag, true);
+                    newTagInput.setText("");
+                } else {
+                    Toast.makeText(getContext(), "Duplicate tag", Toast.LENGTH_SHORT).show();
+                }
             } else {
-                Toast.makeText(getContext(), "Invalid or duplicate tag", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Tag cannot be empty", Toast.LENGTH_SHORT).show();
             }
         });
+
 
 
         btnDone.setOnClickListener(v -> {

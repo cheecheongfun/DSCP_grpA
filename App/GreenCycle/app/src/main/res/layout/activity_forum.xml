@@ -115,11 +115,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="682dp"
+        android:layout_height="662dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="0dp"
-        android:layout_marginBottom="3dp" />
+        android:layout_marginBottom="33dp" />
 
     <ImageButton
         android:id="@+id/addpost"

@@ -203,27 +203,31 @@ public class NewPost extends AppCompatActivity {
     }
 
     private void uploadImageAndSavePost() {
-        btnPost.setEnabled(false);
+        setButtonsEnabled(false); // Disable all buttons before uploading
+
         List<String> uploadedUrls = new ArrayList<>();
         if (imageUris.isEmpty()) {
             savePost(editPostTitle.getText().toString(), editPostBody.getText().toString(), uploadedUrls);
-            return;
-        }
-        for (Uri uri : imageUris) {
-            StorageReference fileRef = mStorageRef.child("post_images/" + System.currentTimeMillis() + ".jpg");
-            fileRef.putFile(uri)
-                    .addOnSuccessListener(taskSnapshot -> fileRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
-                        uploadedUrls.add(downloadUri.toString());
-                        if (uploadedUrls.size() == imageUris.size()) {
-                            savePost(editPostTitle.getText().toString(), editPostBody.getText().toString(), uploadedUrls);
-                        }
-                    }))
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(NewPost.this, "Failed to upload image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        btnPost.setEnabled(true);
-                    });
+            setButtonsEnabled(true); // Re-enable buttons if no images to upload
+        } else {
+            for (Uri uri : imageUris) {
+                StorageReference fileRef = mStorageRef.child("post_images/" + System.currentTimeMillis() + ".jpg");
+                fileRef.putFile(uri)
+                        .addOnSuccessListener(taskSnapshot -> fileRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
+                            uploadedUrls.add(downloadUri.toString());
+                            if (uploadedUrls.size() == imageUris.size()) {
+                                savePost(editPostTitle.getText().toString(), editPostBody.getText().toString(), uploadedUrls);
+                                setButtonsEnabled(true); // Re-enable buttons after upload
+                            }
+                        }))
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(NewPost.this, "Failed to upload image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            setButtonsEnabled(true); // Re-enable buttons on failure
+                        });
+            }
         }
     }
+
 
     private void savePost(String title, String content, List<String> imageUrls) {
         Map<String, Object> post = new HashMap<>();
@@ -283,4 +287,13 @@ public class NewPost extends AppCompatActivity {
 
         fullImageView.setOnClickListener(v -> fullImageDialog.dismiss());
     }
+    private void setButtonsEnabled(boolean enabled) {
+        btnCamera.setEnabled(enabled);
+        btnGallery.setEnabled(enabled);
+        btnPost.setEnabled(enabled);
+        back.setEnabled(enabled);
+        viewPager.setEnabled(enabled);
+        findViewById(R.id.btnShowTags).setEnabled(enabled);
+    }
+
 }
