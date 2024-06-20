@@ -309,8 +309,7 @@ public class FullPostActivity extends AppCompatActivity {
                 .add(comment)
                 .addOnSuccessListener(docRef -> {
                     comment.setId(docRef.getId());  // Set the ID for the newly created comment
-                    commentsList.add(comment); // Add the comment to the local list
-                    commentsAdapter.notifyItemInserted(commentsList.size() - 1);  // Notify the adapter of the new item
+                    commentsAdapter.notifyDataSetChanged();  // Notify the adapter of the new item
                     commentInput.setText(""); // Clear the input after posting
                     Toast.makeText(this, "Comment added", Toast.LENGTH_SHORT).show();
                 })
