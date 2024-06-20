@@ -320,11 +320,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                             .delete()
                             .addOnSuccessListener(aVoid -> {
                                 Log.d("PostAdapter", "Post deleted successfully");
-                                if (position != RecyclerView.NO_POSITION) {
-                                    postList.remove(position);
-                                    notifyItemRemoved(position);
-                                    notifyItemRangeChanged(position, postList.size() - position);
-                                }
+                                notifyDataSetChanged();
                             })
                             .addOnFailureListener(e -> Log.e("PostAdapter", "Failed to delete post", e));
                 })
