@@ -1,10 +1,8 @@
 package sg.edu.np.mad.greencycle.ImageLog;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,8 +19,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import sg.edu.np.mad.greencycle.Classes.User;
-import sg.edu.np.mad.greencycle.LiveData.Tank;
-import sg.edu.np.mad.greencycle.LiveData.TankSelection;
+import sg.edu.np.mad.greencycle.Classes.Tank;
+import sg.edu.np.mad.greencycle.TankSelection.TankSelection;
 import sg.edu.np.mad.greencycle.R;
 
 public class DisplayImage extends AppCompatActivity {

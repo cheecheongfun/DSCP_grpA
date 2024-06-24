@@ -62,6 +62,9 @@
             android:name=".FeedingLog.Feeding"
             android:exported="false" />
         <activity
+            android:name=".FeedingLog.FeedingNew"
+            android:exported="false" />
+        <activity
             android:name=".LiveData.LiveData"
             android:exported="false" />
         <activity
@@ -74,7 +77,7 @@
             android:name=".StartUp.LandingPage"
             android:exported="true" />
         <activity
-            android:name=".LiveData.TankSelection"
+            android:name=".TankSelection.TankSelection"
             android:exported="false" />
         <activity
             android:name=".StartUp.MainActivity"

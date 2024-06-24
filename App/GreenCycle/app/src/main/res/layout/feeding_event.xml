@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@style/AppBackgroundColour">
+
+    <RelativeLayout
+        android:id="@+id/details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/greens"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="80dp"
+            android:maxHeight="300dp">
+
+
+            <ImageButton
+                android:id="@+id/addGreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:gravity="center"
+                android:padding="6dp"
+                app:tint="@color/textColour"
+                android:background="@color/transparent"
+                android:src="@drawable/baseline_add_circle_outline_24" />
+
+            <TextView
+                android:id="@+id/greenText"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignTop="@id/addGreen"
+                android:layout_alignBottom="@id/addGreen"
+                android:layout_toEndOf="@id/addGreen"
+                android:text="Greens"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:textSize="25dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/greenRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/greenText"
+                android:layout_alignStart="@+id/addGreen"
+                android:layout_marginBottom="10dp"
+                android:theme="@style/Border"
+                android:layout_marginEnd="5dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/browns"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/greens"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="80dp"
+            android:maxHeight="300dp">
+
+            <ImageButton
+                android:id="@+id/addBrown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:gravity="center"
+                android:padding="6dp"
+                android:background="@color/transparent"
+                app:tint="@color/textColour"
+                android:src="@drawable/baseline_add_circle_outline_24" />
+
+            <TextView
+                android:id="@+id/brownText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/addBrown"
+                android:layout_alignBottom="@id/addBrown"
+                android:layout_toEndOf="@id/addBrown"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:gravity="center"
+                android:text="Browns"
+                android:textSize="25dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/brownRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/brownText"
+                android:layout_alignStart="@+id/addBrown"
+                android:layout_marginBottom="10dp"
+                android:theme="@style/Border"
+                android:layout_marginEnd="5dp"/>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/waterText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/browns"
+            android:layout_alignStart="@id/browns"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"
+            android:text="Water: "
+            android:textSize="25dp"
+            android:gravity="center"/>
+
+        <EditText
+            android:id="@+id/editWater"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/browns"
+            android:layout_toEndOf="@id/waterText"
+            android:inputType="number"
+            android:layout_alignTop="@+id/waterText"
+            android:hint="input amount"
+            android:textSize="15sp"
+            android:layout_marginStart="10dp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/waterAmt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/browns"
+            android:text="50ml"
+            android:layout_alignTop="@+id/waterText"
+            android:layout_alignBottom="@id/waterText"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:layout_toEndOf="@id/waterText"
+            android:layout_marginStart="10dp"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/notesText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/waterText"
+            android:text="Notes"
+            android:layout_alignStart="@id/waterText"
+            android:textSize="25dp"
+            android:layout_marginTop="10dp"/>
+
+        <EditText
+            android:id="@+id/notesDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/notesText"
+            android:layout_alignStart="@id/notesText"
+            android:layout_alignEnd="@id/browns"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:gravity="start|top"
+            android:inputType="text|textMultiLine"
+            android:hint="Add notes"
+            android:scrollbars="vertical"
+            android:maxLines="7"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/notesFixed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/notesText"
+            android:layout_alignStart="@id/notesText"
+            android:layout_alignEnd="@id/browns"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:gravity="start|top"
+            android:scrollbars="vertical"
+            android:maxLines="7"
+            android:text="Testing"
+            android:visibility="visible"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/noLogsText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="No logs for today"
+        android:layout_alignBottom="@+id/details"
+        android:layout_alignTop="@id/details"
+        android:textSize="25sp"
+        android:visibility="gone"/>
+
+</RelativeLayout>

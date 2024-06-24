@@ -41,9 +41,10 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import sg.edu.np.mad.greencycle.Classes.Food;
 import sg.edu.np.mad.greencycle.Classes.User;
-import sg.edu.np.mad.greencycle.LiveData.Tank;
-import sg.edu.np.mad.greencycle.LiveData.TankSelection;
+import sg.edu.np.mad.greencycle.Classes.Tank;
+import sg.edu.np.mad.greencycle.TankSelection.TankSelection;
 import sg.edu.np.mad.greencycle.R;
 
 // Fionn, S12040073K
@@ -56,7 +57,7 @@ public class Feeding extends AppCompatActivity {
     public TextView noLogText, backButton, date, editNote, waterAmt,calendar ;
     ImageButton addGreen, addBrown;
     ArrayList<String> green,brown, greenFood, brownFood;
-    public ArrayList<sg.edu.np.mad.greencycle.FeedingLog.Log> feedingLog;
+    public ArrayList<sg.edu.np.mad.greencycle.Classes.Log> feedingLog;
     ArrayList<Tank> tankList;
     FloatingActionButton add;
     LogAdapter mAdapter;
@@ -65,7 +66,7 @@ public class Feeding extends AppCompatActivity {
     String dateFed, notes;
     public Button confirm;
     public BottomSheetDialog addLog;
-    sg.edu.np.mad.greencycle.FeedingLog.Log log;
+    sg.edu.np.mad.greencycle.Classes.Log log;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,13 +180,13 @@ public class Feeding extends AppCompatActivity {
                 addGreen.setOnClickListener(v -> gAdapter.addItem());
                 addBrown.setOnClickListener(v -> bAdapter.addItem());
 
-                log = new sg.edu.np.mad.greencycle.FeedingLog.Log(feedingLog.size(), targetTankId, dateFed, new ArrayList<>(), new ArrayList<>(), notes, water);
+                log = new sg.edu.np.mad.greencycle.Classes.Log(feedingLog.size(), targetTankId, dateFed, new ArrayList<Food>(), new ArrayList<Food>(), notes, water);
                 Log.i(null, "Log id: " + log.getLogId() + log.getWaterAmt());
-                gAdapter = new FoodAdapter(greenFood, greenRecycler, "green", user, log, Feeding.this);
+                gAdapter = new FoodAdapter(greenFood, greenRecycler, "green", new ArrayList<>());
                 greenRecycler.setLayoutManager(new LinearLayoutManager(Feeding.this));
                 greenRecycler.setAdapter(gAdapter);
 
-                bAdapter = new FoodAdapter(brownFood, brownRecycler, "brown", user, log, Feeding.this);
+                bAdapter = new FoodAdapter(brownFood, brownRecycler, "brown", new ArrayList<>());
                 brownRecycler.setLayoutManager(new LinearLayoutManager(Feeding.this));
                 brownRecycler.setAdapter(bAdapter);
                 if (!log.getGreens().isEmpty()){
@@ -219,15 +220,15 @@ public class Feeding extends AppCompatActivity {
                                     feedingLog = tank.getFeedingLog();
                                 }
                                 else {
-                                    feedingLog = new ArrayList<sg.edu.np.mad.greencycle.FeedingLog.Log>();
+                                    feedingLog = new ArrayList<sg.edu.np.mad.greencycle.Classes.Log>();
                                 }
                             }
                         }
                     } else {
-                        feedingLog = new ArrayList<sg.edu.np.mad.greencycle.FeedingLog.Log>();
+                        feedingLog = new ArrayList<sg.edu.np.mad.greencycle.Classes.Log>();
                     }
                 } else {
-                    feedingLog = new ArrayList<sg.edu.np.mad.greencycle.FeedingLog.Log>();
+                    feedingLog = new ArrayList<sg.edu.np.mad.greencycle.Classes.Log>();
                 }
 
                 updateRecyclerView(feedingLog);
@@ -242,18 +243,18 @@ public class Feeding extends AppCompatActivity {
         Log.i(null, "after firebase");
         greenFood = new ArrayList<>();
         brownFood = new ArrayList<>();
-        for (Tank tank : user.getTanks()){
-            if (tank.getFeedingLog() != null){
-                for (sg.edu.np.mad.greencycle.FeedingLog.Log log : tank.getFeedingLog()){
-                    if (log.getGreens() != null){
-                        greenFood.addAll(log.getGreens());
-                    }
-                    if (log.getBrowns() != null) {
-                        brownFood.addAll(log.getBrowns());
-                    }
-                }
-            }
-        }
+//        for (Tank tank : user.getTanks()){
+//            if (tank.getFeedingLog() != null){
+//                for (sg.edu.np.mad.greencycle.Classes.Log log : tank.getFeedingLog()){
+//                    if (log.getGreens() != null){
+//                        greenFood.addAll(log.getGreens());
+//                    }
+//                    if (log.getBrowns() != null) {
+//                        brownFood.addAll(log.getBrowns());
+//                    }
+//                }
+//            }
+//        }
         if (greenFood != null){
             for (String s : greenFood){
                 int index = greenFood.indexOf(s);
@@ -277,7 +278,7 @@ public class Feeding extends AppCompatActivity {
         brownFood.addAll(brownSet);
 
     }
-    private void updateRecyclerView(ArrayList<sg.edu.np.mad.greencycle.FeedingLog.Log> list) {
+    private void updateRecyclerView(ArrayList<sg.edu.np.mad.greencycle.Classes.Log> list) {
         if (list.isEmpty()) {
             noLogText.setVisibility(View.VISIBLE);
         } else {
@@ -285,9 +286,9 @@ public class Feeding extends AppCompatActivity {
             noLogText.setVisibility(View.INVISIBLE);
         }
 
-        Collections.sort(feedingLog, new Comparator<sg.edu.np.mad.greencycle.FeedingLog.Log>() {
+        Collections.sort(feedingLog, new Comparator<sg.edu.np.mad.greencycle.Classes.Log>() {
             @Override
-            public int compare(sg.edu.np.mad.greencycle.FeedingLog.Log l1, sg.edu.np.mad.greencycle.FeedingLog.Log l2) {
+            public int compare(sg.edu.np.mad.greencycle.Classes.Log l1, sg.edu.np.mad.greencycle.Classes.Log l2) {
                 return l1.getLogDate().compareTo(l2.getLogDate()); // For descending order
             }
         });
@@ -300,18 +301,18 @@ public class Feeding extends AppCompatActivity {
     }
     private void handleConfirmClick() {
         Log.i(null, "in confirm Click");
-        ArrayList<String> selectedGreens = gAdapter.getSelectedFoods();
-        ArrayList<String> selectedBrowns = bAdapter.getSelectedFoods();
+        ArrayList<Food> selectedGreens = gAdapter.getSelectedFoods();
+        ArrayList<Food> selectedBrowns = bAdapter.getSelectedFoods();
 
-        if (selectedGreens != null){
-            log.getGreens().addAll(selectedGreens);
-        }
-        if (selectedBrowns != null){
-            log.getBrowns().addAll(selectedBrowns);
-        }
-        if (!waterAmt.getText().toString().isEmpty()){
-             water = Integer.parseInt(waterAmt.getText().toString());
-        } else water = 0;
+//        if (selectedGreens != null){
+//            log.getGreens().addAll(selectedGreens);
+//        }
+//        if (selectedBrowns != null){
+//            log.getBrowns().addAll(selectedBrowns);
+//        }
+//        if (!waterAmt.getText().toString().isEmpty()){
+//             water = Integer.parseInt(waterAmt.getText().toString());
+//        } else water = 0;
 
         String date = this.date.getText().toString();
         String notes = editNote.getText().toString();

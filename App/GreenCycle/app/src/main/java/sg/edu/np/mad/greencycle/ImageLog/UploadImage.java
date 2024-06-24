@@ -12,7 +12,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -41,8 +40,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import sg.edu.np.mad.greencycle.Classes.User;
-import sg.edu.np.mad.greencycle.LiveData.Tank;
-import sg.edu.np.mad.greencycle.LiveData.TankSelection;
+import sg.edu.np.mad.greencycle.Classes.Tank;
 import sg.edu.np.mad.greencycle.R;
 
 public class UploadImage extends AppCompatActivity {

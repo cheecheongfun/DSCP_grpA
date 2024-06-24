@@ -71,8 +71,7 @@ dependencies {
     implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.3.0-beta02")
     implementation ("com.google.android.material:material:1.4.0")
     implementation ("de.hdodenhof:circleimageview:3.1.0")
-    implementation ("com.kizitonwose.calendar:view:2.0.0>")
-    implementation ("com.kizitonwose.calendar:compose:1.2.0")
+    implementation ("com.kizitonwose.calendar:view:2.0.0")
 
 
 }

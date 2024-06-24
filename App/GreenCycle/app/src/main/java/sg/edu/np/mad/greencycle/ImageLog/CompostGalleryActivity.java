@@ -1,6 +1,5 @@
 package sg.edu.np.mad.greencycle.ImageLog;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +19,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import sg.edu.np.mad.greencycle.Classes.User;
-import sg.edu.np.mad.greencycle.LiveData.Tank;
+import sg.edu.np.mad.greencycle.Classes.Tank;
 import sg.edu.np.mad.greencycle.R;
 
 public class CompostGalleryActivity extends AppCompatActivity implements galleryAdapter.ImageDeletionListener {

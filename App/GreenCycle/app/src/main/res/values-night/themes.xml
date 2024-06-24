@@ -11,7 +11,7 @@
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/transparent</item>
-
+        <item name="android:fontFamily">sans-serif-condensed-medium</item>
         <!-- Customize your theme here. -->
     </style>
     <!-- Base application theme. -->
@@ -149,5 +149,11 @@
     <!-- Resource filter by type -->
     <style name="ResourceFilter">
         <item name="android:backgroundTint">@color/mid_green</item>
+    </style>
+
+    <!-- Radio button for schedule -->
+    <style name="CustomRadioButton">
+        <item name="android:buttonTint">@color/white</item> <!-- Set the button tint color to white -->
+        <item name="android:textColor">@color/white</item> <!-- Set the text color to white -->
     </style>
 </resources>

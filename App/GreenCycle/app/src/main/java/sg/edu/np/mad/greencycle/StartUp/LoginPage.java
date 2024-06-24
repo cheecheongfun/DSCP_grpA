@@ -64,14 +64,10 @@ public class LoginPage extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
-                            Log.i(null, "Login success");
                             User user = dataSnapshot.getValue(User.class);
                             String storedSalt = user.getSalt();
-                            Log.i(null, "StoredSalt: " + storedSalt);
                             String storedHashedPassword = user.getPassword();
-                            Log.i(null, "storedHashedPassword: " + storedHashedPassword);
                             String hashedEnteredPassword = HashUtils.hashPassword(password, storedSalt);
-                            Log.i(null, "enteredHash: " + hashedEnteredPassword);
 
                             if (storedHashedPassword.equals(hashedEnteredPassword)) {
                                 Log.i(null, "Login success");

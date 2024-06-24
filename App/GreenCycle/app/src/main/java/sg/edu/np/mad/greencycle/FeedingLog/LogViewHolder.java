@@ -8,6 +8,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.BreakIterator;
+
 import sg.edu.np.mad.greencycle.R;
 // Fionn, S10240073K
 public class LogViewHolder extends RecyclerView.ViewHolder {

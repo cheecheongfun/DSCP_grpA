@@ -1,4 +1,4 @@
-package sg.edu.np.mad.greencycle.LiveData;
+package sg.edu.np.mad.greencycle.TankSelection;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import sg.edu.np.mad.greencycle.Classes.User;
+import sg.edu.np.mad.greencycle.Classes.Tank;
 import sg.edu.np.mad.greencycle.StartUp.MainActivity;
 import sg.edu.np.mad.greencycle.R;
 // Fionn, S1040073K
@@ -100,7 +101,7 @@ public class TankSelection extends AppCompatActivity {
                 npk.add(100.0);
                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                 String today = formatter.format(new Date());
-                Tank tank = new Tank(tankList.size(), "Test", "Testing", 30, npk, 30.2, 89.9, 7.0, today, null);
+                Tank tank = new Tank(tankList.size(), "Test", "Testing", 30, npk, 30.2, 89.9, 7.0, today, null, null);
                 tankList.add(tank);
                 user.setTanks(tankList);
                 reference.child(user.getUsername()).setValue(user)

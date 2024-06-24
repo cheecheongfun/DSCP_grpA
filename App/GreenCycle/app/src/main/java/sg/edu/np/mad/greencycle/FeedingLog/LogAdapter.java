@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import sg.edu.np.mad.greencycle.Classes.Log;
 import sg.edu.np.mad.greencycle.R;
 // Fionn, S10240073K
 public class LogAdapter extends RecyclerView.Adapter<LogViewHolder> {
@@ -44,25 +45,25 @@ public class LogAdapter extends RecyclerView.Adapter<LogViewHolder> {
         month = getMonthName(Integer.parseInt(dateParts[1]));
         holder.dateFed.setText(day + " " + month);
 
-        ArrayList<String> green = new ArrayList<>();
-        ArrayList<String> brown = new ArrayList<>();
-        if (log.getGreens()!= null){
-            for (String s : log.getGreens()){
-                s = s.replaceAll("[^a-zA-Z ]", "");
-                green.add(s.trim());
-            }
-        }
-        if (log.getBrowns() !=null){
-            for (String s : log.getBrowns()){
-                s = s.replaceAll("[^a-zA-Z ]", "");
-                brown.add(s.trim());
-            }
-        }
-        String g = process(green,25);
-        String b = process(brown, 25);
-
-        holder.greenDesc.setText(g);
-        holder.brownDesc.setText(b);
+//        ArrayList<String> green = new ArrayList<>();
+//        ArrayList<String> brown = new ArrayList<>();
+//        if (log.getGreens()!= null){
+//            for (String s : log.getGreens()){
+//                s = s.replaceAll("[^a-zA-Z ]", "");
+//                green.add(s.trim());
+//            }
+//        }
+//        if (log.getBrowns() !=null){
+//            for (String s : log.getBrowns()){
+//                s = s.replaceAll("[^a-zA-Z ]", "");
+//                brown.add(s.trim());
+//            }
+//        }
+//        String g = process(green,25);
+//        String b = process(brown, 25);
+//
+//        holder.greenDesc.setText(g);
+//        holder.brownDesc.setText(b);
 
     }
 
