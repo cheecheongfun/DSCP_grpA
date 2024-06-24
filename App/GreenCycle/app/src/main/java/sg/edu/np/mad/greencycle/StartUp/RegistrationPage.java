@@ -1,6 +1,8 @@
 package sg.edu.np.mad.greencycle.StartUp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -131,6 +133,11 @@ public class RegistrationPage extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(RegistrationPage.this, "Successful Sign Up!", Toast.LENGTH_SHORT).show();
+
+                                // Save user info in SharedPreferences
+                                saveUserToSharedPreferences(newUser);
+
+                                // Proceed to main activity
                                 Intent intent = new Intent(RegistrationPage.this, MainActivity.class);
                                 intent.putExtra("user", newUser);
                                 intent.putExtra("tab", "home_tab");
@@ -145,4 +152,12 @@ public class RegistrationPage extends AppCompatActivity {
             Toast.makeText(RegistrationPage.this, "Error generating salt", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void saveUserToSharedPreferences(User user) {
+        SharedPreferences sharedPref = getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(user.getUsername() + "_DisplayName", user.getDisplayname());
+        editor.apply();
+    }
+
 }

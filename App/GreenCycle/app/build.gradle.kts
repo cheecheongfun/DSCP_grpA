@@ -55,7 +55,7 @@ dependencies {
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-ml-modeldownloader")
-    implementation ("com.google.firebase:firebase-auth:21.0.6'")
+    implementation ("com.google.firebase:firebase-auth:21.0.6")
     implementation("org.tensorflow:tensorflow-lite:2.3.0")
     implementation ("com.google.firebase:firebase-database:20.1.0")
     implementation ("com.squareup.picasso:picasso:2.71828")

@@ -1,0 +1,127 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:theme="@style/AppBackgroundColour">
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Forum.NewPost">
+
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="-3dp"
+        android:layout_marginTop="43dp"
+        android:backgroundTint="@color/transparent"
+        app:srcCompat="@drawable/baseline_arrow_back_ios_new_24" />
+
+    <Button
+        android:id="@+id/post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="13dp"
+        android:backgroundTint="@color/mid_green"
+        android:text="Post" />
+
+    <EditText
+        android:id="@+id/EditPostTitle"
+        android:layout_width="348dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="105dp"
+        android:layout_marginEnd="35dp"
+        android:ems="10"
+        android:textSize="25dp"
+        android:hint="Title"
+        android:inputType="text"
+        android:textColor="@color/black"
+        android:background="@null" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="232dp"
+        android:layout_below="@id/EditPostTitle"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"/>
+
+    <EditText
+        android:id="@+id/EditPostbody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/viewPager"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginTop="20dp"
+        android:background="@null"
+        android:ems="10"
+        android:hint="body text"
+        android:inputType="textMultiLine"
+        android:textColor="@color/black" />
+
+    <ImageButton
+        android:id="@+id/gallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/EditPostbody"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="0dp"
+        android:backgroundTint="@color/transparent"
+        app:srcCompat="@drawable/baseline_image_search_24" />
+
+    <ImageButton
+        android:id="@+id/camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/EditPostbody"
+        android:layout_toEndOf="@id/gallery"
+        android:layout_marginStart="-4dp"
+        android:layout_marginTop="0dp"
+        android:backgroundTint="@color/transparent"
+        app:srcCompat="@drawable/outline_camera_alt_24" />
+
+    <ImageButton
+        android:id="@+id/btnShowTags"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/EditPostbody"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="102dp"
+        android:layout_marginTop="0dp"
+        android:backgroundTint="@color/transparent"
+        app:srcCompat="@drawable/tags_solid_svgrepo_com"
+        android:onClick="showTagDialog"/>
+
+    <TextView
+        android:id="@+id/selectedTags"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/EditPostbody"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="13dp"
+        android:layout_toEndOf="@id/btnShowTags"
+        android:textColor="@color/light_grey" />
+
+</RelativeLayout>
+</ScrollView>

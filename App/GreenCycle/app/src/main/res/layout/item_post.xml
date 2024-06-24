@@ -1,0 +1,171 @@
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <!-- Author's profile picture and name -->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/authorProfilePicture"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:src="@drawable/green_cycle_icon"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="1dp" />
+
+        <!-- Post Title -->
+        <TextView
+            android:id="@+id/authorDisplayName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/authorProfilePicture"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_toEndOf="@id/authorProfilePicture"
+            android:text="User Name"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/postTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/authorProfilePicture"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:text="Post Title"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <!-- ViewPager for Images -->
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/postImagePager"
+            android:layout_width="match_parent"
+            android:layout_height="232dp"
+            android:layout_below="@id/postTitle"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="10dp"
+            android:visibility="gone" />
+
+        <me.relex.circleindicator.CircleIndicator
+            android:id="@+id/indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/postImagePager"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp" />
+
+        <!-- Post Content TextView -->
+        <TextView
+            android:id="@+id/postContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/indicator"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="10dp"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+            android:textSize="14sp" />
+
+        <!-- See More TextView -->
+        <TextView
+            android:id="@+id/seeMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/postContent"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="4dp"
+            android:text="see more..."
+            android:textColor="@color/light_grey"
+            android:textSize="14sp"
+            android:visibility="visible" />
+
+        <!-- Likes and Comments -->
+        <ImageButton
+            android:id="@+id/likeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/seeMore"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:background="@null"
+            app:srcCompat="@drawable/heart_svgrepo_com" />
+
+        <TextView
+            android:id="@+id/likeCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/seeMore"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@id/likeButton"
+            android:text="10"
+            android:textSize="14sp" />
+
+        <ImageButton
+            android:id="@+id/post_comment_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/seeMore"
+            android:layout_marginStart="19dp"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@id/likeCount"
+            android:backgroundTint="@color/transparent"
+            app:srcCompat="@drawable/outline_mode_comment_24" />
+
+        <!-- Delete Button -->
+
+        <TextView
+            android:id="@+id/commentCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/seeMore"
+            android:layout_marginStart="-6dp"
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@id/post_comment_button"
+            android:text="5"
+            android:textSize="14sp" />
+
+        <ImageButton
+            android:id="@+id/deleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/post_comment_button"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="5dp"
+            android:background="@null"
+            app:srcCompat="@drawable/baseline_delete_24" />
+
+        <!-- Post Date -->
+        <TextView
+            android:id="@+id/postdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="9dp"
+            android:layout_marginEnd="17dp"
+            android:text="6 days ago"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+
+</androidx.cardview.widget.CardView>
