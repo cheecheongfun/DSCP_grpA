@@ -15,6 +15,7 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,7 +27,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
@@ -42,7 +45,7 @@ import sg.edu.np.mad.greencycle.R;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
 
-    private final List<Post> postList;
+    private List<Post> postList;
     private final Context context;
     private final FirebaseFirestore firestoreDb = FirebaseFirestore.getInstance();
     private final DatabaseReference realtimeDb = FirebaseDatabase.getInstance().getReference();
@@ -131,17 +134,28 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     });
 
+
+
         List<String> imageUrls = post.getImageUrls();
+        Log.d("PostAdapter", "Number of images: " + imageUrls.size());
+
         if (imageUrls != null && !imageUrls.isEmpty()) {
             holder.postImagePager.setVisibility(View.VISIBLE);
-            holder.indicator.setVisibility(View.VISIBLE);
+            // Set up the adapter for the ViewPager
             ImagePagerAdapter imagePagerAdapter = new ImagePagerAdapter(context, imageUrls, position1 -> {
                 Uri currentImageUri = Uri.parse(imageUrls.get(position1));
                 showFullImageDialog(context, currentImageUri);
             });
             holder.postImagePager.setAdapter(imagePagerAdapter);
-            holder.indicator.setViewPager(holder.postImagePager);
-            imagePagerAdapter.registerDataSetObserver(holder.indicator.getDataSetObserver());
+
+            // Determine visibility of the CircleIndicator
+            if (imageUrls.size() > 1) {
+                holder.indicator.setVisibility(View.VISIBLE);
+                holder.indicator.setViewPager(holder.postImagePager);
+                imagePagerAdapter.registerDataSetObserver(holder.indicator.getDataSetObserver());
+            } else {
+                holder.indicator.setVisibility(View.GONE);
+            }
         } else {
             holder.postImagePager.setVisibility(View.GONE);
             holder.indicator.setVisibility(View.GONE);
@@ -153,14 +167,23 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             boolean isLiked = modifiedLikedBy.contains(user.getUsername());
             if (isLiked) {
                 modifiedLikedBy.remove(user.getUsername());
+                removePostFromLikedPosts(post.getId());
             } else {
                 modifiedLikedBy.add(user.getUsername());
+                addPostToLikedPosts(post.getId());
             }
+            // Update likedBy list and likeCount atomically
             firestoreDb.collection("Post").document("posts").collection("posts").document(post.getId())
-                    .update("likedBy", modifiedLikedBy)
-                    .addOnFailureListener(e -> Log.e("PostAdapter", "Failed to update likes", e));
-            updateLikeButton(holder, !isLiked);
-            holder.likeCount.setText(String.valueOf(modifiedLikedBy.size()));
+                    .update("likedBy", modifiedLikedBy, "likeCount", modifiedLikedBy.size())
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d("PostAdapter", "Likes updated successfully");
+                        updateLikeButton(holder, !isLiked);
+                        holder.likeCount.setText(String.valueOf(modifiedLikedBy.size()));
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e("PostAdapter", "Failed to update likes", e);
+                        // Optionally handle the error, e.g., revert UI changes or show a message
+                    });
         });
 
         holder.post_comment_button.setOnClickListener(v -> {
@@ -199,6 +222,65 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             commentCount = itemView.findViewById(R.id.commentCount);
             deleteButton = itemView.findViewById(R.id.deleteButton);
         }
+    }
+
+    public void updateData(List<Post> newPostList) {
+        this.postList = newPostList;
+        notifyDataSetChanged();
+    }
+
+    private void addPostToLikedPosts(String postId) {
+        DatabaseReference likedPostsRef = realtimeDb.child("users").child(user.getUsername()).child("LikedPosts");
+        likedPostsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> currentLikedPosts = dataSnapshot.getValue(new GenericTypeIndicator<ArrayList<String>>() {});
+                if (currentLikedPosts == null) {
+                    currentLikedPosts = new ArrayList<>();
+                }
+                // Final or effectively final variable for use inside lambda
+                final ArrayList<String> updatedLikedPosts = currentLikedPosts;
+
+                if (!updatedLikedPosts.contains(postId)) {
+                    updatedLikedPosts.add(postId);
+                    likedPostsRef.setValue(updatedLikedPosts)
+                            .addOnSuccessListener(aVoid -> {
+                                Log.d("PostAdapter", "Post added to likedPosts");
+                                user.setLikedPosts(new ArrayList<>(updatedLikedPosts)); // Now you're using the effectively final variable
+                            })
+                            .addOnFailureListener(e -> Log.e("PostAdapter", "Failed to add post to likedPosts", e));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("PostAdapter", "Failed to read likedPosts", databaseError.toException());
+            }
+        });
+    }
+
+
+    private void removePostFromLikedPosts(String postId) {
+        DatabaseReference likedPostsRef = realtimeDb.child("users").child(user.getUsername()).child("likedPosts");
+        likedPostsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> likedPosts = dataSnapshot.getValue(new GenericTypeIndicator<ArrayList<String>>() {});
+                if (likedPosts != null && likedPosts.remove(postId)) {
+                    likedPostsRef.setValue(likedPosts)
+                            .addOnSuccessListener(aVoid -> {
+                                Log.d("PostAdapter", "Post removed from likedPosts");
+                                user.setLikedPosts(new ArrayList<>(likedPosts)); // Ensure correct type is passed
+                            })
+                            .addOnFailureListener(e -> Log.e("PostAdapter", "Failed to remove post from likedPosts", e));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("PostAdapter", "Failed to read likedPosts", databaseError.toException());
+            }
+        });
     }
 
     private String calculatePostAge(Timestamp postTime) {
@@ -319,14 +401,21 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                     firestoreDb.collection("Post").document("posts").collection("posts").document(post.getId())
                             .delete()
                             .addOnSuccessListener(aVoid -> {
-                                Log.d("PostAdapter", "Post deleted successfully");
+                                // Remove the post from the list and notify the adapter
                                 notifyDataSetChanged();
+                                Log.d("PostAdapter", "Post deleted successfully");
                             })
-                            .addOnFailureListener(e -> Log.e("PostAdapter", "Failed to delete post", e));
+                            .addOnFailureListener(e -> {
+                                Log.e("PostAdapter", "Failed to delete post", e);
+                                Toast.makeText(context, "Error: Post could not be deleted.", Toast.LENGTH_SHORT).show();
+                            });
                 })
                 .setNegativeButton("No", null)
                 .show();
     }
+
+
+
 
 
 

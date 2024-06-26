@@ -126,7 +126,7 @@ public class RegistrationPage extends AppCompatActivity {
             String salt = HashUtils.getSalt();
             String hashedPassword = HashUtils.hashPassword(password, salt);
 
-            User newUser = new User(username, hashedPassword, username, null, salt);
+            User newUser = new User(username, hashedPassword, username, null, null,null,salt);
             reference.child(username).setValue(newUser)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override

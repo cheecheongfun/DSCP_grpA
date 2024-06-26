@@ -66,20 +66,25 @@ public class LoginPage extends AppCompatActivity {
                         if (dataSnapshot.exists()) {
                             Log.i(null, "Login success");
                             User user = dataSnapshot.getValue(User.class);
-                            String storedSalt = user.getSalt();
-                            Log.i(null, "StoredSalt: " + storedSalt);
-                            String storedHashedPassword = user.getPassword();
-                            Log.i(null, "storedHashedPassword: " + storedHashedPassword);
-                            String hashedEnteredPassword = HashUtils.hashPassword(password, storedSalt);
-                            Log.i(null, "enteredHash: " + hashedEnteredPassword);
+                            if (user != null) {
+                                String storedSalt = user.getSalt();
+                                Log.i(null, "StoredSalt: " + storedSalt);
+                                String storedHashedPassword = user.getPassword();
+                                Log.i(null, "storedHashedPassword: " + storedHashedPassword);
+                                String hashedEnteredPassword = HashUtils.hashPassword(password, storedSalt);
+                                Log.i(null, "enteredHash: " + hashedEnteredPassword);
 
-                            if (storedHashedPassword.equals(hashedEnteredPassword)) {
-                                Log.i(null, "Login success");
-                                Intent intent = new Intent(LoginPage.this, MainActivity.class);
-                                intent.putExtra("user", user);
-                                intent.putExtra("tab", "home_tab");
-                                startActivity(intent);
-                                finish();
+                                if (storedHashedPassword.equals(hashedEnteredPassword)) {
+                                    Log.i(null, "Login success");
+                                    Intent intent = new Intent(LoginPage.this, MainActivity.class);
+                                    intent.putExtra("user", user);
+                                    intent.putExtra("tab", "home_tab");
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    tvAuthStatus.setText("Login Failed: Invalid username or password");
+                                    Log.i(null, "Login failed");
+                                }
                             } else {
                                 tvAuthStatus.setText("Login Failed: Invalid username or password");
                                 Log.i(null, "Login failed");
@@ -96,6 +101,7 @@ public class LoginPage extends AppCompatActivity {
                         Log.i(null, "Database error");
                     }
                 });
+
             } else {
                 tvAuthStatus.setText("Please enter username and password");
             }

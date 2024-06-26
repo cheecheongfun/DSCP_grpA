@@ -237,6 +237,8 @@ public class NewPost extends AppCompatActivity {
         post.put("user", user.getUsername());
         post.put("imageUrls", imageUrls);
         post.put("tags", postTags);
+        post.put("likeCount", 0);
+        post.put("commentCount", 0);
 
         FirebaseFirestore.getInstance()
                 .collection("Post")

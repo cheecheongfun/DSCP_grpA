@@ -105,22 +105,50 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
             holder.likeCount.setText(String.valueOf(modifiedLikedBy.size()));
         });
 
-        // Combined OnClickListener for replies text
-        holder.repliesText.setOnClickListener(v -> {
-            // Toggle visibility of replies
-            if (holder.repliesRecyclerView.getVisibility() == View.GONE) {
-                holder.repliesRecyclerView.setVisibility(View.VISIBLE);
-            } else {
-                holder.repliesRecyclerView.setVisibility(View.GONE);
-            }
+        holder.repliesText.setOnClickListener(v -> showAddReplyDialog(comment));
 
-            // Show the reply dialog
-            showAddReplyDialog(comment);
+        // Set long click listener for deleting comment
+        holder.itemView.setOnLongClickListener(v -> {
+            if (comment.getAuthor().equals(user.getUsername())) {
+                showDeleteCommentDialog(comment);
+                return true;
+            }
+            return false;
         });
 
-        // Load replies initially
         loadReplies(comment, holder);
     }
+
+    private void showDeleteCommentDialog(Comment comment) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Delete Comment");
+        builder.setMessage("Are you sure you want to delete this comment?");
+        builder.setPositiveButton("Yes", (dialog, which) -> deleteComment(comment));
+        builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
+
+    private void deleteComment(Comment comment) {
+        if (post != null && post.getId() != null && comment != null && comment.getId() != null) {
+            firestoreDb.collection("Post")
+                    .document("posts")
+                    .collection("posts")
+                    .document(post.getId())
+                    .collection("comments")
+                    .document(comment.getId())
+                    .delete()
+                    .addOnSuccessListener(aVoid -> {
+                        comments.remove(comment);
+                        notifyDataSetChanged();
+                        Toast.makeText(context, "Comment deleted", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> Log.e("CommentsAdapter", "Failed to delete comment", e));
+        } else {
+            Log.e("CommentsAdapter", "Post ID or Comment ID is null");
+        }
+    }
+
+
 
     private void showAddReplyDialog(Comment parentComment) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
@@ -136,6 +164,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
         postReplyButton.setOnClickListener(v -> {
             String replyText = replyInput.getText().toString().trim();
             if (!replyText.isEmpty()) {
+                postReplyButton.setEnabled(false);  // Disable the button to prevent multiple posts
                 Reply newReply = new Reply();
                 newReply.setAuthor(user.getUsername());
                 newReply.setDisplay(user.getDisplayname()); // Assuming you have a method to get display name
@@ -143,12 +172,12 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
                 newReply.setTimestamp(Timestamp.now());
                 newReply.setCommentId(parentComment.getId()); // Set the parent comment ID
 
-                DocumentReference commentRef = firestoreDb.collection("Post")  // Access the main 'Post' collection
-                        .document("posts")  // Use a specific document under which all posts are nested
-                        .collection("posts")  // Sub-collection where actual posts are stored
-                        .document(post.getId())  // Specific post document
-                        .collection("comments")  // Sub-collection for comments under the specific post
-                        .document(parentComment.getId());  // Specific comment document
+                DocumentReference commentRef = firestoreDb.collection("Post")
+                        .document("posts")
+                        .collection("posts")
+                        .document(post.getId())
+                        .collection("comments")
+                        .document(parentComment.getId());
 
                 // Add the new reply
                 commentRef.collection("replies").add(newReply)
@@ -161,11 +190,16 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
                                     .addOnSuccessListener(aVoid -> {
                                         Log.d("CommentsAdapter", "Updated repliedBy successfully");
                                         bottomSheetDialog.dismiss(); // Dismiss the dialog upon successful operation
+                                        postReplyButton.setEnabled(true);  // Re-enable the button
                                     })
-                                    .addOnFailureListener(e -> Log.e("CommentsAdapter", "Failed to update repliedBy", e));
+                                    .addOnFailureListener(e -> {
+                                        Log.e("CommentsAdapter", "Failed to update repliedBy", e);
+                                        postReplyButton.setEnabled(true);  // Re-enable the button on failure
+                                    });
                         })
                         .addOnFailureListener(e -> {
                             Log.e("CommentsAdapter", "Failed to add reply", e); // Log any errors encountered during the operation
+                            postReplyButton.setEnabled(true);  // Re-enable the button on failure
                         });
             } else {
                 Toast.makeText(context, "Reply cannot be empty.", Toast.LENGTH_SHORT).show();
@@ -176,30 +210,48 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
 
 
 
+
     private void loadReplies(Comment parentComment, ViewHolder holder) {
-        firestoreDb.collection("Post")  // Access the main 'Post' collection
-                .document("posts")  // Access the 'posts' document where all posts are grouped
-                .collection("posts")  // Access the 'posts' sub-collection where individual posts are stored
-                .document(post.getId())  // Access the specific post by ID
-                .collection("comments")  // Access the 'comments' sub-collection under the specific post
-                .document(parentComment.getId())  // Access the specific comment by ID
-                .collection("replies")  // Access the 'replies' sub-collection where replies to the comment are stored
-                .orderBy("timestamp", Query.Direction.ASCENDING)  // Order the replies by their timestamp in ascending order
+        firestoreDb.collection("Post")
+                .document("posts")
+                .collection("posts")
+                .document(post.getId())
+                .collection("comments")
+                .document(parentComment.getId())
+                .collection("replies")
+                .orderBy("timestamp", Query.Direction.ASCENDING)
                 .addSnapshotListener((queryDocumentSnapshots, e) -> {
                     if (e != null) {
-                        Log.e("CommentsAdapter", "Failed to load replies", e);  // Log any errors encountered
+                        Log.e("CommentsAdapter", "Failed to load replies", e);
                         return;
                     }
 
-                    List<Reply> replies = new ArrayList<>();  // Create a list to hold the fetched replies
+                    List<Reply> replies = new ArrayList<>();
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
-                        Reply reply = doc.toObject(Reply.class);  // Convert each document snapshot into a Reply object
-                        replies.add(reply);  // Add the reply to the list
+                        Reply reply = doc.toObject(Reply.class);
+                        replies.add(reply);
                     }
 
-                    RepliesAdapter repliesAdapter = new RepliesAdapter(replies, parentComment, user, post, context);  // Create an adapter for the replies
-                    holder.repliesRecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));  // Set a linear layout manager for the RecyclerView
-                    holder.repliesRecyclerView.setAdapter(repliesAdapter);  // Set the adapter to the RecyclerView
+                    if (!replies.isEmpty()) {
+                        holder.viewRepliesCount.setVisibility(View.VISIBLE);
+                        holder.viewRepliesCount.setText("View " + replies.size() + " more replies");
+                    } else {
+                        holder.viewRepliesCount.setVisibility(View.GONE);
+                    }
+
+                    holder.viewRepliesCount.setOnClickListener(v -> {
+                        if (holder.repliesRecyclerView.getVisibility() == View.GONE) {
+                            holder.repliesRecyclerView.setVisibility(View.VISIBLE);
+                            holder.viewRepliesCount.setText("Hide replies");
+                        } else {
+                            holder.repliesRecyclerView.setVisibility(View.GONE);
+                            holder.viewRepliesCount.setText("View " + replies.size() + " more replies");
+                        }
+                    });
+
+                    RepliesAdapter repliesAdapter = new RepliesAdapter(replies, parentComment, user, post, context);
+                    holder.repliesRecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
+                    holder.repliesRecyclerView.setAdapter(repliesAdapter);
                 });
     }
 
@@ -210,7 +262,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView author, content, likeCount, postDate, repliesText;
+        TextView author, content, likeCount, postDate, repliesText,viewRepliesCount;
         ImageButton likeButton;
         Button replyButton;
         RecyclerView repliesRecyclerView;
@@ -223,6 +275,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
             likeButton = itemView.findViewById(R.id.likeButton);
             postDate = itemView.findViewById(R.id.comment_date);
             repliesText = itemView.findViewById(R.id.replies_text);
+            viewRepliesCount = itemView.findViewById(R.id.view_replies_count);
             repliesRecyclerView = itemView.findViewById(R.id.replies_recycler_view);
         }
     }

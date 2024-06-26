@@ -73,6 +73,9 @@ dependencies {
     implementation ("de.hdodenhof:circleimageview:3.1.0")
     implementation ("com.kizitonwose.calendar:view:2.0.0")
     implementation ("me.relex:circleindicator:2.1.6")
+    implementation ("com.wdullaer:materialdatetimepicker:4.2.3")
+    implementation ("com.google.android.material:material:1.8.0")
+
 
 
 

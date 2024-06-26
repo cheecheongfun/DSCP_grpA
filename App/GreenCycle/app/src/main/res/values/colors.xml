@@ -15,5 +15,8 @@
     <color name="transparent">#00000000</color>
     <color name="red">#FF0000</color>
     <color name="light_yellow">#FFFF2E</color>
+    <color name="indicator_active">#FF6699CC</color>
+    <color name="indicator_inactive">#FF888888</color> <!-- Grey for inactive -->
+
 
 </resources>

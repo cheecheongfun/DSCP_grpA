@@ -28,12 +28,13 @@ import sg.edu.np.mad.greencycle.R;
 public class DisplayImage extends AppCompatActivity {
     User user;
     Tank tank;
-    ImageButton upload, gallery;
+    ImageButton upload, gallery,calender;
     RecyclerView recyclerView;
     ImageAdapter adapter;
     TextView back;
 
-    @SuppressLint("MissingInflatedId")
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +47,7 @@ public class DisplayImage extends AppCompatActivity {
         upload = findViewById(R.id.Compostcamera);
         gallery = findViewById(R.id.gallery);
         back = findViewById(R.id.backButton);
+        calender = findViewById(R.id.Calender);
         recyclerView = findViewById(R.id.rvTanks);
 
         setupNavigationListeners();

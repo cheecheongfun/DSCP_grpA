@@ -5,34 +5,44 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
+import sg.edu.np.mad.greencycle.Forum.Comment;
 import sg.edu.np.mad.greencycle.LiveData.Tank;
 
 public class User implements Parcelable {
     private String username;
     private String password;
-    private String displayname; // Including displayname field
+    private String displayname;
     private ArrayList<Tank> tanks;
+    private ArrayList<String> likedPosts;
+    private ArrayList<String> comments;
     private String salt;
 
     public User() {
-        // Initialize tanks ArrayList
         tanks = new ArrayList<>();
+        likedPosts = new ArrayList<>();
+        comments = new ArrayList<>();
     }
 
-    public User(String username, String password, String displayname, ArrayList<Tank> tank, String salt) {
+    public User(String username, String password, String displayname, ArrayList<Tank> tanks, ArrayList<String> likedPosts, ArrayList<String> comments, String salt) {
         this.username = username;
         this.password = password;
-        this.displayname = displayname; // Setting displayname in constructor
+        this.displayname = displayname;
         this.tanks = tanks;
-        this.salt = salt; // for security
+        this.likedPosts = likedPosts;
+        this.comments = comments;
+        this.salt = salt;
     }
 
     protected User(Parcel in) {
         username = in.readString();
         password = in.readString();
-        displayname = in.readString(); // Reading displayname from Parcel
+        displayname = in.readString();
         tanks = new ArrayList<>();
         in.readList(tanks, Tank.class.getClassLoader());
+        likedPosts = new ArrayList<>();
+        in.readList(likedPosts, String.class.getClassLoader());
+        comments = new ArrayList<>();
+        in.readList(comments, String.class.getClassLoader());
         salt = in.readString();
     }
 
@@ -57,19 +67,38 @@ public class User implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(username);
         dest.writeString(password);
-        dest.writeString(displayname); // Writing displayname to Parcel
+        dest.writeString(displayname);
         dest.writeList(tanks);
+        dest.writeList(likedPosts);
+        dest.writeList(comments);
         dest.writeString(salt);
     }
 
-    // Method to add a tank to the user's list
+    // Methods to manipulate tanks
     public void addTank(Tank tank) {
         tanks.add(tank);
     }
 
-    // Method to remove a tank from the user's list
     public void removeTank(Tank tank) {
         tanks.remove(tank);
+    }
+
+    // Methods to manipulate likedPosts
+    public void addLikedPost(String postId) {
+        likedPosts.add(postId);
+    }
+
+    public void removeLikedPost(String postId) {
+        likedPosts.remove(postId);
+    }
+
+    // Methods to manipulate comments
+    public void addComment(String commentId) {
+        comments.add(commentId);
+    }
+
+    public void removeComment(String commentId) {
+        comments.remove(commentId);
     }
 
     // Getters and Setters
@@ -79,6 +108,22 @@ public class User implements Parcelable {
 
     public void setTanks(ArrayList<Tank> tanks) {
         this.tanks = tanks;
+    }
+
+    public ArrayList<String> getLikedPosts() {
+        return likedPosts;
+    }
+
+    public void setLikedPosts(ArrayList<String> likedPosts) {
+        this.likedPosts = likedPosts;
+    }
+
+    public ArrayList<String> getComments() {
+        return comments;
+    }
+
+    public void setComments(ArrayList<String> comments) {
+        this.comments = comments;
     }
 
     public String getUsername() {
@@ -105,15 +150,11 @@ public class User implements Parcelable {
         this.displayname = displayname;
     }
 
-    public String getSalt() {return salt;}
-    public void setSalt(String salt) {this.salt = salt;}
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
 }
-
-//    public String getFingerprintId() {
-//        return fingerprintId;
-//    }
-//
-//    public void setFingerprintId(String fingerprintId) {
-//        this.password = password;
-//    }
-

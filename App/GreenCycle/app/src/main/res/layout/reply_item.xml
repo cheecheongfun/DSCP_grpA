@@ -38,7 +38,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="4dp"
         android:text="Reply"
-        android:textSize="15dp"
+        android:textSize="12dp"
         android:clickable="true"
         android:textColor="@color/light_grey"/>
 
