@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/mdtp_background_color"
+    android:padding="16dp">
+
+    <ImageButton
+        android:id="@+id/buttonBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/back_button"
+        android:backgroundTint="@color/mid_green"
+        android:contentDescription="Back"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Options"
+        android:textAlignment="center"
+        android:textColor="@color/mid_green"
+        android:textSize="24sp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:layout_marginTop="24dp"
+        android:paddingBottom="24dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/buttonChangePassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Change Password"
+            android:layout_marginBottom="16dp"
+            android:background="@color/mid_green"
+            android:textColor="@android:color/white"
+            android:drawableLeft="@drawable/baseline_password_24"
+            android:padding="16dp"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/buttonChangeEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Change Email"
+            android:layout_marginBottom="16dp"
+            android:background="@color/mid_green"
+            android:textColor="@android:color/white"
+            android:drawableLeft="@drawable/baseline_email_24"
+            android:padding="16dp"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/buttonDeleteAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete Account"
+            android:layout_marginBottom="16dp"
+            android:background="@color/mid_green"
+            android:textColor="@android:color/white"
+            android:drawableLeft="@drawable/baseline_delete_24"
+            android:padding="16dp"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/buttonLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:background="@color/mid_green"
+            android:textColor="@android:color/white"
+            android:drawableLeft="@drawable/baseline_logout_24"
+            android:padding="16dp"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical" />
+    </LinearLayout>
+
+</LinearLayout>
