@@ -44,6 +44,9 @@
             android:name=".Profile.profile"
             android:exported="false" />
         <activity
+            android:name=".Profile.options"
+            android:exported="false" />
+        <activity
             android:name=".SolarForecast.Forecast"
             android:exported="false" />
 
@@ -86,6 +89,12 @@
             android:name=".StartUp.LandingPage"
             android:exported="true" />
         <activity
+            android:name=".StartUp.ForgotPasswordActivity"
+            android:exported="true" />
+        <activity
+            android:name=".StartUp.ChangePasswordActivity"
+            android:exported="true" />
+        <activity
             android:name=".LiveData.TankSelection"
             android:exported="false" />
         <activity
@@ -101,6 +110,7 @@
         <activity
             android:name=".Goals.CreateGoals"
             android:theme="@style/AppTheme.PopupOverlay" />
+
 
         <meta-data
             android:name="preloaded_fonts"
