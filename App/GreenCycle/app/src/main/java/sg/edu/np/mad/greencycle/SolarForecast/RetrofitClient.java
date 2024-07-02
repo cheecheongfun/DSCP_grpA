@@ -1,22 +1,23 @@
 package sg.edu.np.mad.greencycle.SolarForecast;
 
+import java.util.concurrent.ConcurrentHashMap;
+
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-// Fionn, S1040073K
-public class RetrofitClient {
-    private static final String BASE_URL = "https://api.data.gov.sg/";  // Base URL
-    private static Retrofit retrofit = null;
 
-    public static Retrofit getClient() {
-        if (retrofit == null) {
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
+public class RetrofitClient {
+    private static ConcurrentHashMap<String, Retrofit> retrofitInstances = new ConcurrentHashMap<>();
+    private static OkHttpClient sharedHttpClient = new OkHttpClient.Builder().build();
+
+    public static Retrofit getClient(String baseUrl) {
+        // Use the baseUrl as the key to store and retrieve Retrofit instances
+        return retrofitInstances.computeIfAbsent(baseUrl, newBaseUrl -> {
+            return new Retrofit.Builder()
+                    .baseUrl(newBaseUrl)
                     .addConverterFactory(GsonConverterFactory.create())
+                    .client(sharedHttpClient)
                     .build();
-        }
-        return retrofit;
+        });
     }
 }
-
-
-

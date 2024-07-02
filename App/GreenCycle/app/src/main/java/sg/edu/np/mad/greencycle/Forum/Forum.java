@@ -118,7 +118,7 @@ public class Forum extends AppCompatActivity {
         tagsContainer = findViewById(R.id.tagsContainer);
 
         int buttonHeight = 100; // Set the desired height of the buttons, in pixels.
-        Drawable selectedBackground = new ColorDrawable(getResources().getColor(R.color.icon_brown_dark));
+        Drawable selectedBackground = getResources().getDrawable(R.drawable.selected);
         Drawable normalBackground = getResources().getDrawable(R.drawable.rounded_button);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
