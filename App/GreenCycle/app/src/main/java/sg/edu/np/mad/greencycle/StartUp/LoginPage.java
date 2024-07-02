@@ -29,7 +29,7 @@ public class LoginPage extends AppCompatActivity {
 
     EditText etUsername, etPassword;
     Button btnAuth, loginButton, registerButton;
-    TextView tvAuthStatus;
+    TextView tvAuthStatus, forgotpasswordButton;
     private Executor executor;
     private BiometricPrompt.PromptInfo promptInfo;
     private BiometricPrompt biometricPrompt;
@@ -49,6 +49,7 @@ public class LoginPage extends AppCompatActivity {
         tvAuthStatus = findViewById(R.id.tvAuthStatus);
         loginButton = findViewById(R.id.loginButton);
         registerButton = findViewById(R.id.register);
+        forgotpasswordButton = findViewById(R.id.forgotPassword);
         executor = ContextCompat.getMainExecutor(this);
         FirebaseApp.initializeApp(this);
 
@@ -109,6 +110,11 @@ public class LoginPage extends AppCompatActivity {
 
         registerButton.setOnClickListener(view -> {
             Intent intent = new Intent(LoginPage.this, RegistrationPage.class);
+            startActivity(intent);
+        });
+
+        forgotpasswordButton.setOnClickListener(view -> {
+            Intent intent = new Intent(LoginPage.this, ForgotPasswordActivity.class);
             startActivity(intent);
         });
     }
