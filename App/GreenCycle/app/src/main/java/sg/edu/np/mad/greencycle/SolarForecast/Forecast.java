@@ -1,6 +1,5 @@
 package sg.edu.np.mad.greencycle.SolarForecast;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -10,7 +9,6 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import me.relex.circleindicator.CircleIndicator3;
 import sg.edu.np.mad.greencycle.R;
-import sg.edu.np.mad.greencycle.StartUp.MainActivity;
 
 public class Forecast extends AppCompatActivity {
 
@@ -41,8 +39,7 @@ public class Forecast extends AppCompatActivity {
         });
 
         back.setOnClickListener(v -> {
-            Intent intent = new Intent(Forecast.this, MainActivity.class);
-            startActivity(intent);
+           finish();
         });
     }
 }
