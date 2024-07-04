@@ -123,7 +123,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         @Override
                         public void onFinish() {
                             btnSendCode.setEnabled(true);
-                            btnSendCode.setText("Resend Code");
+                            btnSendCode.setText("Resend");
                         }
                     }.start();
                     Toast.makeText(ForgotPasswordActivity.this, "Verification code sent to your email.", Toast.LENGTH_SHORT).show();
