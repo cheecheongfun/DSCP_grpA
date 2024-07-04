@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.net.PasswordAuthentication;
@@ -110,7 +111,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 if (!username.isEmpty()) {
                     generatedCode = generateRandomCode();
                     // Simulate sending email
-                    getEmailFromUsername(username, generatedCode);
+                    getUserByEmail(username, generatedCode);
                     // Disable button and start countdown
                     btnSendCode.setEnabled(false);
                     new CountDownTimer(30000, 1000) {
@@ -183,26 +184,29 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         javaMailAPI.execute();
     }
 
-    private void getEmailFromUsername(String username, String code) {
-        String Email = null; // Initialize Email here
+    private void getUserByEmail(String email, String code) {
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
+        Query query = usersRef.orderByChild("email").equalTo(email);
 
-        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users").child(username);
-        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    String email = dataSnapshot.child("email").getValue(String.class);
-                    String password= dataSnapshot.child("password").getValue(String.class);
-                    salt = dataSnapshot.child("salt").getValue(String.class);
-                    if (email != null) {
-                        Log.v("Email",salt);
-                        sendEmail(username, code, email);
-                        Password = password;
-                    } else {
-                        Toast.makeText(ForgotPasswordActivity.this, "Email not found for username: " + username, Toast.LENGTH_SHORT).show();
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        username = userSnapshot.getKey();
+                        String retrievedEmail = userSnapshot.child("email").getValue(String.class);
+                        Password = userSnapshot.child("password").getValue(String.class);
+                        salt = userSnapshot.child("salt").getValue(String.class);
+
+                        if (retrievedEmail != null) {
+                            Log.v("Email", salt);
+                            sendEmail(username, code, retrievedEmail);
+                        } else {
+                            Toast.makeText(ForgotPasswordActivity.this, "Email not found: " + email, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 } else {
-                    Toast.makeText(ForgotPasswordActivity.this, "Username not found: " + username, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ForgotPasswordActivity.this, "User not found with email: " + email, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -213,6 +217,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             }
         });
     }
+
 
 }
 
