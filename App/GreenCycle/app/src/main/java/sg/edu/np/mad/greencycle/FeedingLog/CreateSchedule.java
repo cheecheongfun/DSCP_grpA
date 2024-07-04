@@ -46,6 +46,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import sg.edu.np.mad.greencycle.Classes.FeedSchedule;
@@ -60,7 +61,7 @@ public class CreateSchedule extends DialogFragment {
     RelativeLayout greenSect, brownSect, waterSect, repeatSect, notificationSect, second, third, fourth, monthOptions;
     LinearLayout dayTitles, repeatOptions, notiOptions;
     TextView green, greenCancel, greenLine, brown, brownCancel, brownLine, repeatText, repeatCancel;
-    TextView repeatLine, notiText, notiCancel, notiLine, cancel, save, monthOption1, monthOption2;
+    TextView repeatLine, notiText, notiCancel, notiLine, cancel, save, monthOption1, monthOption2, text2, text3, text4;
     RecyclerView greenRecycler, brownRecycler;
     RadioButton repeatNone, repeatDaily, repeatWeekly, repeatMonthly, notiNone, notiDay, notiDayBefore;
     FoodAdapter gAdapter, bAdapter;
@@ -159,31 +160,43 @@ public class CreateSchedule extends DialogFragment {
         fourth = notiOptions.findViewById(R.id.fourth);
         notiDayBefore = fourth.findViewById(R.id.radioNotiDayBefore);
         fourthEdit = fourth.findViewById(R.id.fourthEdit);
+        text2 = view.findViewById(R.id.text2);
+        text3 = view.findViewById(R.id.text3);
+        text4 = view.findViewById(R.id.text4);
 
         greenList = new ArrayList<>();
         brownList = new ArrayList<>();
+        gAdapter = new FoodAdapter(greenFood, greenRecycler, "green", greenList);
+        bAdapter = new FoodAdapter(brownFood, brownRecycler, "brown", brownList);
 
         // day of week titles
         dayAbbreviations = new String[]{"M", "T", "W", "T", "F", "S", "S"};
+        scheduleName.requestFocus();
+        greenCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setGone("green");
+                green.setClickable(false);
+            }
+        });
+        brownCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setGone("brown");
+                brown.setClickable(false);
+            }
+        });
+        repeatCancel.setOnClickListener(nev -> setGone("repeat"));
+        notiCancel.setOnClickListener(nev -> setGone("noti"));
         // green section
         greenSect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (greenCancel.getVisibility() == View.VISIBLE){
-                    greenCancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            setGone("green");
-                            green.setClickable(false);
-                        }
-                    });
+                    greenCancel.callOnClick();
                 }
                 else {
                     setVisible("green");
-                    brownCancel.callOnClick();
-                    notiCancel.callOnClick();
-                    repeatCancel.callOnClick();
-                    Log.i("greenVisible", "greenFood List: " + greenFood.size());
                     gAdapter = new FoodAdapter(greenFood, greenRecycler, "green", greenList);
                     greenRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
                     greenRecycler.setAdapter(gAdapter);
@@ -198,19 +211,10 @@ public class CreateSchedule extends DialogFragment {
             @Override
             public void onClick(View view) {
                 if (brownCancel.getVisibility() == View.VISIBLE){
-                    brownCancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            setGone("brown");
-                            brown.setClickable(false);
-                        }
-                    });
+                    brownCancel.callOnClick();
                 }
                 else {
                     setVisible("brown");
-                    greenCancel.callOnClick();
-                    notiCancel.callOnClick();
-                    repeatCancel.callOnClick();
                     bAdapter = new FoodAdapter(brownFood, brownRecycler, "brown", brownList);
                     brownRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
                     brownRecycler.setAdapter(bAdapter);
@@ -219,19 +223,35 @@ public class CreateSchedule extends DialogFragment {
                 }
             }
         });
-        // repeat section
 
+        // water section
+        waterAmt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (greenCancel.getVisibility() == View.VISIBLE){
+                    greenCancel.callOnClick();
+                }
+                if (brownCancel.getVisibility() == View.VISIBLE){
+                    brownCancel.callOnClick();
+                }
+                if (repeatCancel.getVisibility() == View.VISIBLE){
+                    repeatCancel.callOnClick();
+                }
+                if (notiCancel.getVisibility() == View.VISIBLE){
+                    notiCancel.callOnClick();
+                }
+            }
+        });
+
+        // repeat section
         repeatType = "";
         repeatSect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (repeatCancel.getVisibility() == View.VISIBLE) {
-                    repeatCancel.setOnClickListener(nev -> setGone("repeat"));
+                    repeatCancel.callOnClick();
                 } else {
                     setVisible("repeat");
-                    greenCancel.callOnClick();
-                    notiCancel.callOnClick();
-                    brownCancel.callOnClick();
                     if (repeatType.isEmpty()){
                         repeatNone.setChecked(true);
                         repeatDaily.setChecked(false);
@@ -453,6 +473,79 @@ public class CreateSchedule extends DialogFragment {
                             }
                         }
                     });
+                    text2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            repeatNone.setChecked(false);
+                            repeatDaily.setChecked(false);
+                            repeatWeekly.setChecked(true);
+                            repeatMonthly.setChecked(false);
+                            repeatType = "Every 1 week";
+                            repeatText.setText(repeatType);
+                            repeatText.setTextColor(Color.parseColor("#FFFFFFFF"));
+                            dayTitles.setVisibility(View.VISIBLE);
+                            monthOptions.setVisibility(View.GONE);
+                            weeklyDays.clear();
+                            for (int i = 0; i < dayTitles.getChildCount(); i++) {
+                                final int index = i;
+                                TextView textView = (TextView) dayTitles.getChildAt(i);
+                                String abbreviation = dayAbbreviations[index];
+                                textView.setText(abbreviation);
+                                textView.setBackgroundColor(Color.TRANSPARENT);
+                                textView.setTextColor(Color.BLACK);
+
+                                DayOfWeek dayOfWeek = DayOfWeek.of(index + 1);
+                                if (weeklyDays.contains(dayOfWeek.toString())) {
+                                    textView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.icon_brown_light));
+                                    textView.setTextColor(ContextCompat.getColor(getActivity(), R.color.icon_brown_light));
+                                }
+
+                                textView.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        String dayString = dayOfWeek.toString();
+
+                                        if (weeklyDays.contains(dayString)) {
+                                            weeklyDays.remove(dayString);
+                                            textView.setBackgroundColor(Color.TRANSPARENT);
+                                            textView.setTextColor(Color.BLACK);
+                                        } else {
+                                            weeklyDays.add(dayString);
+                                            textView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.icon_brown_light));
+                                            textView.setTextColor(ContextCompat.getColor(getActivity(), R.color.icon_brown_light));
+                                        }
+
+                                        if (weeklyDays.size() == 7) {
+                                            Log.i("WeeklyDays", "All days selected: Switching to daily");
+                                            repeatDaily.setChecked(true);
+                                            repeatWeekly.setChecked(false);
+                                            repeatType = "Everyday";
+                                            dayTitles.setVisibility(View.GONE);
+                                        } else {
+                                            repeatDaily.setChecked(false);
+                                            repeatWeekly.setChecked(true);
+                                            if (!secondEdit.getText().toString().isEmpty()){
+                                                repeatType = "Every " + secondEdit.getText().toString() + " week";
+                                            }
+                                            else{
+                                                repeatType = "Every 1 week";
+                                            }
+                                            dayTitles.setVisibility(View.VISIBLE);
+                                        }
+                                    }
+                                });
+                            }
+
+                            if (!secondEdit.getText().toString().isEmpty()){
+                                repeatType = "Every " + secondEdit.getText().toString() + " week";
+                            }
+                            else{
+                                repeatType = "Every 1 week";
+                            }
+                            repeatText.setText(repeatType);
+                            repeatText.setTextColor(Color.parseColor("#FFFFFFFF"));
+                        }
+                    });
 
                     repeatMonthly.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -530,6 +623,20 @@ public class CreateSchedule extends DialogFragment {
 
                         }
                     });
+                    text3.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            repeatNone.setChecked(false);
+                            repeatDaily.setChecked(false);
+                            repeatWeekly.setChecked(false);
+                            repeatMonthly.setChecked(true);
+                            repeatType = "Every 1 month";
+                            repeatText.setText(repeatType);
+                            repeatText.setTextColor(Color.parseColor("#FFFFFFFF"));
+                            dayTitles.setVisibility(View.GONE);
+                            monthOptions.setVisibility(View.VISIBLE);
+                        }
+                    });
                 }
             }
         });
@@ -540,12 +647,9 @@ public class CreateSchedule extends DialogFragment {
             @Override
             public void onClick(View view) {
                 if (notiCancel.getVisibility() == View.VISIBLE) {
-                    notiCancel.setOnClickListener(nev -> setGone("noti"));
+                    notiCancel.callOnClick();
                 } else {
                     setVisible("noti");
-                    greenCancel.callOnClick();
-                    brownCancel.callOnClick();
-                    repeatCancel.callOnClick();
                     if (notiType.isEmpty()){
                         notiNone.setChecked(true);
                         notiDay.setChecked(false);
@@ -636,6 +740,17 @@ public class CreateSchedule extends DialogFragment {
                             notiText.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     });
+                    text4.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            notiDayBefore.setChecked(true);
+                            notiDay.setChecked(false);
+                            notiNone.setChecked(false);
+                            notiType = "1 day before";
+                            notiText.setText(notiType);
+                            notiText.setTextColor(Color.parseColor("#FFFFFFFF"));
+                        }
+                    });
                 }
             }
         });
@@ -646,72 +761,81 @@ public class CreateSchedule extends DialogFragment {
                 Toast.makeText(getActivity(), "Fill in schedule name", Toast.LENGTH_SHORT).show();
             }
             else{
-                if (tank.getFeedSchedule() != null){
+                Log.i("save schedule", "schedule name filled");
+                if (!tank.getFeedSchedule().isEmpty()){
+                    Log.i("save schedule", "Schedule List not empty");
+                    ArrayList<String> names = new ArrayList<>();
                     for (FeedSchedule sched : tank.getFeedSchedule()){
-                        if (sched.getScheduleName().equals(scheduleName.getText().toString())){
-                            Toast.makeText(getActivity(), "Schedule name already exists", Toast.LENGTH_SHORT).show();
+                        names.add(sched.getScheduleName());
+                    }
+                    if (names.contains(scheduleName.getText().toString())){
+                        Toast.makeText(getActivity(), "Schedule name already used", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        String name = scheduleName.getText().toString().trim();
+                        // Food
+                        if (gAdapter.getSelectedFoods() != null && !gAdapter.getSelectedFoods().isEmpty()){
+                            greenList = gAdapter.getSelectedFoods();
                         }
-                        else {
-                            String name = scheduleName.getText().toString().trim();
-                            // Food
-                            if (gAdapter.getSelectedFoods() != null || !gAdapter.getSelectedFoods().isEmpty()){
-                                greenList = gAdapter.getSelectedFoods();
-                            }
-                            else greenList = new ArrayList<>();
-                            if (bAdapter.getSelectedFoods() != null || !bAdapter.getSelectedFoods().isEmpty()){
-                                brownList = bAdapter.getSelectedFoods();
-                            }
-                            else brownList = new ArrayList<>();
+                        else greenList = null;
+                        if (bAdapter.getSelectedFoods() != null && !bAdapter.getSelectedFoods().isEmpty()){
+                            brownList = bAdapter.getSelectedFoods();
+                        }
+                        else brownList = null;
 
-                            // Repeat
-                            if (repeatType.isEmpty()){
-                                repeatType = "Don't repeat";
-                                weeklyDaysList = new ArrayList<>();
-                            }
-                            else{
-                                weeklyDaysList = new ArrayList<>(weeklyDays);
-                            }
-
-                            repeatDetails.put(repeatType, weeklyDaysList);
-
-                            // Water
-                            if (waterAmt.getText().toString().isEmpty()){
-                                water = 0;
-                            }
-                            else water = Integer.parseInt(waterAmt.getText().toString());
-
-                            // Notification
-                            if (notiType.isEmpty()){
-                                notiType = "Don't notify";
-                            }
-                            FeedSchedule schedule = new FeedSchedule(name, greenList, brownList, repeatType,  repeatDetails, notiType, water, date);
-                            Log.i("In save schedule", "schedule: " + schedule.getScheduleName() + schedule.getWaterAmt() + schedule.getNotification());
-                            Log.i("In save schedule", "schedule: " + schedule.getGreenFood() + schedule.getBrownFood() + schedule.getRepeatType() + schedule.getRepeatDetails());
-                            ArrayList<FeedSchedule> feedSchedules = new ArrayList<>();
-                            feedSchedules.add(schedule);
-                            tank.setFeedSchedule(feedSchedules);
-                            saveToFirebase(tank);
-                            Bundle result = new Bundle();
-                            result.putString("scheduleName", name);
-                            getParentFragmentManager().setFragmentResult("requestKey", result);
-                            dismiss();
-                            Toast.makeText(getActivity(), schedule.getScheduleName() + " saved", Toast.LENGTH_SHORT).show();
-                            break;
+                        // Repeat
+                        if (repeatType.isEmpty()){
+                            repeatType = "Don't repeat";
+                            weeklyDaysList = new ArrayList<>();
+                        }
+                        else{
+                            weeklyDaysList = new ArrayList<>(weeklyDays);
                         }
 
+                        repeatDetails.put(repeatType, weeklyDaysList);
+
+                        // Water
+                        if (waterAmt.getText().toString().isEmpty()){
+                            water = 0;
+                        }
+                        else water = Integer.parseInt(waterAmt.getText().toString());
+
+                        // Notification
+                        if (notiType.isEmpty()){
+                            notiType = "Don't notify";
+                        }
+                        ArrayList<String> dates = new ArrayList<>();
+                        FeedSchedule schedule = new FeedSchedule(name, greenList, brownList, repeatType,  repeatDetails, notiType, water, date, dates);
+                        for (LocalDate d : generateScheduledDates(schedule)){
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                            dates.add(formatter.format(d));
+                        }
+                        schedule.setDates(dates);
+                        Log.i("In save schedule", "schedule: " + schedule.getScheduleName() + schedule.getWaterAmt() + schedule.getNotification());
+                        Log.i("In save schedule", "schedule: " + schedule.getGreenFood() + schedule.getBrownFood() + schedule.getRepeatType() + schedule.getRepeatDetails());
+                        ArrayList<FeedSchedule> feedSchedules = tank.getFeedSchedule();
+                        feedSchedules.add(schedule);
+                        tank.setFeedSchedule(feedSchedules);
+                        saveToFirebase(tank);
+                        Bundle result = new Bundle();
+                        result.putString("scheduleName", name);
+                        getParentFragmentManager().setFragmentResult("requestKey", result);
+                        dismiss();
+                        Toast.makeText(getActivity(), schedule.getScheduleName() + " saved", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
+                    Log.i("save schedule", "schedule List empty");
                     String name = scheduleName.getText().toString().trim();
                     // Food
                     if (gAdapter.getSelectedFoods() != null || !gAdapter.getSelectedFoods().isEmpty()){
                         greenList = gAdapter.getSelectedFoods();
                     }
-                    else greenList = new ArrayList<>();
+                    else greenList = null;
                     if (bAdapter.getSelectedFoods() != null || !bAdapter.getSelectedFoods().isEmpty()){
                         brownList = bAdapter.getSelectedFoods();
                     }
-                    else brownList = new ArrayList<>();
+                    else brownList = null;
 
                     // Repeat
                     if (repeatType.isEmpty()){
@@ -733,10 +857,14 @@ public class CreateSchedule extends DialogFragment {
                     if (notiType.isEmpty()){
                         notiType = "Don't notify";
                     }
-                    FeedSchedule schedule = new FeedSchedule(name, greenList, brownList, repeatType,  repeatDetails, notiType, water, date);
-                    Log.i("In save schedule", "schedule: " + schedule.getScheduleName() + schedule.getWaterAmt() + schedule.getNotification());
-                    Log.i("In save schedule", "schedule: " + schedule.getGreenFood() + schedule.getBrownFood() + schedule.getRepeatType() + schedule.getRepeatDetails());
-                    ArrayList<FeedSchedule> feedSchedules = new ArrayList<>();
+                    ArrayList<String> dates = new ArrayList<>();
+                    FeedSchedule schedule = new FeedSchedule(name, greenList, brownList, repeatType,  repeatDetails, notiType, water, date, dates);
+                    for (LocalDate d : generateScheduledDates(schedule)){
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        dates.add(formatter.format(d));
+                    }
+                    schedule.setDates(dates);
+                    ArrayList<FeedSchedule> feedSchedules = tank.getFeedSchedule();
                     feedSchedules.add(schedule);
                     tank.setFeedSchedule(feedSchedules);
                     saveToFirebase(tank);
@@ -773,6 +901,17 @@ public class CreateSchedule extends DialogFragment {
                 greenLine.setVisibility(View.VISIBLE);
                 greenRecycler.setVisibility(View.VISIBLE);
                 green.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.baseline_add_24, 0, 0, 0);
+                if (brownCancel.getVisibility() == View.VISIBLE){
+                    brownCancel.callOnClick();
+                }
+                if (repeatCancel.getVisibility() == View.VISIBLE){
+                    repeatCancel.callOnClick();
+                }
+                if (notiCancel.getVisibility() == View.VISIBLE){
+                    notiCancel.callOnClick();
+                }
+                scheduleName.clearFocus();
+                waterAmt.clearFocus();
                 break;
             case "brown":
                 brown.setTextColor(Color.parseColor("#FFFFFFFF"));
@@ -780,18 +919,51 @@ public class CreateSchedule extends DialogFragment {
                 brownLine.setVisibility(View.VISIBLE);
                 brownRecycler.setVisibility(View.VISIBLE);
                 brown.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.baseline_add_24, 0, 0, 0);
+                if (greenCancel.getVisibility() == View.VISIBLE){
+                    greenCancel.callOnClick();
+                }
+                if (repeatCancel.getVisibility() == View.VISIBLE){
+                    repeatCancel.callOnClick();
+                }
+                if (notiCancel.getVisibility() == View.VISIBLE){
+                    notiCancel.callOnClick();
+                }
+                scheduleName.clearFocus();
+                waterAmt.clearFocus();
                 break;
             case "repeat":
                 repeatText.setTextColor(Color.parseColor("#FFFFFFFF"));
                 repeatCancel.setVisibility(View.VISIBLE);
                 repeatLine.setVisibility(View.VISIBLE);
                 repeatOptions.setVisibility(View.VISIBLE);
+                if (greenCancel.getVisibility() == View.VISIBLE){
+                    greenCancel.callOnClick();
+                }
+                if (brownCancel.getVisibility() == View.VISIBLE){
+                    brownCancel.callOnClick();
+                }
+                if (notiCancel.getVisibility() == View.VISIBLE){
+                    notiCancel.callOnClick();
+                }
+                scheduleName.clearFocus();
+                waterAmt.clearFocus();
                 break;
             case "noti":
                 notiText.setTextColor(Color.parseColor("#FFFFFFFF"));
                 notiCancel.setVisibility(View.VISIBLE);
                 notiLine.setVisibility(View.VISIBLE);
                 notiOptions.setVisibility(View.VISIBLE);
+                if (greenCancel.getVisibility() == View.VISIBLE){
+                    greenCancel.callOnClick();
+                }
+                if (brownCancel.getVisibility() == View.VISIBLE){
+                    brownCancel.callOnClick();
+                }
+                if (repeatCancel.getVisibility() == View.VISIBLE){
+                    repeatCancel.callOnClick();
+                }
+                scheduleName.clearFocus();
+                waterAmt.clearFocus();
                 break;
         }
     }
@@ -903,7 +1075,8 @@ public class CreateSchedule extends DialogFragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.i("FirebaseUpdate", "Feed Schedule: "+ user.getTanks().get(0).getFeedSchedule().size());
+                        Log.i("FirebaseUpdate in Create Schedule" +
+                                "", "Feed Schedule: "+ user.getTanks().get(0).getFeedSchedule().size());
                         // Dismiss the dialog or close the activity
                     }
                 })
@@ -913,6 +1086,91 @@ public class CreateSchedule extends DialogFragment {
                         Log.e("FirebaseUpdate", "Failed to update user tank list.", e);
                     }
                 });
+    }
+    public static ArrayList<LocalDate> generateScheduledDates(FeedSchedule feedSchedule) {
+        // individual
+        ArrayList<LocalDate> scheduledDates = new ArrayList<>();
+        LocalDate refDate = LocalDate.parse(feedSchedule.getRefDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        LocalDate nextMonth = LocalDate.now().plusMonths(3); // continues generating 3 months worth of dates
+        String repeatType = feedSchedule.getRepeatType();
+        HashMap<String, ArrayList<String>> repeatDetails = feedSchedule.getRepeatDetails();
+
+
+        if (repeatType.equals("Don't repeat")) {
+            scheduledDates.add(refDate);
+        }
+        else if (repeatType.equals("Everyday")) {
+            for (LocalDate date = refDate; !date.isAfter(nextMonth); date = date.plusDays(1)) {
+                scheduledDates.add(date);
+            }
+        }
+        else if (repeatType.contains("week")) {
+            String keyWithWeek = null;
+            for (String key : repeatDetails.keySet()) {
+                if (key.toLowerCase().contains("week")) {
+                    keyWithWeek = key;
+                    break;
+                }
+            }
+            ArrayList<String> daysOfWeek = repeatDetails.get(keyWithWeek);
+            int repeatOften = Integer.parseInt(feedSchedule.getRepeatType().replaceAll("[^0-9]", ""));
+            for (LocalDate date = refDate; !date.isAfter(nextMonth); date = date.plusWeeks(repeatOften)) {
+                for (String day : daysOfWeek) {
+                    DayOfWeek dayOfWeek = DayOfWeek.valueOf(day.toUpperCase());
+                    LocalDate weekDate = date.with(dayOfWeek);
+                    if (!weekDate.isBefore(refDate) && !weekDate.isAfter(nextMonth)) {
+                        scheduledDates.add(weekDate);
+                    }
+                }
+            }
+        }
+        else if (repeatType.contains("month")) {
+            android.util.Log.i("generateScheduledDates", "month");
+            String keyWithMonth = null;
+            for (String key : repeatDetails.keySet()) {
+                if (key.toLowerCase().contains("month")) {
+                    keyWithMonth = key;
+                    break;
+                }
+            }
+            String daysOfMonth = repeatDetails.get(keyWithMonth).get(0);
+            int repeatOften = Integer.parseInt(feedSchedule.getRepeatType().replaceAll("[^0-9]", ""));
+            addDatesForNextMonths(daysOfMonth, repeatOften, scheduledDates);
+        }
+
+        return scheduledDates;
+    }
+    public static void addDatesForNextMonths(String input, int everyNMonths, List<LocalDate> scheduledDates) {
+        try {
+            String[] parts = input.split(" ");
+            int nth = Integer.parseInt(parts[0].substring(0, parts[0].length() - 2)); // Get the number part (1st, 2nd, etc.)
+            String dayOfWeekStr = parts[1];
+
+            // Get the day of week enum from string
+            DayOfWeek dayOfWeek = DayOfWeek.valueOf(dayOfWeekStr.toUpperCase());
+
+            // Get the current month
+            LocalDate today = LocalDate.now();
+
+            // Loop through the specified number of occurrences, incrementing by everyNMonths
+            for (int i = 0; i < 12; i++) {
+                LocalDate firstDayOfMonth = today.plusMonths(i * everyNMonths).withDayOfMonth(1);
+                LocalDate firstOccurrence = firstDayOfMonth.with(TemporalAdjusters.firstInMonth(dayOfWeek));
+
+                // Calculate the nth occurrence in the month
+                LocalDate date = firstOccurrence.plusWeeks(nth - 1);
+
+                // Check if the calculated date is within the same month
+                if (date.getMonth() == firstDayOfMonth.getMonth()) {
+                    scheduledDates.add(date);
+                } else {
+                    System.out.println("The " + nth + " " + dayOfWeekStr + " does not exist in " + firstDayOfMonth.getMonth());
+                }
+            }
+        } catch (Exception e) {
+            // Handle parsing errors or invalid input format
+            android.util.Log.i("addDatesforMonth", "Invalid input format: " + input);
+        }
     }
 
 }

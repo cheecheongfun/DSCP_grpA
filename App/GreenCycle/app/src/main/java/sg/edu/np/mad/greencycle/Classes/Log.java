@@ -5,7 +5,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 public class Log implements Parcelable {
-    private int logId, tankId, waterAmt;
+    private int logId, waterAmt;
     private String logDate;
     private ArrayList<Food> greens, browns;
     private String notes;
@@ -13,9 +13,8 @@ public class Log implements Parcelable {
     public Log() {
     }
 
-    public Log(int logId, int tankId, String logDate, ArrayList<Food> greens, ArrayList<Food> browns, String notes, int waterAmt) {
+    public Log(int logId, String logDate, ArrayList<Food> greens, ArrayList<Food> browns, String notes, int waterAmt) {
         this.logId = logId;
-        this.tankId = tankId;
         this.logDate = logDate;
         this.greens = greens;
         this.browns = browns;
@@ -25,7 +24,6 @@ public class Log implements Parcelable {
 
     protected Log(Parcel in) {
         logId = in.readInt();
-        tankId = in.readInt();
         logDate = in.readString();
         greens = new ArrayList<>();
         in.readList(this.greens, Food.class.getClassLoader());
@@ -55,7 +53,6 @@ public class Log implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(logId);
-        parcel.writeInt(tankId);
         parcel.writeString(logDate);
         parcel.writeList(greens);
         parcel.writeList(browns);
@@ -70,14 +67,6 @@ public class Log implements Parcelable {
 
     public void setLogId(int logId) {
         this.logId = logId;
-    }
-
-    public int getTankId() {
-        return tankId;
-    }
-
-    public void setTankId(int tankId) {
-        this.tankId = tankId;
     }
 
     public String getLogDate() {

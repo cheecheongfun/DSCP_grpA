@@ -1,92 +1,78 @@
 package sg.edu.np.mad.greencycle.FeedingLog;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 
-import sg.edu.np.mad.greencycle.Classes.Log;
+import sg.edu.np.mad.greencycle.Classes.FeedSchedule;
+import sg.edu.np.mad.greencycle.Classes.Food;
 import sg.edu.np.mad.greencycle.R;
-// Fionn, S10240073K
-public class LogAdapter extends RecyclerView.Adapter<LogViewHolder> {
+
+public class LogAdapter extends RecyclerView.Adapter<LogViewHolder>{
+
+    ArrayList<Food> foodList;
+    ArrayList<FeedSchedule> scheduleList;
+    String type;
     Context context;
-    ArrayList<Log> feedingLog;
-    String day,month;
-    public LogAdapter(ArrayList<Log> feedingLog, Context context){
-        this.feedingLog = feedingLog;
+
+    public LogAdapter(Context context, ArrayList<Food> foodList, String type, ArrayList<FeedSchedule> scheduleList) {
+        this.foodList = foodList;
+        this.type = type;
+        this.scheduleList = scheduleList;
         this.context = context;
     }
 
+    void setLog(ArrayList<Food> foodList, String type) {
+        this.foodList = foodList;
+        this.type = type;
+        notifyDataSetChanged();
+    }
     @Override
     public int getItemViewType(int position){
-        Log log = feedingLog.get(position);
-        return position;
-    }
-
-    @Override
-    public int getItemCount() { return feedingLog.size();}
-
-    @Override
-    public LogViewHolder onCreateViewHolder(
-            ViewGroup parent,
-            int viewType) {
-        return new LogViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.feeding_card, parent, false));
-    }
-    @Override
-    public void onBindViewHolder(
-            LogViewHolder holder,
-            int position){
-        Log log = feedingLog.get(position);
-        String[] dateParts = log.getLogDate().split("/");
-        day = dateParts[0];
-        month = getMonthName(Integer.parseInt(dateParts[1]));
-        holder.dateFed.setText(day + " " + month);
-
-//        ArrayList<String> green = new ArrayList<>();
-//        ArrayList<String> brown = new ArrayList<>();
-//        if (log.getGreens()!= null){
-//            for (String s : log.getGreens()){
-//                s = s.replaceAll("[^a-zA-Z ]", "");
-//                green.add(s.trim());
-//            }
-//        }
-//        if (log.getBrowns() !=null){
-//            for (String s : log.getBrowns()){
-//                s = s.replaceAll("[^a-zA-Z ]", "");
-//                brown.add(s.trim());
-//            }
-//        }
-//        String g = process(green,25);
-//        String b = process(brown, 25);
-//
-//        holder.greenDesc.setText(g);
-//        holder.brownDesc.setText(b);
-
-    }
-
-    public static String getMonthName(int month) {
-        String[] monthNames = {
-                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-        };
-        return monthNames[month - 1];
-    }
-    private String process(ArrayList<String> list, int maxLength) {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < list.size(); i++) {
-            String s = list.get(i);
-            if (builder.length() + s.length() > maxLength) {
-                builder.append("...");
-                break;
-            }
-            if (i > 0) {
-                builder.append(", ");
-            }
-            builder.append(s);
+        if (type.equals("green")){
+            return 0;
         }
-        return builder.toString();
+        else if (type.equals("brown")){
+            return 1;
+        }
+        else return 2;
+    }
+    @Override
+        public LogViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == 0 || viewType ==1){
+            return new LogViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.food_new, parent, false));
+        }
+        if (viewType == 2){
+            return new LogViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.schedule, parent, false));
+        }
+        return new LogViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.food_new, parent, false));
+    }
+
+    @Override
+    public void onBindViewHolder(LogViewHolder holder, int position) {
+        if (getItemViewType(position) == 0 || getItemViewType(position) == 1){
+            // Green Food + Brown Food
+            Food food = foodList.get(position);
+            holder.foodText.setText("- " + food.getName() + " " + food.getAmount() + " " + food.getUnit());
+            holder.foodText.setTextColor(ContextCompat.getColor(context, R.color.textColour));
+        }
+        else if (getItemViewType(position) == 2){
+            // Schedule
+            FeedSchedule feedSchedule = scheduleList.get(position);
+            holder.foodText.setText(feedSchedule.getScheduleName());
+        }
+        else Log.i(null, "None View");
+    }
+
+    @Override
+    public int getItemCount() {
+        if (foodList == null) return scheduleList.size();
+        else return foodList.size();
     }
 }

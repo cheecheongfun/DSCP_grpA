@@ -69,10 +69,7 @@
             android:theme="@style/Theme.GreenCycle" />
         <activity
             android:name=".FeedingLog.Feeding"
-            android:exported="false" />
-        <activity
-            android:name=".FeedingLog.FeedingNew"
-            android:exported="false" />
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".LiveData.LiveData"
             android:exported="false" />

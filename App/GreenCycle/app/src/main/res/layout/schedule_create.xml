@@ -11,12 +11,13 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
         android:backgroundTint="@color/icon_brown_light"
         android:inputType="textCapWords"
         android:text="New Schedule"
         android:textSize="20sp"
+        android:layout_centerHorizontal="true"
         />
 
     <EditText
@@ -24,6 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Name"
+        android:inputType="text"
         android:textColorHint="#DFD9C5"
         android:layout_below="@+id/title"
         style="@style/NoUnderlineHint"
@@ -35,6 +37,7 @@
         android:layout_marginEnd="15dp"
         android:layout_marginTop="10dp"
         android:maxLines="1"
+        android:maxLength="20"
         android:textColor="@color/white"/>
 
     <RelativeLayout
@@ -174,7 +177,7 @@
 
         <EditText
             android:id="@+id/waterAmt"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:paddingStart="15dp"
@@ -284,7 +287,9 @@
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/radioRepeatWeekly"
                     android:hint="1"
+                    android:inputType="number"
                     android:paddingStart="10dp"
+                    android:maxLength="3"
                     android:paddingEnd="10dp"
                     android:textColor="@color/white"
                     android:gravity="center"
@@ -353,8 +358,10 @@
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/radioRepeatMonthly"
                     android:hint="1"
+                    android:inputType="number"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
+                    android:maxLength="3"
                     android:textColor="@color/white"
                     android:gravity="center"
                     android:maxLines="1"
@@ -470,7 +477,6 @@
             android:layout_centerHorizontal="true"
             android:layout_marginStart="34dp"
             android:backgroundTint="@color/transparent"
-            android:divider="@color/white"
             android:showDividers="middle"
             android:visibility="gone">
 
@@ -510,6 +516,8 @@
                     android:layout_toEndOf="@id/radioNotiDayBefore"
                     android:hint="1"
                     android:paddingStart="10dp"
+                    android:inputType="number"
+                    android:maxLength="3"
                     android:paddingEnd="10dp"
                     android:layout_marginStart="-18dp"
                     android:textColor="@color/white"
@@ -536,40 +544,35 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:weightSum="2"
         android:layout_below="@+id/notificationSect"
+        android:layout_alignStart="@id/notificationSect"
         android:background="@color/transparent"
-        android:layout_alignStart="@+id/notificationSect"
-        android:layout_alignEnd="@+id/notificationSect"
+        android:orientation="horizontal"
         android:layout_marginBottom="10dp">
-
         <TextView
             android:id="@+id/scheduleCancel"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="Cancel"
-            android:background="@color/transparent"
             android:gravity="center"
-            android:textSize="16sp"
-            android:layout_marginStart="50dp"
-            />
-
+            android:textSize="18sp"
+            android:background="@color/transparent"
+            android:layout_weight="1"/>
         <TextView
             android:id="@+id/scheduleSave"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="Save"
-            android:background="@color/transparent"
             android:gravity="center"
-            android:textSize="16sp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="50dp"
-            />
+            android:textSize="18sp"
+            android:background="@color/transparent"
+            android:layout_weight="1"/>
+    </LinearLayout>
 
-    </RelativeLayout>
 
 
 

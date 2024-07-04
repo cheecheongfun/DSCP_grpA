@@ -14,13 +14,14 @@ public class FeedSchedule implements Parcelable {
     private HashMap<String, ArrayList<String>> repeatDetails; // Additional details like days for weekly repeats
     private String notification;
     private int waterAmt;
-    private String startDate; // Store startDate as String
+    private String refDate;
+    private ArrayList<String> dates;
     public FeedSchedule(){
 
     }
 
     // Constructor
-    public FeedSchedule(String scheduleName, ArrayList<Food> greenFood, ArrayList<Food> brownFood, String repeatType, HashMap<String, ArrayList<String>> repeatDetails, String notification, int waterAmt, String startDate) {
+    public FeedSchedule(String scheduleName, ArrayList<Food> greenFood, ArrayList<Food> brownFood, String repeatType, HashMap<String, ArrayList<String>> repeatDetails, String notification, int waterAmt, String refDate, ArrayList<String> dates) {
         this.scheduleName = scheduleName;
         this.greenFood = greenFood;
         this.brownFood = brownFood;
@@ -28,7 +29,8 @@ public class FeedSchedule implements Parcelable {
         this.repeatDetails = repeatDetails;
         this.notification = notification;
         this.waterAmt = waterAmt;
-        this.startDate = startDate; // Store startDate as String
+        this.refDate = refDate;
+        this.dates = dates;
     }
 
     // Getter and setter methods
@@ -88,13 +90,15 @@ public class FeedSchedule implements Parcelable {
         this.waterAmt = waterAmt;
     }
 
-    public String getStartDate() {
-        return startDate;
+    public String getRefDate() {
+        return refDate;
     }
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
+    public void setRefDate(String refDate) {
+        this.refDate = refDate;
     }
+    public ArrayList<String> getDates() {return dates;}
+    public void setDates(ArrayList<String> dates){ this.dates = dates;}
 
     // Parcelable implementation
     protected FeedSchedule(Parcel in) {
@@ -105,7 +109,9 @@ public class FeedSchedule implements Parcelable {
         repeatDetails = (HashMap<String, ArrayList<String>>) in.readSerializable();
         notification = in.readString();
         waterAmt = in.readInt();
-        startDate = in.readString(); // Read String
+        refDate = in.readString();
+        dates = new ArrayList<>();
+        in.readList(this.dates, String.class.getClassLoader());
     }
 
     public static final Creator<FeedSchedule> CREATOR = new Creator<FeedSchedule>() {
@@ -134,6 +140,8 @@ public class FeedSchedule implements Parcelable {
         parcel.writeSerializable(repeatDetails);
         parcel.writeString(notification);
         parcel.writeInt(waterAmt);
-        parcel.writeString(startDate); // Write String
+        parcel.writeString(refDate); // Write String
+        parcel.writeList(dates);
     }
+
 }
