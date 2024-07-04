@@ -33,6 +33,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -85,6 +86,7 @@ public class FullPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_full_post);
 
         postTitle = findViewById(R.id.postTitle);
+        TextView postTags = findViewById(R.id.postTags);
         postContent = findViewById(R.id.postContent);
         likeCount = findViewById(R.id.likeCount);
         postdate = findViewById(R.id.postdate);
@@ -121,6 +123,12 @@ public class FullPostActivity extends AppCompatActivity {
 
         postTitle.setText(post.getTitle());
         postContent.setText(post.getContent());
+        if (post.getTags() != null && !post.getTags().isEmpty()) {
+            String tagsText = "Tags: " + String.join(", ", post.getTags());
+            postTags.setText(tagsText);
+        } else {
+            postTags.setText("");
+        }
 
         commentsAdapter = new CommentsAdapter(commentsList,user,post,this);
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -147,19 +155,25 @@ public class FullPostActivity extends AppCompatActivity {
         updateLikeButton(likedBy.contains(user.getUsername()));
 
         List<String> imageUrls = post.getImageUrls();
+        Log.d("PostAdapter", "Number of images: " + imageUrls.size());
+
         if (imageUrls != null && !imageUrls.isEmpty()) {
             postImagePager.setVisibility(View.VISIBLE);
-            indicator.setVisibility(View.VISIBLE);
-
+            // Set up the adapter for the ViewPager
             ImagePagerAdapter imagePagerAdapter = new ImagePagerAdapter(this, imageUrls, position1 -> {
                 Uri currentImageUri = Uri.parse(imageUrls.get(position1));
                 showFullImageDialog(this, currentImageUri);
             });
-
             postImagePager.setAdapter(imagePagerAdapter);
-            indicator.setViewPager(postImagePager);
-            imagePagerAdapter.registerDataSetObserver(indicator.getDataSetObserver());
 
+            // Determine visibility of the CircleIndicator
+            if (imageUrls.size() > 1) {
+                indicator.setVisibility(View.VISIBLE);
+                indicator.setViewPager(postImagePager);
+                imagePagerAdapter.registerDataSetObserver(indicator.getDataSetObserver());
+            } else {
+               indicator.setVisibility(View.GONE);
+            }
         } else {
             postImagePager.setVisibility(View.GONE);
             indicator.setVisibility(View.GONE);
@@ -286,6 +300,7 @@ public class FullPostActivity extends AppCompatActivity {
         }
     }
     private void postComment() {
+        postCommentButton.setEnabled(false);
         String commentText = commentInput.getText().toString();
         if (commentText.isEmpty()) {
             Toast.makeText(this, "Comment cannot be empty", Toast.LENGTH_SHORT).show();
@@ -300,24 +315,58 @@ public class FullPostActivity extends AppCompatActivity {
         comment.setTimestamp(new Timestamp(new Date()));  // Capture the timestamp at the time of posting
         comment.setPostId(post.getId());
 
-        // Add the comment to Firestore
-        firestoreDb.collection("Post")
+        // Reference to the post document
+        final DocumentReference postRef = firestoreDb.collection("Post")
                 .document("posts")
                 .collection("posts")
-                .document(post.getId())
-                .collection("comments")
-                .add(comment)
-                .addOnSuccessListener(docRef -> {
-                    comment.setId(docRef.getId());  // Set the ID for the newly created comment
-                    commentsAdapter.notifyDataSetChanged();  // Notify the adapter of the new item
-                    commentInput.setText(""); // Clear the input after posting
-                    Toast.makeText(this, "Comment added", Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e -> {
-                    Log.e("Firebase", "Error adding comment", e);
-                    Toast.makeText(this, "Failed to post comment", Toast.LENGTH_SHORT).show();
-                });
+                .document(post.getId());
+
+        // Reference to store user's comment IDs
+        DatabaseReference userCommentsRef = realtimeDb.child("users").child(user.getUsername()).child("commentIds");
+
+        // Run a transaction to add the comment and increment the commentCount atomically
+        firestoreDb.runTransaction(transaction -> {
+            DocumentSnapshot postSnapshot = transaction.get(postRef);
+            Long currentCommentCount = postSnapshot.getLong("commentCount");
+            if (currentCommentCount == null) {
+                currentCommentCount = 0L;
+            }
+            transaction.update(postRef, "commentCount", currentCommentCount + 1);
+
+            // Add the comment to Firestore within the same transaction and get the new document ID
+            DocumentReference newCommentRef = postRef.collection("comments").document();
+            transaction.set(newCommentRef, comment);
+
+            // Use the document ID of the new comment
+            String newCommentId = newCommentRef.getId();
+
+            // Return the new comment ID for further processing in the onSuccess listener
+            return newCommentId;
+        }).addOnSuccessListener(newCommentId -> {
+            commentsAdapter.notifyDataSetChanged();  // Notify the adapter of the new item
+            commentInput.setText(""); // Clear the input after posting
+            Toast.makeText(this, "Comment added", Toast.LENGTH_SHORT).show();
+
+            // Update local user object with new comment ID
+            List<String> commentIds = user.getComments();
+            if (commentIds == null) {
+                commentIds = new ArrayList<>();
+            }
+            commentIds.add(newCommentId);
+            user.setComments(new ArrayList<>(commentIds));  // Assuming setCommentIds accepts an ArrayList
+
+            // Save the updated comment IDs to the Realtime Database
+            userCommentsRef.setValue(commentIds);
+
+            postCommentButton.setEnabled(true);
+
+        }).addOnFailureListener(e -> {
+            Log.e("Firebase", "Error adding comment", e);
+            Toast.makeText(this, "Failed to post comment", Toast.LENGTH_SHORT).show();
+            postCommentButton.setEnabled(true);
+        });
     }
+
 
 
 

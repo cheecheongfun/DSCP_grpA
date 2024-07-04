@@ -7,6 +7,8 @@ android {
     namespace = "sg.edu.np.mad.greencycle"
     compileSdk = 34
 
+
+
     defaultConfig {
         applicationId = "sg.edu.np.mad.greencycle"
         minSdk = 29
@@ -33,6 +35,15 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    packaging {
+        resources {
+            excludes.add("META-INF/NOTICE.md")
+            excludes.add("META-INF/LICENSE.md")
+        }
+    }
+
+
 }
 
 
@@ -73,5 +84,11 @@ dependencies {
     implementation ("de.hdodenhof:circleimageview:3.1.0")
     implementation ("com.kizitonwose.calendar:view:2.0.0")
     implementation ("me.relex:circleindicator:2.1.6")
+    implementation ("com.wdullaer:materialdatetimepicker:4.2.3")
+    implementation ("com.google.android.material:material:1.8.0")
+    implementation ("com.sun.mail:android-mail:1.6.6")
+    implementation ("com.sun.mail:android-activation:1.6.6")
+
+
 
 }

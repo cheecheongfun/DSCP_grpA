@@ -14,102 +14,82 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="82dp"
         android:layout_marginEnd="5dp"
+        android:backgroundTint="@color/white"
         android:forceDarkAllowed="false"
         android:iconifiedByDefault="false"
         android:queryHint="Search here"
-        android:theme="@style/CustomSearchView" />
+       />
 
     <LinearLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="350dp"
+    android:id="@+id/tabLayout"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:layout_marginTop="183dp"
+    android:layout_marginBottom="20dp">
+
+    <TextView
+        android:id="@+id/Top"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:text="Top"
         android:gravity="center"
-        android:layout_marginTop="183dp"
-        android:layout_marginBottom="20dp">
+        android:textSize="16sp"
+        android:clickable="true"
+        android:focusable="true"
+        android:textColor="@color/text_color_selector"/>
 
+    <TextView
+        android:id="@+id/New"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="New"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:clickable="true"
+        android:focusable="true"
+        android:textColor="@color/text_color_selector"/>
 
-        <TextView
-            android:id="@+id/Hot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Hot"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:clickable="true"
-            android:focusable="true"
-            android:textColor="@color/text_color_selector"/>
+    <TextView
+        android:id="@+id/Hot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Hot"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:clickable="true"
+        android:focusable="true"
+        android:textColor="@color/text_color_selector"/>
 
-        <TextView
-            android:id="@+id/New"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="New"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:clickable="true"
-            android:focusable="true"
-            android:textColor="@color/text_color_selector"/>
-
-        <TextView
-            android:id="@+id/Top"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Top"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:clickable="true"
-            android:focusable="true"
-            android:textColor="@color/text_color_selector"/>
-    </LinearLayout>
+    <TextView
+        android:id="@+id/All"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="All"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:clickable="true"
+        android:focusable="true"
+        android:textColor="@color/text_color_selector"/>
+</LinearLayout>
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
         android:layout_width="match_parent"
-        android:layout_height="59dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="130dp">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/search"
+        android:layout_marginTop="5dp"> <!-- Adjust as necessary -->
 
         <LinearLayout
+            android:id="@+id/tagsContainer"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/button1"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:backgroundTint="@color/light_green"
-                android:text="Button 1" />
-
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:backgroundTint="@color/light_green"
-                android:text="Button 2" />
-
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:backgroundTint="@color/light_green"
-                android:text="Button 3" />
-
-            <Button
-                android:id="@+id/button4"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:backgroundTint="@color/light_green"
-                android:text="Button 4" />
-
-            <!-- Add more buttons as needed -->
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
     </HorizontalScrollView>
 
     <androidx.recyclerview.widget.RecyclerView

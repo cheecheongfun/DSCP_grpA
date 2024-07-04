@@ -2,10 +2,10 @@ package sg.edu.np.mad.greencycle.SolarForecast;
 
 import java.util.ArrayList;
 
-public class HumidityResponse {
+public class TemperatureResponse {
     public ApiInfo api_info;
     public Metadata metadata;
-    public ArrayList<HumidityItem> items;
+    public ArrayList<TemperatureItem> items;
 
     public static class ApiInfo {
         public String status;
@@ -29,7 +29,7 @@ public class HumidityResponse {
         }
     }
 
-    public static class HumidityItem {
+    public static class TemperatureItem {
         public String timestamp;
         public ArrayList<StationReading> readings;
 

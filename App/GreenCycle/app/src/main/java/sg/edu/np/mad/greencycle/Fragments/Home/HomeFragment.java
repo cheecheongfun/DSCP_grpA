@@ -28,6 +28,7 @@ import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.Forum.Forum;
 import sg.edu.np.mad.greencycle.TankSelection.TankSelection;
 import sg.edu.np.mad.greencycle.NPKvalue.npk_value;
+import sg.edu.np.mad.greencycle.Profile.options;
 import sg.edu.np.mad.greencycle.Profile.profile;
 import sg.edu.np.mad.greencycle.R;
 import sg.edu.np.mad.greencycle.SolarForecast.Forecast;
@@ -91,6 +92,7 @@ public class HomeFragment extends Fragment {
         settingsBtn = view.findViewById((R.id.settings));
         drawerLayout = view.findViewById(R.id.drawer_layout);
         LinearLayout profileLayout = view.findViewById(R.id.nav_profile_layout);
+        LinearLayout optionLayout = view.findViewById(R.id.nav_option_two_layout);
         imageView = view.findViewById(R.id.profileImageView);
 
         if (username != null) {
@@ -104,6 +106,13 @@ public class HomeFragment extends Fragment {
 
         profileLayout.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), profile.class);
+            intent.putExtra("user", user);
+            startActivity(intent);
+            drawerLayout.closeDrawer(GravityCompat.END);
+        });
+
+        optionLayout.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), options.class);
             intent.putExtra("user", user);
             startActivity(intent);
             drawerLayout.closeDrawer(GravityCompat.END);
@@ -191,6 +200,11 @@ public class HomeFragment extends Fragment {
         outputUnit.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         outputUnit.setOnValueChangedListener((numberPicker, i, i1) -> newOutputUnit = units[i1]);
 
+        // Add listeners to NumberPickers
+        inputNo.setOnValueChangedListener((numberPicker, oldVal, newVal) -> convert(units));
+        inputUnit.setOnValueChangedListener((numberPicker, oldVal, newVal) -> convert(units));
+        outputUnit.setOnValueChangedListener((numberPicker, oldVal, newVal) -> convert(units));
+
         solarForecastBtn.setOnClickListener(view16 -> {
             Intent forecast = new Intent(getContext(), Forecast.class);
             forecast.putExtra("user", user);
@@ -199,6 +213,59 @@ public class HomeFragment extends Fragment {
 
         return view;
     }
+
+    private void convert(String[] units) {
+        int inputAmount = inputNo.getValue();
+        String inputUnitStr = units[inputUnit.getValue()];
+        String outputUnitStr = units[outputUnit.getValue()];
+
+        // Convert the input amount to the base unit (ml)
+        double baseAmount = toBaseUnit(inputAmount, inputUnitStr);
+
+        // Convert the base amount to the output unit
+        double convertedValue = fromBaseUnit(baseAmount, outputUnitStr);
+
+        // Format the converted value to 3 significant figures
+        String formattedValue = String.format("%.3g", convertedValue);
+
+        outputNo.setText(formattedValue);
+    }
+
+    private double toBaseUnit(int amount, String unit) {
+        switch (unit) {
+            case "ml":
+                return amount;
+            case "g":
+                return amount * 1.0; // Assuming 1 g of water = 1 ml
+            case "tbsp":
+                return amount * 15.0; // 1 tbsp = 15 ml
+            case "tsp":
+                return amount * 5.0; // 1 tsp = 5 ml
+            case "cup":
+                return amount * 240.0; // 1 cup = 240 ml
+            default:
+                throw new IllegalArgumentException("Unknown unit: " + unit);
+        }
+    }
+
+    private double fromBaseUnit(double amount, String unit) {
+        switch (unit) {
+            case "ml":
+                return amount;
+            case "g":
+                return amount * 1.0; // Assuming 1 ml of water = 1 g
+            case "tbsp":
+                return amount / 15.0; // 1 tbsp = 15 ml
+            case "tsp":
+                return amount / 5.0; // 1 tsp = 5 ml
+            case "cup":
+                return amount / 240.0; // 1 cup = 240 ml
+            default:
+                throw new IllegalArgumentException("Unknown unit: " + unit);
+        }
+    }
+
+
 
 
 

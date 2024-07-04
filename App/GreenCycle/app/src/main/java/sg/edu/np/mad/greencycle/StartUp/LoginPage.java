@@ -29,7 +29,7 @@ public class LoginPage extends AppCompatActivity {
 
     EditText etUsername, etPassword;
     Button btnAuth, loginButton, registerButton;
-    TextView tvAuthStatus;
+    TextView tvAuthStatus, forgotpasswordButton;
     private Executor executor;
     private BiometricPrompt.PromptInfo promptInfo;
     private BiometricPrompt biometricPrompt;
@@ -49,6 +49,7 @@ public class LoginPage extends AppCompatActivity {
         tvAuthStatus = findViewById(R.id.tvAuthStatus);
         loginButton = findViewById(R.id.loginButton);
         registerButton = findViewById(R.id.register);
+        forgotpasswordButton = findViewById(R.id.forgotPassword);
         executor = ContextCompat.getMainExecutor(this);
         FirebaseApp.initializeApp(this);
 
@@ -65,17 +66,25 @@ public class LoginPage extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             User user = dataSnapshot.getValue(User.class);
-                            String storedSalt = user.getSalt();
-                            String storedHashedPassword = user.getPassword();
-                            String hashedEnteredPassword = HashUtils.hashPassword(password, storedSalt);
+                            if (user != null) {
+                                String storedSalt = user.getSalt();
+                                Log.i(null, "StoredSalt: " + storedSalt);
+                                String storedHashedPassword = user.getPassword();
+                                Log.i(null, "storedHashedPassword: " + storedHashedPassword);
+                                String hashedEnteredPassword = HashUtils.hashPassword(password, storedSalt);
+                                Log.i(null, "enteredHash: " + hashedEnteredPassword);
 
-                            if (storedHashedPassword.equals(hashedEnteredPassword)) {
-                                Log.i(null, "Login success");
-                                Intent intent = new Intent(LoginPage.this, MainActivity.class);
-                                intent.putExtra("user", user);
-                                intent.putExtra("tab", "home_tab");
-                                startActivity(intent);
-                                finish();
+                                if (storedHashedPassword.equals(hashedEnteredPassword)) {
+                                    Log.i(null, "Login success");
+                                    Intent intent = new Intent(LoginPage.this, MainActivity.class);
+                                    intent.putExtra("user", user);
+                                    intent.putExtra("tab", "home_tab");
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    tvAuthStatus.setText("Login Failed: Invalid username or password");
+                                    Log.i(null, "Login failed");
+                                }
                             } else {
                                 tvAuthStatus.setText("Login Failed: Invalid username or password");
                                 Log.i(null, "Login failed");
@@ -92,6 +101,7 @@ public class LoginPage extends AppCompatActivity {
                         Log.i(null, "Database error");
                     }
                 });
+
             } else {
                 tvAuthStatus.setText("Please enter username and password");
             }
@@ -99,6 +109,11 @@ public class LoginPage extends AppCompatActivity {
 
         registerButton.setOnClickListener(view -> {
             Intent intent = new Intent(LoginPage.this, RegistrationPage.class);
+            startActivity(intent);
+        });
+
+        forgotpasswordButton.setOnClickListener(view -> {
+            Intent intent = new Intent(LoginPage.this, ForgotPasswordActivity.class);
             startActivity(intent);
         });
     }

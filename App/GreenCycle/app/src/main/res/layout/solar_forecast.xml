@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/forecastPage"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SolarForecast.Forecast"
@@ -13,38 +11,40 @@
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableStart="@drawable/back_button"
-        android:layout_marginTop="15dp"
         android:layout_marginStart="15dp"
-        android:theme="@style/DrawableTint" />
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Forecasting"
-        android:textSize="30dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/backButton"/>
+        android:layout_marginTop="15dp"
+        android:drawableStart="@drawable/back_button"
+        android:theme="@style/DrawableTint"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
 
     <TextView
         android:id="@+id/refresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/backButton"
-        android:layout_alignBottom="@+id/backButton"
-        android:layout_alignParentEnd="true"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="15dp"
         android:drawableStart="@drawable/baseline_refresh_24"
-        android:theme="@style/DrawableTint" />
+        android:theme="@style/DrawableTint"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true" />
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="477dp"
+        android:layout_below="@id/backButton"
+        android:layout_marginTop="16dp" />
 
-
-    <TextView
-        android:id="@+id/humidity"
+    <me.relex.circleindicator.CircleIndicator3
+        android:id="@+id/indicator"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/title"
-        android:layout_centerHorizontal="true" />
-
-
+        android:layout_height="20dp"
+        android:layout_below="@id/viewPager"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        app:ci_drawable="@drawable/active_indicator"
+        app:ci_drawable_unselected="@drawable/inactive_indicator"
+        android:visibility="visible"/>
 </RelativeLayout>
+

@@ -65,10 +65,13 @@
         <me.relex.circleindicator.CircleIndicator
             android:id="@+id/indicator"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
             android:layout_below="@id/postImagePager"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="5dp"
+            app:ci_drawable="@drawable/active_indicator"
+            app:ci_drawable_unselected="@drawable/inactive_indicator"
+            android:visibility="gone"/>
 
         <!-- Post Content TextView -->
         <TextView
@@ -114,7 +117,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/seeMore"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="9dp"
             android:layout_toEndOf="@id/likeButton"
             android:text="10"
             android:textSize="14sp" />
@@ -138,7 +141,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/seeMore"
             android:layout_marginStart="-6dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="10dp"
             android:layout_toEndOf="@id/post_comment_button"
             android:text="5"
             android:textSize="14sp" />

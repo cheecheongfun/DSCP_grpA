@@ -31,6 +31,19 @@
                 app:civ_border_color="#FF000000"
                 app:civ_border_width="1dp" />
 
+
+            <TextView
+                android:id="@+id/postTags"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/postContent"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="100dp"
+                android:textColor="@color/light_grey"
+                android:text="Tags:"
+                android:textSize="12sp"/>
+
+
             <!-- Author's display name -->
 
             <!-- Post title -->
@@ -72,11 +85,13 @@
             <me.relex.circleindicator.CircleIndicator
                 android:id="@+id/indicator"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:layout_below="@id/postImagePager"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
-                android:visibility="visible" />
+                android:layout_marginTop="5dp"
+                app:ci_drawable="@drawable/active_indicator"
+                app:ci_drawable_unselected="@drawable/inactive_indicator"
+                android:visibility="gone"/>
 
             <!-- Post content text -->
             <TextView

@@ -10,10 +10,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="light_grey">#D3D3D3</color>
+    <color name="dark_gray">#757272</color>
     <color name="android_hint">#9E9E9E</color>
     <color name="textColour">#47525E</color>
     <color name="transparent">#00000000</color>
     <color name="red">#FF0000</color>
     <color name="light_yellow">#FFFF2E</color>
+    <color name="indicator_active">#FF6699CC</color>
+    <color name="indicator_inactive">#FF888888</color> <!-- Grey for inactive -->
+
 
 </resources>
