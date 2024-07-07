@@ -925,6 +925,7 @@ public class Feeding extends AppCompatActivity {
         logs.setVisibility(View.GONE);
         scheduleDetails.setVisibility(View.GONE);
         bottomBtnLog.setVisibility(View.GONE);
+        schedule.setVisibility(View.VISIBLE);
         if (getAllScheduledDates(scheduleList).contains(date)){
             FeedSchedule sched = findFeedScheduleByDate(scheduleList, date);
             android.util.Log.i("load Schedule for date", "In if: " );
