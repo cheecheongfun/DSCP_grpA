@@ -105,6 +105,11 @@
             android:name=".StartUp.MainActivity"
             android:exported="true"
             android:label="@string/app_name" />
+
+        <activity
+            android:name=".StartUp.EmailVerificationActivity"
+            android:exported="true"
+            android:label="@string/app_name" />
         <activity
             android:name=".NPKvalue.npk_value"
             android:exported="true" />
