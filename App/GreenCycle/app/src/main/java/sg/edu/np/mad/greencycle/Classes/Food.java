@@ -4,30 +4,27 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Food implements Parcelable {
-    private String name, unit;
+    private String name;
     private double amount;
 
     // Constructor
     public Food(){
 
     }
-    public Food(String name, double amount, String unit) {
+    public Food(String name, double amount) {
         this.name = name;
         this.amount = amount;
-        this.unit = unit;
     }
 
     // Parcelable implementation
     protected Food(Parcel in) {
         name = in.readString();
-        unit = in.readString();
         amount = in.readDouble();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
-        dest.writeString(unit);
         dest.writeDouble(amount);
     }
 
@@ -46,10 +43,6 @@ public class Food implements Parcelable {
     public String getName() { return name; }
 
     public void setName(String name) { this.name = name; }
-
-    public String getUnit() { return unit; }
-
-    public void setUnit(String unit) { this.unit = unit; }
 
     public double getAmount() { return amount; }
 

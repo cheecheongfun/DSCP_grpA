@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 import sg.edu.np.mad.greencycle.Forum.Comment;
-import sg.edu.np.mad.greencycle.LiveData.Tank;
 
 public class User implements Parcelable {
     private String username;

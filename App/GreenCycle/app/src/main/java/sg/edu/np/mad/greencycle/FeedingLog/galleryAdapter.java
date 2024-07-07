@@ -1,4 +1,4 @@
-package sg.edu.np.mad.greencycle.ImageLog;
+package sg.edu.np.mad.greencycle.FeedingLog;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -53,8 +55,7 @@ public class galleryAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.image_item, parent, false);
             holder = new ViewHolder();
             holder.imageView = convertView.findViewById(R.id.compostimage);
-            holder.dateText = convertView.findViewById(R.id.tvDate);
-            holder.deleteButton = convertView.findViewById(R.id.deleteimage);
+            holder.imageCard = convertView.findViewById(R.id.imageCard);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -67,13 +68,13 @@ public class galleryAdapter extends BaseAdapter {
                 .placeholder(R.drawable.uploadicon)
                 .into(holder.imageView);
 
-        if (holder.dateText != null) {
-            holder.dateText.setText(imageData.get("timestamp"));
-        }
-
-        holder.deleteButton.setOnClickListener(v -> {
-            if (deletionListener != null) {
-                deletionListener.onDeleteImage(imageData);
+        holder.imageCard.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (deletionListener != null) {
+                    deletionListener.onDeleteImage(imageData);
+                }
+                return false;
             }
         });
 
@@ -84,5 +85,6 @@ public class galleryAdapter extends BaseAdapter {
         ImageView imageView;
         TextView dateText;
         ImageButton deleteButton;
+        CardView imageCard;
     }
 }

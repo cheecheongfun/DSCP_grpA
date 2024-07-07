@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:theme="@style/AppBackgroundColour"
-    android:background="@drawable/rounded_corners_brown_dark"
-    android:backgroundTint="@color/icon_brown_light">
+    android:id="@+id/create"
+    android:background="#F1F1F3"
+    app:cornerRadius="50dp">
 
     <TextView
         android:id="@+id/title"
@@ -13,32 +14,30 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
-        android:backgroundTint="@color/icon_brown_light"
-        android:inputType="textCapWords"
         android:text="New Schedule"
         android:textSize="20sp"
         android:layout_centerHorizontal="true"
+        android:background="@color/transparent"
         />
 
     <EditText
         android:id="@+id/scheduleName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Name"
+        android:hint="Title"
         android:inputType="text"
-        android:textColorHint="#DFD9C5"
+        android:textColorHint="@color/android_hint"
         android:layout_below="@+id/title"
         style="@style/NoUnderlineHint"
         android:layout_marginStart="15dp"
         android:padding="10dp"
         android:paddingStart="20dp"
         android:background="@drawable/rounded_corner_mid_green"
-        android:backgroundTint="@color/icon_brown_dark"
+        android:backgroundTint="@color/white"
         android:layout_marginEnd="15dp"
         android:layout_marginTop="10dp"
         android:maxLines="1"
-        android:maxLength="20"
-        android:textColor="@color/white"/>
+        android:maxLength="20"/>
 
     <RelativeLayout
         android:id="@+id/greenSect"
@@ -49,7 +48,7 @@
         android:layout_alignStart="@+id/scheduleName"
         android:layout_alignEnd="@+id/scheduleName"
         android:background="@drawable/rounded_corner_mid_green"
-        android:backgroundTint="@color/icon_brown_dark">
+        android:backgroundTint="@color/white">
 
         <TextView
             android:id="@+id/green"
@@ -58,12 +57,12 @@
             android:padding="10dp"
             android:paddingStart="15dp"
             android:background="@drawable/rounded_corner_mid_green"
-            android:backgroundTint="@color/icon_brown_dark"
+            android:backgroundTint="@color/transparent"
             android:text="Greens"
             android:textSize="18sp"
-            android:textColor="#DFD9C5"
+            android:textColor="@color/android_hint"
             android:drawableStart="@drawable/outline_nest_eco_leaf_24"
-            android:drawableTint="@color/icon_brown_light"
+            android:drawableTint="@color/android_hint"
             android:drawablePadding="10dp"/>
 
 
@@ -74,7 +73,7 @@
             android:layout_alignParentEnd="true"
             android:padding="10dp"
             android:paddingEnd="15dp"
-            android:drawableTint="@color/icon_brown_light"
+            android:drawableTint="@color/android_hint"
             android:drawableStart="@drawable/baseline_close_24"
             android:layout_alignBottom="@+id/green"
             android:backgroundTint="@color/transparent"
@@ -85,7 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/green"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/light_grey"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="16dp"
             android:visibility="gone"/>
@@ -111,7 +110,7 @@
         android:layout_alignStart="@+id/greenSect"
         android:layout_alignEnd="@+id/greenSect"
         android:background="@drawable/rounded_corner_mid_green"
-        android:backgroundTint="@color/icon_brown_dark">
+        android:backgroundTint="@color/white">
 
         <TextView
             android:id="@+id/brown"
@@ -120,12 +119,12 @@
             android:padding="10dp"
             android:paddingStart="15dp"
             android:background="@drawable/rounded_corner_mid_green"
-            android:backgroundTint="@color/icon_brown_dark"
+            android:backgroundTint="@color/transparent"
             android:text="Browns"
             android:textSize="18sp"
-            android:textColor="#DFD9C5"
+            android:textColor="@color/android_hint"
             android:drawableStart="@drawable/outline_nest_eco_leaf_24"
-            android:drawableTint="@color/icon_brown_light"
+            android:drawableTint="@color/android_hint"
             android:drawablePadding="10dp"/>
 
 
@@ -136,7 +135,7 @@
             android:layout_alignParentEnd="true"
             android:padding="10dp"
             android:paddingEnd="15dp"
-            android:drawableTint="@color/icon_brown_light"
+            android:drawableTint="@color/android_hint"
             android:drawableStart="@drawable/baseline_close_24"
             android:layout_alignBottom="@+id/brown"
             android:backgroundTint="@color/transparent"
@@ -147,7 +146,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/brown"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/light_grey"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="16dp"
             android:visibility="gone"/>
@@ -173,7 +172,7 @@
         android:layout_alignStart="@+id/brownSect"
         android:layout_alignEnd="@+id/brownSect"
         android:background="@drawable/rounded_corner_mid_green"
-        android:backgroundTint="@color/icon_brown_dark">
+        android:backgroundTint="@color/white">
 
         <EditText
             android:id="@+id/waterAmt"
@@ -182,13 +181,14 @@
             android:padding="10dp"
             android:paddingStart="15dp"
             android:background="@drawable/rounded_corner_mid_green"
-            android:backgroundTint="@color/icon_brown_dark"
+            android:backgroundTint="@color/transparent"
             android:hint="Water (ml)"
             android:textSize="18sp"
-            android:textColorHint="#DFD9C5"
-            android:textColor="@color/white"
+            android:textColorHint="@color/android_hint"
+            android:textColor="@color/textColour"
             android:drawableStart="@drawable/outline_water_drop_24"
             android:drawablePadding="10dp"
+            android:drawableTint="@color/android_hint"
             android:inputType="number"/>
 
     </RelativeLayout>
@@ -202,7 +202,8 @@
         android:layout_alignStart="@+id/waterSect"
         android:layout_alignEnd="@+id/waterSect"
         android:background="@drawable/rounded_corner_mid_green"
-        android:backgroundTint="@color/icon_brown_dark">
+        android:backgroundTint="@color/white"
+        android:theme="@style/AppBackgroundColour">
 
         <TextView
             android:id="@+id/repeatText"
@@ -211,11 +212,12 @@
             android:padding="10dp"
             android:paddingStart="15dp"
             android:background="@drawable/rounded_corner_mid_green"
-            android:backgroundTint="@color/icon_brown_dark"
+            android:backgroundTint="@color/transparent"
             android:textSize="18sp"
-            android:textColor="#DFD9C5"
+            android:textColor="@color/android_hint"
             android:text="Don't repeat"
             android:drawableStart="@drawable/outline_repeat_24"
+            android:drawableTint="@color/android_hint"
             android:drawablePadding="10dp"/>
 
         <TextView
@@ -225,7 +227,7 @@
             android:layout_alignParentEnd="true"
             android:padding="10dp"
             android:paddingEnd="15dp"
-            android:drawableTint="@color/icon_brown_light"
+            android:drawableTint="@color/android_hint"
             android:drawableStart="@drawable/baseline_close_24"
             android:layout_alignBottom="@+id/repeatText"
             android:backgroundTint="@color/transparent"
@@ -236,10 +238,10 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/repeatText"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/light_grey"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="16dp"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <LinearLayout
             android:id="@+id/radioRepeatGroup"
@@ -258,14 +260,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Don't repeat"
-                android:textColor="@color/white"
                 android:textSize="17sp"/>
             <RadioButton
                 android:id="@+id/radioRepeatDaily"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Everyday"
-                android:textColor="@color/white"
                 android:textSize="17sp"/>
             <RelativeLayout
                 android:id="@+id/second"
@@ -278,7 +278,6 @@
                     android:layout_height="wrap_content"
                     android:theme="@style/CustomRadioButton"
                     android:text="Every"
-                    android:textColor="@color/white"
                     android:textSize="17sp"/>
 
                 <EditText
@@ -291,7 +290,6 @@
                     android:paddingStart="10dp"
                     android:maxLength="3"
                     android:paddingEnd="10dp"
-                    android:textColor="@color/white"
                     android:gravity="center"
                     android:maxLines="1"
                     android:layout_alignBottom="@id/radioRepeatWeekly"
@@ -302,7 +300,6 @@
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/secondEdit"
                     android:text="week"
-                    android:textColor="@color/white"
                     android:textSize="17sp"
                     android:backgroundTint="@color/transparent"
                     android:layout_alignBottom="@id/secondEdit"
@@ -349,7 +346,6 @@
                     android:layout_height="wrap_content"
                     android:theme="@style/CustomRadioButton"
                     android:text="Every"
-                    android:textColor="@color/white"
                     android:textSize="17sp"/>
 
                 <EditText
@@ -362,7 +358,6 @@
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
                     android:maxLength="3"
-                    android:textColor="@color/white"
                     android:gravity="center"
                     android:maxLines="1"
                     android:layout_alignBottom="@id/radioRepeatMonthly"
@@ -373,7 +368,6 @@
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/thirdEdit"
                     android:text="month"
-                    android:textColor="@color/white"
                     android:textSize="17sp"
                     android:backgroundTint="@color/transparent"
                     android:layout_alignBottom="@id/thirdEdit"
@@ -428,7 +422,7 @@
         android:layout_alignStart="@+id/repeat"
         android:layout_alignEnd="@+id/repeat"
         android:background="@drawable/rounded_corner_mid_green"
-        android:backgroundTint="@color/icon_brown_dark"
+        android:backgroundTint="@color/white"
         android:layout_marginBottom="10dp">
 
         <TextView
@@ -438,11 +432,12 @@
             android:padding="10dp"
             android:paddingStart="15dp"
             android:background="@drawable/rounded_corner_mid_green"
-            android:backgroundTint="@color/icon_brown_dark"
+            android:backgroundTint="@color/white"
             android:textSize="18sp"
-            android:textColor="#DFD9C5"
+            android:textColor="@color/android_hint"
             android:text="Don't notify"
             android:drawableStart="@drawable/outline_notifications_24"
+            android:drawableTint="@color/android_hint"
             android:drawablePadding="10dp"/>
 
         <TextView
@@ -452,7 +447,7 @@
             android:layout_alignParentEnd="true"
             android:padding="10dp"
             android:paddingEnd="15dp"
-            android:drawableTint="@color/icon_brown_light"
+            android:drawableTint="@color/android_hint"
             android:drawableStart="@drawable/baseline_close_24"
             android:layout_alignBottom="@+id/notiText"
             android:backgroundTint="@color/transparent"
@@ -463,7 +458,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/notiText"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/light_grey"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="16dp"
             android:visibility="gone"/>
@@ -486,14 +481,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Don't notify"
-                android:textColor="@color/white"
                 android:textSize="17sp"/>
             <RadioButton
                 android:id="@+id/radioNotiDay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="On the day itself"
-                android:textColor="@color/white"
                 android:textSize="17sp"/>
 
             <RelativeLayout
@@ -506,7 +499,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:theme="@style/CustomRadioButton"
-                    android:textColor="@color/white"
                     android:textSize="17sp"/>
 
                 <EditText
@@ -520,7 +512,6 @@
                     android:maxLength="3"
                     android:paddingEnd="10dp"
                     android:layout_marginStart="-18dp"
-                    android:textColor="@color/white"
                     android:gravity="center"
                     android:maxLines="1"
                     android:layout_alignBottom="@id/radioNotiDayBefore"
@@ -531,7 +522,6 @@
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/fourthEdit"
                     android:text="day before"
-                    android:textColor="@color/white"
                     android:textSize="17sp"
                     android:backgroundTint="@color/transparent"
                     android:layout_alignBottom="@id/fourthEdit"
@@ -548,7 +538,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="2"
-        android:layout_below="@+id/notificationSect"
+        android:layout_alignParentBottom="true"
         android:layout_alignStart="@id/notificationSect"
         android:background="@color/transparent"
         android:orientation="horizontal"

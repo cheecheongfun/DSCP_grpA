@@ -61,13 +61,13 @@
         </provider>
 
         <activity
-            android:name=".ImageLog.CompostGalleryActivity"
+            android:name=".FeedingLog.CompostGalleryActivity"
             android:exported="false" />
         <activity
-            android:name=".ImageLog.DisplayImage"
+            android:name=".FeedingLog.DisplayImage"
             android:exported="false" />
         <activity
-            android:name=".ImageLog.UploadImage"
+            android:name=".FeedingLog.UploadImage"
             android:exported="false" />
         <activity
             android:name=".Analytics.Analytics"
@@ -96,6 +96,10 @@
             android:exported="true" />
         <activity
             android:name=".TankSelection.TankSelection"
+            android:exported="false" />
+        <activity
+            android:name=".FeedingLog.CreateSchedule"
+            android:windowSoftInputMode="stateVisible|adjustResize"
             android:exported="false" />
         <activity
             android:name=".StartUp.MainActivity"

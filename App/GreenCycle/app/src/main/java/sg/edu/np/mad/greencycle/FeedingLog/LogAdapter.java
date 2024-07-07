@@ -59,7 +59,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogViewHolder>{
         if (getItemViewType(position) == 0 || getItemViewType(position) == 1){
             // Green Food + Brown Food
             Food food = foodList.get(position);
-            holder.foodText.setText("- " + food.getName() + " " + food.getAmount() + " " + food.getUnit());
+            holder.foodText.setText("- " + food.getName() + " " + food.getAmount() + " grams");
             holder.foodText.setTextColor(ContextCompat.getColor(context, R.color.textColour));
         }
         else if (getItemViewType(position) == 2){

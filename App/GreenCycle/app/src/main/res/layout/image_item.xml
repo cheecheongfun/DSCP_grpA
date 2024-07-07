@@ -7,24 +7,13 @@
     android:layout_margin="8dp"
     app:cardElevation="4dp"
     app:cardCornerRadius="20dp"
-    android:id="@+id/imagecard"
-    android:backgroundTint="@color/cardview_light_background">
+    android:id="@+id/imageCard"
+    android:backgroundTint="@color/cardview_light_background"
+    android:longClickable="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/tvDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="0dp"
-            android:padding="16dp"
-            android:textSize="20dp"
-            tools:text="Date" />
 
         <ImageView
             android:id="@+id/compostimage"
@@ -32,21 +21,9 @@
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="73dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp" />
-
-        <ImageButton
-            android:id="@+id/deleteimage"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="13dp"
-            android:backgroundTint="@color/transparent"
-            app:srcCompat="@drawable/baseline_delete_24" />
-        <!--            android:src="@drawable/uploadicon" />-->
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

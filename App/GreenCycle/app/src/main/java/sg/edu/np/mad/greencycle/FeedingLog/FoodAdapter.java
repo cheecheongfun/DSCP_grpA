@@ -49,11 +49,15 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        String food = foodList.get(position);
+        String food;
         if (!selectedFoods.isEmpty() && position < selectedFoods.size()){
             return 2;
         }
         else {
+            if (!customFoodList.get(position).isEmpty() && customFoodList.size() == 1){
+                food = customFoodList.get(position);
+            }
+            else food = foodList.get(position);
             return food.isEmpty() ? 1 : 0;
         }
     }
@@ -79,6 +83,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodViewHolder> {
 
         if (getItemViewType(position) == 1) {
             android.util.Log.i(null, "in view 1");
+            // editing food or adding food
             holder.editFood.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
@@ -107,7 +112,6 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodViewHolder> {
                     notifyDataSetChanged();
                 }
             });
-
             holder.editAmt.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
@@ -122,6 +126,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodViewHolder> {
             });
         } else if (getItemViewType(position) == 0) {
             Log.i(null, "in view 0");
+            // food is present in database
             holder.foodText.setText(food);
             holder.check.setChecked(checkedStateArray.get(position));
             holder.check.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -153,7 +158,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodViewHolder> {
             Food foodDetails = selectedFoods.get(position);
             holder.check.setChecked(true);
             holder.check.setVisibility(View.VISIBLE);
-            holder.food.setText(foodDetails.getName() + ": " + foodDetails.getAmount() + " " + foodDetails.getUnit());
+            holder.food.setText(foodDetails.getName() + ": " + foodDetails.getAmount() + " g");
             holder.check.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (!holder.check.isChecked()){
                     selectedFoods.remove(foodDetails);
@@ -175,7 +180,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodViewHolder> {
                 empty.add(f);
             }
         }
-        if (empty.size() < 1){
+        if (empty.size() <= 1){
             foodList.add("");
             checkedStateArray.add(false);
             amtList.add("");
@@ -217,8 +222,8 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodViewHolder> {
                 String foodName = foodList.get(i).isEmpty() ? customFoodList.get(i) : foodList.get(i);
                 if (!foodName.isEmpty()) { // Ensure that foodName is not empty
                     double amount = amtList.get(i).isEmpty() ? 0 : Double.parseDouble(amtList.get(i));
-                    finalSelectedFoods.add(new Food(foodName, amount, "unit")); // Replace "unit" with the appropriate unit if necessary
-                    Log.i("2nd If", "Food: " + foodName + amount + "unit");
+                    finalSelectedFoods.add(new Food(foodName, amount));
+                    Log.i("2nd If", "Food: " + foodName + amount);
                 }
             }
         }
