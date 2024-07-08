@@ -16,7 +16,6 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:background">@color/main_background</item>
         <item name="android:textColor">@color/textColour</item>
-        <item name="android:fontFamily">sans-serif-condensed-medium</item>
     </style>
     <!-- Base application theme. -->
     <style name="Base.Theme.GreenCycle" parent="Theme.Material3.DayNight.NoActionBar">
@@ -155,6 +154,7 @@
     <!-- Basic drawables (black/white) -->
     <style name="HomePageButtons">
         <item name="android:backgroundTint">#faedcd</item>
+        <item name="android:src"></item>
     </style>
 
     <!-- Number Picker -->

@@ -1,34 +1,35 @@
-package sg.edu.np.mad.greencycle.Classes;
+package sg.edu.np.mad.greencycle.FeedingLog;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import java.util.ArrayList;
-
+// Fionn, S10240073K
 public class Log implements Parcelable {
-    private int logId, waterAmt;
+    private int logId, tankId, waterAmt;
     private String logDate;
-    private ArrayList<Food> greens, browns;
+    private ArrayList<String> greens;
+    private ArrayList<String> browns;
     private String notes;
 
     public Log() {
     }
 
-    public Log(int logId, String logDate, ArrayList<Food> greens, ArrayList<Food> browns, String notes, int waterAmt) {
+    public Log(int logId, int tankId, String logDate, ArrayList<String> green, ArrayList<String> brown, String note, int waterAmt) {
         this.logId = logId;
+        this.tankId = tankId;
         this.logDate = logDate;
-        this.greens = greens;
-        this.browns = browns;
-        this.notes = notes;
+        this.greens = green;
+        this.browns = brown;
+        this.notes = note;
         this.waterAmt = waterAmt;
     }
 
     protected Log(Parcel in) {
         logId = in.readInt();
+        tankId = in.readInt();
         logDate = in.readString();
-        greens = new ArrayList<>();
-        in.readList(this.greens, Food.class.getClassLoader());
-        browns = new ArrayList<>();
-        in.readList(this.browns, Food.class.getClassLoader());
+        greens = in.createStringArrayList();
+        browns = in.createStringArrayList();
         notes = in.readString();
         waterAmt = in.readInt();
     }
@@ -53,9 +54,10 @@ public class Log implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(logId);
+        parcel.writeInt(tankId);
         parcel.writeString(logDate);
-        parcel.writeList(greens);
-        parcel.writeList(browns);
+        parcel.writeStringList(greens);
+        parcel.writeStringList(browns);
         parcel.writeString(notes);
         parcel.writeInt(waterAmt);
     }
@@ -69,6 +71,14 @@ public class Log implements Parcelable {
         this.logId = logId;
     }
 
+    public int getTankId() {
+        return tankId;
+    }
+
+    public void setTankId(int tankId) {
+        this.tankId = tankId;
+    }
+
     public String getLogDate() {
         return logDate;
     }
@@ -77,35 +87,28 @@ public class Log implements Parcelable {
         this.logDate = logDate;
     }
 
-    public ArrayList<Food> getGreens() {
+    public ArrayList<String> getGreens() {
         return greens;
     }
 
-    public void setGreens(ArrayList<Food> greens) {
+    public void setGreens(ArrayList<String> greens) {
         this.greens = greens;
     }
 
-    public ArrayList<Food> getBrowns() {
+    public ArrayList<String> getBrowns() {
         return browns;
     }
 
-    public void setBrowns(ArrayList<Food> browns) {
+    public void setBrowns(ArrayList<String> browns) {
         this.browns = browns;
     }
 
-    public String getNotes() {
-        return notes;
-    }
+    public String getNotes() { return notes; }
 
     public void setNotes(String notes) {
         this.notes = notes;
     }
-
-    public int getWaterAmt() {
-        return waterAmt;
-    }
-
-    public void setWaterAmt(int waterAmt) {
-        this.waterAmt = waterAmt;
-    }
+    public int getWaterAmt() {return waterAmt;}
+    public void setWaterAmt(int waterAmt) {this.waterAmt = waterAmt;}
 }
+

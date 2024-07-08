@@ -4,8 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/foodCard"
-    android:theme="@style/AppBackgroundColour"
-    android:backgroundTint="@color/transparent">
+    android:theme="@style/AppBackgroundColour">
 
     <CheckBox
         android:id="@+id/check"
@@ -22,8 +21,7 @@
         android:layout_alignTop="@+id/check"
         android:layout_alignBottom="@+id/check"
         android:gravity="center"
-        android:textSize="20sp"
-        android:backgroundTint="@color/transparent"/>
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/colon"
@@ -35,7 +33,6 @@
         android:layout_alignBottom="@+id/foodText"
         android:layout_alignTop="@+id/foodText"
         android:gravity="center"
-        android:backgroundTint="@color/transparent"
         android:visibility="invisible"
         android:textSize="17sp"/>
 
@@ -50,8 +47,7 @@
         android:visibility="invisible"
         android:layout_centerVertical="true"
         android:layout_alignTop="@+id/check"
-        android:layout_alignBottom="@+id/check"
-        android:layout_marginBottom="-5dp"/>
+        android:layout_alignBottom="@+id/check"/>
 
 
 </RelativeLayout>
