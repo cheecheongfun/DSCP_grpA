@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/foodCardEdit"
     android:theme="@style/AppBackgroundColour"
     android:backgroundTint="@color/transparent">
@@ -9,7 +10,9 @@
     <CheckBox
         android:id="@+id/check"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:theme="@style/OtherButtonTheme"
+        />
 
     <EditText
         android:id="@+id/editFood"
@@ -23,8 +26,7 @@
         android:layout_alignBottom="@+id/check"
         android:maxLines="1"
         android:inputType="textCapWords"
-        android:layout_marginStart="-3dp"
-        android:textColor="@color/white"/>
+        android:layout_marginStart="-3dp"/>
 
     <TextView
         android:id="@+id/colon"
@@ -44,13 +46,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/colon"
-        android:hint="amount"
+        android:hint="grams"
         android:inputType="number"
         android:visibility="invisible"
         android:layout_alignTop="@+id/check"
         android:gravity="center"
         android:maxLines="1"
-        android:layout_alignBottom="@+id/check"
-        android:textColor="@color/white"/>
+        android:layout_alignBottom="@+id/check"/>
 
 </RelativeLayout>

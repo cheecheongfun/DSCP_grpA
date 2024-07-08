@@ -224,8 +224,8 @@
     </style>
 
     <!-- Radio button for schedule -->
-    <style name="CustomRadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
-        <item name="android:buttonTint">@color/white</item>
-        <item name="android:textColor">@color/white</item>
+    <style name="OtherButtonTheme">
+        <item name="colorAccent">@color/textColour</item>
+        <item name="android:textColorSecondary">@color/textColour</item>
     </style>
 </resources>

@@ -260,12 +260,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Don't repeat"
+                android:theme="@style/OtherButtonTheme"
                 android:textSize="17sp"/>
             <RadioButton
                 android:id="@+id/radioRepeatDaily"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Everyday"
+                android:theme="@style/OtherButtonTheme"
                 android:textSize="17sp"/>
             <RelativeLayout
                 android:id="@+id/second"
@@ -276,7 +278,7 @@
                     android:id="@+id/radioRepeatWeekly"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:theme="@style/CustomRadioButton"
+                    android:theme="@style/OtherButtonTheme"
                     android:text="Every"
                     android:textSize="17sp"/>
 
@@ -344,7 +346,7 @@
                     android:id="@+id/radioRepeatMonthly"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:theme="@style/CustomRadioButton"
+                    android:theme="@style/OtherButtonTheme"
                     android:text="Every"
                     android:textSize="17sp"/>
 
@@ -481,12 +483,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Don't notify"
+                android:theme="@style/OtherButtonTheme"
                 android:textSize="17sp"/>
             <RadioButton
                 android:id="@+id/radioNotiDay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="On the day itself"
+                android:theme="@style/OtherButtonTheme"
                 android:textSize="17sp"/>
 
             <RelativeLayout
@@ -498,7 +502,7 @@
                     android:id="@+id/radioNotiDayBefore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:theme="@style/CustomRadioButton"
+                    android:theme="@style/OtherButtonTheme"
                     android:textSize="17sp"/>
 
                 <EditText

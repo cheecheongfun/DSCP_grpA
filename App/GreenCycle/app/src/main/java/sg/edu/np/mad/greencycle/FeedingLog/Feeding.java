@@ -136,6 +136,8 @@ public class Feeding extends AppCompatActivity {
     private StorageReference mStorageRef;
     private Uri imageUri;
     private ImageView imageView;
+    FoodAdapter greenAdapter;
+    FoodAdapter brownAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -239,7 +241,7 @@ public class Feeding extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 android.util.Log.i("edit log", "confirm click");
-                // Adding log / Editing log
+                // Editing log
                 if (confirm.getText().equals("Edit log")){
                     android.util.Log.i("edit log", "in edit");
                     if (isCalendarView){
@@ -262,10 +264,13 @@ public class Feeding extends AppCompatActivity {
                         setupWeekView();
                         isCalendarView = !isCalendarView;
                     }
-
+                    gHead.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.baseline_add_24,0);
+                    bHead.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.baseline_add_24,0);
                     confirm.setVisibility(View.GONE);
                     bottomBtnLog.setVisibility(View.VISIBLE);
                     toggleViewButton.setVisibility(View.GONE);
+                    logDelete.setText("Delete");
+
 
                     // Green Food section
                     ArrayList<Food> greenFoodList;
@@ -274,11 +279,16 @@ public class Feeding extends AppCompatActivity {
                     } else greenFoodList = selectedLog.getGreens();
                     gHead.setVisibility(View.VISIBLE);
                     gRecycler.setVisibility(View.VISIBLE);
-                    FoodAdapter greenAdapter;
                     greenAdapter = new FoodAdapter(greenFood, gRecycler, "green", greenFoodList);
                     gRecycler.setLayoutManager(new LinearLayoutManager(Feeding.this));
                     gRecycler.setAdapter(greenAdapter);
-                    greenAdapter.addItem();
+                    gHead.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            greenAdapter.addItem();
+                        }
+                    });
+
 
                     // Brown Food section
                     ArrayList<Food> brownFoodList;
@@ -287,11 +297,16 @@ public class Feeding extends AppCompatActivity {
                     } else brownFoodList = selectedLog.getBrowns();
                     bHead.setVisibility(View.VISIBLE);
                     bRecycler.setVisibility(View.VISIBLE);
-                    FoodAdapter brownAdapter;
                     brownAdapter = new FoodAdapter(brownFood, bRecycler, "brown", brownFoodList);
                     bRecycler.setLayoutManager(new LinearLayoutManager(Feeding.this));
                     bRecycler.setAdapter(brownAdapter);
-                    brownAdapter.addItem();
+
+                    bHead.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            brownAdapter.addItem();
+                        }
+                    });
 
 
                     // water section
@@ -308,6 +323,79 @@ public class Feeding extends AppCompatActivity {
                     // image section
                     imageButtons.setVisibility(View.VISIBLE);
                 }
+                else {
+                    android.util.Log.i("add log", "in add");
+                    if (isCalendarView){
+                        calendarView.setVisibility(View.GONE);
+                        weekCalendarView.setVisibility(View.VISIBLE);
+                        viewType = "week";
+                        if (selectedDate.isAfter(LocalDate.now())){
+                            loadScheduleForDate(selectedDate,viewType);
+                        }
+                        else if (selectedDate.isBefore(LocalDate.now())){
+                            loadEventsForDate(selectedDate, viewType);
+                        }
+                        else loadForToday(viewType);
+                        setupWeekView();
+                        isCalendarView = !isCalendarView;
+                    }
+                    gHead.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.baseline_add_24,0);
+                    bHead.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.baseline_add_24,0);
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    if (tank.getFeedingLog().isEmpty()){
+                        selectedLog = new Log(0, formatter.format(selectedDate), null, null, null, 0);
+                    } else selectedLog = new Log(tank.getFeedingLog().size() - 1, formatter.format(selectedDate), null, null, null, 0);
+                    noLogs.setVisibility(View.GONE);
+                    details.setVisibility(View.VISIBLE);
+                    confirm.setVisibility(View.GONE);
+                    bottomBtnLog.setVisibility(View.VISIBLE);
+                    toggleViewButton.setVisibility(View.GONE);
+                    logDelete.setText("Cancel");
+
+                    // Green Food section
+                    ArrayList<Food> greenFoodList = new ArrayList<>();
+                    gHead.setVisibility(View.VISIBLE);
+                    gRecycler.setVisibility(View.VISIBLE);
+                    greenAdapter = new FoodAdapter(greenFood, gRecycler, "green", greenFoodList);
+                    gRecycler.setLayoutManager(new LinearLayoutManager(Feeding.this));
+                    gRecycler.setAdapter(greenAdapter);
+                    gHead.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            greenAdapter.addItem();
+                        }
+                    });
+
+
+                    // Brown Food section
+                    ArrayList<Food> brownFoodList = new ArrayList<>();
+                    bHead.setVisibility(View.VISIBLE);
+                    bRecycler.setVisibility(View.VISIBLE);
+                    brownAdapter = new FoodAdapter(brownFood, bRecycler, "brown", brownFoodList);
+                    bRecycler.setLayoutManager(new LinearLayoutManager(Feeding.this));
+                    bRecycler.setAdapter(brownAdapter);
+
+                    bHead.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            brownAdapter.addItem();
+                        }
+                    });
+
+
+                    // water section
+                    waterAmt.setText("Water: ");
+                    editWater.setVisibility(View.VISIBLE);
+                    editWater.setHint("0 ml");
+
+                    // notes section
+                    notesSection.setVisibility(View.VISIBLE);
+                    notesFixed.setVisibility(View.GONE);
+                    editNotes.setVisibility(View.VISIBLE);
+
+                    // image section
+                    imageButtons.setVisibility(View.VISIBLE);
+                }
                 logDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -317,8 +405,82 @@ public class Feeding extends AppCompatActivity {
                         bottomBtnLog.setVisibility(View.GONE);
                         toggleViewButton.setVisibility(View.VISIBLE);
 
+                        if (logDelete.getText().equals("Delete")){
+                            ArrayList<Log> logList = tank.getFeedingLog();
+                            logList.remove(selectedLog);
+                            database = FirebaseDatabase.getInstance();
+                            reference = database.getReference("users");
+
+                            for (int i = 0; i < user.getTanks().size(); i++) {
+                                Tank tank = user.getTanks().get(i);
+                                if (tank.getTankID() == targetTankID) {
+                                    tank.setFeedingLog(logList);
+                                    user.getTanks().set(i, tank);
+                                    user.setTanks(user.getTanks());
+                                    break;
+                                }
+                            }
+
+                            android.util.Log.i(null, "after set tank");
+                            reference.child(user.getUsername()).setValue(user)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            android.util.Log.i("FirebaseUpdate", "Success");
+                                            // Dismiss the dialog or close the activity
+                                            refreshData(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    if (isCalendarView){
+                                                        setupCalendarView();
+                                                    } else setupWeekView();
+                                                }
+                                            });
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            android.util.Log.e("FirebaseUpdate", "Failed to update user tank list.", e);
+                                        }
+                                    });
+                        }
+                        else {
+                            if (isCalendarView){
+                                setupCalendarView();
+                            } else setupWeekView();
+                        }
+                    }
+                });
+                logSave.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        android.util.Log.i("logSave", "logDelete: " + logDelete.getText().toString());
+                        int index = 0;
                         ArrayList<Log> logList = tank.getFeedingLog();
-                        logList.remove(selectedLog);
+                        if (!logList.isEmpty()){
+                            index = logList.indexOf(selectedLog);
+                        }
+                        // saving log
+                        if (!editWater.getText().toString().isEmpty()){
+                            selectedLog.setWaterAmt(Integer.parseInt(editWater.getText().toString()));
+                        }
+                        if (!editNotes.getText().toString().isEmpty()){
+                            selectedLog.setNotes(editNotes.getText().toString());
+                        }
+                        if (greenAdapter.getSelectedFoods()!=null && !greenAdapter.getSelectedFoods().isEmpty()){
+                            selectedLog.setGreens(greenAdapter.getSelectedFoods());
+                        } else selectedLog.setGreens(null);
+                        if (brownAdapter.getSelectedFoods()!=null && !brownAdapter.getSelectedFoods().isEmpty()){
+                            selectedLog.setBrowns(brownAdapter.getSelectedFoods());
+                        } else selectedLog.setBrowns(null);
+
+                        if (logDelete.getText().toString().equals("Delete")){
+                            logList.set(index, selectedLog);
+                        }
+                        else{
+                            logList.add(selectedLog);
+                        }
                         database = FirebaseDatabase.getInstance();
                         reference = database.getReference("users");
 
@@ -337,8 +499,21 @@ public class Feeding extends AppCompatActivity {
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        android.util.Log.i("FirebaseUpdate", "Feed Schedule: "+ user.getTanks().get(0).getFeedSchedule().size());
+                                        android.util.Log.i("FirebaseUpdate", "Success");
                                         // Dismiss the dialog or close the activity
+                                        refreshData(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                confirm.setText("Edit log");
+                                                confirm.setVisibility(View.VISIBLE);
+                                                bottomBtnLog.setVisibility(View.GONE);
+                                                toggleViewButton.setVisibility(View.VISIBLE);
+                                                editWater.setVisibility(View.GONE);
+                                                if (isCalendarView){
+                                                    setupCalendarView();
+                                                } else setupWeekView();
+                                            }
+                                        });
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -347,28 +522,6 @@ public class Feeding extends AppCompatActivity {
                                         android.util.Log.e("FirebaseUpdate", "Failed to update user tank list.", e);
                                     }
                                 });
-                        refreshData(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (isCalendarView){
-                                    setupCalendarView();
-                                } else setupWeekView();
-                            }
-                        });
-                    }
-                });
-                logSave.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // saving log
-                        confirm.setText("Edit log");
-                        confirm.setVisibility(View.VISIBLE);
-                        bottomBtnLog.setVisibility(View.GONE);
-                        toggleViewButton.setVisibility(View.VISIBLE);
-                        editWater.setVisibility(View.GONE);
-                        if (isCalendarView){
-                            setupCalendarView();
-                        } else setupWeekView();
                     }
                 });
                 upload.setOnClickListener(new View.OnClickListener() {
@@ -829,6 +982,7 @@ public class Feeding extends AppCompatActivity {
         noLogs.setVisibility(View.GONE);
         editWater.setVisibility(View.GONE);
         imageButtons.setVisibility(View.GONE);
+
         ArrayList<LocalDate> dateList = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.getDefault());
         for (Log log : tank.getFeedingLog()) {
@@ -858,6 +1012,8 @@ public class Feeding extends AppCompatActivity {
             logs.setVisibility(View.VISIBLE);
             details.setVisibility(View.VISIBLE);
             noLogs.setVisibility(View.GONE);
+            gHead.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+            bHead.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
             if (notes == null || notes.isEmpty()){
                 notesSection.setVisibility(View.GONE);
             }
@@ -884,6 +1040,7 @@ public class Feeding extends AppCompatActivity {
                 bRecycler.setVisibility(View.VISIBLE);
             }
             else if (browns.isEmpty()){
+                android.util.Log.i("loadEventsForDate", "here");
                 bRecycler.setVisibility(View.GONE);
                 gAdapter = new LogAdapter(Feeding.this, greens, "green", null);
                 gRecycler.setLayoutManager(new LinearLayoutManager(this));

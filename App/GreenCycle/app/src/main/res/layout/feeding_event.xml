@@ -27,7 +27,9 @@
                 android:layout_alignParentStart="true"
                 android:text="Greens"
                 android:fontFamily="sans-serif-condensed-medium"
-                android:textSize="25dp"/>
+                android:textSize="25sp"
+                android:theme="@style/DrawableTint"
+                android:drawablePadding="15dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/greenRecycler"
@@ -54,9 +56,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:fontFamily="sans-serif-condensed-medium"
-                android:gravity="center"
                 android:text="Browns"
-                android:textSize="25dp" />
+                android:textSize="25sp"
+                android:theme="@style/DrawableTint"
+                android:drawablePadding="15dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/brownRecycler"
@@ -82,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Water: "
-                android:textSize="25dp"
+                android:textSize="25sp"
                 android:gravity="center"/>
 
             <EditText
@@ -112,7 +115,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Notes"
-                android:textSize="25dp"/>
+                android:textSize="25sp"/>
 
             <EditText
                 android:id="@+id/notesDescription"
@@ -158,21 +161,24 @@
             <ImageButton
                 android:id="@+id/camera"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="-2dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="-5dp"
                 android:backgroundTint="@color/transparent"
+                android:contentDescription="Take picture"
+                android:contextClickable="true"
+                android:cropToPadding="false"
                 android:src="@drawable/outline_camera_alt_24"
                 app:tint="@color/textColour" />
 
             <ImageButton
                 android:id="@+id/upload"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="-2dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="-6dp"
                 android:backgroundTint="@color/transparent"
                 android:src="@drawable/baseline_attach_file_24"
-                app:tint="@color/textColour" />
+                app:tint="@color/textColour"
+                android:contentDescription="Upload picture"/>
 
         </LinearLayout>
 
