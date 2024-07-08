@@ -1,523 +1,101 @@
 package sg.edu.np.mad.greencycle.FeedingLog;
 
-
-import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.view.LayoutInflater;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.FrameLayout;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.kizitonwose.calendar.core.CalendarDay;
-import com.kizitonwose.calendar.core.CalendarMonth;
-import com.kizitonwose.calendar.core.DayPosition;
-import com.kizitonwose.calendar.core.Week;
-import com.kizitonwose.calendar.core.WeekDay;
-import com.kizitonwose.calendar.view.CalendarView;
-import com.kizitonwose.calendar.view.ViewContainer;
-import com.kizitonwose.calendar.view.MonthDayBinder;
-import com.kizitonwose.calendar.view.WeekCalendarView;
-import com.kizitonwose.calendar.view.WeekDayBinder;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
-import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
-import sg.edu.np.mad.greencycle.Classes.FeedSchedule;
-import sg.edu.np.mad.greencycle.Classes.Food;
-import sg.edu.np.mad.greencycle.Classes.Log;
-import sg.edu.np.mad.greencycle.Classes.Tank;
 import sg.edu.np.mad.greencycle.Classes.User;
+import sg.edu.np.mad.greencycle.LiveData.Tank;
+import sg.edu.np.mad.greencycle.LiveData.TankSelection;
 import sg.edu.np.mad.greencycle.R;
-import sg.edu.np.mad.greencycle.TankSelection.TankSelection;
 
+// Fionn, S12040073K
 public class Feeding extends AppCompatActivity {
-
-    CalendarView calendarView;
-    WeekCalendarView weekCalendarView;
-    RelativeLayout logs, fixedTitleContainer, titlesContainer, scheduleDetails;
-    TextView toggleViewButton, backBtn, waterAmt, notesFixed, noLogs, monthHead, water;
-    TextView noDetails, greenText, brownText, scheduleTitle;
-    TextView gHead, bHead;
-    boolean isCalendarView = true;
-    boolean isSelected = true;
-    boolean isCancelled;
-    LocalDate selectedDate;
-    LogAdapter gAdapter, bAdapter;
-    ArrayList<DayOfWeek> daysOfWeek;
-    ArrayList<Food> greens, browns;
-    ArrayList<FeedSchedule> scheduleList;
-    RecyclerView gRecycler, bRecycler, greenRecycler, brownRecycler;
-    ImageButton gAdd, bAdd, camera, upload;
-    FirebaseDatabase database;
-    DatabaseReference reference;
     User user;
     Tank tank;
-    EditText editWater, editNotes;
-    Button confirm, schedule, delete, add, logDelete, logSave;
-    String today, viewType;
-    LinearLayout dayHead, bottomBtnSchedule, bottomBtnLog, details, waterSection, notesSection, imageButtons;
-    DayViewContainer selectedDateContainer = null;
-    int selectedIndex, targetTankID;
-    ArrayList<Log> feedingLog;
-    ArrayList<String> greenFood, brownFood;
-    FrameLayout imageFragment;
-    galleryAdapter adapter;
-    Log selectedLog;
-    private static final int PICK_IMAGE_REQUEST = 1;
-    private static final int CAPTURE_IMAGE_REQUEST = 2;
-    private static final int REQUEST_CAMERA_PERMISSION = 101;
-    private static final int REQUEST_CODE_CREATE_SCHEDULE = 3;
-    private StorageReference mStorageRef;
-    private Uri imageUri;
-    private ImageView imageView;
+    FirebaseDatabase database;
+    DatabaseReference reference;
+    RecyclerView logRecycler, greenRecycler, brownRecycler;
+    public TextView noLogText, backButton, date, editNote, waterAmt,calendar ;
+    ImageButton addGreen, addBrown;
+    ArrayList<String> green,brown, greenFood, brownFood;
+    public ArrayList<sg.edu.np.mad.greencycle.FeedingLog.Log> feedingLog;
+    ArrayList<Tank> tankList;
+    FloatingActionButton add;
+    LogAdapter mAdapter;
+    FoodAdapter gAdapter, bAdapter;
+    int targetTankId, water;
+    String dateFed, notes;
+    public Button confirm;
+    public BottomSheetDialog addLog;
+    sg.edu.np.mad.greencycle.FeedingLog.Log log;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.feeding_log);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.feedingCalendar), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.feedingRecyclerView), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+
         database = FirebaseDatabase.getInstance();
-        mStorageRef = FirebaseStorage.getInstance().getReference();
         reference = database.getReference("users");
 
         Intent receivingEnd = getIntent();
         user = receivingEnd.getParcelableExtra("user");
         tank = receivingEnd.getParcelableExtra("tank");
-        if (tank.getFeedSchedule()!=null){
-            scheduleList = tank.getFeedSchedule();
-        }
-        else scheduleList = new ArrayList<>();
-        targetTankID = tank.getTankID();
+        targetTankId = tank.getTankID();
+        Log.i(null, "Tank ID: " + targetTankId);
+        tankList = user.getTanks();
 
-        calendarView = findViewById(R.id.calendarView);
-        weekCalendarView = findViewById(R.id.weekCalendarView);
-        logs = findViewById(R.id.logs);
-        toggleViewButton = findViewById(R.id.toggle);
-        backBtn = findViewById(R.id.backButton);
-        confirm = findViewById(R.id.bottomBtn);
-        fixedTitleContainer = findViewById(R.id.fixedTitleContainer);
-        schedule = fixedTitleContainer.findViewById(R.id.schedule);
-        titlesContainer = fixedTitleContainer.findViewById(R.id.titlesContainer);
-        dayHead = titlesContainer.findViewById(R.id.dayTitles);
-        monthHead = titlesContainer.findViewById(R.id.monthTitles);
-        bottomBtnSchedule = findViewById(R.id.bottomBtnSchedule);
-        delete = bottomBtnSchedule.findViewById(R.id.scheduleDelete);
-        add = bottomBtnSchedule.findViewById(R.id.scheduleAdd);
-        bottomBtnLog = findViewById(R.id.bottomBtnLog);
-        logDelete=bottomBtnLog.findViewById(R.id.logDelete);
-        logSave = bottomBtnLog.findViewById(R.id.logSave);
-
-
-        // log + feeding event
-        gHead = logs.findViewById(R.id.greenText);
-        bHead = logs.findViewById(R.id.brownText);
-        gRecycler = logs.findViewById(R.id.greenRecycler);
-        bRecycler = logs.findViewById(R.id.brownRecycler);
-        gAdd = logs.findViewById(R.id.addGreen);
-        bAdd = logs.findViewById(R.id.addBrown);
-
-        details = logs.findViewById(R.id.details);
-        waterSection = logs.findViewById(R.id.waterSection);
-        waterAmt = waterSection.findViewById(R.id.waterText);
-        editWater = waterSection.findViewById(R.id.editWater);
-        notesSection = logs.findViewById(R.id.notesSection);
-        notesFixed = logs.findViewById(R.id.notesFixed);
-        editNotes = logs.findViewById(R.id.notesDescription);
-        noLogs = logs.findViewById(R.id.noLogsText);
-        imageButtons = logs.findViewById(R.id.imageButtons);
-        camera = imageButtons.findViewById(R.id.camera);
-        upload = imageButtons.findViewById(R.id.upload);
-        imageFragment = logs.findViewById(R.id.imageFragment);
-
-        // schedule details
-        scheduleDetails =  findViewById(R.id.scheduleDetail);
-        greenRecycler = scheduleDetails.findViewById(R.id.greenRecycler);
-        brownRecycler = scheduleDetails.findViewById(R.id.brownRecycler);
-        water = scheduleDetails.findViewById(R.id.water);
-        noDetails = scheduleDetails.findViewById(R.id.noDetailsText);
-        greenText = scheduleDetails.findViewById(R.id.greens);
-        brownText= scheduleDetails.findViewById(R.id.browns);
-        scheduleTitle= scheduleDetails.findViewById(R.id.scheduleName);
-
-        selectedIndex =0;
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        today = formatter.format(new Date());
-        selectedDate = LocalDate.now();
-        viewType = "month";
-
-        greens = new ArrayList<>();
-        browns = new ArrayList<>();
-
-        toggleViewButton.setOnClickListener(view -> toggleView());
-
-        // day of week titles
-        daysOfWeek = new ArrayList();
-        daysOfWeek.add(DayOfWeek.MONDAY);
-        daysOfWeek.add(DayOfWeek.TUESDAY);
-        daysOfWeek.add(DayOfWeek.WEDNESDAY);
-        daysOfWeek.add(DayOfWeek.THURSDAY);
-        daysOfWeek.add(DayOfWeek.FRIDAY);
-        daysOfWeek.add(DayOfWeek.SATURDAY);
-        daysOfWeek.add(DayOfWeek.SUNDAY);
-
-        for (FeedSchedule schedule : scheduleList){
-            regenerateDates(scheduleList.indexOf(schedule));
-        }
-        refreshData(() -> loadForToday(viewType));
-        setupCalendarView();
-        confirm.setOnClickListener(new View.OnClickListener() {
+        logRecycler = findViewById(R.id.log);
+        noLogText = findViewById(R.id.noLogText);
+        backButton = findViewById(R.id.backButton);
+        add = findViewById(R.id.addLog);
+        refreshLogRecyclerView();
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                android.util.Log.i("edit log", "confirm click");
-                // Adding log / Editing log
-                if (confirm.getText().equals("Edit log")){
-                    android.util.Log.i("edit log", "in edit");
-                    if (isCalendarView){
-                        for (Log log : tank.getFeedingLog()){
-                            if (selectedDate.equals(LocalDate.parse(log.getLogDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy")))){
-                                selectedLog = log;
-                            }
-                        }
-
-                        calendarView.setVisibility(View.GONE);
-                        weekCalendarView.setVisibility(View.VISIBLE);
-                        viewType = "week";
-                        if (selectedDate.isAfter(LocalDate.now())){
-                            loadScheduleForDate(selectedDate,viewType);
-                        }
-                        else if (selectedDate.isBefore(LocalDate.now())){
-                            loadEventsForDate(selectedDate, viewType);
-                        }
-                        else loadForToday(viewType);
-                        setupWeekView();
-                        isCalendarView = !isCalendarView;
-                    }
-
-                    confirm.setVisibility(View.GONE);
-                    bottomBtnLog.setVisibility(View.VISIBLE);
-                    toggleViewButton.setVisibility(View.GONE);
-
-                    // Green Food section
-                    ArrayList<Food> greenFoodList;
-                    if ( selectedLog.getGreens() == null ||  selectedLog.getGreens().isEmpty()){
-                        greenFoodList = new ArrayList<>();
-                    } else greenFoodList = selectedLog.getGreens();
-                    gHead.setVisibility(View.VISIBLE);
-                    gRecycler.setVisibility(View.VISIBLE);
-                    FoodAdapter greenAdapter;
-                    greenAdapter = new FoodAdapter(greenFood, gRecycler, "green", greenFoodList);
-                    gRecycler.setLayoutManager(new LinearLayoutManager(Feeding.this));
-                    gRecycler.setAdapter(greenAdapter);
-                    greenAdapter.addItem();
-
-                    // Brown Food section
-                    ArrayList<Food> brownFoodList;
-                    if ( selectedLog.getBrowns() == null ||  selectedLog.getBrowns().isEmpty()){
-                        brownFoodList = new ArrayList<>();
-                    } else brownFoodList = selectedLog.getBrowns();
-                    bHead.setVisibility(View.VISIBLE);
-                    bRecycler.setVisibility(View.VISIBLE);
-                    FoodAdapter brownAdapter;
-                    brownAdapter = new FoodAdapter(brownFood, bRecycler, "brown", brownFoodList);
-                    bRecycler.setLayoutManager(new LinearLayoutManager(Feeding.this));
-                    bRecycler.setAdapter(brownAdapter);
-                    brownAdapter.addItem();
-
-
-                    // water section
-                    waterAmt.setText("Water: ");
-                    editWater.setVisibility(View.VISIBLE);
-                    editWater.setHint(selectedLog.getWaterAmt() + " ml");
-
-                    // notes section
-                    notesSection.setVisibility(View.VISIBLE);
-                    notesFixed.setVisibility(View.GONE);
-                    editNotes.setVisibility(View.VISIBLE);
-                    editNotes.setText(selectedLog.getNotes());
-
-                    // image section
-                    imageButtons.setVisibility(View.VISIBLE);
-                }
-                logDelete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // deleting log
-                        confirm.setText("Add log");
-                        confirm.setVisibility(View.VISIBLE);
-                        bottomBtnLog.setVisibility(View.GONE);
-                        toggleViewButton.setVisibility(View.VISIBLE);
-
-                        ArrayList<Log> logList = tank.getFeedingLog();
-                        logList.remove(selectedLog);
-                        database = FirebaseDatabase.getInstance();
-                        reference = database.getReference("users");
-
-                        for (int i = 0; i < user.getTanks().size(); i++) {
-                            Tank tank = user.getTanks().get(i);
-                            if (tank.getTankID() == targetTankID) {
-                                tank.setFeedingLog(logList);
-                                user.getTanks().set(i, tank);
-                                user.setTanks(user.getTanks());
-                                break;
-                            }
-                        }
-
-                        android.util.Log.i(null, "after set tank");
-                        reference.child(user.getUsername()).setValue(user)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        android.util.Log.i("FirebaseUpdate", "Feed Schedule: "+ user.getTanks().get(0).getFeedSchedule().size());
-                                        // Dismiss the dialog or close the activity
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        android.util.Log.e("FirebaseUpdate", "Failed to update user tank list.", e);
-                                    }
-                                });
-                        refreshData(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (isCalendarView){
-                                    setupCalendarView();
-                                } else setupWeekView();
-                            }
-                        });
-                    }
-                });
-                logSave.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // saving log
-                        confirm.setText("Edit log");
-                        confirm.setVisibility(View.VISIBLE);
-                        bottomBtnLog.setVisibility(View.GONE);
-                        toggleViewButton.setVisibility(View.VISIBLE);
-                        editWater.setVisibility(View.GONE);
-                        if (isCalendarView){
-                            setupCalendarView();
-                        } else setupWeekView();
-                    }
-                });
-                upload.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        chooseImage(selectedLog);
-                    }
-                });
-
-                camera.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        requestCameraPermission();
-                        loadImage();
-                    }
-                });
-            }
-
-        });
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                FeedSchedule feedSched = findFeedScheduleByDate(scheduleList, selectedDate);
-                int index = scheduleList.indexOf(feedSched);
-                ArrayList<String> dates = new ArrayList<>(feedSched.getDates());
-                for (FeedSchedule sched : scheduleList){
-                    if (sched.equals(findFeedScheduleByDate(scheduleList, selectedDate))){
-                        dates.remove(formatter.format(selectedDate));
-                    }
-                }
-
-                feedSched.setDates(dates);
-                scheduleList.set(index, feedSched);
-
-                database = FirebaseDatabase.getInstance();
-                reference = database.getReference("users");
-
-                for (int i = 0; i < user.getTanks().size(); i++) {
-                    Tank tank = user.getTanks().get(i);
-                    if (tank.getTankID() == targetTankID) {
-                        tank.setFeedSchedule(scheduleList);
-                        user.getTanks().set(i, tank);
-                        user.setTanks(user.getTanks());
-                        break;
-                    }
-                }
-
-                android.util.Log.i(null, "after set tank");
-                reference.child(user.getUsername()).setValue(user)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                android.util.Log.i("FirebaseUpdate", "Feed Schedule: "+ user.getTanks().get(0).getFeedSchedule().size());
-                                // Dismiss the dialog or close the activity
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                android.util.Log.e("FirebaseUpdate", "Failed to update user tank list.", e);
-                            }
-                        });
-                refreshData(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (isCalendarView){
-                            setupCalendarView();
-                        } else setupWeekView();
-                    }
-                });
-            }
-        });
-
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-                // removing schedule date
-                FeedSchedule feedSched = findFeedScheduleByDate(scheduleList, selectedDate);
-                int index = scheduleList.indexOf(feedSched);
-                ArrayList<String> dates = new ArrayList<>(feedSched.getDates());
-                for (FeedSchedule sched : scheduleList){
-                    if (sched.equals(findFeedScheduleByDate(scheduleList, selectedDate))){
-                        dates.remove(formatter.format(selectedDate));
-                    }
-                }
-                feedSched.setDates(dates);
-                scheduleList.set(index, feedSched);
-
-                // creating log
-                Log newLog = new Log();
-                if (tank.getFeedingLog() != null){
-                    newLog = new Log(0, formatter.format(selectedDate), feedSched.getGreenFood(), feedSched.getBrownFood(), null, feedSched.getWaterAmt() );
-                }
-                newLog = new Log(tank.getFeedingLog().size(), formatter.format(selectedDate), feedSched.getGreenFood(), feedSched.getBrownFood(), null, feedSched.getWaterAmt() );
-
-                ArrayList<Log> logList;
-                if (tank.getFeedingLog() != null){
-                    logList = tank.getFeedingLog();
-                }
-                else logList = new ArrayList<>();
-                logList.add(newLog);
-                tank.setFeedingLog(logList);
-
-                database = FirebaseDatabase.getInstance();
-                reference = database.getReference("users");
-
-                for (int i = 0; i < user.getTanks().size(); i++) {
-                    Tank tank = user.getTanks().get(i);
-                    if (tank.getTankID() == targetTankID) {
-                        tank.setFeedSchedule(scheduleList);
-                        tank.setFeedingLog(logList);
-                        user.getTanks().set(i, tank);
-                        user.setTanks(user.getTanks());
-                        break;
-                    }
-                }
-
-                android.util.Log.i(null, "after set tank");
-                reference.child(user.getUsername()).setValue(user)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                android.util.Log.i("FirebaseUpdate", "Feed Schedule: "+ user.getTanks().get(0).getFeedSchedule().size());
-                                // Dismiss the dialog or close the activity
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                android.util.Log.e("FirebaseUpdate", "Failed to update user tank list.", e);
-                            }
-                        });
-                refreshData(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (isCalendarView){
-                            setupCalendarView();
-                        } else setupWeekView();
-                    }
-                });
-            }
-        });
-
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent intent = new Intent(Feeding.this, TankSelection.class);
                 intent.putExtra("user", user);
                 intent.putExtra("where", "Feeding");
@@ -526,733 +104,107 @@ public class Feeding extends AppCompatActivity {
             }
         });
 
-        schedule.setOnClickListener(new View.OnClickListener() {
+        add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                refreshData(new Runnable() {
+                addLog = new BottomSheetDialog(Feeding.this);
+                addLog.setContentView(R.layout.add_feeding_bottom);
+                addLog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                addLog.setCancelable(true);
+                addLog.setDismissWithAnimation(true);
+
+                date = addLog.findViewById(R.id.date);
+                calendar = addLog.findViewById(R.id.calendar);
+                greenRecycler = addLog.findViewById(R.id.greenRecycler);
+                brownRecycler = addLog.findViewById(R.id.brownRecycler);
+                waterAmt = addLog.findViewById(R.id.editWater);
+                editNote = addLog.findViewById(R.id.notesDescription);
+                addGreen = addLog.findViewById(R.id.addGreen);
+                addBrown = addLog.findViewById(R.id.addBrown);
+                confirm = addLog.findViewById(R.id.confirm);
+
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                String today = formatter.format(new Date());
+                // set todays date first
+                date.setText(today);
+                dateFed = date.getText().toString().trim();
+
+                // date selection
+                calendar.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void run() {
-                        if (!scheduleList.isEmpty()){
-                            android.util.Log.i("schedule", "scheduleList not empty");
-                            LayoutInflater inflater = getLayoutInflater();
-                            View dialogView = inflater.inflate(R.layout.schedule_dialog, null);
-
-                            TextView dialogTitle = dialogView.findViewById(R.id.title);
-                            ListView scheduleListView = dialogView.findViewById(R.id.scheduleList);
-
-                            dialogTitle.setText("Schedules");
-                            AlertDialog.Builder builder = new AlertDialog.Builder(Feeding.this);
-
-                            if (getAllScheduledDates(scheduleList).contains(selectedDate)){
-
-                                FeedSchedule existing = findFeedScheduleByDate(scheduleList, selectedDate);
-                                ArrayList<FeedSchedule> temporary = new ArrayList<>(scheduleList);
-                                temporary.remove(existing);
-                                FeedScheduleAdapter adapter = new FeedScheduleAdapter(Feeding.this, temporary, user, tank, scheduleList);
-                                scheduleListView.setAdapter(adapter);
-                                builder.setView(dialogView)
-                                        .setPositiveButton("Replace", (dialog, which) -> {
-                                            if (temporary.isEmpty()){
-                                                Toast.makeText(Feeding.this, "No schedule selected", Toast.LENGTH_SHORT).show();
-                                                dialog.dismiss();
-                                                refreshData(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        if (isCalendarView){
-                                                            setupCalendarView();
-                                                        } else setupWeekView();
-                                                    }
-                                                });
-                                            }
-                                            else{
-                                                replaceSchedule(adapter.getNewFeedSchedule());
-                                            }
-
-                                        })
-                                        .setNegativeButton("Cancel", (dialog, which) -> {
-                                            refreshData(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    if (isCalendarView){
-                                                        setupCalendarView();
-                                                    } else setupWeekView();
-                                                }
-                                            });
-                                        })
-                                        .setNeutralButton("New Schedule", (dialog, which) -> {
-                                            createSchedule();
-                                        });
-
-                            }
-                            else{
-                                android.util.Log.i("schedule", "no schedule for today");
-                                FeedScheduleAdapter adapter = new FeedScheduleAdapter(Feeding.this, scheduleList, user, tank, scheduleList);
-                                scheduleListView.setAdapter(adapter);
-
-                                builder.setView(dialogView)
-                                        .setPositiveButton("Set", (dialog, which) -> {
-
-                                            if (scheduleList.isEmpty()){
-                                                Toast.makeText(Feeding.this, "No schedule selected", Toast.LENGTH_SHORT).show();
-                                                dialog.dismiss();
-                                            }
-                                            else {
-                                                addSchedule(adapter.getSelectedIndex(), adapter.getSelectedNotificationType());
-                                            }
-                                            refreshData(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    if (isCalendarView){
-                                                        setupCalendarView();
-                                                    } else setupWeekView();
-                                                }
-                                            });
-                                        })
-                                        .setNegativeButton("Cancel", (dialog, which) -> {
-                                            refreshData(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    if (isCalendarView){
-                                                        setupCalendarView();
-                                                    } else setupWeekView();
-                                                }
-                                            });
-                                        })
-                                        .setNeutralButton("New Schedule", (dialog, which) -> {
-                                            if (getAllScheduledDates(scheduleList).contains(selectedDate)){
-                                                Toast.makeText(Feeding.this, "One schedule a day", Toast.LENGTH_SHORT).show();
-                                            }
-                                            else{
-                                                createSchedule();
-                                            }
-                                        });
-                            }
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
-                        }
-                        else{
-                            Intent intent = new Intent(Feeding.this, CreateSchedule.class);
-
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                            String date = selectedDate.format(formatter);
-
-                            Bundle info = new Bundle();
-                            info.putParcelable("tank", tank);
-                            info.putParcelable("user", user);
-                            info.putStringArrayList("greenFood", greenFood);
-                            info.putStringArrayList("brownFood", brownFood);
-                            info.putString("date", date);
-                            intent.putExtras(info);
-                            ((Activity) Feeding.this).startActivityForResult(intent, REQUEST_CODE_CREATE_SCHEDULE);
-                        }
-                    }
-                });
-
-            }
-        });
-    }
-
-
-    public void setupCalendarView() {
-        for (int i = 0; i < dayHead.getChildCount(); i++) {
-            TextView textView = (TextView) dayHead.getChildAt(i);
-            DayOfWeek dayOfWeek = daysOfWeek.get(i);
-            String title = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault());
-            textView.setText(title);
-        }
-        if (selectedDate.isAfter(LocalDate.now())){
-            loadScheduleForDate(selectedDate,viewType);
-        }
-        else if (selectedDate.isBefore(LocalDate.now())){
-            loadEventsForDate(selectedDate, viewType);
-        }
-        else loadForToday(viewType);
-        // Bind each day in the calendar
-        calendarView.setDayBinder(new MonthDayBinder<DayViewContainer>() {
-            @Override
-            public DayViewContainer create(View view) {
-                return new DayViewContainer(view);
-            }
-
-            @Override
-            public void bind(DayViewContainer container, CalendarDay day) {
-                container.dayText.setText(String.valueOf(day.getDate().getDayOfMonth()));
-                // set all indicators for schedule
-                for (LocalDate date : getAllScheduledDates(scheduleList)){
-                    if (date.equals(LocalDate.of(day.getDate().getYear(), day.getDate().getMonth(), day.getDate().getDayOfMonth()))){
-                        container.scheduleIndicator.setVisibility(View.VISIBLE);
-                    }
-                }
-                if (day.getPosition() == DayPosition.MonthDate) {
-                    container.dayText.setTextColor(Color.BLACK);
-                    container.dayText.setOnClickListener(v -> {
-                        toggleSelect(container, day.getDate().getYear(), day.getDate().getMonthValue());
-                        if (selectedDate.isAfter(LocalDate.now())){
-                            loadScheduleForDate(day.getDate(),viewType);
-                        }
-                        else if (selectedDate.isBefore(LocalDate.now())){
-                            loadEventsForDate(day.getDate(), viewType);
-                        }
-                        else loadForToday(viewType);
-                    });
-                } else {
-                    int textColor = ContextCompat.getColor(Feeding.this, R.color.light_grey);
-                    container.dayText.setTextColor(textColor);
-                }
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.getDefault());
-                if (selectedDate!=null && day.getDate().isEqual(selectedDate)){
-                    int backgroundColor = ContextCompat.getColor(Feeding.this, R.color.mid_green);
-                    container.dayText.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(Feeding.this, R.color.transparent)));
-                    container.dayText.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(Feeding.this, R.color.white)));
-                    container.select.setBackgroundTintList(ColorStateList.valueOf(backgroundColor));
-                    selectedDate = day.getDate();
-                    selectedDateContainer = container;
-                }
-                else if (selectedDate == null && day.getDate().equals(LocalDate.now())){
-                    int backgroundColor = ContextCompat.getColor(Feeding.this, R.color.mid_green);
-                    container.dayText.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(Feeding.this, R.color.transparent)));
-                    container.dayText.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(Feeding.this, R.color.white)));
-                    container.select.setBackgroundTintList(ColorStateList.valueOf(backgroundColor));
-                    selectedDate = day.getDate();
-                    selectedDateContainer = container;
-                }
-            }
-        });
-
-        calendarView.setMonthScrollListener(new Function1<CalendarMonth, Unit>() {
-            @Override
-            public Unit invoke(CalendarMonth month) {
-                YearMonth yearMonth = month.getYearMonth();
-                String monthYear = yearMonth.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()) + " " + yearMonth.getYear();
-                monthHead.setText(monthYear);
-                return Unit.INSTANCE;
-            }
-        });
-        YearMonth currentMonth = YearMonth.from(selectedDate);
-        YearMonth firstMonth = currentMonth.minusMonths(12);
-        YearMonth lastMonth = currentMonth.plusMonths(12);
-
-        calendarView.setup(firstMonth, lastMonth, DayOfWeek.MONDAY);
-        calendarView.scrollToMonth(currentMonth);
-    }
-
-
-    public void setupWeekView() {
-        for (int i = 0; i < dayHead.getChildCount(); i++) {
-            TextView textView = (TextView) dayHead.getChildAt(i);
-            DayOfWeek dayOfWeek = daysOfWeek.get(i);
-            String title = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault());
-            textView.setText(title);
-        }
-        if (selectedDate.isAfter(LocalDate.now())){
-            loadScheduleForDate(selectedDate,viewType);
-        }
-        else if (selectedDate.isBefore(LocalDate.now())){
-            android.util.Log.e("CHECK", "here2");
-            loadEventsForDate(selectedDate, viewType);
-        }
-        else loadForToday(viewType);
-        // Bind each day in the calendar
-        weekCalendarView.setDayBinder(new WeekDayBinder<DayViewContainer>() {
-
-
-            @Override
-            public DayViewContainer create(View view) { return new DayViewContainer(view); }
-            @Override
-            public void bind(@NonNull DayViewContainer container, WeekDay weekDay) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.getDefault());
-                for (LocalDate date : getAllScheduledDates(scheduleList)){
-                    if (date.equals(LocalDate.of(weekDay.getDate().getYear(), weekDay.getDate().getMonth(), weekDay.getDate().getDayOfMonth()))){
-                        container.scheduleIndicator.setVisibility(View.VISIBLE);
-                    }
-                }
-                container.dayText.setText(String.valueOf(weekDay.getDate().getDayOfMonth()));
-                container.dayText.setOnClickListener(v -> {
-                    toggleSelect(container, weekDay.getDate().getYear(), weekDay.getDate().getMonthValue());
-                    if (selectedDate.isAfter(LocalDate.now())){
-                        loadScheduleForDate(weekDay.getDate(),viewType);
-                    }
-                    else if (selectedDate.isBefore(LocalDate.now())){
-                        android.util.Log.e("CHECK", "here1");
-                        loadEventsForDate(weekDay.getDate(), viewType);
-                    }
-                    else loadForToday(viewType);
-                });
-                if (selectedDate!=null && weekDay.getDate().isEqual(selectedDate)){
-                    int backgroundColor = ContextCompat.getColor(Feeding.this, R.color.mid_green);
-                    container.dayText.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(Feeding.this, R.color.transparent)));
-                    container.dayText.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(Feeding.this, R.color.white)));
-                    container.select.setBackgroundTintList(ColorStateList.valueOf(backgroundColor));
-                    selectedDate = weekDay.getDate();
-                    selectedDateContainer = container;
-                }
-                else if (selectedDate == null && weekDay.getDate().equals(LocalDate.now())){
-                    int backgroundColor = ContextCompat.getColor(Feeding.this, R.color.mid_green);
-                    container.dayText.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(Feeding.this, R.color.transparent)));
-                    container.dayText.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(Feeding.this, R.color.white)));
-                    container.select.setBackgroundTintList(ColorStateList.valueOf(backgroundColor));
-                    selectedDate = weekDay.getDate();
-                    selectedDateContainer = container;
-                }
-            }
-
-        });
-        weekCalendarView.setWeekScrollListener(new Function1<Week, Unit>() {
-            @Override
-            public Unit invoke(Week week) {
-                LocalDate firstDate = week.getDays().get(0).getDate();
-                YearMonth yearMonth = YearMonth.from(firstDate);
-                String monthYear = yearMonth.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()) + " " + yearMonth.getYear();
-                monthHead.setText(monthYear);
-                return Unit.INSTANCE;
-            }
-        });
-
-        LocalDate firstDate = selectedDate.minusWeeks(12);
-        LocalDate lastDate = selectedDate.plusWeeks(12);
-
-        weekCalendarView.setup(firstDate, lastDate, DayOfWeek.MONDAY);
-        weekCalendarView.scrollToDate(selectedDate);
-    }
-
-    // load log based on Date and view type(month, week)
-    private void loadEventsForDate(LocalDate date, String view) {
-        android.util.Log.i("loadEvents", "in load events");
-        scheduleDetails.setVisibility(View.GONE);
-        bottomBtnSchedule.setVisibility(View.GONE);
-        bottomBtnLog.setVisibility(View.GONE);
-        toggleViewButton.setVisibility(View.VISIBLE);
-        confirm.setVisibility(View.VISIBLE);
-        schedule.setVisibility(View.GONE);
-        schedule.setText("Schedule");
-        logs.setVisibility(View.GONE);
-        noLogs.setVisibility(View.GONE);
-        editWater.setVisibility(View.GONE);
-        imageButtons.setVisibility(View.GONE);
-        ArrayList<LocalDate> dateList = new ArrayList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.getDefault());
-        for (Log log : tank.getFeedingLog()) {
-            dateList.add(LocalDate.parse(log.getLogDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        }
-        String notes = " ";
-        int water = 0;
-        greens.clear();
-        browns.clear();
-        if (dateList.contains(date)) {
-            for (Log log : tank.getFeedingLog()) {
-                if (log.getLogDate().equals(formatter.format(date))) {
-                    if (log.getGreens() != null){
-                        greens.addAll(log.getGreens());
-                    }
-                    if (log.getBrowns() != null){
-                        browns.addAll(log.getBrowns());
-                    }
-                    notes = log.getNotes();
-                    water = log.getWaterAmt();
-                    break;
-                }
-            }
-            loadImage();
-            waterAmt.setText("Water: " + water + " ml");
-            confirm.setText("Edit log");
-            logs.setVisibility(View.VISIBLE);
-            details.setVisibility(View.VISIBLE);
-            noLogs.setVisibility(View.GONE);
-            if (notes == null || notes.isEmpty()){
-                notesSection.setVisibility(View.GONE);
-            }
-            else{
-                notesFixed.setVisibility(View.VISIBLE);
-                notesSection.setVisibility(View.VISIBLE);
-                notesFixed.setText(notes);
-            }
-            if (greens.isEmpty() && browns.isEmpty()){
-                android.util.Log.i(null, "In Load If");
-                gHead.setVisibility(View.GONE);
-                bHead.setVisibility(View.GONE);
-                gRecycler.setVisibility(View.GONE);
-                bRecycler.setVisibility(View.GONE);
-            }
-            else if (greens.isEmpty()){
-                android.util.Log.i(null, "In Load Else If");
-                gRecycler.setVisibility(View.GONE);
-                bAdapter = new LogAdapter(Feeding.this, browns, "brown", null);
-                bRecycler.setLayoutManager(new LinearLayoutManager(this));
-                bRecycler.setAdapter(bAdapter);
-                gHead.setVisibility(View.GONE);
-                bHead.setVisibility(View.VISIBLE);
-                bRecycler.setVisibility(View.VISIBLE);
-            }
-            else if (browns.isEmpty()){
-                bRecycler.setVisibility(View.GONE);
-                gAdapter = new LogAdapter(Feeding.this, greens, "green", null);
-                gRecycler.setLayoutManager(new LinearLayoutManager(this));
-                gRecycler.setAdapter(gAdapter);
-                bHead.setVisibility(View.GONE);
-                gHead.setVisibility(View.VISIBLE);
-                gRecycler.setVisibility(View.VISIBLE);
-            }
-            else {
-                android.util.Log.i(null, "In Load Else");
-                gAdapter = new LogAdapter(Feeding.this, greens, "green", null);
-                gRecycler.setLayoutManager(new LinearLayoutManager(this));
-                gRecycler.setAdapter(gAdapter);
-
-                // brown recycler view
-                bAdapter = new LogAdapter(Feeding.this, browns, "brown", null);
-                bRecycler.setLayoutManager(new LinearLayoutManager(this));
-                bRecycler.setAdapter(bAdapter);
-
-                gHead.setVisibility(View.VISIBLE);
-                bHead.setVisibility(View.VISIBLE);
-                gRecycler.setVisibility(View.VISIBLE);
-                bRecycler.setVisibility(View.VISIBLE);
-            }
-        } else {
-            confirm.setText("Add log");
-            android.util.Log.i("loadEvents", "no log");
-            logs.setVisibility(View.VISIBLE);
-            details.setVisibility(View.GONE);
-            noLogs.setVisibility(View.VISIBLE);
-            if (date.equals(LocalDate.now())){
-                schedule.setVisibility(View.VISIBLE);
-            }
-        }
-    }
-
-    private void loadScheduleForDate(LocalDate date, String view) {
-        confirm.setVisibility(View.GONE);
-        logs.setVisibility(View.GONE);
-        scheduleDetails.setVisibility(View.GONE);
-        bottomBtnLog.setVisibility(View.GONE);
-        schedule.setVisibility(View.VISIBLE);
-        if (getAllScheduledDates(scheduleList).contains(date)){
-            FeedSchedule sched = findFeedScheduleByDate(scheduleList, date);
-            android.util.Log.i("load Schedule for date", "In if: " );
-            if (date.equals(LocalDate.now())){
-                bottomBtnSchedule.setVisibility(View.VISIBLE);
-                android.util.Log.i("load Schedule for date", "contains today: " + LocalDate.now() );
-            }
-            else bottomBtnSchedule.setVisibility(View.GONE);
-            schedule.setVisibility(View.VISIBLE);
-            schedule.setText("Replace schedule");
-
-            scheduleTitle.setText(sched.getScheduleName());
-
-            noDetails.setText("No details");
-            water.setText("Water: " + sched.getWaterAmt() + " " + "ml");
-            noDetails.setVisibility(View.GONE);
-            scheduleDetails.setVisibility(View.VISIBLE);
-
-            if (sched.getGreenFood() == null && sched.getBrownFood() == null && sched.getWaterAmt() == 0){
-                android.util.Log.i("load Schedule for date", "null" );
-                noDetails.setVisibility(View.VISIBLE);
-            }
-            else if (sched.getGreenFood() == null && sched.getBrownFood() == null){
-                android.util.Log.i("load Schedule for date", "food null" );
-                greenText.setVisibility(View.GONE);
-                greenRecycler.setVisibility(View.GONE);
-                brownText.setVisibility(View.GONE);
-                brownRecycler.setVisibility(View.GONE);
-                noDetails.setVisibility(View.GONE);
-                water.setVisibility(View.VISIBLE);
-            }
-            else if (sched.getGreenFood() == null){
-                android.util.Log.i("load Schedule for date", "green null" );
-                greenText.setVisibility(View.GONE);
-                greenRecycler.setVisibility(View.GONE);
-                brownText.setVisibility(View.VISIBLE);
-                brownRecycler.setVisibility(View.VISIBLE);
-                bAdapter = new LogAdapter(Feeding.this, sched.getBrownFood(), "brown", null);
-                brownRecycler.setLayoutManager(new LinearLayoutManager(this));
-                brownRecycler.setAdapter(bAdapter);
-                water.setVisibility(View.VISIBLE);
-                noDetails.setVisibility(View.GONE);
-            }
-            else if (sched.getBrownFood() == null){
-                android.util.Log.i("load Schedule for date", "brown null" );
-                greenText.setVisibility(View.VISIBLE);
-                greenRecycler.setVisibility(View.VISIBLE);
-                brownText.setVisibility(View.GONE);
-                brownRecycler.setVisibility(View.GONE);
-                gAdapter = new LogAdapter(Feeding.this, sched.getGreenFood(), "green", null);
-                greenRecycler.setLayoutManager(new LinearLayoutManager(this));
-                greenRecycler.setAdapter(gAdapter);
-                noDetails.setVisibility(View.GONE);
-                water.setVisibility(View.VISIBLE);
-            }
-            else {
-                android.util.Log.i("load Schedule for date", "all details");
-                noDetails.setVisibility(View.GONE);
-                greenText.setVisibility(View.VISIBLE);
-                greenRecycler.setVisibility(View.VISIBLE);
-                brownText.setVisibility(View.VISIBLE);
-                brownRecycler.setVisibility(View.VISIBLE);
-
-                gAdapter = new LogAdapter(Feeding.this, sched.getGreenFood(), "green", null);
-                greenRecycler.setLayoutManager(new LinearLayoutManager(this));
-                greenRecycler.setAdapter(gAdapter);
-
-                // brown recycler view
-                bAdapter = new LogAdapter(Feeding.this, sched.getBrownFood(), "brown", null);
-                brownRecycler.setLayoutManager(new LinearLayoutManager(this));
-                brownRecycler.setAdapter(bAdapter);
-
-                water.setVisibility(View.VISIBLE);
-            }
-        }
-        else {
-            android.util.Log.i("load Schedule for date", "In else: " );
-            bottomBtnSchedule.setVisibility(View.GONE);
-            schedule.setText("Schedule");
-            scheduleDetails.setVisibility(View.VISIBLE);
-            scheduleTitle.setText("No Schedule");
-            noDetails.setVisibility(View.VISIBLE);
-            noDetails.setText(" ");
-        }
-    }
-
-    private void loadForToday(String view) {
-        LocalDate today = LocalDate.now();
-        android.util.Log.i("LoadForToday", "loading logs");
-        if (!getAllScheduledDates(scheduleList).contains(today)){
-            loadEventsForDate(today, view);
-        }
-        else{
-            android.util.Log.i("LoadForToday", "loading schedule");
-            loadScheduleForDate(today, view);
-            // add to log
-            // load events
-            // change button to edit log
-            // remove schedule date
-        }
-    }
-
-    // toggle between month view and week view
-    private void toggleView() {
-        android.util.Log.i(null, "Pressed Toggle");
-        if (isCalendarView) {
-            android.util.Log.i(null, "Changing to WeekView");
-            toggleViewButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.outline_calendar_month_24,0,0,0);
-            calendarView.setVisibility(View.GONE);
-            weekCalendarView.setVisibility(View.VISIBLE);
-            viewType = "week";
-            if (selectedDate.isAfter(LocalDate.now())){
-                loadScheduleForDate(selectedDate,viewType);
-            }
-            else if (selectedDate.isBefore(LocalDate.now())){
-                android.util.Log.e("CHECK", "here4");
-                loadEventsForDate(selectedDate, viewType);
-            }
-            else loadForToday(viewType);
-            setupWeekView();
-        } else {
-            android.util.Log.i(null, "Changing to CalendarView");
-            toggleViewButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.outline_calendar_view_day_24,0,0,0);
-            calendarView.setVisibility(View.VISIBLE);
-            weekCalendarView.setVisibility(View.GONE);
-            viewType = "month";
-            if (selectedDate.isAfter(LocalDate.now())){
-                loadScheduleForDate(selectedDate,viewType);
-            }
-            else if (selectedDate.isBefore(LocalDate.now())){
-                android.util.Log.e("CHECK", "here5");
-                loadEventsForDate(selectedDate, viewType);
-            }
-            else loadForToday(viewType);
-            setupCalendarView();
-        }
-        isCalendarView = !isCalendarView;
-    }
-
-    // customization for date selected
-    public void toggleSelect(DayViewContainer container, int currentYear, int currentMonth) {
-        int day = Integer.parseInt(container.dayText.getText().toString());
-        LocalDate clickedDate = LocalDate.of(currentYear, currentMonth, day);
-        if (selectedDateContainer != null) {
-            android.util.Log.i("toggle Select", "In select if");
-            // reset
-            selectedDateContainer.dayText.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(Feeding.this, R.color.transparent)));
-            selectedDateContainer.dayText.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(Feeding.this, R.color.black)));
-            selectedDateContainer.select.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(Feeding.this, R.color.transparent)));
-            android.util.Log.i("toggle Select", "getAllScheduledDates: " + (getAllScheduledDates(scheduleList).contains(selectedDate)) );
-            if (getAllScheduledDates(scheduleList).contains(selectedDate)){
-                android.util.Log.i("toggle Select", "indicator on");
-                selectedDateContainer.scheduleIndicator.setVisibility(View.VISIBLE);
-            }
-            else {
-                android.util.Log.i("toggle Select", "indicator off");
-                selectedDateContainer.scheduleIndicator.setVisibility(View.GONE);
-            }
-        }
-        // Select the new date
-        int backgroundColor = ContextCompat.getColor(Feeding.this, R.color.mid_green);
-        container.dayText.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(Feeding.this, R.color.transparent)));
-        container.dayText.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(Feeding.this, R.color.white)));
-        container.select.setBackgroundTintList(ColorStateList.valueOf(backgroundColor));
-        selectedDate = clickedDate;
-        selectedDateContainer = container;
-    }
-
-    // Add Schedule to date
-    public void addSchedule(int index, String notiType){
-        android.util.Log.i("addSchedule", "index: " + index);
-        FeedSchedule newSched = scheduleList.get(index);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String date = selectedDate.format(formatter);
-        if (newSched.getRefDate()==null){
-            newSched.setRefDate(date);
-        }
-
-        ArrayList<String> dates;
-        if (newSched.getDates() != null){
-            dates = newSched.getDates();
-        }
-        else {
-            dates = new ArrayList<>();
-            ArrayList<LocalDate> localDates = new ArrayList<>();
-            localDates = generateScheduledDates(newSched);
-            for (LocalDate ld : localDates){
-                dates.add(ld.format(formatter));
-            }
-        }
-        dates.add(date);
-        newSched.setDates(dates);
-        scheduleList.set(index, newSched);
-
-        database = FirebaseDatabase.getInstance();
-        reference = database.getReference("users");
-
-        for (int i = 0; i < user.getTanks().size(); i++) {
-            Tank tank = user.getTanks().get(i);
-            if (tank.getTankID() == targetTankID) {
-                tank.setFeedSchedule(scheduleList);
-                user.getTanks().set(i, tank);
-                user.setTanks(user.getTanks());
-                break;
-            }
-        }
-
-        android.util.Log.i(null, "after set tank");
-        reference.child(user.getUsername()).setValue(user)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        android.util.Log.i("FirebaseUpdate", "Feed Schedule: "+ user.getTanks().get(0).getFeedSchedule().size());
-                        refreshData(new Runnable() {
+                    public void onClick(View view) {
+                        final Calendar c = Calendar.getInstance();
+                        int year = c.get(Calendar.YEAR);
+                        int month = c.get(Calendar.MONTH);
+                        int day = c.get(Calendar.DAY_OF_MONTH);
+                        DatePickerDialog datePickerDialog = new DatePickerDialog(Feeding.this, R.style.CustomDatePickerDialog, new DatePickerDialog.OnDateSetListener() {
                             @Override
-                            public void run() {
-                                if (isCalendarView){
-                                    setupCalendarView();
-                                } else setupWeekView();
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                String day1 = String.valueOf(dayOfMonth);
+                                String month1 = String.valueOf(monthOfYear + 1);
+                                if (day1.length() != 2) {
+                                    day1 = "0" + day1;
+                                }
+                                if (month1.length() != 2) {
+                                    month1 = "0" + month1;
+                                }
+                                date.setText(day1 + "/" + month1 + "/" + year); // sets the text to the chosen date
                             }
-                        });
+                        },
+                                year, month, day);
+                        datePickerDialog.getDatePicker().setMaxDate(c.getTimeInMillis()); // max date will be day of creation, selection of days after will be restricted
+                        datePickerDialog.show();
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
+
+                });
+                // add notes
+                editNote.addTextChangedListener(new TextWatcher() {
                     @Override
-                    public void onFailure(@NonNull Exception e) {
-                        android.util.Log.e("FirebaseUpdate", "Failed to update user tank list.", e);
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        editNote.setMinLines(3);
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
                     }
                 });
-    }
-    // Replace schedule
-    public void replaceSchedule(FeedSchedule newSchedule){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        FeedSchedule old = findFeedScheduleByDate(scheduleList, selectedDate);
-        int indexOld = scheduleList.indexOf(old);
-        ArrayList<String> dates;
-        if (old.getDates() != null){
-            dates = new ArrayList<>(old.getDates());
-        }
-        else dates = new ArrayList<>();
-        dates.remove(formatter.format(selectedDate));
-        old.setDates(dates);
 
-        int indexNew = scheduleList.indexOf(newSchedule);
-        String name = newSchedule.getScheduleName();
-        for (FeedSchedule schedule: scheduleList){
-            if (schedule.getScheduleName().equals(name)){
-                newSchedule = schedule;
-                indexNew = scheduleList.indexOf(schedule);
-            }
-        }
+                // green and brown foods
+                addGreen.setOnClickListener(v -> gAdapter.addItem());
+                addBrown.setOnClickListener(v -> bAdapter.addItem());
 
-        ArrayList<String> datesNew;
-        if (newSchedule.getDates() != null){
-            datesNew = new ArrayList<>(newSchedule.getDates());
-        }
-        else datesNew = new ArrayList<>();
-        datesNew.add(formatter.format(selectedDate));
-        newSchedule.setDates(datesNew);
+                log = new sg.edu.np.mad.greencycle.FeedingLog.Log(feedingLog.size(), targetTankId, dateFed, new ArrayList<>(), new ArrayList<>(), notes, water);
+                Log.i(null, "Log id: " + log.getLogId() + log.getWaterAmt());
+                gAdapter = new FoodAdapter(greenFood, greenRecycler, "green", user, log, Feeding.this);
+                greenRecycler.setLayoutManager(new LinearLayoutManager(Feeding.this));
+                greenRecycler.setAdapter(gAdapter);
 
-        scheduleList.set(indexOld, old);
-        scheduleList.set(indexNew, newSchedule);
-
-        database = FirebaseDatabase.getInstance();
-        reference = database.getReference("users");
-
-        for (int i = 0; i < user.getTanks().size(); i++) {
-            Tank tank = user.getTanks().get(i);
-            if (tank.getTankID() == targetTankID) {
-                tank.setFeedSchedule(scheduleList);
-                user.getTanks().set(i, tank);
-                user.setTanks(user.getTanks());
-                break;
-            }
-        }
-
-        android.util.Log.i(null, "after set tank");
-        reference.child(user.getUsername()).setValue(user)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                bAdapter = new FoodAdapter(brownFood, brownRecycler, "brown", user, log, Feeding.this);
+                brownRecycler.setLayoutManager(new LinearLayoutManager(Feeding.this));
+                brownRecycler.setAdapter(bAdapter);
+                if (!log.getGreens().isEmpty()){
+                    Log.i(null, "GreenLog: " + log.getGreens().get(0));
+                }
+                // to add the log
+                confirm.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        android.util.Log.i("FirebaseUpdate", "Feed Schedule: "+ user.getTanks().get(0).getFeedSchedule().size());
-                        // Dismiss the dialog or close the activity
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        android.util.Log.e("FirebaseUpdate", "Failed to update user tank list.", e);
+                    public void onClick(View view) {
+                        handleConfirmClick();
+                        addLog.dismiss();
                     }
                 });
-        refreshData(new Runnable() {
-            @Override
-            public void run() {
-                if (isCalendarView){
-                    setupCalendarView();
-                } else setupWeekView();
+                addLog.show();
             }
         });
     }
-
-    // Create Schedule
-    public void createSchedule(){
-        scheduleList = tank.getFeedSchedule();
-        if (scheduleList.size() >= 3){
-            Toast.makeText(Feeding.this, "Limit reached", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            Intent intent = new Intent(Feeding.this, CreateSchedule.class);
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            String date = selectedDate.format(formatter);
-
-            Bundle info = new Bundle();
-            info.putParcelable("tank", tank);
-            info.putParcelable("user", user);
-            info.putStringArrayList("greenFood", greenFood);
-            info.putStringArrayList("brownFood", brownFood);
-            info.putString("date", date);
-            intent.putExtras(info);
-            ((Activity) Feeding.this).startActivityForResult(intent, REQUEST_CODE_CREATE_SCHEDULE);
-        }
-    }
-
-    // Refresh Data
-    public void refreshData(Runnable onComplete) {
+    public void refreshLogRecyclerView() {
+        Log.i(null, "in refresh log");
         reference.child(user.getUsername()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -1262,473 +214,142 @@ public class Feeding extends AppCompatActivity {
                     if (updatedUser != null && updatedUser.getTanks() != null) {
                         user.setTanks(updatedUser.getTanks());
                         for (Tank tank : user.getTanks()) {
-                            if (tank.getTankID() == targetTankID) {
-                                if (tank.getFeedSchedule() != null) {
-                                    scheduleList = tank.getFeedSchedule();
-                                } else {
-                                    scheduleList = new ArrayList<>();
-                                }
-                                if (tank.getFeedingLog() != null) {
+                            if (tank.getTankID() == targetTankId) {
+                                if (tank.getFeedingLog()!=null){
                                     feedingLog = tank.getFeedingLog();
-                                } else {
-                                    feedingLog = new ArrayList<>();
+                                }
+                                else {
+                                    feedingLog = new ArrayList<sg.edu.np.mad.greencycle.FeedingLog.Log>();
                                 }
                             }
                         }
                     } else {
-                        scheduleList = new ArrayList<>();
-                        feedingLog = new ArrayList<>();
+                        feedingLog = new ArrayList<sg.edu.np.mad.greencycle.FeedingLog.Log>();
                     }
                 } else {
-                    scheduleList = new ArrayList<>();
-                    feedingLog = new ArrayList<>();
+                    feedingLog = new ArrayList<sg.edu.np.mad.greencycle.FeedingLog.Log>();
                 }
 
-                greenFood = new ArrayList<>();
-                brownFood = new ArrayList<>();
-                for (Tank tank : user.getTanks()) {
-                    if (tank.getFeedingLog() != null) {
-                        for (Log log : tank.getFeedingLog()) {
-                            if (log.getGreens() != null) {
-                                for (Food food : log.getGreens()) {
-                                    greenFood.add(food.getName());
-                                }
-                            }
-                            if (log.getBrowns() != null) {
-                                for (Food food : log.getBrowns()) {
-                                    brownFood.add(food.getName());
-                                }
-                            }
-                        }
-                    }
-                }
-                Set<String> greenSet = new HashSet<>(greenFood);
-                greenFood.clear();
-                greenFood.addAll(greenSet);
-
-                Set<String> brownSet = new HashSet<>(brownFood);
-                brownFood.clear();
-                brownFood.addAll(brownSet);
-
-                tank = user.getTanks().get(targetTankID);
-                android.util.Log.i("Refresh Data", "Schedule List: " + scheduleList.size());
-
-                // Call the onComplete callback
-                if (onComplete != null) {
-                    onComplete.run();
-                }
+                updateRecyclerView(feedingLog);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Handle error
-                android.util.Log.e("Firebase", "Failed to read user data.", error.toException());
-                // Call the onComplete callback even if there is an error to avoid blocking
-                if (onComplete != null) {
-                    onComplete.run();
-                }
+                Log.e("Firebase", "Failed to read user data.", error.toException());
             }
         });
+        Log.i(null, "after firebase");
+        greenFood = new ArrayList<>();
+        brownFood = new ArrayList<>();
+        for (Tank tank : user.getTanks()){
+            if (tank.getFeedingLog() != null){
+                for (sg.edu.np.mad.greencycle.FeedingLog.Log log : tank.getFeedingLog()){
+                    if (log.getGreens() != null){
+                        greenFood.addAll(log.getGreens());
+                    }
+                    if (log.getBrowns() != null) {
+                        brownFood.addAll(log.getBrowns());
+                    }
+                }
+            }
+        }
+        if (greenFood != null){
+            for (String s : greenFood){
+                int index = greenFood.indexOf(s);
+                greenFood.set(index, s.replaceAll("[^a-zA-Z ]", "").trim());
+
+            }
+        }
+        if (brownFood != null){
+            for (String s : brownFood){
+                int index = brownFood.indexOf(s);
+                brownFood.set(index, s.replaceAll("[^a-zA-Z ]", "").trim());
+            }
+        }
+        // get foods from all feeding log
+        Set<String> greenSet = new HashSet<>(greenFood);
+        greenFood.clear();
+        greenFood.addAll(greenSet);
+
+        Set<String> brownSet = new HashSet<>(brownFood);
+        brownFood.clear();
+        brownFood.addAll(brownSet);
+
     }
+    private void updateRecyclerView(ArrayList<sg.edu.np.mad.greencycle.FeedingLog.Log> list) {
+        if (list.isEmpty()) {
+            noLogText.setVisibility(View.VISIBLE);
+        } else {
+            Log.i(null, "not empty");
+            noLogText.setVisibility(View.INVISIBLE);
+        }
 
-    // generate scheduled dates
-    public void regenerateDates(int index) {
-        android.util.Log.i("regenerateDates", "regenerating");
-        // individual
-        FeedSchedule feedSchedule = scheduleList.get(index);
-        ArrayList<LocalDate> scheduledDates = new ArrayList<>();
-        LocalDate nextMonth = LocalDate.now().plusMonths(3); // continues generating 3 months worth of dates
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        LocalDate refDate = LocalDate.parse(feedSchedule.getRefDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        String repeatType = feedSchedule.getRepeatType();
-        HashMap<String, ArrayList<String>> repeatDetails = feedSchedule.getRepeatDetails();
-        if (LocalDate.now().isEqual(refDate.plusWeeks(1))) {
-            feedSchedule.setRefDate(formatter.format(LocalDate.now()));
-            refDate = LocalDate.parse(feedSchedule.getRefDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            if (repeatType.equals("Don't repeat")) {
-                scheduledDates.add(refDate);
-            } else if (repeatType.equals("Everyday")) {
-                for (LocalDate date = refDate; !date.isAfter(nextMonth); date = date.plusDays(1)) {
-                    scheduledDates.add(date);
-                }
-            } else if (repeatType.contains("week")) {
-                String keyWithWeek = null;
-                for (String key : repeatDetails.keySet()) {
-                    if (key.toLowerCase().contains("week")) {
-                        keyWithWeek = key;
-                        break;
-                    }
-                }
-                ArrayList<String> daysOfWeek = repeatDetails.get(keyWithWeek);
-                int repeatOften = Integer.parseInt(feedSchedule.getRepeatType().replaceAll("[^0-9]", ""));
-                for (LocalDate date = refDate; !date.isAfter(nextMonth); date = date.plusWeeks(repeatOften)) {
-                    for (String day : daysOfWeek) {
-                        DayOfWeek dayOfWeek = DayOfWeek.valueOf(day.toUpperCase());
-                        LocalDate weekDate = date.with(dayOfWeek);
-                        if (!weekDate.isBefore(refDate) && !weekDate.isAfter(nextMonth)) {
-                            scheduledDates.add(weekDate);
-                        }
-                    }
-                }
-            } else if (repeatType.contains("month")) {
-                android.util.Log.i("generateScheduledDates", "month");
-                String keyWithMonth = null;
-                for (String key : repeatDetails.keySet()) {
-                    if (key.toLowerCase().contains("month")) {
-                        keyWithMonth = key;
-                        break;
-                    }
-                }
-                String daysOfMonth = repeatDetails.get(keyWithMonth).get(0);
-                int repeatOften = Integer.parseInt(feedSchedule.getRepeatType().replaceAll("[^0-9]", ""));
-                addDatesForNextMonths(daysOfMonth, repeatOften, scheduledDates);
+        Collections.sort(feedingLog, new Comparator<sg.edu.np.mad.greencycle.FeedingLog.Log>() {
+            @Override
+            public int compare(sg.edu.np.mad.greencycle.FeedingLog.Log l1, sg.edu.np.mad.greencycle.FeedingLog.Log l2) {
+                return l1.getLogDate().compareTo(l2.getLogDate()); // For descending order
             }
+        });
+        mAdapter = new LogAdapter(feedingLog, this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        logRecycler.setLayoutManager(linearLayoutManager);
+        logRecycler.setAdapter(mAdapter);
+    }
+    private void handleConfirmClick() {
+        Log.i(null, "in confirm Click");
+        ArrayList<String> selectedGreens = gAdapter.getSelectedFoods();
+        ArrayList<String> selectedBrowns = bAdapter.getSelectedFoods();
+
+        if (selectedGreens != null){
+            log.getGreens().addAll(selectedGreens);
         }
-
-
-
-        ArrayList<String> dateList = new ArrayList<>();
-        for (LocalDate dates : scheduledDates){
-            if (dates.isBefore(LocalDate.now())){
-                dateList.remove(formatter.format(dates));
-            }
-            dateList.add(formatter.format(dates));
+        if (selectedBrowns != null){
+            log.getBrowns().addAll(selectedBrowns);
         }
-        if (dateList.isEmpty()){
-            dateList=  feedSchedule.getDates();
-        }
+        if (!waterAmt.getText().toString().isEmpty()){
+             water = Integer.parseInt(waterAmt.getText().toString());
+        } else water = 0;
 
-        feedSchedule.setDates(dateList);
-        scheduleList.set(index, feedSchedule);
+        String date = this.date.getText().toString();
+        String notes = editNote.getText().toString();
+        Log.i(null, "after get texts");
+        log.setLogDate(date);
+        log.setWaterAmt(water);
+        log.setNotes(notes);
+
+        feedingLog.add(log);
+        Log.i(null, "after add log");
+        // Assuming User and DatabaseReference setup is done
         database = FirebaseDatabase.getInstance();
         reference = database.getReference("users");
 
-        for (int i = 0; i < user.getTanks().size(); i++) {
-            Tank tank = user.getTanks().get(i);
-            if (tank.getTankID() == targetTankID) {
-                tank.setFeedSchedule(scheduleList);
-                user.getTanks().set(i, tank);
+        for (Tank tank : user.getTanks()) {
+            if (log.getTankId() == tank.getTankID()) {
+                Log.i(null, "feedingLog size: " + feedingLog.size());
+                tank.setFeedingLog(feedingLog);
+                user.getTanks().set(log.getTankId(), tank);
                 user.setTanks(user.getTanks());
                 break;
             }
         }
-
-        android.util.Log.i(null, "after set tank");
+        Log.i(null, "after set tank");
         reference.child(user.getUsername()).setValue(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        android.util.Log.i("FirebaseUpdate", "Update");
+                        Log.i(null, "Check list" + user.getTanks().get(0).getFeedingLog().size());
+                        // Dismiss the dialog or close the activity
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        android.util.Log.e("FirebaseUpdate", "Failed to update user tank list.", e);
+                        Log.e("FirebaseUpdate", "Failed to update user tank list.", e);
                     }
                 });
+        refreshLogRecyclerView();
     }
-    public ArrayList<LocalDate> generateScheduledDates(FeedSchedule feedSchedule) {
-        // individual
-        ArrayList<LocalDate> scheduledDates = new ArrayList<>();
-
-        LocalDate refDate = selectedDate;
-        LocalDate nextMonth = LocalDate.now().plusMonths(3); // continues generating 3 months worth of dates
-        String repeatType = feedSchedule.getRepeatType();
-        HashMap<String, ArrayList<String>> repeatDetails = feedSchedule.getRepeatDetails();
-
-
-        if (repeatType.equals("Don't repeat")) {
-            scheduledDates.add(selectedDate);
-        }
-        else if (repeatType.equals("Everyday")) {
-            for (LocalDate date = refDate; !date.isAfter(nextMonth); date = date.plusDays(1)) {
-                scheduledDates.add(date);
-            }
-        }
-        else if (repeatType.contains("week")) {
-            String keyWithWeek = null;
-            for (String key : repeatDetails.keySet()) {
-                if (key.toLowerCase().contains("week")) {
-                    keyWithWeek = key;
-                    break;
-                }
-            }
-            ArrayList<String> daysOfWeek = repeatDetails.get(keyWithWeek);
-            int repeatOften = Integer.parseInt(feedSchedule.getRepeatType().replaceAll("[^0-9]", ""));
-            for (LocalDate date = refDate; !date.isAfter(nextMonth); date = date.plusWeeks(repeatOften)) {
-                for (String day : daysOfWeek) {
-                    DayOfWeek dayOfWeek = DayOfWeek.valueOf(day.toUpperCase());
-                    LocalDate weekDate = date.with(dayOfWeek);
-                    if (!weekDate.isBefore(refDate) && !weekDate.isAfter(nextMonth)) {
-                        scheduledDates.add(weekDate);
-                    }
-                }
-            }
-        }
-        else if (repeatType.contains("month")) {
-            android.util.Log.i("generateScheduledDates", "month");
-            String keyWithMonth = null;
-            for (String key : repeatDetails.keySet()) {
-                if (key.toLowerCase().contains("month")) {
-                    keyWithMonth = key;
-                    break;
-                }
-            }
-            String daysOfMonth = repeatDetails.get(keyWithMonth).get(0);
-            int repeatOften = Integer.parseInt(feedSchedule.getRepeatType().replaceAll("[^0-9]", ""));
-            addDatesForNextMonths(daysOfMonth, repeatOften, scheduledDates);
-        }
-
-        return scheduledDates;
-    }
-    public static void addDatesForNextMonths(String input, int everyNMonths, List<LocalDate> scheduledDates) {
-        try {
-            String[] parts = input.split(" ");
-            int nth = Integer.parseInt(parts[0].substring(0, parts[0].length() - 2)); // Get the number part (1st, 2nd, etc.)
-            String dayOfWeekStr = parts[1];
-
-            // Get the day of week enum from string
-            DayOfWeek dayOfWeek = DayOfWeek.valueOf(dayOfWeekStr.toUpperCase());
-
-            // Get the current month
-            LocalDate today = LocalDate.now();
-
-            // Loop through the specified number of occurrences, incrementing by everyNMonths
-            for (int i = 0; i < 12; i++) {
-                LocalDate firstDayOfMonth = today.plusMonths(i * everyNMonths).withDayOfMonth(1);
-                LocalDate firstOccurrence = firstDayOfMonth.with(TemporalAdjusters.firstInMonth(dayOfWeek));
-
-                // Calculate the nth occurrence in the month
-                LocalDate date = firstOccurrence.plusWeeks(nth - 1);
-
-                // Check if the calculated date is within the same month
-                if (date.getMonth() == firstDayOfMonth.getMonth()) {
-                    scheduledDates.add(date);
-                } else {
-                    System.out.println("The " + nth + " " + dayOfWeekStr + " does not exist in " + firstDayOfMonth.getMonth());
-                }
-            }
-        } catch (Exception e) {
-            // Handle parsing errors or invalid input format
-            android.util.Log.i("addDatesforMonth", "Invalid input format: " + input);
-        }
-    }
-    public static FeedSchedule findFeedScheduleByDate(ArrayList<FeedSchedule> scheduleList, LocalDate targetDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        for (FeedSchedule schedule : scheduleList){
-            if (schedule.getDates()!= null){
-                if (schedule.getDates().contains(formatter.format(targetDate))) {
-                    return schedule;
-                }
-            }
-        }
-        return null;
-    }
-
-    public static List<LocalDate> getAllScheduledDates(ArrayList<FeedSchedule> scheduleList) {
-        // all schedule dates
-        List<LocalDate> allScheduledDates = new ArrayList<>();
-        for (FeedSchedule schedule : scheduleList){
-            if (schedule.getDates() != null){
-                for (String s : schedule.getDates()){
-                    allScheduledDates.add(LocalDate.parse(s, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-                }
-            }
-        }
-        return allScheduledDates;
-    }
-
-    public void loadImage() {
-        ImageFragment imageFragment = new ImageFragment(user, tank, Feeding.this, selectedDate);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.imageFragment, imageFragment);
-        transaction.commit();
-    }
-
-    private void deleteImageFromFirestore(Map<String, String> imageData) {
-        String docId = imageData.get("docId");  // Retrieve the document ID
-        if (docId == null) {
-            Toast.makeText(this, "Document ID is null", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Users").document(user.getUsername())
-                .collection("Tanks").document(String.valueOf(tank.getTankID()))
-                .collection("Images").document(docId)
-                .delete()
-                .addOnSuccessListener(aVoid -> {
-                    adapter.imageDataList.remove(imageData);
-                    adapter.notifyDataSetChanged();
-                    Toast.makeText(Feeding.this, "Image deleted successfully", Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(Feeding.this, "Error deleting image", Toast.LENGTH_SHORT).show();
-                });
-    }
-
-    private void chooseImage(Log log) {
-        selectedLog = log;  // Store the log in the member variable
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_CREATE_SCHEDULE) {
-            if (resultCode == Activity.RESULT_OK && data != null && data.getBooleanExtra("schedule_saved", false)) {
-                android.util.Log.i("onActivityResult", "Schedule created successfully");
-                refreshData(() -> schedule.callOnClick());
-            }
-        }
-        else if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null){
-            if (resultCode == Activity.RESULT_OK){
-                imageUri = data.getData();
-                uploadImage(selectedLog);  // Use the member variable
-            }
-        }
-        else if (requestCode == CAPTURE_IMAGE_REQUEST){
-            if (resultCode == Activity.RESULT_OK){
-                uploadImage(selectedLog);
-            }
-        }
-    }
-
-
-
-    private void requestCameraPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
-        } else {
-            launchCamera();
-        }
-    }
-
-    private void launchCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                android.util.Log.e("Camera", "Error creating file", ex);
-            }
-            if (photoFile != null) {
-                imageUri = FileProvider.getUriForFile(this, getPackageName() + ".provider", photoFile);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                startActivityForResult(intent, CAPTURE_IMAGE_REQUEST);
-            }
-        }
-    }
-
-    private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        return File.createTempFile("JPEG_" + timeStamp + "_", ".jpg", storageDir);
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CAMERA_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                launchCamera();
-            } else {
-                Toast.makeText(this, "Camera permission is required to use the camera.", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private void uploadImage(Log log) {
-        if (imageUri != null) {
-            isCancelled = false;
-            Glide.with(this)
-                    .asBitmap()
-                    .load(imageUri)
-                    .centerCrop()
-                    .override(500, 500)
-                    .into(new CustomTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                            if (!isCancelled) {
-                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                resource.compress(Bitmap.CompressFormat.JPEG, 70, baos);
-                                byte[] data = baos.toByteArray();
-                                StorageReference fileRef = mStorageRef.child("images/" + System.currentTimeMillis() + ".jpg");
-                                fileRef.putBytes(data).addOnSuccessListener(taskSnapshot ->
-                                        fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                                            if (!isCancelled) {
-                                                uploadImageDetailsToFirestore(uri.toString(), log);
-                                            }
-                                        }).addOnFailureListener(e -> {
-                                            Toast.makeText(Feeding.this, "Failed to get image URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                        })
-                                ).addOnFailureListener(e -> {
-                                    Toast.makeText(Feeding.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                });
-                            }
-                        }
-
-                        @Override
-                        public void onLoadCleared(@Nullable Drawable placeholder) {
-                        }
-                    });
-        } else {
-            Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void uploadImageDetailsToFirestore(String imageUrl, Log log) {
-        if (!isCancelled) {
-            // Create timestamp for Firestore document
-            LocalDate logDate = LocalDate.parse(log.getLogDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(logDate.getYear(), logDate.getMonthValue() - 1, logDate.getDayOfMonth(), 0, 0, 0);
-            Date date = calendar.getTime();
-            Timestamp timestamp = new Timestamp(date);
-
-            // Prepare image details
-            Map<String, Object> imageDetails = new HashMap<>();
-            imageDetails.put("image_url", imageUrl);
-            imageDetails.put("timestamp", timestamp);
-
-            // Upload to Firestore
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("Users").document(user.getUsername())
-                    .collection("Tanks").document(String.valueOf(tank.getTankID()))
-                    .collection("Images").document()
-                    .set(imageDetails)
-                    .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(Feeding.this, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show();
-                        loadImage();
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(Feeding.this, "Upload Error", Toast.LENGTH_SHORT).show();
-                    });
-        }
-    }
-
-    private void resetImageView() {
-        imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.uploadicon));
-        imageUri = null;
-    }
-    // Classes
-    class DayViewContainer extends ViewContainer {
-        TextView dayText, select, logIndicator, scheduleIndicator;
-
-        DayViewContainer(View view) {
-            super(view);
-            dayText = view.findViewById(R.id.dayText);
-            select = view.findViewById(R.id.selectedDate);
-            logIndicator = view.findViewById(R.id.logIndicator);
-            scheduleIndicator = view.findViewById(R.id.scheduleIndicator);
-        }
-    }
-
 }
-

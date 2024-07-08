@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ImageLog.UploadImage"
+    android:theme="@style/AppBackgroundColour">
+
+    <!-- ImageView to display the selected image -->
+
+    <!-- Button to choose an image -->
+
+    <ImageButton
+        android:id="@+id/btnChooseImage"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="92dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="@color/icon_brown_light"
+        app:srcCompat="@drawable/baseline_attach_file_24" />
+
+    <TextView
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:clickable="true"
+        android:drawableStart="@drawable/back_button"
+        android:focusable="true"
+        android:theme="@style/DrawableTint" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="293dp"
+        android:layout_marginTop="131dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/uploadicon"
+
+        />
+
+    <!-- Button to upload the image -->
+
+    <Button
+        android:id="@+id/btnUploadImage"
+        android:layout_width="374dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnUseCamera"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+         android:backgroundTint="@color/mid_green"
+        android:text="Upload Image"
+        app:cornerRadius="5dp" />
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="42dp"
+        android:layout_below="@+id/btnUploadImage"
+        android:layout_alignTop="@+id/btnUploadImage"
+        android:layout_marginTop="90dp"
+       android:layout_centerHorizontal="true"
+        android:layout_marginBottom="278dp"
+        android:backgroundTint="@color/icon_brown_dark"
+        android:text="Cancel"
+        android:textSize="10dp"
+        app:cornerRadius="5dp" />
+
+    <ImageButton
+        android:id="@+id/btnUseCamera"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="116dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="@color/icon_brown_light"
+        app:srcCompat="@drawable/baseline_camera_alt_24" />
+
+
+</RelativeLayout>

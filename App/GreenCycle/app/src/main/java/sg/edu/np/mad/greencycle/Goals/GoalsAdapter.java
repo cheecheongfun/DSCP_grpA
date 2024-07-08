@@ -20,7 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.List;
 
 import sg.edu.np.mad.greencycle.Classes.User;
-import sg.edu.np.mad.greencycle.Classes.Tank;
+import sg.edu.np.mad.greencycle.LiveData.Tank;
 import sg.edu.np.mad.greencycle.R;
 
 public class GoalsAdapter extends RecyclerView.Adapter<GoalsViewHolder> {

@@ -1,4 +1,4 @@
-package sg.edu.np.mad.greencycle.TankSelection;
+package sg.edu.np.mad.greencycle.LiveData;
 
 import sg.edu.np.mad.greencycle.Analytics.Analytics;
 import sg.edu.np.mad.greencycle.Classes.User;
@@ -17,8 +17,7 @@ import java.util.ArrayList;
 
 import sg.edu.np.mad.greencycle.FeedingLog.Feeding;
 import sg.edu.np.mad.greencycle.Goals.ViewGoals;
-import sg.edu.np.mad.greencycle.LiveData.LiveData;
-import sg.edu.np.mad.greencycle.Classes.Tank;
+import sg.edu.np.mad.greencycle.ImageLog.DisplayImage;
 import sg.edu.np.mad.greencycle.R;
 // Fionn, S10240073K
 public class TankAdapter extends RecyclerView.Adapter<TankViewHolder>{
@@ -76,6 +75,13 @@ public class TankAdapter extends RecyclerView.Adapter<TankViewHolder>{
                     context.startActivity(feed);
                 }else if (purpose.equals("Analytics")) {
                     Intent feed = new Intent(context, Analytics.class);
+                    Bundle info = new Bundle();
+                    info.putParcelable("tank", tank);
+                    info.putParcelable("user", user);
+                    feed.putExtras(info);
+                    context.startActivity(feed);
+                }else if (purpose.equals("Identify")) {
+                    Intent feed = new Intent(context, DisplayImage.class);
                     Bundle info = new Bundle();
                     info.putParcelable("tank", tank);
                     info.putParcelable("user", user);

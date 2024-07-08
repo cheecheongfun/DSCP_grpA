@@ -93,7 +93,7 @@
             android:layout_height="60dp"
             android:layout_below="@+id/sectionVermi"
             android:layout_marginTop="15dp"
-            android:layout_marginEnd="60dp"
+            android:layout_marginEnd="40dp"
             android:layout_toStartOf="@+id/feedingLogButton"
             android:background="@drawable/home_page_buttons"
             android:elevation="2dp"
@@ -121,7 +121,8 @@
             android:padding="10dp"
             android:elevation="2dp"
             android:scaleType="centerCrop"
-            android:layout_centerHorizontal="true"
+            android:layout_toStartOf="@+id/helper"
+            android:layout_marginEnd="20dp"
             android:theme="@style/FeedingLogBtn"/>
 
         <TextView
@@ -131,10 +132,33 @@
             android:layout_below="@+id/feedingLogButton"
             android:layout_alignTop="@+id/liveDataText"
             android:layout_alignBottom="@+id/liveDataText"
-            android:layout_toStartOf="@+id/analyticsText"
+            android:layout_toStartOf="@+id/imageText"
             android:layout_toEndOf="@+id/liveDataText"
             android:gravity="center"
             android:text="Feeding Log" />
+
+        <ImageButton
+            android:id="@+id/imageLog"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignTop="@+id/liveDataButton"
+            android:background="@drawable/home_page_buttons"
+            android:padding="10dp"
+            android:elevation="2dp"
+            android:layout_toEndOf="@+id/helper"
+            android:layout_marginStart="20dp"
+            android:scaleType="centerCrop"
+            android:theme="@style/ImageLogBtn" />
+
+        <TextView
+            android:id="@+id/imageText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageLog"
+            android:layout_alignStart="@+id/imageLog"
+            android:layout_alignEnd="@+id/imageLog"
+            android:gravity="center"
+            android:text="Image Log" />
 
         <ImageButton
             android:id="@+id/analyticsButton"
@@ -144,8 +168,8 @@
             android:layout_alignTop="@+id/liveDataButton"
             android:layout_marginTop="0dp"
             android:elevation="2dp"
-            android:layout_toEndOf="@+id/feedingLogButton"
-            android:layout_marginStart="60dp"
+            android:layout_toEndOf="@+id/imageLog"
+            android:layout_marginStart="40dp"
             android:background="@drawable/home_page_buttons"
             android:padding="10dp"
             android:scaleType="centerCrop"
@@ -169,11 +193,10 @@
             android:layout_height="60dp"
             android:layout_below="@+id/liveDataText"
             android:layout_alignStart="@+id/liveDataButton"
-            android:layout_marginStart="0dp"
             android:layout_marginTop="25dp"
             android:background="@drawable/home_page_buttons"
-            android:elevation="2dp"
             android:padding="10dp"
+            android:elevation="2dp"
             android:scaleType="centerCrop"
             android:theme="@style/GoalsBtn" />
 
@@ -188,11 +211,34 @@
             android:text="Goals" />
 
         <ImageButton
-            android:id="@+id/communityButton"
+            android:id="@+id/conversionButton"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_below="@+id/feedingLogText"
-            android:layout_centerHorizontal="true"
+            android:layout_alignStart="@+id/feedingLogButton"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/home_page_buttons"
+            android:padding="10dp"
+            android:elevation="2dp"
+            android:scaleType="centerCrop"
+            android:theme="@style/ConverterBtn" />
+
+        <TextView
+            android:id="@+id/conversionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/conversionButton"
+            android:layout_toEndOf="@+id/goalsText"
+            android:layout_toStartOf="@+id/communityText"
+            android:gravity="center"
+            android:text="Unit Converter" />
+
+        <ImageButton
+            android:id="@+id/communityButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_below="@+id/imageText"
+            android:layout_alignStart="@+id/imageText"
             android:layout_marginTop="25dp"
             android:elevation="2dp"
             android:background="@drawable/home_page_buttons"
@@ -204,12 +250,11 @@
             android:id="@+id/communityText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/communityButton"
+            android:layout_below="@+id/conversionButton"
             android:layout_alignStart="@+id/communityButton"
             android:layout_alignEnd="@+id/communityButton"
             android:gravity="center"
             android:text="Forum"/>
-
 
         <ImageButton
             android:id="@+id/soilTypeButton"

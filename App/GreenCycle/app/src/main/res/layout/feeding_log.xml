@@ -1,221 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/feedingCalendar"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/feedingRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".FeedingLog.Feeding"
     android:theme="@style/AppBackgroundColour">
 
-    <LinearLayout
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+      <TextView
+          android:id="@+id/backButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:drawableStart="@drawable/back_button"
+          android:layout_marginTop="15dp"
+          android:layout_marginStart="15dp"
+          android:theme="@style/DrawableTint" />
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Feeding Log"
+          android:textSize="30dp"
+          android:layout_centerHorizontal="true"
+          android:layout_marginTop="6dp"/>
+
+      <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/log"
+          android:layout_below="@+id/backButton"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:theme="@style/AppBackgroundColour"
+          android:layout_marginTop="15dp"/>
+
+
+      <com.google.android.material.floatingactionbutton.FloatingActionButton
+          android:id="@+id/addLog"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentEnd="true"
+          android:layout_alignParentBottom="true"
+          android:layout_marginEnd="16dp"
+          android:layout_marginBottom="16dp"
+          android:backgroundTint="@color/mid_green"
+          android:clickable="true"
+          android:src="@drawable/baseline_add_circle_outline_24" />
+
+    <TextView
+        android:id="@+id/noLogText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-        <RelativeLayout
-            android:id="@+id/header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="15dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp">
-            <TextView
-                android:id="@+id/backButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:drawableStart="@drawable/back_button"
-                android:theme="@style/DrawableTint" />
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="Feeding Log"
-                android:textSize="30dp"
-                android:layout_marginTop="6dp"/>
+        android:layout_below="@+id/backButton"
+        android:layout_marginTop="14dp"
+        android:gravity="center"
+        android:text="No logs found"
+        android:visibility="visible" />
 
-            <TextView
-                android:id="@+id/toggle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:drawableStart="@drawable/outline_calendar_view_day_24"
-                android:theme="@style/DrawableTint"
-                android:layout_alignParentEnd="true"/>
+  </RelativeLayout>
 
-        </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/fixedTitleContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-
-            <include
-                android:id="@+id/titlesContainer"
-                layout="@layout/calendar_day_title_container" />
-        </RelativeLayout>
-
-        <!-- Month View -->
-        <com.kizitonwose.calendar.view.CalendarView
-            android:id="@+id/calendarView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            app:cv_scrollPaged="true"
-            app:cv_outDateStyle="endOfRow"
-            app:cv_dayViewResource="@layout/calendar_day"
-            android:visibility="visible"/>
-        <!-- Week View -->
-        <com.kizitonwose.calendar.view.WeekCalendarView
-            android:id="@+id/weekCalendarView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            app:cv_scrollPaged="true"
-            app:cv_dayViewResource="@layout/calendar_day"
-            android:visibility="gone"/>
-
-        <Button
-            android:id="@+id/schedule"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Schedule"
-            android:visibility="gone"
-            android:textSize="18sp"
-            app:cornerRadius="5dp"
-            android:textColor="@color/textColour"
-            android:backgroundTint="@color/light_green"/>
-
-        <TextView
-            android:id="@+id/line"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="@color/light_grey"
-            android:visibility="visible"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"/>
-
-        <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp">
-
-            <RelativeLayout
-                android:id="@+id/logs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="visible">
-
-                <include layout="@layout/feeding_event"></include>
-            </RelativeLayout>
-        </ScrollView>
-
-        <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <RelativeLayout
-                android:id="@+id/scheduleDetail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone">
-
-                <include layout="@layout/schedule_details"></include>
-            </RelativeLayout>
-        </ScrollView>
-    </LinearLayout>
-
-
-    <!-- Bottom layout -->
-    <Button
-        android:id="@+id/bottomBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Edit Log"
-        android:layout_alignParentBottom="true"
-        app:cornerRadius="0dp"
-        android:textSize="18sp"
-        android:textColor="@color/white"
-        android:backgroundTint="@color/mid_green"
-        android:layout_marginBottom="-4dp"
-        android:visibility="gone"/>
-
-    <LinearLayout
-        android:id="@+id/bottomBtnSchedule"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        android:background="@color/transparent"
-        android:visibility="visible">
-
-        <Button
-            android:id="@+id/scheduleDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Delete"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="5dp"
-            android:textSize="18sp"
-            android:textColor="@color/textColour"
-            app:cornerRadius="5dp"
-            android:backgroundTint="@color/mid_green"/>
-
-        <Button
-            android:id="@+id/scheduleAdd"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Add"
-            android:textSize="18sp"
-            android:textColor="@color/textColour"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="10dp"
-            app:cornerRadius="5dp"
-            android:backgroundTint="@color/mid_green"/>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/bottomBtnLog"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        android:background="@color/transparent"
-        android:visibility="gone">
-
-        <Button
-            android:id="@+id/logDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Delete"
-            android:textColor="@color/textColour"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="5dp"
-            app:cornerRadius="5dp"
-            android:textSize="18sp"
-            android:backgroundTint="@color/mid_green"/>
-
-        <Button
-            android:id="@+id/logSave"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Save"
-            android:textColor="@color/textColour"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="10dp"
-            app:cornerRadius="5dp"
-            android:textSize="18sp"
-            android:backgroundTint="@color/mid_green"/>
-
-    </LinearLayout>
-
-</RelativeLayout>
+</FrameLayout>

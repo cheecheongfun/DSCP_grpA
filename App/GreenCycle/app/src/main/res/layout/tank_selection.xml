@@ -5,7 +5,7 @@
     android:id="@+id/tankRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TankSelection.TankSelection"
+    tools:context=".LiveData.TankSelection"
     android:theme="@style/AppBackgroundColour">
 
     <RelativeLayout

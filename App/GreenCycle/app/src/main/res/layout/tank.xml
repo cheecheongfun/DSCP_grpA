@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:theme="@style/TankRecyclerCard"
+    android:backgroundTint="#FAF9F8"
     android:clickable="true"
     android:elevation="10dp"
     android:layout_marginTop="20dp"
@@ -23,6 +24,7 @@
         android:text="Tank 0"
         android:textSize="22sp"
         android:background="@color/transparent"
+        android:textColor="@color/mid_green"
         />
 
     <ImageView

@@ -1,5 +1,6 @@
 package sg.edu.np.mad.greencycle.StartUp;
 
+
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -13,9 +14,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,16 +40,23 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import sg.edu.np.mad.greencycle.Classes.User;
+import sg.edu.np.mad.greencycle.Profile.changePassword;
+import sg.edu.np.mad.greencycle.Profile.changeemail;
 import sg.edu.np.mad.greencycle.R;
+import sg.edu.np.mad.greencycle.StartUp.JavaMailAPI;
+import sg.edu.np.mad.greencycle.StartUp.LoginPage;
+import sg.edu.np.mad.greencycle.StartUp.MainActivity;
+import sg.edu.np.mad.greencycle.StartUp.RegistrationPage;
+import sg.edu.np.mad.greencycle.StartUp.ResetPassword;
 
 
-public class ForgotPasswordActivity extends AppCompatActivity {
+public class VerifyNewAccount extends AppCompatActivity {
 
     private EditText etUsername, etVerificationCode;
     private Button btnSendCode, btnSubmit, back;
     private EditText box1, box2, box3, box4, box5, box6;
     private String generatedCode;
-    String Password,username,salt;
+    String Password, email, salt;
 
     private static final String API_KEY = "d86e3f76c011440aab7b16cb13eb8d80"; // Replace with your actual API key
     private static final String BASE_URL = "https://emailvalidation.abstractapi.com/v1/";
@@ -58,6 +71,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         btnSendCode = findViewById(R.id.sendUsernameButton);
         btnSubmit = findViewById(R.id.submitCodeButton);
         back = findViewById(R.id.backToLoginButton);
+
+        TextView Instruction = findViewById(R.id.forgotPasswordInstructions);
+        TextView Title = findViewById(R.id.forgotPasswordText);
+
+        Instruction.setText("Enter your Email");
+        Title.setText("Create Account");
 
         box1 = findViewById(R.id.codeBox1);
         box2 = findViewById(R.id.codeBox2);
@@ -106,28 +125,25 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                             boxes[i].setText(String.valueOf(pasteData.charAt(i)));
                         }
                     } else {
-                        Toast.makeText(ForgotPasswordActivity.this, "Invalid code length", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(VerifyNewAccount.this, "Invalid code length", Toast.LENGTH_SHORT).show();
                     }
                 }
                 return true;
             }
         });
 
-
         btnSendCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                username = etUsername.getText().toString().trim();
-                if (!username.isEmpty()) {
-
+                email = etUsername.getText().toString().trim();
+                email = email.toLowerCase();
+                if (!email.isEmpty()) {
                     String emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-                    if (username.matches(emailPattern)){
-
-                        verifyEmail(username);
-
+                    if (email.matches(emailPattern)) {
+                        checkEmailInFirebase(email);
+                    } else {
+                        Toast.makeText(VerifyNewAccount.this, "Incorrect Email Format.", Toast.LENGTH_SHORT).show();
                     }
-
-                    else Toast.makeText(ForgotPasswordActivity.this, "Incorrect Email Format.", Toast.LENGTH_SHORT).show();
 
                     // Disable button and start countdown
                     btnSendCode.setEnabled(false);
@@ -144,11 +160,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         }
                     }.start();
                 } else {
-                    Toast.makeText(ForgotPasswordActivity.this, "Please enter your Email.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(VerifyNewAccount.this, "Please enter your Email.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,17 +175,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         box5.getText().toString() +
                         box6.getText().toString();
                 if (inputCode.equals(generatedCode)) {
-                    Toast.makeText(ForgotPasswordActivity.this, "Verification successful. Proceed to reset password.", Toast.LENGTH_SHORT).show();
-                    // Navigate to the ChangePasswordActivity
-                    Intent intent = new Intent(ForgotPasswordActivity.this, ResetPassword.class);
-                    intent.putExtra("password",Password);
-                    intent.putExtra("username",username);
-                    intent.putExtra("salt",salt);
-                    Log.v("Password",Password);
+                    Intent intent = new Intent(VerifyNewAccount.this, RegistrationPage.class);
+                    intent.putExtra("email", email);
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(ForgotPasswordActivity.this, "Incorrect verification code.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(VerifyNewAccount.this, "Incorrect verification code.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -178,12 +188,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ForgotPasswordActivity.this, LoginPage.class);
-                startActivity(intent);
                 finish();
             }
         });
-
     }
 
     private String generateRandomCode() {
@@ -192,46 +199,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         return String.valueOf(code);
     }
 
-    private void sendEmail(String username, String code, String email) {
-
+    private void sendEmail(String code, String email) {
         String subject = "Your Verification Code";
         String message = "Your verification code is: " + code;
         JavaMailAPI javaMailAPI = new JavaMailAPI(email, subject, message);
         javaMailAPI.execute();
-    }
-
-    private void getUserByEmail(String email, String code) {
-        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
-        Query query = usersRef.orderByChild("email").equalTo(email);
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                        username = userSnapshot.getKey();
-                        String retrievedEmail = userSnapshot.child("email").getValue(String.class);
-                        Password = userSnapshot.child("password").getValue(String.class);
-                        salt = userSnapshot.child("salt").getValue(String.class);
-
-                        if (retrievedEmail != null) {
-                            Log.v("Email", retrievedEmail);
-                            sendEmail(username, code, retrievedEmail);
-                        } else {
-                            Toast.makeText(ForgotPasswordActivity.this, "Email not found: " + email, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                } else {
-                    Toast.makeText(ForgotPasswordActivity.this, "User not found with email: " + email, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e("Firebase", "Error retrieving data", databaseError.toException());
-                Toast.makeText(ForgotPasswordActivity.this, "Error retrieving data", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private void verifyEmail(String email) {
@@ -247,7 +219,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("EmailVerification", "API request error: " + e.getMessage());
-                Toast.makeText(ForgotPasswordActivity.this, "Could not verify Email", Toast.LENGTH_SHORT).show();
+                runOnUiThread(() -> Toast.makeText(VerifyNewAccount.this, "Could not verify Email", Toast.LENGTH_SHORT).show());
             }
 
             @Override
@@ -260,22 +232,43 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
                     runOnUiThread(() -> {
                         if (isValidFormat && isSmtpValid) {
-
                             generatedCode = generateRandomCode();
-                            // Simulate sending email
-                            getUserByEmail(email, generatedCode);
-
+                            sendEmail(generatedCode, email);
                         } else {
-                            Toast.makeText(ForgotPasswordActivity.this, "Email does not Exist", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(VerifyNewAccount.this, "Email does not exist", Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else {
                     Log.e("EmailVerification", "API request failed with response code: " + response.code());
-                    Toast.makeText(ForgotPasswordActivity.this, "Could not verify Email", Toast.LENGTH_SHORT).show();
+                    runOnUiThread(() -> Toast.makeText(VerifyNewAccount.this, "Could not verify Email", Toast.LENGTH_SHORT).show());
                 }
             }
         });
     }
 
+    private void checkEmailInFirebase(String email) {
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
+        Query emailQuery = usersRef.orderByChild("email").equalTo(email);
+        emailQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Toast.makeText(VerifyNewAccount.this, "Email is already registered.", Toast.LENGTH_SHORT).show();
+                } else {
+                    verifyEmail(email);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("FirebaseCheck", "Database error: " + databaseError.getMessage());
+                Toast.makeText(VerifyNewAccount.this, "Could not check email", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
+
+
+
+
 
