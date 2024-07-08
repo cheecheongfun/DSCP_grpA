@@ -49,7 +49,7 @@
             android:layout_marginStart="10dp"
             android:ems="10"
             android:fontFamily="sans-serif-condensed-medium"
-            android:hint="Username"
+            android:hint="Input Username"
             android:textColorHint="@color/light_grey"
             android:inputType="text"
             android:textColor="@color/textColour"
@@ -57,39 +57,10 @@
 
     </RelativeLayout>
 
-
-    <RelativeLayout
-        android:id="@+id/editemail"
-        style="@style/NoUnderlineHint"
-        android:layout_below="@id/editName"
-        android:layout_marginTop="50dp"
-        android:layout_centerHorizontal="true"
-        android:layout_width="345dp"
-        android:layout_marginEnd="30dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/greyrounded">
-
-        <EditText
-            android:id="@+id/registeremail"
-            style="@style/NoUnderlineHint"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="10dp"
-            android:ems="10"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:hint="Email"
-            android:textColorHint="@color/light_grey"
-            android:inputType="text"
-            android:paddingStart="5dp"
-            android:textColor="@color/textColour" />
-
-
-    </RelativeLayout>
-
     <RelativeLayout
         android:id="@+id/editPass"
         style="@style/NoUnderlineHint"
-        android:layout_below="@id/editemail"
+        android:layout_below="@id/editName"
         android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
         android:layout_width="345dp"

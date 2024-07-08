@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/AppBackgroundColour"
+    android:backgroundTint="@color/transparent">
+
+    <CheckBox
+        android:id="@+id/check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:backgroundTint="@color/transparent"/>
+    <TextView
+        android:id="@+id/foodText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_toRightOf="@+id/check"
+        android:text="Food"
+        android:textSize="20sp"
+        android:layout_alignBottom="@+id/check"
+        android:layout_alignTop="@+id/check"
+        android:backgroundTint="@color/transparent"/>
+</RelativeLayout>

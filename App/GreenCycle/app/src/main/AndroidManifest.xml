@@ -38,12 +38,6 @@
             android:name=".Profile.EditDisplayName"
             android:exported="false" />
         <activity
-            android:name=".Profile.changePassword"
-            android:exported="false" />
-        <activity
-            android:name=".Profile.changeemail"
-            android:exported="false" />
-        <activity
             android:name=".Profile.profile"
             android:exported="false" />
         <activity
@@ -64,15 +58,6 @@
         </provider>
 
         <activity
-            android:name=".ImageLog.CompostGalleryActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ImageLog.DisplayImage"
-            android:exported="false" />
-        <activity
-            android:name=".ImageLog.UploadImage"
-            android:exported="false" />
-        <activity
             android:name=".Analytics.Analytics"
             android:exported="false"
             android:theme="@style/Theme.GreenCycle" />
@@ -89,25 +74,30 @@
             android:name=".StartUp.LoginPage"
             android:exported="false" />
         <activity
-            android:name=".StartUp.VerifyNewAccount"
-            android:exported="false" />
-        <activity
             android:name=".StartUp.LandingPage"
             android:exported="true" />
         <activity
             android:name=".StartUp.ForgotPasswordActivity"
             android:exported="true" />
         <activity
-            android:name=".StartUp.ResetPassword"
+            android:name=".StartUp.ChangePasswordActivity"
             android:exported="true" />
         <activity
-            android:name=".LiveData.TankSelection"
+            android:name=".TankSelection.TankSelection"
+            android:exported="false" />
+        <activity
+            android:name=".FeedingLog.CreateSchedule"
+            android:windowSoftInputMode="stateVisible|adjustResize"
             android:exported="false" />
         <activity
             android:name=".StartUp.MainActivity"
             android:exported="true"
             android:label="@string/app_name" />
 
+        <activity
+            android:name=".StartUp.EmailVerificationActivity"
+            android:exported="true"
+            android:label="@string/app_name" />
         <activity
             android:name=".NPKvalue.npk_value"
             android:exported="true" />

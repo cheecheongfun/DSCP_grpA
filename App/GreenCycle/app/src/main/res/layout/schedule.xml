@@ -2,16 +2,31 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:theme="@style/AppBackgroundColour">
+    android:theme="@style/TankRecyclerCard">
+
+    <CheckBox
+        android:id="@+id/check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/foodText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/check"
+        android:text="Schedule Name"
+        android:layout_alignTop="@+id/check"
+        android:layout_alignBottom="@+id/check"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:visibility="visible"/>
 
     <RadioButton
         android:id="@+id/radioButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
-        android:theme="@style/OtherButtonTheme"
-        />
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/foodText3"
@@ -23,7 +38,7 @@
         android:layout_alignBottom="@+id/radioButton"
         android:gravity="center"
         android:textSize="20sp"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/view"
@@ -31,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_toStartOf="@id/delete"
         android:drawableStart="@drawable/view_icon"
-        android:visibility="visible"
+        android:visibility="gone"
         android:theme="@style/DrawableTint"
         android:layout_alignParentTop="true"
         android:layout_alignBottom="@+id/foodText3"
@@ -44,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:drawableStart="@drawable/outline_delete_24"
-        android:visibility="visible"
+        android:visibility="gone"
         android:theme="@style/DrawableTint"
         android:layout_alignParentTop="true"
         android:layout_alignBottom="@+id/foodText3"
@@ -136,7 +151,7 @@
                 android:scaleX="0.8"
                 android:scaleY="0.8"
                 android:text="Don't notify"
-                android:theme="@style/OtherButtonTheme"
+                android:textColor="@color/textColour"
                 android:textSize="20sp" />
 
             <RadioButton
@@ -146,7 +161,7 @@
                 android:scaleX="0.8"
                 android:scaleY="0.8"
                 android:text="On the day itself"
-                android:theme="@style/OtherButtonTheme"
+                android:textColor="@color/textColour"
                 android:textSize="20sp" />
 
             <RelativeLayout
@@ -162,7 +177,7 @@
                     android:scaleX="0.8"
                     android:scaleY="0.8"
                     android:textSize="20sp"
-                    android:theme="@style/OtherButtonTheme"/>
+                    android:theme="@style/CustomRadioButton" />
 
                 <EditText
                     android:id="@+id/fourthEdit"

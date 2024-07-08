@@ -26,7 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import de.hdodenhof.circleimageview.CircleImageView;
 import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.Forum.Forum;
-import sg.edu.np.mad.greencycle.LiveData.TankSelection;
+import sg.edu.np.mad.greencycle.TankSelection.TankSelection;
 import sg.edu.np.mad.greencycle.NPKvalue.npk_value;
 import sg.edu.np.mad.greencycle.Profile.options;
 import sg.edu.np.mad.greencycle.Profile.profile;
@@ -36,7 +36,7 @@ import sg.edu.np.mad.greencycle.Goals.Goals_Notification;
 
 public class HomeFragment extends Fragment {
 
-    ImageButton liveDataBtn, feedingLogBtn, analyticsBtn, goalsBtn, imageLogBtn, soilTypeBtn, solarForecastBtn, communityBtn, converterBtn, settingsBtn;
+    ImageButton liveDataBtn, feedingLogBtn, analyticsBtn, goalsBtn, soilTypeBtn, solarForecastBtn, communityBtn, settingsBtn;
     NumberPicker inputNo, inputUnit, outputUnit;
     TextView username, outputNo;
     String newInputNo, newInputUnit, newOutputUnit;
@@ -80,10 +80,8 @@ public class HomeFragment extends Fragment {
         feedingLogBtn = view.findViewById(R.id.feedingLogButton);
         analyticsBtn = view.findViewById(R.id.analyticsButton);
         goalsBtn = view.findViewById(R.id.goalsButton);
-        imageLogBtn = view.findViewById(R.id.imageLog);
         soilTypeBtn = view.findViewById(R.id.soilTypeButton);
         communityBtn = view.findViewById(R.id.communityButton);
-        converterBtn = view.findViewById(R.id.conversionButton);
         inputNo = view.findViewById(R.id.inputNo);
         inputUnit = view.findViewById(R.id.inputUnit);
         outputNo = view.findViewById(R.id.outputNo);
@@ -152,13 +150,6 @@ public class HomeFragment extends Fragment {
             Intent tankSelect = new Intent(getContext(), TankSelection.class);
             tankSelect.putExtra("user", user);
             tankSelect.putExtra("where", "Analytics");
-            startActivity(tankSelect);
-        });
-
-        imageLogBtn.setOnClickListener(view14 -> {
-            Intent tankSelect = new Intent(getContext(), TankSelection.class);
-            tankSelect.putExtra("user", user);
-            tankSelect.putExtra("where", "Identify");
             startActivity(tankSelect);
         });
 

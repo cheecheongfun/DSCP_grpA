@@ -1,5 +1,4 @@
-package sg.edu.np.mad.greencycle.Profile;
-
+package sg.edu.np.mad.greencycle.StartUp;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,14 +20,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import sg.edu.np.mad.greencycle.Classes.HashUtils;
 import sg.edu.np.mad.greencycle.R;
-import sg.edu.np.mad.greencycle.StartUp.LoginPage;
 
-public class changePassword extends AppCompatActivity {
+public class ChangePasswordActivity extends AppCompatActivity {
 
     private EditText etUsername, etCurrentPassword, etNewPassword, etConfirmPassword;
     private Button btnSavePassword,back;
     private DatabaseReference usersRef;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +40,6 @@ public class changePassword extends AppCompatActivity {
         btnSavePassword = findViewById(R.id.submitNewPasswordButton);
         back = findViewById(R.id.backToLoginFromChangeButton);
 
-        back.setText("Back");
-
 
         btnSavePassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,6 +51,8 @@ public class changePassword extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(ChangePasswordActivity.this, LoginPage.class);
+                startActivity(intent);
                 finish();
             }
         });
@@ -113,19 +109,18 @@ public class changePassword extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
                     String newPassword = HashUtils.hashPassword(confirmPassword, salt);
                     dataSnapshot.getRef().child("password").setValue(newPassword);
-                    Toast.makeText(changePassword.this, "Password updated successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChangePasswordActivity.this, "Password updated successfully", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
-                    Toast.makeText(changePassword.this, "Username not found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChangePasswordActivity.this, "Username not found", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(changePassword.this, "Error updating password", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ChangePasswordActivity.this, "Error updating password", Toast.LENGTH_SHORT).show();
             }
         });
 
     }
 }
-

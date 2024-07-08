@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -15,7 +14,6 @@ import androidx.core.content.ContextCompat;
 
 import sg.edu.np.mad.greencycle.Classes.HashUtils;
 import sg.edu.np.mad.greencycle.Classes.User;
-import sg.edu.np.mad.greencycle.Profile.changeemail;
 import sg.edu.np.mad.greencycle.R;
 import androidx.biometric.BiometricPrompt;
 
@@ -39,8 +37,6 @@ public class LoginPage extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference reference;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,8 +56,6 @@ public class LoginPage extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         reference = database.getReference("users");
 
-
-
         loginButton.setOnClickListener(view -> {
             String username = etUsername.getText().toString();
             String password = etPassword.getText().toString();
@@ -71,7 +65,6 @@ public class LoginPage extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
-                            Log.i(null, "Login success");
                             User user = dataSnapshot.getValue(User.class);
                             if (user != null) {
                                 String storedSalt = user.getSalt();
@@ -115,7 +108,7 @@ public class LoginPage extends AppCompatActivity {
         });
 
         registerButton.setOnClickListener(view -> {
-            Intent intent = new Intent(LoginPage.this, VerifyNewAccount.class);
+            Intent intent = new Intent(LoginPage.this, RegistrationPage.class);
             startActivity(intent);
         });
 

@@ -22,19 +22,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import java.io.IOException;
+import java.net.PasswordAuthentication;
 import java.util.Random;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.R;
+import sg.edu.np.mad.greencycle.StartUp.JavaMailAPI;
 
 
 public class ForgotPasswordActivity extends AppCompatActivity {
@@ -44,9 +37,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     private EditText box1, box2, box3, box4, box5, box6;
     private String generatedCode;
     String Password,username,salt;
-
-    private static final String API_KEY = "d86e3f76c011440aab7b16cb13eb8d80"; // Replace with your actual API key
-    private static final String BASE_URL = "https://emailvalidation.abstractapi.com/v1/";
 
     @SuppressLint("CutPasteId")
     @Override
@@ -119,16 +109,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             public void onClick(View v) {
                 username = etUsername.getText().toString().trim();
                 if (!username.isEmpty()) {
-
-                    String emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-                    if (username.matches(emailPattern)){
-
-                        verifyEmail(username);
-
-                    }
-
-                    else Toast.makeText(ForgotPasswordActivity.this, "Incorrect Email Format.", Toast.LENGTH_SHORT).show();
-
+                    generatedCode = generateRandomCode();
+                    // Simulate sending email
+                    getUserByEmail(username, generatedCode);
                     // Disable button and start countdown
                     btnSendCode.setEnabled(false);
                     new CountDownTimer(30000, 1000) {
@@ -143,8 +126,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                             btnSendCode.setText("Resend");
                         }
                     }.start();
+                    Toast.makeText(ForgotPasswordActivity.this, "Verification code sent to your email.", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(ForgotPasswordActivity.this, "Please enter your Email.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ForgotPasswordActivity.this, "Please enter your username.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -162,7 +146,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 if (inputCode.equals(generatedCode)) {
                     Toast.makeText(ForgotPasswordActivity.this, "Verification successful. Proceed to reset password.", Toast.LENGTH_SHORT).show();
                     // Navigate to the ChangePasswordActivity
-                    Intent intent = new Intent(ForgotPasswordActivity.this, ResetPassword.class);
+                    Intent intent = new Intent(ForgotPasswordActivity.this, ChangePasswordActivity.class);
                     intent.putExtra("password",Password);
                     intent.putExtra("username",username);
                     intent.putExtra("salt",salt);
@@ -215,7 +199,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         salt = userSnapshot.child("salt").getValue(String.class);
 
                         if (retrievedEmail != null) {
-                            Log.v("Email", retrievedEmail);
+                            Log.v("Email", salt);
                             sendEmail(username, code, retrievedEmail);
                         } else {
                             Toast.makeText(ForgotPasswordActivity.this, "Email not found: " + email, Toast.LENGTH_SHORT).show();
@@ -234,48 +218,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         });
     }
 
-    private void verifyEmail(String email) {
-        OkHttpClient client = new OkHttpClient();
-
-        String url = BASE_URL + "?api_key=" + API_KEY + "&email=" + email;
-
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e("EmailVerification", "API request error: " + e.getMessage());
-                Toast.makeText(ForgotPasswordActivity.this, "Could not verify Email", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String responseBody = response.body().string();
-                    JsonObject jsonResponse = JsonParser.parseString(responseBody).getAsJsonObject();
-                    boolean isValidFormat = jsonResponse.get("is_valid_format").getAsJsonObject().get("value").getAsBoolean();
-                    boolean isSmtpValid = jsonResponse.get("is_smtp_valid").getAsJsonObject().get("value").getAsBoolean();
-
-                    runOnUiThread(() -> {
-                        if (isValidFormat && isSmtpValid) {
-
-                            generatedCode = generateRandomCode();
-                            // Simulate sending email
-                            getUserByEmail(email, generatedCode);
-
-                        } else {
-                            Toast.makeText(ForgotPasswordActivity.this, "Email does not Exist", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } else {
-                    Log.e("EmailVerification", "API request failed with response code: " + response.code());
-                    Toast.makeText(ForgotPasswordActivity.this, "Could not verify Email", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
 
 }
 

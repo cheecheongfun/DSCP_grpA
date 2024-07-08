@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,10 +30,9 @@ import sg.edu.np.mad.greencycle.Classes.HashUtils;
 import sg.edu.np.mad.greencycle.R;
 import sg.edu.np.mad.greencycle.Classes.User;
 
+public class RegistrationPage extends AppCompatActivity {
 
-public class RegistrationPage extends AppCompatActivity{
-
-    EditText registerusername, registerpassword,registeremail;
+    EditText registerusername, registerpassword;
     Button successfulregister;
     TextView availabilityStatus;
     FirebaseDatabase database;
@@ -51,10 +49,8 @@ public class RegistrationPage extends AppCompatActivity{
 
         registerusername = findViewById(R.id.registerusername);
         registerpassword = findViewById(R.id.registerpassword);
-        registeremail = findViewById(R.id.registeremail);
         successfulregister = findViewById(R.id.registerbutton);
         availabilityStatus = findViewById(R.id.availabilityStatus);
-
 
         // Text watcher to check username as user types
         registerusername.addTextChangedListener(new TextWatcher() {
@@ -77,14 +73,13 @@ public class RegistrationPage extends AppCompatActivity{
             public void onClick(View view) {
                 final String username = registerusername.getText().toString();
                 final String password = registerpassword.getText().toString();
-                final String email = registeremail.getText().toString();
 
                 if (!isValidUsername(username)) {
                     return;
                 }
 
                 // Proceed to registration if username is valid and available
-                registerNewUser(username, password,email);
+                registerNewUser(username, password);
             }
         });
     }
@@ -126,12 +121,12 @@ public class RegistrationPage extends AppCompatActivity{
         });
     }
 
-    private void registerNewUser(String username, String password,String email) {
+    private void registerNewUser(String username, String password) {
         try {
             String salt = HashUtils.getSalt();
             String hashedPassword = HashUtils.hashPassword(password, salt);
 
-            User newUser = new User(username, hashedPassword,username,email, null, null,null,salt);
+            User newUser = new User(username, hashedPassword, username, null, null,null,salt);
             reference.child(username).setValue(newUser)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -164,7 +159,5 @@ public class RegistrationPage extends AppCompatActivity{
         editor.putString(user.getUsername() + "_DisplayName", user.getDisplayname());
         editor.apply();
     }
-
-
 
 }
