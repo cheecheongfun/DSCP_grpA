@@ -65,9 +65,7 @@ public class FeedScheduleAdapter extends ArrayAdapter<FeedSchedule> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.schedule, parent, false);
         }
 
-        TextView scheduleName = convertView.findViewById(R.id.foodText2);
         TextView scheduleName1 = convertView.findViewById(R.id.foodText3);
-        CheckBox check = convertView.findViewById(R.id.check);
         RadioButton radioButton = convertView.findViewById(R.id.radioButton);
         TextView delete = convertView.findViewById(R.id.delete);
         TextView viewDetails = convertView.findViewById(R.id.view);
@@ -83,8 +81,6 @@ public class FeedScheduleAdapter extends ArrayAdapter<FeedSchedule> {
         RadioButton radioDayBefore = convertView.findViewById(R.id.radioNotiDayBefore);
         EditText editText = convertView.findViewById(R.id.fourthEdit);
 
-        scheduleName.setVisibility(View.GONE);
-        check.setVisibility(View.GONE);
         scheduleName1.setText(feedSchedule.getScheduleName());
         scheduleName1.setVisibility(View.VISIBLE);
         radioButton.setVisibility(View.VISIBLE);

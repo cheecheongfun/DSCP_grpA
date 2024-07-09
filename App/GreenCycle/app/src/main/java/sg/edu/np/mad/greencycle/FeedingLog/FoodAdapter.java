@@ -21,18 +21,21 @@ import sg.edu.np.mad.greencycle.R;
 public class FoodAdapter extends RecyclerView.Adapter<FoodViewHolder> {
     private ArrayList<String> foodList;
     private ArrayList<Boolean> checkedStateArray;
+    private ArrayList<Boolean> newFoodFlags;
     private RecyclerView recycler;
     private String foodType;
     private ArrayList<String> amtList, customFoodList;
     private ArrayList<Food> selectedFoods;
-    FirebaseDatabase database;
-    DatabaseReference reference;
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
 
     public FoodAdapter(ArrayList<String> foodList, RecyclerView recycler, String foodType, ArrayList<Food> selectedFoods) {
         this.foodList = foodList;
         this.checkedStateArray = new ArrayList<>();
+        this.newFoodFlags = new ArrayList<>();
         for (int i = 0; i < foodList.size(); i++) {
             checkedStateArray.add(false);
+            newFoodFlags.add(false);
         }
         this.recycler = recycler;
         this.foodType = foodType;
@@ -45,20 +48,23 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodViewHolder> {
             customFoodList.add("");
         }
         this.selectedFoods = selectedFoods;
+
+        setHasStableIds(true);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
     public int getItemViewType(int position) {
-        String food;
-        if (!selectedFoods.isEmpty() && position < selectedFoods.size()){
-            return 2;
-        }
-        else {
-            if (!customFoodList.get(position).isEmpty() && customFoodList.size() == 1){
-                food = customFoodList.get(position);
-            }
-            else food = foodList.get(position);
-            return food.isEmpty() ? 1 : 0;
+        if (newFoodFlags.get(position)) {
+            return 1; // New custom food item
+        } else if (!selectedFoods.isEmpty() && position < selectedFoods.size()) {
+            return 2; // Selected food item
+        } else {
+            return 0; // Food item from the database
         }
     }
 
@@ -71,134 +77,132 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodViewHolder> {
     public FoodViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == 1) {
             return new FoodViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.food_card_edit, parent, false));
-        } else if (viewType == 0){
+        } else if (viewType == 0) {
             return new FoodViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.food_card, parent, false));
+        } else {
+            return new FoodViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.food_new, parent, false));
         }
-        else return new FoodViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.food_new, parent, false));
     }
 
     @Override
     public void onBindViewHolder(FoodViewHolder holder, int position) {
-        String food = foodList.get(position);
-
-        if (getItemViewType(position) == 1) {
-            android.util.Log.i(null, "in view 1");
-            // editing food or adding food
-            holder.editFood.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    holder.check.setChecked(true);
-                    String newFood = editable.toString();
-                    holder.colon.setVisibility(View.VISIBLE);
-                    holder.editAmt.setVisibility(View.VISIBLE);
-                    customFoodList.set(position, newFood);
-                }
-            });
-            Log.i(null, "empty edit: " +  holder.editFood.getText().toString().isEmpty());
-            holder.check.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                checkedStateArray.set(position, isChecked);
-                holder.editCard.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-                if (!isChecked || holder.editFood.getText().toString().isEmpty()) {
-                    foodList.remove(position);
-                    amtList.remove(position);
-                    customFoodList.remove(position);
-                    checkedStateArray.remove(position);
-                    notifyDataSetChanged();
-                }
-            });
-            holder.editAmt.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    amtList.set(position, editable.toString());
-                }
-            });
-        } else if (getItemViewType(position) == 0) {
-            Log.i(null, "in view 0");
-            // food is present in database
-            holder.foodText.setText(food);
-            holder.check.setChecked(checkedStateArray.get(position));
-            holder.check.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                checkedStateArray.set(position, isChecked);
-                String foodTextFormat = holder.itemView.getContext().getString(R.string.food_item);
-                String formattedFoodText = String.format(foodTextFormat, food);
-                holder.foodText.setText(formattedFoodText);
-                updateItemList();
-                holder.colon.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-                holder.editAmt.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-            });
-
-            holder.editAmt.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    amtList.set(position, editable.toString());
-                }
-            });
-            holder.editAmt.setVisibility(checkedStateArray.get(position) ? View.VISIBLE : View.GONE);
+        switch (getItemViewType(position)) {
+            case 1:
+                setupEditableViewHolder(holder, position);
+                break;
+            case 0:
+                setupDefaultViewHolder(holder, position, foodList.get(position));
+                break;
+            case 2:
+                setupSelectedViewHolder(holder, position);
+                break;
         }
-        else {
-            Log.i(null, "in view 2");
-            Food foodDetails = selectedFoods.get(position);
-            holder.check.setChecked(true);
-            holder.check.setVisibility(View.VISIBLE);
-            holder.food.setText(foodDetails.getName() + ": " + foodDetails.getAmount() + " g");
-            holder.check.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                if (!holder.check.isChecked()){
-                    selectedFoods.remove(foodDetails);
-                    Log.i(null, "selectedFoods in view 2 remove" + selectedFoods.size());
-                }
-                else {
-                    selectedFoods.add(foodDetails);
-                    Log.i(null, "selectedFoods in view 2 add " + selectedFoods.size());
-                }
-            });
-        }
+    }
+
+    private void setupEditableViewHolder(FoodViewHolder holder, int position) {
+        holder.editFood.setText(customFoodList.get(position)); // Set existing text if any
+        holder.editFood.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                holder.check.setChecked(true);
+                String newFood = editable.toString();
+                holder.colon.setVisibility(View.VISIBLE);
+                holder.editAmt.setVisibility(View.VISIBLE);
+                customFoodList.set(position, newFood);
+                foodList.set(position, newFood);
+                // No need to call notifyItemChanged(position) here
+            }
+        });
+        holder.check.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            checkedStateArray.set(position, isChecked);
+            holder.editCard.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+            if (!isChecked || holder.editFood.getText().toString().isEmpty()) {
+                foodList.remove(position);
+                amtList.remove(position);
+                customFoodList.remove(position);
+                newFoodFlags.remove(position);
+                checkedStateArray.remove(position);
+                notifyDataSetChanged(); // Update RecyclerView
+            }
+        });
+        holder.editAmt.setText(amtList.get(position)); // Set existing amount if any
+        holder.editAmt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                amtList.set(position, editable.toString());
+            }
+        });
+    }
+
+    private void setupDefaultViewHolder(FoodViewHolder holder, int position, String food) {
+        holder.foodText.setText(food);
+        holder.check.setChecked(checkedStateArray.get(position));
+        holder.check.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            checkedStateArray.set(position, isChecked);
+            holder.colon.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+            holder.editAmt.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+            updateItemList();
+        });
+        holder.editAmt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                amtList.set(position, editable.toString());
+            }
+        });
+        holder.editAmt.setVisibility(checkedStateArray.get(position) ? View.VISIBLE : View.GONE);
+    }
+
+    private void setupSelectedViewHolder(FoodViewHolder holder, int position) {
+        Food foodDetails = selectedFoods.get(position);
+        holder.check.setChecked(true);
+        holder.check.setVisibility(View.VISIBLE);
+        holder.food.setText(foodDetails.getName() + ": " + foodDetails.getAmount() + " g");
+        holder.check.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!holder.check.isChecked()) {
+                selectedFoods.remove(foodDetails);
+            } else {
+                selectedFoods.add(foodDetails);
+            }
+        });
     }
 
     public void addItem() {
-        android.util.Log.i(null, "in addItem");
-        ArrayList<String> empty = new ArrayList<>();
-        for (String f : customFoodList){
-            if (f.isEmpty()){
-                empty.add(f);
-            }
-        }
-        if (empty.size() <= 1){
-            foodList.add("");
-            checkedStateArray.add(false);
-            amtList.add("");
-            customFoodList.add("");
-            notifyItemInserted(foodList.size() - 1);
-        }
+        foodList.add("");
+        checkedStateArray.add(false);
+        amtList.add("");
+        customFoodList.add("");
+        newFoodFlags.add(true); // Mark the new item as a new custom food
+        notifyItemInserted(foodList.size() - 1);
     }
-
-
 
     private void updateItemList() {
         ArrayList<String> newList = new ArrayList<>();
         ArrayList<Boolean> newCheckedStates = new ArrayList<>();
+        ArrayList<Boolean> newFoodFlagsUpdated = new ArrayList<>();
 
         for (int i = 0; i < foodList.size(); i++) {
             if (checkedStateArray.get(i)) {
                 newList.add(foodList.get(i));
                 newCheckedStates.add(true);
+                newFoodFlagsUpdated.add(newFoodFlags.get(i));
             }
         }
 
@@ -206,13 +210,15 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodViewHolder> {
             if (!checkedStateArray.get(i)) {
                 newList.add(foodList.get(i));
                 newCheckedStates.add(false);
+                newFoodFlagsUpdated.add(newFoodFlags.get(i));
             }
         }
 
         foodList = newList;
         checkedStateArray = newCheckedStates;
+        newFoodFlags = newFoodFlagsUpdated;
 
-        recycler.post(() -> notifyDataSetChanged());
+        notifyDataSetChanged();
     }
 
     public ArrayList<Food> getSelectedFoods() {

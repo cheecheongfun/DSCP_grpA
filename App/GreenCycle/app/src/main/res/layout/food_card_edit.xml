@@ -23,8 +23,7 @@
         android:layout_alignBottom="@+id/check"
         android:maxLines="1"
         android:inputType="textCapWords"
-        android:layout_marginStart="-3dp"
-        android:textColor="@color/white"/>
+        android:layout_marginStart="-3dp"/>
 
     <TextView
         android:id="@+id/colon"
@@ -50,7 +49,6 @@
         android:layout_alignTop="@+id/check"
         android:gravity="center"
         android:maxLines="1"
-        android:layout_alignBottom="@+id/check"
-        android:textColor="@color/white"/>
+        android:layout_alignBottom="@+id/check"/>
 
 </RelativeLayout>

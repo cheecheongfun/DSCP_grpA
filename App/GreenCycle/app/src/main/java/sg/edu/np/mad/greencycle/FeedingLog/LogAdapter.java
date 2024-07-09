@@ -44,13 +44,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogViewHolder>{
         else return 2;
     }
     @Override
-        public LogViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == 0 || viewType ==1){
-            return new LogViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.food_new, parent, false));
-        }
-        if (viewType == 2){
-            return new LogViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.schedule, parent, false));
-        }
+    public LogViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new LogViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.food_new, parent, false));
     }
 
@@ -61,11 +55,6 @@ public class LogAdapter extends RecyclerView.Adapter<LogViewHolder>{
             Food food = foodList.get(position);
             holder.foodText.setText("- " + food.getName() + " " + food.getAmount() + " grams");
             holder.foodText.setTextColor(ContextCompat.getColor(context, R.color.textColour));
-        }
-        else if (getItemViewType(position) == 2){
-            // Schedule
-            FeedSchedule feedSchedule = scheduleList.get(position);
-            holder.foodText.setText(feedSchedule.getScheduleName());
         }
         else Log.i(null, "None View");
     }
