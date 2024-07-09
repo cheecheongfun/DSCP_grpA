@@ -2,57 +2,26 @@ package sg.edu.np.mad.greencycle.Profile;
 
 import static android.app.PendingIntent.getActivity;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 import sg.edu.np.mad.greencycle.Classes.User;
-import sg.edu.np.mad.greencycle.Fragments.Home.HomeFragment;
-import sg.edu.np.mad.greencycle.NPKvalue.npk_value;
 import sg.edu.np.mad.greencycle.R;
-import sg.edu.np.mad.greencycle.StartUp.ChangePasswordActivity;
+import sg.edu.np.mad.greencycle.StartUp.ResetPassword;
 import sg.edu.np.mad.greencycle.StartUp.LoginPage;
 
 public class options extends AppCompatActivity {
@@ -79,7 +48,7 @@ public class options extends AppCompatActivity {
         });
 
         changepassword.setOnClickListener(v -> {
-            Intent intent = new Intent(this, ChangePasswordActivity.class);
+            Intent intent = new Intent(this, changePassword.class);
             intent.putExtra("username", username);
             intent.putExtra("password",password);
             intent.putExtra("salt",salt);
@@ -87,7 +56,7 @@ public class options extends AppCompatActivity {
         });
 
         changeemail.setOnClickListener(v -> {
-            Intent intent = new Intent(this, ChangePasswordActivity.class);
+            Intent intent = new Intent(this, changeemail.class);
             intent.putExtra("user", user);
             startActivity(intent);
         });

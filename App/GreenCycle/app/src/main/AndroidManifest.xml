@@ -45,6 +45,12 @@
             android:name=".Profile.EditDisplayName"
             android:exported="false" />
         <activity
+            android:name=".Profile.changePassword"
+            android:exported="false" />
+        <activity
+            android:name=".Profile.changeemail"
+            android:exported="false" />
+        <activity
             android:name=".Profile.profile"
             android:exported="false" />
         <activity
@@ -81,6 +87,9 @@
             android:name=".StartUp.LoginPage"
             android:exported="false" />
         <activity
+            android:name=".StartUp.VerifyNewAccount"
+            android:exported="false" />
+        <activity
             android:name=".StartUp.LandingPage"
             android:exported="true" >
             <intent-filter>
@@ -92,7 +101,7 @@
             android:name=".StartUp.ForgotPasswordActivity"
             android:exported="true" />
         <activity
-            android:name=".StartUp.ChangePasswordActivity"
+            android:name=".StartUp.ResetPassword"
             android:exported="true" />
         <activity
             android:name=".TankSelection.TankSelection"
@@ -105,13 +114,11 @@
             android:name=".StartUp.MainActivity"
             android:exported="true"
             android:label="@string/app_name" />
-
-        <activity
-            android:name=".StartUp.EmailVerificationActivity"
-            android:exported="true"
-            android:label="@string/app_name" />
         <activity
             android:name=".NPKvalue.npk_value"
+            android:exported="true" />
+        <activity
+            android:name=".UnitConversion.Conversion"
             android:exported="true" />
         <activity
             android:name=".Goals.ViewGoals"

@@ -33,10 +33,11 @@ import sg.edu.np.mad.greencycle.Profile.profile;
 import sg.edu.np.mad.greencycle.R;
 import sg.edu.np.mad.greencycle.SolarForecast.Forecast;
 import sg.edu.np.mad.greencycle.Goals.Goals_Notification;
+import sg.edu.np.mad.greencycle.UnitConversion.Conversion;
 
 public class HomeFragment extends Fragment {
 
-    ImageButton liveDataBtn, feedingLogBtn, analyticsBtn, goalsBtn, soilTypeBtn, solarForecastBtn, communityBtn, settingsBtn;
+    ImageButton liveDataBtn, feedingLogBtn, analyticsBtn, goalsBtn, soilTypeBtn, solarForecastBtn, communityBtn, settingsBtn,ConversionBtn;
     NumberPicker inputNo, inputUnit, outputUnit;
     TextView username, outputNo;
     String newInputNo, newInputUnit, newOutputUnit;
@@ -80,12 +81,11 @@ public class HomeFragment extends Fragment {
         feedingLogBtn = view.findViewById(R.id.feedingLogButton);
         analyticsBtn = view.findViewById(R.id.analyticsButton);
         goalsBtn = view.findViewById(R.id.goalsButton);
+        ConversionBtn = view.findViewById(R.id.circleButton);
+
         soilTypeBtn = view.findViewById(R.id.soilTypeButton);
         communityBtn = view.findViewById(R.id.communityButton);
-        inputNo = view.findViewById(R.id.inputNo);
-        inputUnit = view.findViewById(R.id.inputUnit);
-        outputNo = view.findViewById(R.id.outputNo);
-        outputUnit = view.findViewById(R.id.outputUnit);
+
         solarForecastBtn = view.findViewById(R.id.solarForecast);
         settingsBtn = view.findViewById((R.id.settings));
         drawerLayout = view.findViewById(R.id.drawer_layout);
@@ -160,6 +160,15 @@ public class HomeFragment extends Fragment {
             startActivity(goals);
         });
 
+        ConversionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Conversion dialog = new Conversion(getContext());
+                dialog.show();
+            }
+        });
+
+
         communityBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -170,31 +179,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        inputNo.setTextColor(ContextCompat.getColor(getContext(), R.color.textColour));
-        inputNo.setMaxValue(999);
-        inputNo.setMinValue(0);
-        inputNo.setValue(0);
-        inputNo.setWrapSelectorWheel(true);
-        inputNo.setOnValueChangedListener((numberPicker, i, i1) -> newInputNo = String.valueOf(i1));
 
-        String[] units = {"ml", "g", "tbsp", "tsp", "cup"};
-        inputUnit.setTextColor(ContextCompat.getColor(getContext(), R.color.textColour));
-        inputUnit.setMinValue(0);
-        inputUnit.setMaxValue(units.length - 1);
-        inputUnit.setDisplayedValues(units);
-        inputUnit.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-
-        outputUnit.setMinValue(0);
-        outputUnit.setTextColor(ContextCompat.getColor(getContext(), R.color.textColour));
-        outputUnit.setMaxValue(units.length - 1);
-        outputUnit.setDisplayedValues(units);
-        outputUnit.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        outputUnit.setOnValueChangedListener((numberPicker, i, i1) -> newOutputUnit = units[i1]);
-
-        // Add listeners to NumberPickers
-        inputNo.setOnValueChangedListener((numberPicker, oldVal, newVal) -> convert(units));
-        inputUnit.setOnValueChangedListener((numberPicker, oldVal, newVal) -> convert(units));
-        outputUnit.setOnValueChangedListener((numberPicker, oldVal, newVal) -> convert(units));
 
         solarForecastBtn.setOnClickListener(view16 -> {
             Intent forecast = new Intent(getContext(), Forecast.class);
@@ -204,59 +189,6 @@ public class HomeFragment extends Fragment {
 
         return view;
     }
-
-    private void convert(String[] units) {
-        int inputAmount = inputNo.getValue();
-        String inputUnitStr = units[inputUnit.getValue()];
-        String outputUnitStr = units[outputUnit.getValue()];
-
-        // Convert the input amount to the base unit (ml)
-        double baseAmount = toBaseUnit(inputAmount, inputUnitStr);
-
-        // Convert the base amount to the output unit
-        double convertedValue = fromBaseUnit(baseAmount, outputUnitStr);
-
-        // Format the converted value to 3 significant figures
-        String formattedValue = String.format("%.3g", convertedValue);
-
-        outputNo.setText(formattedValue);
-    }
-
-    private double toBaseUnit(int amount, String unit) {
-        switch (unit) {
-            case "ml":
-                return amount;
-            case "g":
-                return amount * 1.0; // Assuming 1 g of water = 1 ml
-            case "tbsp":
-                return amount * 15.0; // 1 tbsp = 15 ml
-            case "tsp":
-                return amount * 5.0; // 1 tsp = 5 ml
-            case "cup":
-                return amount * 240.0; // 1 cup = 240 ml
-            default:
-                throw new IllegalArgumentException("Unknown unit: " + unit);
-        }
-    }
-
-    private double fromBaseUnit(double amount, String unit) {
-        switch (unit) {
-            case "ml":
-                return amount;
-            case "g":
-                return amount * 1.0; // Assuming 1 ml of water = 1 g
-            case "tbsp":
-                return amount / 15.0; // 1 tbsp = 15 ml
-            case "tsp":
-                return amount / 5.0; // 1 tsp = 5 ml
-            case "cup":
-                return amount / 240.0; // 1 cup = 240 ml
-            default:
-                throw new IllegalArgumentException("Unknown unit: " + unit);
-        }
-    }
-
-
 
 
 

@@ -213,6 +213,7 @@
         <item name="android:src">@drawable/outline_solar_power_24_dark</item>
     </style>
 
+
     <!-- Resource filter by type -->
     <style name="ResourceFilter">
         <item name="android:backgroundTint">@color/light_green</item>
