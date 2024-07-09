@@ -276,7 +276,7 @@
                     android:id="@+id/radioRepeatWeekly"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:theme="@style/CustomRadioButton"
+                    android:theme="@style/OtherButtonTheme"
                     android:text="Every"
                     android:textSize="17sp"/>
 
@@ -344,7 +344,7 @@
                     android:id="@+id/radioRepeatMonthly"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:theme="@style/CustomRadioButton"
+                    android:theme="@style/OtherButtonTheme"
                     android:text="Every"
                     android:textSize="17sp"/>
 
@@ -498,7 +498,7 @@
                     android:id="@+id/radioNotiDayBefore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:theme="@style/CustomRadioButton"
+                    android:theme="@style/OtherButtonTheme"
                     android:textSize="17sp"/>
 
                 <EditText

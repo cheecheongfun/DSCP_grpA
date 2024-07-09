@@ -36,6 +36,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -71,6 +72,7 @@ public class CreateSchedule extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference reference;
     LocalDate selectedDate;
+    private static final int REQUEST_CODE = 1001;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -794,7 +796,7 @@ public class CreateSchedule extends AppCompatActivity {
                         ArrayList<FeedSchedule> feedSchedules = tank.getFeedSchedule();
                         feedSchedules.add(schedule);
                         tank.setFeedSchedule(feedSchedules);
-                        saveToFirebase(tank);
+                        saveToFirebase(tank, schedule);
                     }
                 }
                 else {
@@ -840,7 +842,7 @@ public class CreateSchedule extends AppCompatActivity {
                     ArrayList<FeedSchedule> feedSchedules = tank.getFeedSchedule();
                     feedSchedules.add(schedule);
                     tank.setFeedSchedule(feedSchedules);
-                    saveToFirebase(tank);
+                    saveToFirebase(tank, schedule);
                 }
             }
         });
@@ -1031,7 +1033,7 @@ public class CreateSchedule extends AppCompatActivity {
         }
     }
 
-    public void saveToFirebase(Tank updatedTank){
+    public void saveToFirebase(Tank updatedTank, FeedSchedule schedule){
         database = FirebaseDatabase.getInstance();
         reference = database.getReference("users");
 

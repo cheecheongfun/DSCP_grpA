@@ -152,8 +152,7 @@
     </style>
 
     <!-- Radio button for schedule -->
-    <style name="CustomRadioButton">
-        <item name="android:buttonTint">@color/white</item> <!-- Set the button tint color to white -->
-        <item name="android:textColor">@color/white</item> <!-- Set the text color to white -->
+    <style name="OtherButtonTheme">
+        <item name="android:buttonTint">@color/white</item>
     </style>
 </resources>

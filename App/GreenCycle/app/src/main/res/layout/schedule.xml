@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:theme="@style/TankRecyclerCard">
+    android:theme="@style/AppBackgroundColour">
 
     <CheckBox
         android:id="@+id/check"
@@ -177,7 +177,7 @@
                     android:scaleX="0.8"
                     android:scaleY="0.8"
                     android:textSize="20sp"
-                    android:theme="@style/CustomRadioButton" />
+                    android:theme="@style/OtherButtonTheme" />
 
                 <EditText
                     android:id="@+id/fourthEdit"

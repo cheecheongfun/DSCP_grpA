@@ -3,7 +3,12 @@ package sg.edu.np.mad.greencycle.FeedingLog;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -11,6 +16,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -71,8 +77,11 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.TemporalAdjusters;
@@ -91,6 +100,7 @@ import kotlin.jvm.functions.Function1;
 import sg.edu.np.mad.greencycle.Classes.FeedSchedule;
 import sg.edu.np.mad.greencycle.Classes.Food;
 import sg.edu.np.mad.greencycle.Classes.Log;
+import sg.edu.np.mad.greencycle.Classes.NotificationReceiver;
 import sg.edu.np.mad.greencycle.Classes.Tank;
 import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.R;
@@ -1147,6 +1157,7 @@ public class Feeding extends AppCompatActivity {
                                 } else setupWeekView();
                             }
                         });
+                        scheduleNotifications(newSched);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -1716,6 +1727,80 @@ public class Feeding extends AppCompatActivity {
     private void resetImageView() {
         imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.uploadicon));
         imageUri = null;
+    }
+    private void scheduleNotifications(FeedSchedule schedule) {
+        String scheduleName = schedule.getScheduleName(); // Assuming each schedule has a unique ID
+        ArrayList<String> feedingDatesString = schedule.getDates();
+        ArrayList<LocalDate> feedingDates = new ArrayList<>();
+        for (String s : feedingDatesString) {
+            feedingDates.add(LocalDate.parse(s, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        }
+
+        for (LocalDate feedingDate : feedingDates) {
+            long feedingDateInMillis = getMillisFromLocalDate(feedingDate);
+
+            switch (schedule.getNotification()) {
+                case "Don't notify":
+                    // Do nothing
+                    break;
+                case "On the day itself":
+                    scheduleNotification(scheduleName, 0, feedingDateInMillis, "feedingReminder");
+                    break;
+                default:
+                    if (schedule.getNotification().contains("days before")) {
+                        String noti = schedule.getNotification();
+                        int daysBefore = extractDaysBefore(noti);
+                        scheduleNotification(scheduleName, daysBefore, feedingDateInMillis, "feedingReminder");
+                    }
+                    break;
+            }
+        }
+    }
+    private int extractDaysBefore(String notificationType) {
+        // Extract the number of days before from the string
+        String[] parts = notificationType.split(" ");
+        for (String part : parts) {
+            try {
+                return Integer.parseInt(part);
+            } catch (NumberFormatException e) {
+                // Ignore and continue
+            }
+        }
+        return 0; // Default to 0 if no number found
+    }
+
+    private void scheduleNotification(String scheduleName, int daysBefore, long feedingDateInMillis, String notificationType) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        intent.putExtra("scheduleName", scheduleName);
+        intent.putExtra("notificationType", notificationType);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, scheduleName.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(feedingDateInMillis);
+
+        if (daysBefore > 0) {
+            calendar.add(Calendar.DAY_OF_YEAR, -daysBefore);
+        }
+
+        // Set the time to 4 AM
+        calendar.set(Calendar.HOUR_OF_DAY, 4);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        if (alarmManager != null) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        }
+    }
+
+
+    private long getMillisFromLocalDate(LocalDate localDate) {
+        ZoneId zoneId = ZoneId.systemDefault(); // or ZoneId.of("your-time-zone")
+        ZonedDateTime zonedDateTime = localDate.atStartOfDay(zoneId).plusHours(4); // Set the time to 4 AM
+        Instant instant = zonedDateTime.toInstant();
+        return instant.toEpochMilli();
     }
     // Classes
     class DayViewContainer extends ViewContainer {

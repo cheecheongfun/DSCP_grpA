@@ -2,11 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <!-- Include permissions here -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -22,6 +24,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GreenCycle"
         tools:targetApi="31">
+        <receiver android:name=".Classes.NotificationReceiver" android:enabled="true" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
         <activity
             android:name=".SolarForecast.CurrentWeatherFragment"
             android:exported="false" />
@@ -75,7 +82,12 @@
             android:exported="false" />
         <activity
             android:name=".StartUp.LandingPage"
-            android:exported="true" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".StartUp.ForgotPasswordActivity"
             android:exported="true" />
