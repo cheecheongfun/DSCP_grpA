@@ -30,7 +30,8 @@ import sg.edu.np.mad.greencycle.Classes.HashUtils;
 import sg.edu.np.mad.greencycle.R;
 import sg.edu.np.mad.greencycle.Classes.User;
 
-public class RegistrationPage extends AppCompatActivity {
+
+public class RegistrationPage extends AppCompatActivity{
 
     EditText registerusername, registerpassword;
     Button successfulregister;
@@ -51,6 +52,10 @@ public class RegistrationPage extends AppCompatActivity {
         registerpassword = findViewById(R.id.registerpassword);
         successfulregister = findViewById(R.id.registerbutton);
         availabilityStatus = findViewById(R.id.availabilityStatus);
+
+        Intent receivingEnd = getIntent();
+        String email = receivingEnd.getExtras().getString("email");
+
 
         // Text watcher to check username as user types
         registerusername.addTextChangedListener(new TextWatcher() {
@@ -79,7 +84,7 @@ public class RegistrationPage extends AppCompatActivity {
                 }
 
                 // Proceed to registration if username is valid and available
-                registerNewUser(username, password);
+                registerNewUser(username, password,email);
             }
         });
     }
@@ -121,12 +126,12 @@ public class RegistrationPage extends AppCompatActivity {
         });
     }
 
-    private void registerNewUser(String username, String password) {
+    private void registerNewUser(String username, String password,String email) {
         try {
             String salt = HashUtils.getSalt();
             String hashedPassword = HashUtils.hashPassword(password, salt);
 
-            User newUser = new User(username, hashedPassword, username, null, null,null,salt);
+            User newUser = new User(username, hashedPassword,username,email, null, null,null,salt);
             reference.child(username).setValue(newUser)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -159,5 +164,7 @@ public class RegistrationPage extends AppCompatActivity {
         editor.putString(user.getUsername() + "_DisplayName", user.getDisplayname());
         editor.apply();
     }
+
+
 
 }

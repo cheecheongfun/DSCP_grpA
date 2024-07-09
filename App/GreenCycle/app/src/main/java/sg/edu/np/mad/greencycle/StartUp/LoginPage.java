@@ -108,7 +108,7 @@ public class LoginPage extends AppCompatActivity {
         });
 
         registerButton.setOnClickListener(view -> {
-            Intent intent = new Intent(LoginPage.this, RegistrationPage.class);
+            Intent intent = new Intent(LoginPage.this, VerifyNewAccount.class);
             startActivity(intent);
         });
 

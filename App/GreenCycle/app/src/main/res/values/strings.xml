@@ -63,4 +63,12 @@
     <string name="food_item">%s:</string>
     <string name="profile">Profile</string>
 
+    <string-array name="units_array">
+        <item>ml</item>
+        <item>g</item>
+        <item>tbsp</item>
+        <item>tsp</item>
+        <item>cup</item>
+    </string-array>
+
 </resources>

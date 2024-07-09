@@ -235,114 +235,6 @@
 
         <!-- Widget -->
 
-        <RelativeLayout
-            android:id="@+id/widget"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_below="@+id/goalsText"
-            android:layout_marginTop="30dp"
-            android:layout_alignStart="@+id/sectionVermi"
-            android:layout_alignEnd="@+id/sectionVermi"
-            android:background="@drawable/rounded_corner_mid_green"
-            android:backgroundTint="@color/light_green">
-
-
-            <TextView
-                android:id="@+id/convert"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/baseline_arrow_forward_24"
-                android:drawableTint="@color/textColour"
-                android:background="@color/transparent"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:layout_alignTop="@+id/inputUnit"
-                android:layout_alignBottom="@+id/inputUnit"/>
-
-            <TextView
-                android:id="@+id/inputUnitText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Unit"
-                android:textColor="@color/textColour"
-                android:background="@color/transparent"
-                android:layout_alignEnd="@+id/inputUnit"
-                android:layout_alignStart="@+id/inputUnit"
-                android:gravity="center"
-                android:layout_above="@+id/inputUnit"
-                android:layout_marginBottom="-22dp"/>
-
-            <NumberPicker
-                android:id="@+id/inputUnit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:layout_marginEnd="20dp"
-                android:layout_toStartOf="@+id/convert"
-                android:theme="@style/WidgetPicker"
-                android:layout_marginTop="20dp" />
-
-            <TextView
-                android:id="@+id/inputAmtText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Amount"
-                android:textColor="@color/textColour"
-                android:background="@color/transparent"
-                android:layout_alignEnd="@+id/inputNo"
-                android:layout_alignStart="@+id/inputNo"
-                android:gravity="center"
-                android:layout_above="@+id/inputNo"
-                android:layout_marginBottom="-22dp"/>
-
-            <NumberPicker
-                android:id="@+id/inputNo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:layout_marginTop="20dp"
-                android:layout_toStartOf="@+id/inputUnit"
-                android:theme="@style/WidgetPicker"/>
-
-            <TextView
-                android:id="@+id/outputNo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="10"
-                android:textColor="@color/textColour"
-                android:background="@color/transparent"
-                android:layout_toEndOf="@+id/convert"
-                android:layout_alignTop="@+id/inputUnit"
-                android:layout_alignBottom="@+id/inputUnit"
-                android:gravity="center"
-                android:layout_marginStart="20dp"
-                android:textSize="20dp"/>
-
-            <TextView
-                android:id="@+id/outputUnitText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Unit"
-                android:textColor="@color/textColour"
-                android:background="@color/transparent"
-                android:layout_alignEnd="@+id/outputUnit"
-                android:layout_alignStart="@+id/outputUnit"
-                android:gravity="center"
-                android:layout_above="@+id/outputUnit"
-                android:layout_marginBottom="-22dp"/>
-
-            <NumberPicker
-                android:id="@+id/outputUnit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:layout_marginTop="20dp"
-                android:layout_toEndOf="@+id/outputNo"
-                android:theme="@style/WidgetPicker"
-                android:layout_marginStart="10dp"
-                />
-
-        </RelativeLayout>
 
         <!-- Solar Section -->
 
@@ -350,7 +242,7 @@
             android:id="@+id/sectionSolar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/widget"
+            android:layout_below="@+id/goalsButton"
             android:layout_alignStart="@+id/sectionVermi"
             android:layout_marginTop="30dp"
             android:layout_alignEnd="@+id/sectionVermi"
@@ -391,6 +283,18 @@
             android:layout_marginEnd="6dp"
             android:backgroundTint="@color/transparent"
             android:src="@drawable/baseline_settings_24" />
+
+        <ImageButton
+            android:id="@+id/circleButton"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/baseline_change_circle_24"
+            android:scaleType="fitCenter" />
+
 
     </RelativeLayout>
 </FrameLayout>

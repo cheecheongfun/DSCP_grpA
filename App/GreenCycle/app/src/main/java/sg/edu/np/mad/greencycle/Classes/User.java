@@ -10,6 +10,7 @@ import sg.edu.np.mad.greencycle.Forum.Comment;
 public class User implements Parcelable {
     private String username;
     private String password;
+    private String email;
     private String displayname;
     private ArrayList<Tank> tanks;
     private ArrayList<String> likedPosts;
@@ -22,9 +23,10 @@ public class User implements Parcelable {
         comments = new ArrayList<>();
     }
 
-    public User(String username, String password, String displayname, ArrayList<Tank> tanks, ArrayList<String> likedPosts, ArrayList<String> comments, String salt) {
+    public User(String username, String password, String displayname,String email, ArrayList<Tank> tanks, ArrayList<String> likedPosts, ArrayList<String> comments, String salt) {
         this.username = username;
         this.password = password;
+        this.email = email;
         this.displayname = displayname;
         this.tanks = tanks;
         this.likedPosts = likedPosts;
@@ -35,6 +37,7 @@ public class User implements Parcelable {
     protected User(Parcel in) {
         username = in.readString();
         password = in.readString();
+        email = in.readString();
         displayname = in.readString();
         tanks = new ArrayList<>();
         in.readList(tanks, Tank.class.getClassLoader());
@@ -66,6 +69,7 @@ public class User implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(username);
         dest.writeString(password);
+        dest.writeString(email);
         dest.writeString(displayname);
         dest.writeList(tanks);
         dest.writeList(likedPosts);
@@ -135,6 +139,14 @@ public class User implements Parcelable {
 
     public String getPassword() {
         return password;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public void setPassword(String password) {
