@@ -1,0 +1,29 @@
+name: Process New Blob
+
+on:
+  repository_dispatch:
+    types: [new_blob_created]
+
+jobs:
+  process_blob:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install azure-storage-blob pandas openpyxl
+
+      - name: Run data processing script
+        env:
+          AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
+        run: |
+          python scripts/process_blob.py "${{ github.event.client_payload.blob_name }}"
