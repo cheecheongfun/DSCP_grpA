@@ -1,0 +1,39 @@
+name: Process and Append Data
+
+on:
+  workflow_dispatch:
+    inputs:
+      blob_url:
+        description: 'The URL of the new data blob'
+        required: true
+
+jobs:
+  process_data:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pandas azure-storage-blob requests
+
+    - name: Download new data file
+      env:
+        BLOB_URL: ${{ github.event.inputs.blob_url }}
+      run: |
+        wget -O new_datafile.xlsx "${{ env.BLOB_URL }}"
+
+    - name: Run preprocessing script
+      env:
+        AZURE_STORAGE_ACCOUNT_NAME: ${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}
+        AZURE_STORAGE_ACCOUNT_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
+      run: |
+        python preprocess_and_append.py new_datafile.xlsx
