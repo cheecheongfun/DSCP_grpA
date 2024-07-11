@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       blob_url:
-        description: 'The URL othe new data blob'
+        description: 'The URL of the new data blob'
         required: true
 
 jobs:
@@ -18,7 +18,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.11'
+        python-version: '3.9'
 
     - name: Install dependencies
       run: |
@@ -35,5 +35,6 @@ jobs:
       env:
         AZURE_STORAGE_ACCOUNT_NAME: ${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}
         AZURE_STORAGE_ACCOUNT_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
+        CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
       run: |
         python preprocess_and_append.py new_datafile.xlsx
