@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       blob_url:
-        description: 'The URL of the new data blob'
+        description: 'The URL othe new data blob'
         required: true
 
 jobs:
