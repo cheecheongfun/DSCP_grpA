@@ -9,18 +9,17 @@ from concurrent.futures import ThreadPoolExecutor
 account_name = os.getenv('AZURE_STORAGE_ACCOUNT_NAME')
 account_key = os.getenv('AZURE_STORAGE_ACCOUNT_KEY')
 container_name = 'datadump'
-final_data_folder = 'final_data'
 blob_service_client = BlobServiceClient(account_url=f"https://{account_name}.blob.core.windows.net", credential=account_key)
 
 def download_blob(blob_name):
-    blob_client = blob_service_client.get_blob_client(container=container_name, blob=f"{final_data_folder}/{blob_name}")
+    blob_client = blob_service_client.get_blob_client(container=container_name, blob=f"{blob_name}")
     download_file_path = f"./{blob_name}"
     with open(download_file_path, "wb") as download_file:
         download_file.write(blob_client.download_blob().readall())
     return download_file_path
 
 def upload_blob(blob_name, file_path):
-    blob_client = blob_service_client.get_blob_client(container=container_name, blob=f"{final_data_folder}/{blob_name}")
+    blob_client = blob_service_client.get_blob_client(container=container_name, blob=f"{blob_name}")
     with open(file_path, "rb") as data:
         blob_client.upload_blob(data, overwrite=True)
 
