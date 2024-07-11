@@ -31,7 +31,7 @@ def preprocess_and_append(new_file):
     df_new['PR %'] = np.where(df_new['PR %']==0,80,df_new['PR %'])
     df_new['PR %'] = np.where(df_new['PR %']<70,70,df_new['PR %'])
     df_new.drop(['Energy Generation','Expected Value kWh'],axis=1,inplace=True)
-    winsorizer = Winsorizer(capping_method='quantiles',tail='right',fold=0.05,vairables='Energy kWh')
+    winsorizer = Winsorizer(capping_method='quantiles',tail='right',fold=0.05,variables='Energy kWh')
     winsorizer.fit(df_new)
     df_new = winsorizer.transform(df_new)
     winsorizer = Winsorizer(capping_method='quantiles',tail='left',fold=0.01,variables='Energy kWh')
