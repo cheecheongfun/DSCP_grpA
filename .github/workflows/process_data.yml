@@ -23,7 +23,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pandas azure-storage-blob requests
+        pip install pandas azure-storage-blob numpy feature-engine requests
 
     - name: Download new data file
       env:
