@@ -13,7 +13,6 @@ public class FeedSchedule implements Parcelable {
     private String repeatType; // "None", "Daily", "Weekly", "Monthly", "Custom"
     private HashMap<String, ArrayList<String>> repeatDetails; // Additional details like days for weekly repeats
     private String notification;
-    private int waterAmt;
     private String refDate;
     private ArrayList<String> dates;
     public FeedSchedule(){
@@ -21,14 +20,13 @@ public class FeedSchedule implements Parcelable {
     }
 
     // Constructor
-    public FeedSchedule(String scheduleName, ArrayList<Food> greenFood, ArrayList<Food> brownFood, String repeatType, HashMap<String, ArrayList<String>> repeatDetails, String notification, int waterAmt, String refDate, ArrayList<String> dates) {
+    public FeedSchedule(String scheduleName, ArrayList<Food> greenFood, ArrayList<Food> brownFood, String repeatType, HashMap<String, ArrayList<String>> repeatDetails, String notification, String refDate, ArrayList<String> dates) {
         this.scheduleName = scheduleName;
         this.greenFood = greenFood;
         this.brownFood = brownFood;
         this.repeatType = repeatType;
         this.repeatDetails = repeatDetails;
         this.notification = notification;
-        this.waterAmt = waterAmt;
         this.refDate = refDate;
         this.dates = dates;
     }
@@ -82,14 +80,6 @@ public class FeedSchedule implements Parcelable {
         this.notification = notification;
     }
 
-    public int getWaterAmt() {
-        return waterAmt;
-    }
-
-    public void setWaterAmt(int waterAmt) {
-        this.waterAmt = waterAmt;
-    }
-
     public String getRefDate() {
         return refDate;
     }
@@ -108,7 +98,6 @@ public class FeedSchedule implements Parcelable {
         repeatType = in.readString();
         repeatDetails = (HashMap<String, ArrayList<String>>) in.readSerializable();
         notification = in.readString();
-        waterAmt = in.readInt();
         refDate = in.readString();
         dates = new ArrayList<>();
         in.readList(this.dates, String.class.getClassLoader());
@@ -139,7 +128,6 @@ public class FeedSchedule implements Parcelable {
         parcel.writeString(repeatType);
         parcel.writeSerializable(repeatDetails);
         parcel.writeString(notification);
-        parcel.writeInt(waterAmt);
         parcel.writeString(refDate); // Write String
         parcel.writeList(dates);
     }

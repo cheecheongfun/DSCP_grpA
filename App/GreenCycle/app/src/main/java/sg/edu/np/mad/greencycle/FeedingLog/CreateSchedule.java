@@ -51,8 +51,8 @@ import sg.edu.np.mad.greencycle.R;
 
 public class CreateSchedule extends AppCompatActivity {
 
-    EditText scheduleName, waterAmt, secondEdit, thirdEdit, fourthEdit;
-    RelativeLayout greenSect, brownSect, waterSect, repeatSect, notificationSect, second, third, fourth, monthOptions;
+    EditText scheduleName, secondEdit, thirdEdit, fourthEdit;
+    RelativeLayout greenSect, brownSect, repeatSect, notificationSect, second, third, fourth, monthOptions;
     LinearLayout dayTitles, repeatOptions, notiOptions;
     TextView green, greenCancel, greenLine, brown, brownCancel, brownLine, repeatText, repeatCancel;
     TextView repeatLine, notiText, notiCancel, notiLine, cancel, save, monthOption1, monthOption2, text2, text3, text4;
@@ -68,7 +68,6 @@ public class CreateSchedule extends AppCompatActivity {
     ArrayList<String> weeklyDaysList;
     Set<String> weeklyDays = new HashSet<>();
     String[] dayAbbreviations;
-    int water;
     FirebaseDatabase database;
     DatabaseReference reference;
     LocalDate selectedDate;
@@ -116,15 +115,12 @@ public class CreateSchedule extends AppCompatActivity {
         brownCancel = findViewById(R.id.brownCancel);
         brownRecycler = findViewById(R.id.brownRecycler);
 
-        // Water section
-        waterSect = findViewById(R.id.waterSect);
-        waterAmt = findViewById(R.id.waterAmt);
-
         // Repeat section
         repeatSect = findViewById(R.id.repeat);
         repeatText = findViewById(R.id.repeatText);
         repeatLine = findViewById(R.id.repeatLine);
         repeatCancel = findViewById(R.id.repeatCancel);
+
         // Radio group for options
         repeatOptions = findViewById(R.id.radioRepeatGroup);
         repeatNone = findViewById(R.id.radioRepeatNone);
@@ -227,25 +223,6 @@ public class CreateSchedule extends AppCompatActivity {
                     brownRecycler.setAdapter(bAdapter);
                     brown.setClickable(true);
                     brown.setOnClickListener(v-> bAdapter.addItem());
-                }
-            }
-        });
-
-        // water section
-        waterAmt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (greenCancel.getVisibility() == View.VISIBLE){
-                    greenCancel.callOnClick();
-                }
-                if (brownCancel.getVisibility() == View.VISIBLE){
-                    brownCancel.callOnClick();
-                }
-                if (repeatCancel.getVisibility() == View.VISIBLE){
-                    repeatCancel.callOnClick();
-                }
-                if (notiCancel.getVisibility() == View.VISIBLE){
-                    notiCancel.callOnClick();
                 }
             }
         });
@@ -789,24 +766,18 @@ public class CreateSchedule extends AppCompatActivity {
 
                         repeatDetails.put(repeatType, weeklyDaysList);
 
-                        // Water
-                        if (waterAmt.getText().toString().isEmpty()){
-                            water = 0;
-                        }
-                        else water = Integer.parseInt(waterAmt.getText().toString());
-
                         // Notification
                         if (notiType.isEmpty()){
                             notiType = "Don't notify";
                         }
                         ArrayList<String> dates = new ArrayList<>();
-                        FeedSchedule schedule = new FeedSchedule(name, greenList, brownList, repeatType,  repeatDetails, notiType, water, null, dates);
+                        FeedSchedule schedule = new FeedSchedule(name, greenList, brownList, repeatType,  repeatDetails, notiType, null, dates);
                         for (LocalDate d : generateScheduledDates(schedule)){
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                             dates.add(formatter.format(d));
                         }
                         schedule.setDates(dates);
-                        Log.i("In save schedule", "schedule: " + schedule.getScheduleName() + schedule.getWaterAmt() + schedule.getNotification());
+                        Log.i("In save schedule", "schedule: " + schedule.getScheduleName()  + schedule.getNotification());
                         Log.i("In save schedule", "schedule: " + schedule.getGreenFood() + schedule.getBrownFood() + schedule.getRepeatType() + schedule.getRepeatDetails());
                         ArrayList<FeedSchedule> feedSchedules = tank.getFeedSchedule();
                         feedSchedules.add(schedule);
@@ -837,18 +808,12 @@ public class CreateSchedule extends AppCompatActivity {
                     }
                     repeatDetails.put(repeatType, weeklyDaysList);
 
-                    // Water
-                    if (waterAmt.getText().toString().isEmpty()){
-                        water = 0;
-                    }
-                    else water = Integer.parseInt(waterAmt.getText().toString());
-
                     // Notification
                     if (notiType.isEmpty()){
                         notiType = "Don't notify";
                     }
                     ArrayList<String> dates = new ArrayList<>();
-                    FeedSchedule schedule = new FeedSchedule(name, greenList, brownList, repeatType,  repeatDetails, notiType, water, null, dates);
+                    FeedSchedule schedule = new FeedSchedule(name, greenList, brownList, repeatType,  repeatDetails, notiType, null, dates);
                     for (LocalDate d : generateScheduledDates(schedule)){
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                         dates.add(formatter.format(d));
@@ -890,7 +855,6 @@ public class CreateSchedule extends AppCompatActivity {
                     notiCancel.callOnClick();
                 }
                 scheduleName.clearFocus();
-                waterAmt.clearFocus();
                 break;
             case "brown":
                 brown.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.textColour));
@@ -908,7 +872,6 @@ public class CreateSchedule extends AppCompatActivity {
                     notiCancel.callOnClick();
                 }
                 scheduleName.clearFocus();
-                waterAmt.clearFocus();
                 break;
             case "repeat":
                 repeatText.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.textColour));
@@ -925,7 +888,6 @@ public class CreateSchedule extends AppCompatActivity {
                     notiCancel.callOnClick();
                 }
                 scheduleName.clearFocus();
-                waterAmt.clearFocus();
                 break;
             case "noti":
                 notiText.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.textColour));
@@ -942,7 +904,6 @@ public class CreateSchedule extends AppCompatActivity {
                     repeatCancel.callOnClick();
                 }
                 scheduleName.clearFocus();
-                waterAmt.clearFocus();
                 break;
         }
     }

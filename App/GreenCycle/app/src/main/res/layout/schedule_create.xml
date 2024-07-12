@@ -164,43 +164,13 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/waterSect"
+        android:id="@+id/repeat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/brownSect"
         android:layout_marginTop="10dp"
         android:layout_alignStart="@+id/brownSect"
         android:layout_alignEnd="@+id/brownSect"
-        android:background="@drawable/rounded_corner_mid_green"
-        android:backgroundTint="@color/white">
-
-        <EditText
-            android:id="@+id/waterAmt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:paddingStart="15dp"
-            android:background="@drawable/rounded_corner_mid_green"
-            android:backgroundTint="@color/transparent"
-            android:hint="Water (ml)"
-            android:textSize="18sp"
-            android:textColorHint="@color/android_hint"
-            android:textColor="@color/textColour"
-            android:drawableStart="@drawable/outline_water_drop_24"
-            android:drawablePadding="10dp"
-            android:drawableTint="@color/android_hint"
-            android:inputType="number"/>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/repeat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/waterSect"
-        android:layout_marginTop="10dp"
-        android:layout_alignStart="@+id/waterSect"
-        android:layout_alignEnd="@+id/waterSect"
         android:background="@drawable/rounded_corner_mid_green"
         android:backgroundTint="@color/white"
         android:theme="@style/AppBackgroundColour">

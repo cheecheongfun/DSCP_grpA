@@ -5,7 +5,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 public class Log implements Parcelable {
-    private int logId, waterAmt;
+    private int logId;
     private String logDate;
     private ArrayList<Food> greens, browns;
     private String notes;
@@ -13,13 +13,12 @@ public class Log implements Parcelable {
     public Log() {
     }
 
-    public Log(int logId, String logDate, ArrayList<Food> greens, ArrayList<Food> browns, String notes, int waterAmt) {
+    public Log(int logId, String logDate, ArrayList<Food> greens, ArrayList<Food> browns, String notes) {
         this.logId = logId;
         this.logDate = logDate;
         this.greens = greens;
         this.browns = browns;
         this.notes = notes;
-        this.waterAmt = waterAmt;
     }
 
     protected Log(Parcel in) {
@@ -30,7 +29,6 @@ public class Log implements Parcelable {
         browns = new ArrayList<>();
         in.readList(this.browns, Food.class.getClassLoader());
         notes = in.readString();
-        waterAmt = in.readInt();
     }
 
     public static final Creator<Log> CREATOR = new Creator<Log>() {
@@ -57,7 +55,6 @@ public class Log implements Parcelable {
         parcel.writeList(greens);
         parcel.writeList(browns);
         parcel.writeString(notes);
-        parcel.writeInt(waterAmt);
     }
 
     // Getters and Setters
@@ -99,13 +96,5 @@ public class Log implements Parcelable {
 
     public void setNotes(String notes) {
         this.notes = notes;
-    }
-
-    public int getWaterAmt() {
-        return waterAmt;
-    }
-
-    public void setWaterAmt(int waterAmt) {
-        this.waterAmt = waterAmt;
     }
 }

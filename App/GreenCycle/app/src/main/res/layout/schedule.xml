@@ -8,7 +8,7 @@
         android:id="@+id/radioButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
     <TextView
         android:id="@+id/foodText3"
@@ -20,20 +20,8 @@
         android:layout_alignBottom="@+id/radioButton"
         android:gravity="center"
         android:textSize="20sp"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
-    <TextView
-        android:id="@+id/view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toStartOf="@id/delete"
-        android:drawableStart="@drawable/view_icon"
-        android:visibility="gone"
-        android:theme="@style/DrawableTint"
-        android:layout_alignParentTop="true"
-        android:layout_alignBottom="@+id/foodText3"
-        android:layout_marginEnd="2dp"
-        />
 
     <TextView
         android:id="@+id/delete"
@@ -41,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:drawableStart="@drawable/outline_delete_24"
-        android:visibility="gone"
+        android:visibility="visible"
         android:theme="@style/DrawableTint"
         android:layout_alignParentTop="true"
         android:layout_alignBottom="@+id/foodText3"
@@ -54,8 +42,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/foodText3"
         android:layout_alignStart="@+id/foodText3"
-        android:layout_toStartOf="@+id/view"
-        android:visibility="gone">
+        android:visibility="visible"
+        android:layout_marginBottom="10dp">
 
         <TextView
             android:id="@+id/greens"
@@ -72,124 +60,6 @@
             android:layout_marginTop="5dp"
             android:text="Browns: "
             android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/water"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/browns"
-            android:layout_marginTop="5dp"
-            android:text="Water: __ ml"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/noti"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/water"
-            android:layout_marginTop="5dp"
-            android:text="Notification: "
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/notiText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/water"
-            android:layout_marginTop="5dp"
-            android:layout_toEndOf="@+id/noti"
-            android:text="Don't notify"
-            android:textColor="@color/android_hint"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/dropdown"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/water"
-            android:layout_alignBottom="@+id/notiText"
-            android:layout_marginTop="5dp"
-            android:layout_toEndOf="@+id/notiText"
-            android:drawableStart="@drawable/baseline_keyboard_arrow_down_24" />
-
-        <LinearLayout
-            android:id="@+id/radioNotiGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/notiText"
-            android:layout_alignStart="@+id/notiText"
-            android:layout_marginStart="-55dp"
-            android:backgroundTint="@color/transparent"
-            android:divider="@color/white"
-            android:orientation="vertical"
-            android:showDividers="middle"
-            android:theme="@style/AppBackgroundColour"
-            android:visibility="gone">
-
-            <RadioButton
-                android:id="@+id/radioNotiNone"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:scaleX="0.8"
-                android:scaleY="0.8"
-                android:text="Don't notify"
-                android:textColor="@color/textColour"
-                android:textSize="20sp" />
-
-            <RadioButton
-                android:id="@+id/radioNotiDay"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:scaleX="0.8"
-                android:scaleY="0.8"
-                android:text="On the day itself"
-                android:textColor="@color/textColour"
-                android:textSize="20sp" />
-
-            <RelativeLayout
-                android:id="@+id/fourth"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:backgroundTint="@color/transparent">
-
-                <RadioButton
-                    android:id="@+id/radioNotiDayBefore"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:scaleX="0.8"
-                    android:scaleY="0.8"
-                    android:textSize="20sp"
-                    android:theme="@style/OtherButtonTheme" />
-
-                <EditText
-                    android:id="@+id/fourthEdit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/radioNotiDayBefore"
-                    android:layout_marginStart="53dp"
-                    android:layout_marginBottom="-2dp"
-                    android:gravity="center"
-                    android:hint="1"
-                    android:maxLength="2"
-                    android:maxLines="1"
-                    android:padding="7dp"
-                    android:textColor="@color/textColour"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/text4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/radioNotiDayBefore"
-                    android:layout_alignBottom="@id/radioNotiDayBefore"
-                    android:layout_toEndOf="@id/fourthEdit"
-                    android:backgroundTint="@color/transparent"
-                    android:gravity="center"
-                    android:text="day before"
-                    android:textSize="17sp" />
-            </RelativeLayout>
-
-        </LinearLayout>
 
     </RelativeLayout>
 

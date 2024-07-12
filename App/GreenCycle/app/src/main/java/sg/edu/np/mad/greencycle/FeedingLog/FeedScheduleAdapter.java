@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import sg.edu.np.mad.greencycle.Classes.FeedSchedule;
+import sg.edu.np.mad.greencycle.Classes.Food;
 import sg.edu.np.mad.greencycle.Classes.Tank;
 import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.R;
@@ -68,24 +69,32 @@ public class FeedScheduleAdapter extends ArrayAdapter<FeedSchedule> {
         TextView scheduleName1 = convertView.findViewById(R.id.foodText3);
         RadioButton radioButton = convertView.findViewById(R.id.radioButton);
         TextView delete = convertView.findViewById(R.id.delete);
-        TextView viewDetails = convertView.findViewById(R.id.view);
-        RelativeLayout scheduleDetails = convertView.findViewById(R.id.scheduleDetails);
         TextView greens = convertView.findViewById(R.id.greens);
         TextView browns = convertView.findViewById(R.id.browns);
-        TextView water = convertView.findViewById(R.id.water);
-        TextView notiText = convertView.findViewById(R.id.notiText);
-        TextView dropdown = convertView.findViewById(R.id.dropdown);
-        LinearLayout radioGroup = convertView.findViewById(R.id.radioNotiGroup);
-        RadioButton radioNone = convertView.findViewById(R.id.radioNotiNone);
-        RadioButton radioDay = convertView.findViewById(R.id.radioNotiDay);
-        RadioButton radioDayBefore = convertView.findViewById(R.id.radioNotiDayBefore);
-        EditText editText = convertView.findViewById(R.id.fourthEdit);
 
         scheduleName1.setText(feedSchedule.getScheduleName());
-        scheduleName1.setVisibility(View.VISIBLE);
-        radioButton.setVisibility(View.VISIBLE);
+
+        ArrayList<Food> green = new ArrayList<>();
+        if (feedSchedule.getGreenFood() == null || feedSchedule.getGreenFood().isEmpty()){
+            greens.setVisibility(View.GONE);
+        }
+        else {
+            green = feedSchedule.getGreenFood();
+            greens.setVisibility(View.VISIBLE);
+            greens.setText("Greens: " + getFoodDescription(green, 27));
+        }
+
+        ArrayList<Food> brown = new ArrayList<>();
+        if (feedSchedule.getBrownFood() == null || feedSchedule.getBrownFood().isEmpty()){
+            browns.setVisibility(View.GONE);
+        }
+        else {
+            brown = feedSchedule.getBrownFood();
+            browns.setVisibility(View.VISIBLE);
+            browns.setText("Browns: " + getFoodDescription(brown, 27));
+        }
+
         delete.setVisibility(View.VISIBLE);
-        viewDetails.setVisibility(View.VISIBLE);
         // Manage selection state
         radioButton.setChecked(position == selectedIndex);
         radioButton.setOnClickListener(v -> {
@@ -134,102 +143,6 @@ public class FeedScheduleAdapter extends ArrayAdapter<FeedSchedule> {
             }
         });
 
-        viewDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // if drawable is view
-                if (viewStatus.equals(false)) {
-                    Log.i("view schedule details", "view on click : true");
-                    scheduleDetails.setVisibility(View.VISIBLE);
-                    viewDetails.setCompoundDrawablesWithIntrinsicBounds(R.drawable.disable_view, 0,0,0);
-                    viewStatus = true;
-                    dropdown.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (dropped.equals(false)) {
-                                dropdown.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_keyboard_arrow_up_24, 0,0,0);
-                                radioGroup.setVisibility(View.VISIBLE);
-                                dropped = true;
-                                radioNone.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        radioNone.setChecked(true);
-                                        radioDay.setChecked(false);
-                                        radioDayBefore.setChecked(false);
-                                        notiType = "Don't notify";
-                                        notiText.setText(notiType);
-                                    }
-                                });
-
-                                radioDay.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        radioDay.setChecked(true);
-                                        radioNone.setChecked(false);
-                                        radioDayBefore.setChecked(false);
-                                        notiType = "On the day itself";
-                                        notiText.setText(notiType);
-                                    }
-                                });
-
-                                radioDayBefore.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        radioDayBefore.setChecked(true);
-                                        radioDay.setChecked(false);
-                                        radioNone.setChecked(false);
-                                        if (!editText.getText().toString().isEmpty()){
-                                            notiType = editText.getText().toString() + " day before";
-                                        }
-                                        else {
-                                            notiType = "1 day before";
-                                        }
-                                        notiText.setText(notiType);
-                                    }
-                                });
-                                editText.addTextChangedListener(new TextWatcher() {
-                                    @Override
-                                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                                    }
-
-                                    @Override
-                                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                                    }
-
-                                    @Override
-                                    public void afterTextChanged(Editable editable) {
-                                        radioDayBefore.setChecked(true);
-                                        radioDay.setChecked(false);
-                                        radioNone.setChecked(false);
-                                        if (!editable.toString().isEmpty()){
-                                            notiType = editable.toString() + " day before";
-                                        }
-                                        else {
-                                            notiType = "1 day before";
-                                        }
-                                        notiText.setText(notiType);
-                                        notiText.setTextColor(Color.parseColor("#FFFFFFFF"));
-                                    }
-                                });
-                            }
-                            else{
-                                dropdown.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_keyboard_arrow_down_24, 0,0,0);
-                                radioGroup.setVisibility(View.GONE);
-                                notiText.setText("NotiType");
-                                dropped = false;
-                            }
-                        }
-                    });
-                }
-                else{
-                    scheduleDetails.setVisibility(View.GONE);
-                    viewDetails.setCompoundDrawablesWithIntrinsicBounds(R.drawable.view_icon, 0,0,0);
-                    viewStatus = false;
-                }
-            }
-        });
 
         return convertView;
     }
@@ -253,6 +166,21 @@ public class FeedScheduleAdapter extends ArrayAdapter<FeedSchedule> {
             }
         }
         return null;
+    }
+    private String getFoodDescription(ArrayList<Food> foodList, int maxLength) {
+        StringBuilder description = new StringBuilder();
+        for (Food food : foodList) {
+            if (description.length() > 0) {
+                description.append(", ");
+            }
+            description.append(food.getName() + " " + food.getAmount());
+        }
+
+        if (description.length() > maxLength) {
+            return description.substring(0, maxLength - 3) + "...";
+        } else {
+            return description.toString();
+        }
     }
 }
 

@@ -69,36 +69,6 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/waterSection"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginTop="10dp">
-
-            <TextView
-                android:id="@+id/waterText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Water: "
-                android:textSize="25dp"
-                android:gravity="center"/>
-
-            <EditText
-                android:id="@+id/editWater"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:hint="ml"
-                android:textSize="20sp"
-                android:maxLines="1"
-                android:padding="7dp"
-                android:layout_marginBottom="-5dp"
-                android:visibility="gone"/>
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/notesSection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

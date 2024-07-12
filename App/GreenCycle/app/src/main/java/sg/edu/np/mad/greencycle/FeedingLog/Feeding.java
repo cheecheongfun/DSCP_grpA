@@ -111,7 +111,7 @@ public class Feeding extends AppCompatActivity {
     CalendarView calendarView;
     WeekCalendarView weekCalendarView;
     RelativeLayout logs, fixedTitleContainer, titlesContainer, scheduleDetails;
-    TextView toggleViewButton, backBtn, waterAmt, notesFixed, noLogs, monthHead, water;
+    TextView toggleViewButton, backBtn, notesFixed, noLogs, monthHead;
     TextView noDetails, greenText, brownText, scheduleTitle;
     TextView gHead, bHead;
     boolean isCalendarView = true;
@@ -128,10 +128,10 @@ public class Feeding extends AppCompatActivity {
     DatabaseReference reference;
     User user;
     Tank tank;
-    EditText editWater, editNotes;
+    EditText editNotes;
     Button confirm, schedule, delete, add, logDelete, logSave;
     String today, viewType;
-    LinearLayout dayHead, bottomBtnSchedule, bottomBtnLog, details, waterSection, notesSection, imageButtons;
+    LinearLayout dayHead, bottomBtnSchedule, bottomBtnLog, details, notesSection, imageButtons;
     DayViewContainer selectedDateContainer = null;
     int selectedIndex, targetTankID;
     ArrayList<Log> feedingLog;
@@ -145,7 +145,6 @@ public class Feeding extends AppCompatActivity {
     private static final int REQUEST_CODE_CREATE_SCHEDULE = 3;
     private StorageReference mStorageRef;
     private Uri imageUri;
-    private ImageView imageView;
     FoodAdapter greenAdapter;
     FoodAdapter brownAdapter;
     int selectedLogID = -1;
@@ -196,9 +195,6 @@ public class Feeding extends AppCompatActivity {
         bAdd = logs.findViewById(R.id.addBrown);
 
         details = logs.findViewById(R.id.details);
-        waterSection = logs.findViewById(R.id.waterSection);
-        waterAmt = waterSection.findViewById(R.id.waterText);
-        editWater = waterSection.findViewById(R.id.editWater);
         notesSection = logs.findViewById(R.id.notesSection);
         notesFixed = logs.findViewById(R.id.notesFixed);
         editNotes = logs.findViewById(R.id.notesDescription);
@@ -212,7 +208,6 @@ public class Feeding extends AppCompatActivity {
         scheduleDetails =  findViewById(R.id.scheduleDetail);
         greenRecycler = scheduleDetails.findViewById(R.id.greenRecycler);
         brownRecycler = scheduleDetails.findViewById(R.id.brownRecycler);
-        water = scheduleDetails.findViewById(R.id.water);
         noDetails = scheduleDetails.findViewById(R.id.noDetailsText);
         greenText = scheduleDetails.findViewById(R.id.greens);
         brownText= scheduleDetails.findViewById(R.id.browns);
@@ -308,13 +303,6 @@ public class Feeding extends AppCompatActivity {
                     }
                 });
 
-
-                // water section
-                waterAmt.setText("Water: ");
-                editWater.setVisibility(View.VISIBLE);
-                editWater.setHint("0 ml");
-                editWater.setText("");
-
                 // notes section
                 notesSection.setVisibility(View.VISIBLE);
                 notesFixed.setVisibility(View.GONE);
@@ -409,7 +397,7 @@ public class Feeding extends AppCompatActivity {
                         if (selectedLogID == -1){
                             android.util.Log.i("logSave", "no log");
                             // no log for current selected date
-                            selectedLog = new Log(logList.size(), formatter.format(selectedDate), null, null, null, 0);
+                            selectedLog = new Log(logList.size(), formatter.format(selectedDate), null, null, null);
                             selectedLogID = selectedLog.getLogId();
                             android.util.Log.i("logSave", "id: " + selectedLogID);
                             logList.add(selectedLog);
@@ -428,13 +416,9 @@ public class Feeding extends AppCompatActivity {
                     else{
                         // LogList is empty (user had no logs for this tank)
                         logList = new ArrayList<>();
-                        selectedLog = new Log(0, formatter.format(selectedDate), null, null, null, 0);
+                        selectedLog = new Log(0, formatter.format(selectedDate), null, null, null);
                         logList.add(selectedLog);
                         selectedLogID = 0;
-                    }
-
-                    if (!editWater.getText().toString().isEmpty()){
-                        selectedLog.setWaterAmt(Integer.parseInt(editWater.getText().toString()));
                     }
                     if (!editNotes.getText().toString().isEmpty()){
                         selectedLog.setNotes(editNotes.getText().toString());
@@ -480,7 +464,6 @@ public class Feeding extends AppCompatActivity {
                                             confirm.setVisibility(View.VISIBLE);
                                             bottomBtnLog.setVisibility(View.GONE);
                                             toggleViewButton.setVisibility(View.VISIBLE);
-                                            editWater.setVisibility(View.GONE);
                                             if (isCalendarView){
                                                 setupCalendarView();
                                             } else setupWeekView();
@@ -559,12 +542,6 @@ public class Feeding extends AppCompatActivity {
                             brownAdapter.addItem();
                         }
                     });
-
-
-                    // water section
-                    waterAmt.setText("Water: ");
-                    editWater.setVisibility(View.VISIBLE);
-                    editWater.setHint(selectedLog.getWaterAmt() + " ml");
 
                     // notes section
                     notesSection.setVisibility(View.VISIBLE);
@@ -652,9 +629,9 @@ public class Feeding extends AppCompatActivity {
                 // creating log
                 Log newLog = new Log();
                 if (tank.getFeedingLog() != null){
-                    newLog = new Log(0, formatter.format(selectedDate), feedSched.getGreenFood(), feedSched.getBrownFood(), null, feedSched.getWaterAmt() );
+                    newLog = new Log(0, formatter.format(selectedDate), feedSched.getGreenFood(), feedSched.getBrownFood(), null );
                 }
-                newLog = new Log(tank.getFeedingLog().size(), formatter.format(selectedDate), feedSched.getGreenFood(), feedSched.getBrownFood(), null, feedSched.getWaterAmt() );
+                newLog = new Log(tank.getFeedingLog().size(), formatter.format(selectedDate), feedSched.getGreenFood(), feedSched.getBrownFood(), null);
 
                 ArrayList<Log> logList;
                 if (tank.getFeedingLog() != null){
@@ -743,7 +720,6 @@ public class Feeding extends AppCompatActivity {
                                         .setPositiveButton("Replace", (dialog, which) -> {
                                             if (temporary.isEmpty()){
                                                 Toast.makeText(Feeding.this, "No schedule selected", Toast.LENGTH_SHORT).show();
-                                                dialog.dismiss();
                                                 refreshData(new Runnable() {
                                                     @Override
                                                     public void run() {
@@ -783,7 +759,6 @@ public class Feeding extends AppCompatActivity {
 
                                             if (scheduleList.isEmpty()){
                                                 Toast.makeText(Feeding.this, "No schedule selected", Toast.LENGTH_SHORT).show();
-                                                dialog.dismiss();
                                             }
                                             else {
                                                 addSchedule(adapter.getSelectedIndex(), adapter.getSelectedNotificationType());
@@ -1016,7 +991,6 @@ public class Feeding extends AppCompatActivity {
         schedule.setText("Schedule");
         logs.setVisibility(View.GONE);
         noLogs.setVisibility(View.GONE);
-        editWater.setVisibility(View.GONE);
         imageButtons.setVisibility(View.GONE);
         ArrayList<LocalDate> dateList = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.getDefault());
@@ -1037,14 +1011,12 @@ public class Feeding extends AppCompatActivity {
                         browns.addAll(log.getBrowns());
                     }
                     notes = log.getNotes();
-                    water = log.getWaterAmt();
                     selectedLogID = log.getLogId();
                     android.util.Log.i("loadEvents", "selectedLogID: " + selectedLogID);
                     break;
                 }
             }
             loadImage();
-            waterAmt.setText("Water: " + water + " ml");
             bottomBtnLog.setVisibility(View.VISIBLE);
             confirm.setVisibility(View.GONE);
             logDelete.setText("Delete");
@@ -1138,23 +1110,14 @@ public class Feeding extends AppCompatActivity {
             scheduleTitle.setText(sched.getScheduleName());
 
             noDetails.setText("No details");
-            water.setText("Water: " + sched.getWaterAmt() + " " + "ml");
             noDetails.setVisibility(View.GONE);
             scheduleDetails.setVisibility(View.VISIBLE);
 
-            if (sched.getGreenFood() == null && sched.getBrownFood() == null && sched.getWaterAmt() == 0){
+            if (sched.getGreenFood() == null && sched.getBrownFood() == null){
                 android.util.Log.i("load Schedule for date", "null" );
                 noDetails.setVisibility(View.VISIBLE);
             }
-            else if (sched.getGreenFood() == null && sched.getBrownFood() == null){
-                android.util.Log.i("load Schedule for date", "food null" );
-                greenText.setVisibility(View.GONE);
-                greenRecycler.setVisibility(View.GONE);
-                brownText.setVisibility(View.GONE);
-                brownRecycler.setVisibility(View.GONE);
-                noDetails.setVisibility(View.GONE);
-                water.setVisibility(View.VISIBLE);
-            }
+
             else if (sched.getGreenFood() == null){
                 android.util.Log.i("load Schedule for date", "green null" );
                 greenText.setVisibility(View.GONE);
@@ -1164,7 +1127,6 @@ public class Feeding extends AppCompatActivity {
                 bAdapter = new LogAdapter(Feeding.this, sched.getBrownFood(), "brown", null);
                 brownRecycler.setLayoutManager(new LinearLayoutManager(this));
                 brownRecycler.setAdapter(bAdapter);
-                water.setVisibility(View.VISIBLE);
                 noDetails.setVisibility(View.GONE);
             }
             else if (sched.getBrownFood() == null){
@@ -1177,7 +1139,6 @@ public class Feeding extends AppCompatActivity {
                 greenRecycler.setLayoutManager(new LinearLayoutManager(this));
                 greenRecycler.setAdapter(gAdapter);
                 noDetails.setVisibility(View.GONE);
-                water.setVisibility(View.VISIBLE);
             }
             else {
                 android.util.Log.i("load Schedule for date", "all details");
@@ -1196,7 +1157,6 @@ public class Feeding extends AppCompatActivity {
                 brownRecycler.setLayoutManager(new LinearLayoutManager(this));
                 brownRecycler.setAdapter(bAdapter);
 
-                water.setVisibility(View.VISIBLE);
             }
         }
         else {
@@ -1443,6 +1403,7 @@ public class Feeding extends AppCompatActivity {
             info.putParcelable("tank", tank);
             info.putParcelable("user", user);
             info.putStringArrayList("greenFood", greenFood);
+            android.util.Log.i("createSchedule" , "greenFood; " + greenFood.get(0));
             info.putStringArrayList("brownFood", brownFood);
             info.putString("date", date);
             intent.putExtras(info);
@@ -1500,6 +1461,20 @@ public class Feeding extends AppCompatActivity {
                             }
                         }
                     }
+                    if (tank.getFeedSchedule() != null){
+                        for (FeedSchedule sched : tank.getFeedSchedule()){
+                            if (sched.getGreenFood() != null){
+                                for (Food food: sched.getGreenFood()){
+                                    greenFood.add(food.getName());
+                                }
+                            }
+                            if (sched.getBrownFood() != null){
+                                for (Food food: sched.getBrownFood()){
+                                    brownFood.add(food.getName());
+                                }
+                            }
+                        }
+                    }
                 }
                 Set<String> greenSet = new HashSet<>(greenFood);
                 greenFood.clear();
@@ -1508,7 +1483,7 @@ public class Feeding extends AppCompatActivity {
                 Set<String> brownSet = new HashSet<>(brownFood);
                 brownFood.clear();
                 brownFood.addAll(brownSet);
-
+                android.util.Log.i("Refresh Data", "GreenFood List: " + greenFood.size());
                 tank = user.getTanks().get(targetTankID);
                 android.util.Log.i("Refresh Data", "Schedule List: " + scheduleList.size());
 
@@ -1911,10 +1886,6 @@ public class Feeding extends AppCompatActivity {
         }
     }
 
-    private void resetImageView() {
-        imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.uploadicon));
-        imageUri = null;
-    }
     private void scheduleNotifications(FeedSchedule schedule) {
         String scheduleName = schedule.getScheduleName(); // Assuming each schedule has a unique ID
         ArrayList<String> feedingDatesString = schedule.getDates();
