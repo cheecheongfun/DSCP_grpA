@@ -28,6 +28,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodViewHolder> {
     private ArrayList<Food> selectedFoods;
     private FirebaseDatabase database;
     private DatabaseReference reference;
+    private Boolean edited = false;
 
     public FoodAdapter(ArrayList<String> foodList, RecyclerView recycler, String foodType, ArrayList<Food> selectedFoods) {
         this.foodList = foodList;
@@ -110,6 +111,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodViewHolder> {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                edited = true;
                 holder.check.setChecked(true);
                 String newFood = editable.toString();
                 holder.colon.setVisibility(View.VISIBLE);
@@ -148,6 +150,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodViewHolder> {
 
     private void setupDefaultViewHolder(FoodViewHolder holder, int position, String food) {
         holder.foodText.setText(food);
+        Log.i("default food adapter view", "food: " + food);
         holder.check.setChecked(checkedStateArray.get(position));
         holder.check.setOnCheckedChangeListener((buttonView, isChecked) -> {
             checkedStateArray.set(position, isChecked);
@@ -185,12 +188,17 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodViewHolder> {
     }
 
     public void addItem() {
-        foodList.add("");
-        checkedStateArray.add(false);
-        amtList.add("");
-        customFoodList.add("");
-        newFoodFlags.add(true); // Mark the new item as a new custom food
-        notifyItemInserted(foodList.size() - 1);
+        if (!hasBlankCustomFood()) {
+            foodList.add("");
+            checkedStateArray.add(false);
+            amtList.add("");
+            customFoodList.add("");
+            newFoodFlags.add(true); // Mark the new item as a new custom food
+            notifyItemInserted(foodList.size() - 1);
+        } else {
+            // Optionally, show a message to the user that they need to fill the existing custom food before adding a new one
+            Log.i("FoodAdapter", "Please fill in the existing custom food item before adding a new one.");
+        }
     }
 
     private void updateItemList() {
@@ -236,4 +244,13 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodViewHolder> {
         finalSelectedFoods.addAll(selectedFoods);
         return finalSelectedFoods;
     }
+    private boolean hasBlankCustomFood() {
+        for (int i = 0; i < newFoodFlags.size(); i++) {
+            if (newFoodFlags.get(i) && customFoodList.get(i).isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

@@ -274,6 +274,29 @@
             android:text="Forecast" />
 
         <ImageButton
+            android:id="@+id/insightsBtn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/sectionSolar"
+            android:layout_marginTop="15dp"
+            android:elevation="2dp"
+            android:background="@drawable/home_page_buttons"
+            android:padding="10dp"
+            android:scaleType="centerCrop"
+            android:theme="@style/CommunityBtn" />
+
+        <TextView
+            android:id="@+id/insightsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/insightsBtn"
+            android:layout_alignStart="@+id/communityButton"
+            android:layout_alignEnd="@+id/communityButton"
+            android:gravity="center"
+            android:text="Insights"/>
+
+        <ImageButton
             android:id="@+id/settings"
             android:layout_width="wrap_content"
             android:layout_height="60dp"

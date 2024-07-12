@@ -244,7 +244,9 @@ public class Feeding extends AppCompatActivity {
         daysOfWeek.add(DayOfWeek.SUNDAY);
 
         for (FeedSchedule schedule : scheduleList){
-            regenerateDates(scheduleList.indexOf(schedule));
+            if (schedule.getRefDate() != null){
+                regenerateDates(scheduleList.indexOf(schedule));
+            }
         }
         refreshData(() -> loadForToday(viewType));
         setupCalendarView();
@@ -767,7 +769,7 @@ public class Feeding extends AppCompatActivity {
                                             });
                                         })
                                         .setNeutralButton("New Schedule", (dialog, which) -> {
-                                            createSchedule();
+                                            refreshData(()->createSchedule());
                                         });
 
                             }
@@ -810,7 +812,7 @@ public class Feeding extends AppCompatActivity {
                                                 Toast.makeText(Feeding.this, "One schedule a day", Toast.LENGTH_SHORT).show();
                                             }
                                             else{
-                                                createSchedule();
+                                                refreshData(()->createSchedule());
                                             }
                                         });
                             }
@@ -1536,11 +1538,9 @@ public class Feeding extends AppCompatActivity {
         ArrayList<LocalDate> scheduledDates = new ArrayList<>();
         LocalDate nextMonth = LocalDate.now().plusMonths(3); // continues generating 3 months worth of dates
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
         LocalDate refDate = LocalDate.parse(feedSchedule.getRefDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         String repeatType = feedSchedule.getRepeatType();
         HashMap<String, ArrayList<String>> repeatDetails = feedSchedule.getRepeatDetails();
-
         if (LocalDate.now().isEqual(refDate.plusWeeks(1))) {
             feedSchedule.setRefDate(formatter.format(LocalDate.now()));
             refDate = LocalDate.parse(feedSchedule.getRefDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));

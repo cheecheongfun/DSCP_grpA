@@ -26,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import de.hdodenhof.circleimageview.CircleImageView;
 import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.Forum.Forum;
+import sg.edu.np.mad.greencycle.SolarInsight.Insight;
 import sg.edu.np.mad.greencycle.TankSelection.TankSelection;
 import sg.edu.np.mad.greencycle.NPKvalue.npk_value;
 import sg.edu.np.mad.greencycle.Profile.options;
@@ -37,7 +38,7 @@ import sg.edu.np.mad.greencycle.UnitConversion.Conversion;
 
 public class HomeFragment extends Fragment {
 
-    ImageButton liveDataBtn, feedingLogBtn, analyticsBtn, goalsBtn, soilTypeBtn, solarForecastBtn, communityBtn, settingsBtn,ConversionBtn;
+    ImageButton liveDataBtn, feedingLogBtn, analyticsBtn, goalsBtn, soilTypeBtn, solarForecastBtn, communityBtn, settingsBtn,ConversionBtn, insightsBtn;
     NumberPicker inputNo, inputUnit, outputUnit;
     TextView username, outputNo;
     String newInputNo, newInputUnit, newOutputUnit;
@@ -82,7 +83,7 @@ public class HomeFragment extends Fragment {
         analyticsBtn = view.findViewById(R.id.analyticsButton);
         goalsBtn = view.findViewById(R.id.goalsButton);
         ConversionBtn = view.findViewById(R.id.circleButton);
-
+        insightsBtn = view.findViewById(R.id.insightsBtn);
         soilTypeBtn = view.findViewById(R.id.soilTypeButton);
         communityBtn = view.findViewById(R.id.communityButton);
 
@@ -185,6 +186,15 @@ public class HomeFragment extends Fragment {
             Intent forecast = new Intent(getContext(), Forecast.class);
             forecast.putExtra("user", user);
             startActivity(forecast);
+        });
+
+        insightsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent insights = new Intent(getContext(), Insight.class);
+                insights.putExtra("user", user);
+                startActivity(insights);
+            }
         });
 
         return view;

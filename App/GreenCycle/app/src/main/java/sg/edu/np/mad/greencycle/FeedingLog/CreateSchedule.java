@@ -189,11 +189,19 @@ public class CreateSchedule extends AppCompatActivity {
                 }
                 else {
                     setVisible("green");
+                    if (!greenFood.isEmpty()){
+                        for (String s : greenFood){
+                            if (s.isEmpty()){
+                                greenFood.remove(s);
+                            }
+                        }
+                    }
                     gAdapter = new FoodAdapter(greenFood, greenRecycler, "green", greenList);
                     greenRecycler.setLayoutManager(new LinearLayoutManager(CreateSchedule.this));
                     greenRecycler.setAdapter(gAdapter);
                     green.setClickable(true);
                     green.setOnClickListener(v -> gAdapter.addItem());
+
                 }
             }
         });
@@ -207,6 +215,13 @@ public class CreateSchedule extends AppCompatActivity {
                 }
                 else {
                     setVisible("brown");
+                    if (!brownFood.isEmpty()){
+                        for (String s : brownFood){
+                            if (s.isEmpty()){
+                                brownFood.remove(s);
+                            }
+                        }
+                    }
                     bAdapter = new FoodAdapter(brownFood, brownRecycler, "brown", brownList);
                     brownRecycler.setLayoutManager(new LinearLayoutManager(CreateSchedule.this));
                     brownRecycler.setAdapter(bAdapter);
@@ -937,16 +952,13 @@ public class CreateSchedule extends AppCompatActivity {
             case "green":
                 if (gAdapter.getSelectedFoods() != null && !gAdapter.getSelectedFoods().isEmpty()) {
                     for (int i = 0; i < gAdapter.getSelectedFoods().size(); i++) {
-                        Log.i("setGone", "greenList: " + greenList.get(0).getName());
                         if (!gAdapter.getSelectedFoods().get(i).getName().isEmpty()) {
                             greenList = gAdapter.getSelectedFoods();
-                            Log.i("setGone", "greenList: " + greenList.get(0).getName());
                             green.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.textColour));
                             green.setText("Green: " + greenList.size() + " items selected");
                         }
                     }
                 }
-
                 else {
                     green.setText("Green");
                     green.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.android_hint));
@@ -959,18 +971,16 @@ public class CreateSchedule extends AppCompatActivity {
             case "brown":
                 if (bAdapter.getSelectedFoods() != null && !bAdapter.getSelectedFoods().isEmpty()) {
                     for (int i = 0; i < bAdapter.getSelectedFoods().size(); i++) {
-                        Log.i("setGone", "brownList: " + brownList.get(0).getName());
                         if (!bAdapter.getSelectedFoods().get(i).getName().isEmpty()) {
                             brownList = bAdapter.getSelectedFoods();
-                            Log.i("setGone", "brownList: " + brownList.get(0).getName());
                             brown.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.textColour));
-                            brown.setText("Green: " + brownList.size() + " items selected");
+                            brown.setText("Brown: " + brownList.size() + " items selected");
                         }
                     }
                 }
 
                 else {
-                    brown.setText("Green");
+                    brown.setText("Brown");
                     brown.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.android_hint));
                 }
                 brownCancel.setVisibility(View.GONE);

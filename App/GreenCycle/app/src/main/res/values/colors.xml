@@ -4,7 +4,7 @@
     <color name="active_tab">#FEFAEC</color>
     <color name="mid_green">#84A98C</color>
     <color name="dark_green">#258730</color> <!-- find a new colour -->
-    <color name="main_background">#FFFFFFFF</color>
+    <color name="main_background">#ffffff</color>
     <color name="icon_brown_dark">#C58544</color>
     <color name="icon_brown_light">#F9EBC1</color>
     <color name="black">#FF000000</color>

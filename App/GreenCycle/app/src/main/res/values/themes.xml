@@ -212,6 +212,11 @@
         <item name="android:backgroundTint">@color/icon_brown_light</item>
         <item name="android:src">@drawable/outline_solar_power_24_dark</item>
     </style>
+    <!-- Solar Insights -->
+    <style name="InsightsBtn">
+        <item name="android:backgroundTint">@color/icon_brown_light</item>
+        <item name="android:src">@drawable/outline_lightbulb_24_dark</item>
+    </style>
 
 
     <!-- Resource filter by type -->
