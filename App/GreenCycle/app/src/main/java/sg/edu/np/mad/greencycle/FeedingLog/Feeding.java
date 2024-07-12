@@ -1583,18 +1583,18 @@ public class Feeding extends AppCompatActivity {
                 addDatesForNextMonths(daysOfMonth, repeatOften, scheduledDates);
             }
         }
-
+        else {
+            for (String s : feedSchedule.getDates()){
+                scheduledDates.add(LocalDate.parse(s, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            }
+        }
 
 
         ArrayList<String> dateList = new ArrayList<>();
         for (LocalDate dates : scheduledDates){
-            if (dates.isBefore(LocalDate.now())){
-                dateList.remove(formatter.format(dates));
+            if (!dates.isBefore(LocalDate.now())){
+                dateList.add(formatter.format(dates));
             }
-            dateList.add(formatter.format(dates));
-        }
-        if (dateList.isEmpty()){
-            dateList=  feedSchedule.getDates();
         }
 
         feedSchedule.setDates(dateList);
