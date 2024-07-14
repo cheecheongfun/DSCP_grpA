@@ -159,4 +159,13 @@
     <style name="OtherButtonTheme">
         <item name="android:buttonTint">@color/white</item>
     </style>
+
+    <!-- Create schedule -->
+    <style name="CreateScheduleBackground">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="detailCards">
+        <item name="android:backgroundTint">#1B1A20</item>
+    </style>
 </resources>

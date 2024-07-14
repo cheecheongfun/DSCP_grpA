@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/colon"
         android:hint="grams"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         android:visibility="invisible"
         android:layout_alignTop="@+id/check"
         android:gravity="center"

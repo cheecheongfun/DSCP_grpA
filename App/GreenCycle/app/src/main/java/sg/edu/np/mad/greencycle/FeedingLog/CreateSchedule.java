@@ -1,7 +1,11 @@
 package sg.edu.np.mad.greencycle.FeedingLog;
 
+import static java.security.AccessController.getContext;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -72,6 +76,7 @@ public class CreateSchedule extends AppCompatActivity {
     DatabaseReference reference;
     LocalDate selectedDate;
     private static final int REQUEST_CODE = 1001;
+    int nightModeFlags, textColor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,6 +146,7 @@ public class CreateSchedule extends AppCompatActivity {
         notiText = findViewById(R.id.notiText);
         notiCancel = findViewById(R.id.notiCancel);
         notiLine = findViewById(R.id.notiLine);
+
         // Radio group for options
         notiOptions = findViewById(R.id.radioNotiGroup);
         notiNone = notiOptions.findViewById(R.id.radioNotiNone);
@@ -157,6 +163,25 @@ public class CreateSchedule extends AppCompatActivity {
         gAdapter = new FoodAdapter(greenFood, greenRecycler, "green", greenList);
         bAdapter = new FoodAdapter(brownFood, brownRecycler, "brown", brownList);
 
+        // set up starting colours first
+        green.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.android_hint));
+        brown.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.android_hint));
+        green.setCompoundDrawableTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.android_hint)));
+        brown.setCompoundDrawableTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.android_hint)));
+        repeatText.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.android_hint));
+        notiText.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.android_hint));
+        repeatText.setCompoundDrawableTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.android_hint)));
+        notiText.setCompoundDrawableTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.android_hint)));
+        nightModeFlags = CreateSchedule.this.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        switch (nightModeFlags){
+            case Configuration.UI_MODE_NIGHT_YES:
+                textColor = ContextCompat.getColor(CreateSchedule.this, R.color.white);
+                break;
+
+            case Configuration.UI_MODE_NIGHT_NO:
+                textColor = ContextCompat.getColor(CreateSchedule.this, R.color.textColour);
+                break;
+        }
         // day of week titles
         dayAbbreviations = new String[]{"M", "T", "W", "T", "F", "S", "S"};
         scheduleName.requestFocus();
@@ -549,8 +574,8 @@ public class CreateSchedule extends AppCompatActivity {
                             monthOption1.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    monthOption1.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.android_hint));
-                                    monthOption2.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.textColour));
+                                    monthOption1.setTextColor(textColor);
+                                    monthOption2.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.android_hint));
                                     weeklyDays.clear();
                                     weeklyDays.add(String.valueOf(startDate.getDayOfMonth()));
 
@@ -560,8 +585,8 @@ public class CreateSchedule extends AppCompatActivity {
                             monthOption2.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    monthOption2.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.android_hint));
-                                    monthOption1.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.textColour));
+                                    monthOption2.setTextColor(textColor);
+                                    monthOption1.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.android_hint));
                                     weeklyDays.clear();
                                     weeklyDays.add(getNthOccurrenceAndDay(startDate));
                                 }
@@ -840,11 +865,12 @@ public class CreateSchedule extends AppCompatActivity {
     public void setVisible(String section){
         switch (section) {
             case "green":
-                green.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.textColour));
+                green.setTextColor(textColor);
                 greenCancel.setVisibility(View.VISIBLE);
                 greenLine.setVisibility(View.VISIBLE);
                 greenRecycler.setVisibility(View.VISIBLE);
                 green.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.baseline_add_24, 0, 0, 0);
+                green.setCompoundDrawableTintList(ColorStateList.valueOf(textColor));
                 if (brownCancel.getVisibility() == View.VISIBLE){
                     brownCancel.callOnClick();
                 }
@@ -857,11 +883,12 @@ public class CreateSchedule extends AppCompatActivity {
                 scheduleName.clearFocus();
                 break;
             case "brown":
-                brown.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.textColour));
+                brown.setTextColor(textColor);
                 brownCancel.setVisibility(View.VISIBLE);
                 brownLine.setVisibility(View.VISIBLE);
                 brownRecycler.setVisibility(View.VISIBLE);
                 brown.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.baseline_add_24, 0, 0, 0);
+                brown.setCompoundDrawableTintList(ColorStateList.valueOf(textColor));
                 if (greenCancel.getVisibility() == View.VISIBLE){
                     greenCancel.callOnClick();
                 }
@@ -874,10 +901,11 @@ public class CreateSchedule extends AppCompatActivity {
                 scheduleName.clearFocus();
                 break;
             case "repeat":
-                repeatText.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.textColour));
+                repeatText.setTextColor(textColor);
                 repeatCancel.setVisibility(View.VISIBLE);
                 repeatLine.setVisibility(View.VISIBLE);
                 repeatOptions.setVisibility(View.VISIBLE);
+                repeatText.setCompoundDrawableTintList(ColorStateList.valueOf(textColor));
                 if (greenCancel.getVisibility() == View.VISIBLE){
                     greenCancel.callOnClick();
                 }
@@ -890,10 +918,11 @@ public class CreateSchedule extends AppCompatActivity {
                 scheduleName.clearFocus();
                 break;
             case "noti":
-                notiText.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.textColour));
+                notiText.setTextColor(textColor);
                 notiCancel.setVisibility(View.VISIBLE);
                 notiLine.setVisibility(View.VISIBLE);
                 notiOptions.setVisibility(View.VISIBLE);
+                notiText.setCompoundDrawableTintList(ColorStateList.valueOf(textColor));
                 if (greenCancel.getVisibility() == View.VISIBLE){
                     greenCancel.callOnClick();
                 }
@@ -911,31 +940,35 @@ public class CreateSchedule extends AppCompatActivity {
     public void setGone(String section) {
         switch (section) {
             case "green":
+                green.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.outline_nest_eco_leaf_24, 0, 0, 0);
                 if (gAdapter.getSelectedFoods() != null && !gAdapter.getSelectedFoods().isEmpty()) {
                     for (int i = 0; i < gAdapter.getSelectedFoods().size(); i++) {
                         if (!gAdapter.getSelectedFoods().get(i).getName().isEmpty()) {
                             greenList = gAdapter.getSelectedFoods();
-                            green.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.textColour));
+                            green.setTextColor(textColor);
                             green.setText("Green: " + greenList.size() + " items selected");
+                            green.setCompoundDrawableTintList(ColorStateList.valueOf(textColor));
                         }
                     }
                 }
                 else {
                     green.setText("Green");
                     green.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.android_hint));
+                    green.setCompoundDrawableTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.android_hint)));
                 }
                 greenCancel.setVisibility(View.GONE);
                 greenLine.setVisibility(View.GONE);
                 greenRecycler.setVisibility(View.GONE);
-                green.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.outline_nest_eco_leaf_24, 0, 0, 0);
                 break;
             case "brown":
+                brown.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.outline_nest_eco_leaf_24, 0, 0, 0);
                 if (bAdapter.getSelectedFoods() != null && !bAdapter.getSelectedFoods().isEmpty()) {
                     for (int i = 0; i < bAdapter.getSelectedFoods().size(); i++) {
                         if (!bAdapter.getSelectedFoods().get(i).getName().isEmpty()) {
                             brownList = bAdapter.getSelectedFoods();
-                            brown.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.textColour));
+                            brown.setTextColor(textColor);
                             brown.setText("Brown: " + brownList.size() + " items selected");
+                            brown.setCompoundDrawableTintList(ColorStateList.valueOf(textColor));
                         }
                     }
                 }
@@ -943,15 +976,15 @@ public class CreateSchedule extends AppCompatActivity {
                 else {
                     brown.setText("Brown");
                     brown.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.android_hint));
+                    brown.setCompoundDrawableTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.android_hint)));
                 }
                 brownCancel.setVisibility(View.GONE);
                 brownLine.setVisibility(View.GONE);
                 brownRecycler.setVisibility(View.GONE);
-                brown.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.outline_nest_eco_leaf_24, 0, 0, 0);
                 break;
             case "repeat":
                 if (!repeatType.isEmpty()){
-                    repeatText.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.textColour));
+                    repeatText.setTextColor(textColor);
                     repeatText.setText(repeatType);
                 }
                 else repeatText.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.android_hint));
@@ -961,7 +994,7 @@ public class CreateSchedule extends AppCompatActivity {
                 break;
             case "noti":
                 if (!notiType.isEmpty()){
-                    notiText.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.textColour));
+                    notiText.setTextColor(textColor);
                     notiText.setText(notiType);
                 }
                 else notiText.setTextColor(ContextCompat.getColor(CreateSchedule.this, R.color.android_hint));

@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -148,6 +149,7 @@ public class Feeding extends AppCompatActivity {
     FoodAdapter greenAdapter;
     FoodAdapter brownAdapter;
     int selectedLogID = -1;
+    int nightModeFlags, textColor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -225,7 +227,16 @@ public class Feeding extends AppCompatActivity {
 
         greens = new ArrayList<>();
         browns = new ArrayList<>();
+        nightModeFlags = Feeding.this.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        switch (nightModeFlags){
+            case Configuration.UI_MODE_NIGHT_YES:
+                textColor = ContextCompat.getColor(Feeding.this, R.color.white);
+                break;
 
+            case Configuration.UI_MODE_NIGHT_NO:
+                textColor = ContextCompat.getColor(Feeding.this, R.color.textColour);
+                break;
+        }
         toggleViewButton.setOnClickListener(view -> toggleView());
 
         // day of week titles
@@ -848,7 +859,7 @@ public class Feeding extends AppCompatActivity {
                     }
                 }
                 if (day.getPosition() == DayPosition.MonthDate) {
-                    container.dayText.setTextColor(Color.BLACK);
+                    container.dayText.setTextColor(textColor);
                     container.dayText.setOnClickListener(v -> {
                         toggleSelect(container, day.getDate().getYear(), day.getDate().getMonthValue());
                         if (selectedDate.isAfter(LocalDate.now())){
@@ -860,8 +871,7 @@ public class Feeding extends AppCompatActivity {
                         else loadForToday(viewType);
                     });
                 } else {
-                    int textColor = ContextCompat.getColor(Feeding.this, R.color.light_grey);
-                    container.dayText.setTextColor(textColor);
+                    container.dayText.setTextColor(ContextCompat.getColor(Feeding.this, R.color.android_hint));
                 }
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.getDefault());
                 if (selectedDate!=null && day.getDate().isEqual(selectedDate)){
@@ -931,6 +941,7 @@ public class Feeding extends AppCompatActivity {
                     }
                 }
                 container.dayText.setText(String.valueOf(weekDay.getDate().getDayOfMonth()));
+                container.dayText.setTextColor(textColor);
                 container.dayText.setOnClickListener(v -> {
                     toggleSelect(container, weekDay.getDate().getYear(), weekDay.getDate().getMonthValue());
                     if (selectedDate.isAfter(LocalDate.now())){
@@ -1231,7 +1242,7 @@ public class Feeding extends AppCompatActivity {
             android.util.Log.i("toggle Select", "In select if");
             // reset
             selectedDateContainer.dayText.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(Feeding.this, R.color.transparent)));
-            selectedDateContainer.dayText.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(Feeding.this, R.color.black)));
+            selectedDateContainer.dayText.setTextColor(textColor);
             selectedDateContainer.select.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(Feeding.this, R.color.transparent)));
             android.util.Log.i("toggle Select", "getAllScheduledDates: " + (getAllScheduledDates(scheduleList).contains(selectedDate)) );
             if (getAllScheduledDates(scheduleList).contains(selectedDate)){

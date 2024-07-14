@@ -233,4 +233,15 @@
     <style name="OtherButtonTheme">
         <item name="android:buttonTint">@color/textColour</item>
     </style>
+
+    <!-- Create schedule -->
+    <style name="CreateScheduleBackground">
+        <item name="android:background">#F1F1F3</item>
+        <item name="android:textColor">@color/textColour</item>
+        <item name="android:fontFamily">sans-serif-condensed-medium</item>
+    </style>
+
+    <style name="detailCards">
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
 </resources>

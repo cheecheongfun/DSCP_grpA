@@ -3,9 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:theme="@style/AppBackgroundColour"
+    android:theme="@style/CreateScheduleBackground"
     android:id="@+id/create"
-    android:background="#F1F1F3"
     app:cornerRadius="50dp">
 
     <TextView
@@ -33,7 +32,7 @@
         android:padding="10dp"
         android:paddingStart="20dp"
         android:background="@drawable/rounded_corner_mid_green"
-        android:backgroundTint="@color/white"
+        android:theme="@style/detailCards"
         android:layout_marginEnd="15dp"
         android:layout_marginTop="10dp"
         android:maxLines="1"
@@ -48,7 +47,7 @@
         android:layout_alignStart="@+id/scheduleName"
         android:layout_alignEnd="@+id/scheduleName"
         android:background="@drawable/rounded_corner_mid_green"
-        android:backgroundTint="@color/white">
+        android:theme="@style/detailCards">
 
         <TextView
             android:id="@+id/green"
@@ -60,9 +59,7 @@
             android:backgroundTint="@color/transparent"
             android:text="Greens"
             android:textSize="18sp"
-            android:textColor="@color/android_hint"
             android:drawableStart="@drawable/outline_nest_eco_leaf_24"
-            android:drawableTint="@color/android_hint"
             android:drawablePadding="10dp"/>
 
 
@@ -73,7 +70,7 @@
             android:layout_alignParentEnd="true"
             android:padding="10dp"
             android:paddingEnd="15dp"
-            android:drawableTint="@color/android_hint"
+            android:drawableTint="@color/textColour"
             android:drawableStart="@drawable/baseline_close_24"
             android:layout_alignBottom="@+id/green"
             android:backgroundTint="@color/transparent"
@@ -110,7 +107,7 @@
         android:layout_alignStart="@+id/greenSect"
         android:layout_alignEnd="@+id/greenSect"
         android:background="@drawable/rounded_corner_mid_green"
-        android:backgroundTint="@color/white">
+        android:theme="@style/detailCards">
 
         <TextView
             android:id="@+id/brown"
@@ -122,9 +119,7 @@
             android:backgroundTint="@color/transparent"
             android:text="Browns"
             android:textSize="18sp"
-            android:textColor="@color/android_hint"
             android:drawableStart="@drawable/outline_nest_eco_leaf_24"
-            android:drawableTint="@color/android_hint"
             android:drawablePadding="10dp"/>
 
 
@@ -135,7 +130,7 @@
             android:layout_alignParentEnd="true"
             android:padding="10dp"
             android:paddingEnd="15dp"
-            android:drawableTint="@color/android_hint"
+            android:drawableTint="@color/textColour"
             android:drawableStart="@drawable/baseline_close_24"
             android:layout_alignBottom="@+id/brown"
             android:backgroundTint="@color/transparent"
@@ -172,8 +167,7 @@
         android:layout_alignStart="@+id/brownSect"
         android:layout_alignEnd="@+id/brownSect"
         android:background="@drawable/rounded_corner_mid_green"
-        android:backgroundTint="@color/white"
-        android:theme="@style/AppBackgroundColour">
+        android:theme="@style/detailCards">
 
         <TextView
             android:id="@+id/repeatText"
@@ -184,10 +178,8 @@
             android:background="@drawable/rounded_corner_mid_green"
             android:backgroundTint="@color/transparent"
             android:textSize="18sp"
-            android:textColor="@color/android_hint"
             android:text="Don't repeat"
             android:drawableStart="@drawable/outline_repeat_24"
-            android:drawableTint="@color/android_hint"
             android:drawablePadding="10dp"/>
 
         <TextView
@@ -197,7 +189,7 @@
             android:layout_alignParentEnd="true"
             android:padding="10dp"
             android:paddingEnd="15dp"
-            android:drawableTint="@color/android_hint"
+            android:drawableTint="@color/textColour"
             android:drawableStart="@drawable/baseline_close_24"
             android:layout_alignBottom="@+id/repeatText"
             android:backgroundTint="@color/transparent"
@@ -262,6 +254,7 @@
                     android:paddingEnd="10dp"
                     android:gravity="center"
                     android:maxLines="1"
+                    style="@style/Widget.AppCompat.EditText"
                     android:layout_alignBottom="@id/radioRepeatWeekly"
                     />
                 <TextView
@@ -330,6 +323,7 @@
                     android:maxLength="3"
                     android:gravity="center"
                     android:maxLines="1"
+                    style="@style/Widget.AppCompat.EditText"
                     android:layout_alignBottom="@id/radioRepeatMonthly"
                     />
                 <TextView
@@ -392,7 +386,7 @@
         android:layout_alignStart="@+id/repeat"
         android:layout_alignEnd="@+id/repeat"
         android:background="@drawable/rounded_corner_mid_green"
-        android:backgroundTint="@color/white"
+        android:theme="@style/detailCards"
         android:layout_marginBottom="10dp">
 
         <TextView
@@ -402,12 +396,10 @@
             android:padding="10dp"
             android:paddingStart="15dp"
             android:background="@drawable/rounded_corner_mid_green"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/transparent"
             android:textSize="18sp"
-            android:textColor="@color/android_hint"
             android:text="Don't notify"
             android:drawableStart="@drawable/outline_notifications_24"
-            android:drawableTint="@color/android_hint"
             android:drawablePadding="10dp"/>
 
         <TextView
@@ -417,7 +409,7 @@
             android:layout_alignParentEnd="true"
             android:padding="10dp"
             android:paddingEnd="15dp"
-            android:drawableTint="@color/android_hint"
+            android:drawableTint="@color/textColour"
             android:drawableStart="@drawable/baseline_close_24"
             android:layout_alignBottom="@+id/notiText"
             android:backgroundTint="@color/transparent"
@@ -483,6 +475,7 @@
                     android:paddingEnd="10dp"
                     android:layout_marginStart="-18dp"
                     android:gravity="center"
+                    style="@style/Widget.AppCompat.EditText"
                     android:maxLines="1"
                     android:layout_alignBottom="@id/radioNotiDayBefore"
                     />
