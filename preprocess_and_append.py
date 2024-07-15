@@ -8,23 +8,30 @@ from concurrent.futures import ThreadPoolExecutor
 
 account_name = os.getenv('AZURE_STORAGE_ACCOUNT_NAME')
 account_key = os.getenv('AZURE_STORAGE_ACCOUNT_KEY')
-container_name = 'datadump'
+container_name = os.getenv('CONTAINER_NAME')
 blob_service_client = BlobServiceClient(account_url=f"https://{account_name}.blob.core.windows.net", credential=account_key)
 
 def download_blob(blob_name):
-    blob_client = blob_service_client.get_blob_client(container=container_name, blob=f"{blob_name}")
-    download_file_path = f"./{blob_name}"
+    blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+    if not blob_client.exists():
+        raise FileNotFoundError(f"The specified blob '{blob_name}' does not exist in the container '{container_name}'.")
+    
+    download_file_path = f"./{blob_name.split('/')[-1]}"
     with open(download_file_path, "wb") as download_file:
         download_file.write(blob_client.download_blob().readall())
     return download_file_path
 
 def upload_blob(blob_name, file_path):
-    blob_client = blob_service_client.get_blob_client(container=container_name, blob=f"{blob_name}")
+    blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
     with open(file_path, "rb") as data:
         blob_client.upload_blob(data, overwrite=True)
 
 def preprocess_and_append(new_file):
-    collated_file = download_blob('estate_soe_combined_api_latest.xlsx')
+    try:
+        collated_file=download_blob('final_data/estate_soe_combined_api_latest.xlsx')
+    except FileNotFoundError as e:
+        print(e)
+        return
     df_collated = pd.read_excel(collated_file)
 
     df_new = pd.read_excel(new_file)
@@ -153,9 +160,6 @@ def preprocess_and_append(new_file):
             df_new.at[index,'rain fall']=avg_rainfall
     df_new.drop(columns=['date'],inplace=True)
     df_new['rain fall'].fillna(0,inplace=True)    
-    
-    
-
     
     df_combined = pd.concat([df_collated, df_new], ignore_index=True)
 
