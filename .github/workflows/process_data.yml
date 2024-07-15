@@ -1,11 +1,8 @@
 name: Process and Append Data
 
 on:
-  workflow_dispatch:
-    inputs:
-      blob_url:
-        description: 'The URL of the new data blob'
-        required: true
+  repository_dispatch:
+    types: [azure-storage-event]
 
 jobs:
   process_data:
