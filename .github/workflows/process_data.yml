@@ -2,7 +2,7 @@ name: Process and Append Data
 
 on:
   repository_dispatch:
-    types: [azure-storage-event]
+    types: [blob-added]
 
 jobs:
   process_data:
