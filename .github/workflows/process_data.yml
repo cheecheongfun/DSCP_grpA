@@ -1,8 +1,11 @@
 name: Process and Append Data
 
 on:
-  repository_dispatch:
-    types: [blob-added]
+  workflow_dispatch:
+    inputs:
+      blob_url:
+        description: 'URL of the blob to process'
+        required: true
 
 jobs:
   process_data:
