@@ -162,9 +162,8 @@ def preprocess_and_append(new_file):
     df_new['rain fall'].fillna(0,inplace=True)    
     
     df_combined = pd.concat([df_collated, df_new], ignore_index=True)
-    updated_file_path = {f'./updated_{new_file.split('/')[-1]}'}
-    df_combined.to_excel(updated_file_path, index=False)
-    upload_blob('final_data/estate_soe_combined_api_latest.xlsx', updated_file_path)
+    df_combined.to_excel(collated_file, index=False)
+    upload_blob('final_data/estate_soe_combined_api_latest.xlsx', collated_file)
 
 if __name__ == "__main__":
     import sys
