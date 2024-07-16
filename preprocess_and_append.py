@@ -167,4 +167,7 @@ def preprocess_and_append(new_file):
 
 if __name__ == "__main__":
     import sys
-    preprocess_and_append(sys.argv[1])
+    if sys.argv[1] == 'estate_soe_combined_api_latest.xlsx':
+        quit()
+    else:
+        preprocess_and_append(sys.argv[1])
