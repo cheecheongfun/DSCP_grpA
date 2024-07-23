@@ -200,8 +200,14 @@ def fetch_all_data():
 def push_to_firebase(data_dict):
     for devicename, timestamps in data_dict.items():
         for timestamp, values in timestamps.items():
+            # Construct the correct URL for each entry
             url = f'{FIREBASE_DATABASE_URL}/Tanks/data/{devicename}/{timestamp}.json?auth={FIREBASE_DATABASE_SECRET}'
-            requests.put(url, json=values)
+            print(f'Pushing to URL: {url}')  # Debug print to check URL construction
+            response = requests.put(url, json=values)
+            if response.status_code == 200:
+                print(f'Successfully pushed data for {devicename} at {timestamp}')
+            else:
+                print(f'Failed to push data for {devicename} at {timestamp}. Status code: {response.status_code}')
 
 def delete_from_firebase(path):
     url = f'{FIREBASE_DATABASE_URL}/{path}.json?auth={FIREBASE_DATABASE_SECRET}'
