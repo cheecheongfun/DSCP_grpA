@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       blob_url:
-        description: 'URL of the blob to process'
+        description: 'The URL of the new data blob'
         required: true
 
 jobs:
@@ -30,11 +30,11 @@ jobs:
         BLOB_URL: ${{ github.event.inputs.blob_url }}
       run: |
         wget -O new_datafile.xlsx "${{ env.BLOB_URL }}"
-    
+
     - name: Check if the file is estate_soe_combined_api_latest.xlsx
       id: check_filename
       run: |
-        FILENAME=$(basename "${{ env.BLOB_URL}}")
+        FILENAME=$(basename "${{ env.BLOB_URL }}")
         if [[ "$FILENAME" == "estate_soe_combined_api_latest.xlsx" ]]; then
           echo "FILENAME_MATCH=true" >> $GITHUB_ENV
         else
@@ -49,9 +49,8 @@ jobs:
         CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
       run: |
         python preprocess_and_append.py new_datafile.xlsx
-    
-    - name: Skip processing if filename matches
-      if: env.FILENAME_MATCH == 'false'
-      run: |
-        echo "The uploaded file is one of the final datasets, skipping processing."
 
+    - name: Skip processing if filename does not match
+      if: env.FILENAME_MATCH == 'true'
+      run: |
+        echo "The uploaded file is not estate_soe_combined_api_latest.xlsx. Skipping processing."
