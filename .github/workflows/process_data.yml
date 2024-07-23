@@ -30,11 +30,28 @@ jobs:
         BLOB_URL: ${{ github.event.inputs.blob_url }}
       run: |
         wget -O new_datafile.xlsx "${{ env.BLOB_URL }}"
+    
+    - name: Check if the file is estate_soe_combined_api_latest.xlsx
+      id: check_filename
+      run: |
+        FILENAME=$(basename "${{ env.BLOB_URL}}")
+        if [[ "$FILENAME" == "estate_soe_combined_api_latest.xlsx" ]]; then
+          echo "FILENAME_MATCH=true" >> $GITHUB_ENV
+        else
+          echo "FILENAME_MATCH=false" >> $GITHUB_ENV
+        fi
 
-    - name: Run preprocessing script
+    - name: Run preprocessing script if filename matches
+      if: env.FILENAME_MATCH == 'false'
       env:
         AZURE_STORAGE_ACCOUNT_NAME: ${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}
         AZURE_STORAGE_ACCOUNT_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
         CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
       run: |
         python preprocess_and_append.py new_datafile.xlsx
+    
+    - name: Skip processing if filename matches
+      if: env.FILENAME_MATCH == 'false'
+      run: |
+        echo "The uploaded file is one of the final datasets, skipping processing."
+
