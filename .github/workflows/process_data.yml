@@ -23,34 +23,35 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pandas azure-storage-blob numpy feature-engine requests openpyxl
+        pip install pandas azure-storage-blob numpy feature-engine requests
+
+    - name: Check if the blob URL contains estate_soe_combined_api_latest.xlsx
+      id: check_filename
+      run: |
+        FILENAME=$(basename "${{ github.event.inputs.blob_url }}")
+        if [[ "$FILENAME" == "estate_soe_combined_api_latest.xlsx" ]]; then
+          echo "SKIP_WORKFLOW=true" >> $GITHUB_ENV
+        else
+          echo "SKIP_WORKFLOW=false" >> $GITHUB_ENV
+        fi
+
+    - name: Skip workflow if filename matches estate_soe_combined_api_latest.xlsx
+      if: env.SKIP_WORKFLOW == 'true'
+      run: |
+        echo "The blob URL contains estate_soe_combined_api_latest.xlsx. Skipping workflow."
 
     - name: Download new data file
+      if: env.SKIP_WORKFLOW == 'false'
       env:
         BLOB_URL: ${{ github.event.inputs.blob_url }}
       run: |
         wget -O new_datafile.xlsx "${{ env.BLOB_URL }}"
 
-    - name: Check if the file is estate_soe_combined_api_latest.xlsx
-      id: check_filename
-      run: |
-        FILENAME=$(basename "${{ env.BLOB_URL }}")
-        if [[ "$FILENAME" == "estate_soe_combined_api_latest.xlsx" ]]; then
-          echo "FILENAME_MATCH=true" >> $GITHUB_ENV
-        else
-          echo "FILENAME_MATCH=false" >> $GITHUB_ENV
-        fi
-
-    - name: Run preprocessing script if filename matches
-      if: env.FILENAME_MATCH == 'false'
+    - name: Run preprocessing script
+      if: env.SKIP_WORKFLOW == 'false'
       env:
         AZURE_STORAGE_ACCOUNT_NAME: ${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}
         AZURE_STORAGE_ACCOUNT_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
         CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
       run: |
         python preprocess_and_append.py new_datafile.xlsx
-
-    - name: Skip processing if filename does not match
-      if: env.FILENAME_MATCH == 'true'
-      run: |
-        echo "The uploaded file is not estate_soe_combined_api_latest.xlsx. Skipping processing."
