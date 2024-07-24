@@ -32,10 +32,10 @@ jobs:
         echo "FILENAME=$FILENAME" >> $GITHUB_ENV
         echo "Extracted filename: $FILENAME"
 
-    - name: Check if the blob URL contains estate_soe_combined_api_latest.xlsx
+    - name: Check if the blob URL contains estate_soe_combined_api_latest.xlsx or soe_combined_api_latest.xlsx
       id: check_filename
       run: |
-        if [[ "$FILENAME" == "estate_soe_combined_api_latest.xlsx" || "$FILENAME" == "soe_combined_api_latest.xlsx" *]]; then
+        if [[ "$FILENAME" == "estate_soe_combined_api_latest.xlsx" || "$FILENAME" == *"soe_combined_api_latest.xlsx"* ]]; then
           echo "SKIP_WORKFLOW=true" >> $GITHUB_ENV
         else
           echo "SKIP_WORKFLOW=false" >> $GITHUB_ENV
