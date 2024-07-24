@@ -407,9 +407,9 @@ def preprocess_and_append(new_file):
         print(e)
         return
     df_collated = pd.read_excel(collated_file)
-    if '01' in new_file:
+    if new_file.endswith('01'):
         df_new = preprocess_soe_dpm_5mins(new_file, '01')
-    elif '02' in new_file:
+    elif new_file.endswith('02'):
         df_new = preprocess_soe_dpm_5mins(new_file, '02')
     else:
         quit()
