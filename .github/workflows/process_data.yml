@@ -35,16 +35,16 @@ jobs:
     - name: Check if the blob URL contains estate_soe_combined_api_latest.xlsx
       id: check_filename
       run: |
-        if [[ "$FILENAME" == "estate_soe_combined_api_latest.xlsx" ]]; then
+        if [[ "$FILENAME" == "estate_soe_combined_api_latest.xlsx" || "$FILENAME" == "soe_combined_api_latest.xlsx" *]]; then
           echo "SKIP_WORKFLOW=true" >> $GITHUB_ENV
         else
           echo "SKIP_WORKFLOW=false" >> $GITHUB_ENV
         fi
 
-    - name: Skip workflow if filename matches estate_soe_combined_api_latest.xlsx
+    - name: Skip workflow if filename matches estate_soe_combined_api_latest.xlsx or soe_combined_api_latest.xlsx
       if: env.SKIP_WORKFLOW == 'true'
       run: |
-        echo "The blob URL contains estate_soe_combined_api_latest.xlsx. Skipping workflow."
+        echo "The blob URL contains either estate_soe_combined_api_latest.xlsx or soe_combined_api_latest.xlsx. Skipping workflow."
 
     - name: Download new data file
       if: env.SKIP_WORKFLOW == 'false'
