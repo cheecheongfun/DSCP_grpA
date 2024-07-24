@@ -244,4 +244,11 @@
     <style name="detailCards">
         <item name="android:backgroundTint">@color/white</item>
     </style>
+
+    <!-- Custom Dialog Rounded -->
+    <style name="CustomDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@drawable/rounded_dialog </item>
+        <item name="android:textColor">@color/textColour</item>
+        <item name="fontFamily">sans-serif-condensed-medium</item>
+    </style>
 </resources>

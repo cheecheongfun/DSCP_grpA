@@ -85,7 +85,7 @@ public class LiveData extends AppCompatActivity {
 
         tankName.setText(tank.getTankName());
         temp.setText("Temperature: " + tank.getTemperature() + "°C");
-        humidity.setText("Humidity: " + tank.getHumidity() + "%");
+        humidity.setText("Humidity: " + tank.getEC());
         pH.setText("pH Level: " + tank.getPHValue());
         nitrogen.setText("Nitrogen: " + tank.getNpkValues().get(0));
         phosphorous.setText("Phosphorous: " + tank.getNpkValues().get(1));
@@ -110,7 +110,7 @@ public class LiveData extends AppCompatActivity {
                             // Prepare input data
                             float[][] input = new float[1][3]; // Example input
                             input[0][0] = (float) tank.getTemperature(); // Actual temperature data
-                            input[0][1] = (float) tank.getHumidity(); // Actual humidity data
+                            input[0][1] = (float) tank.getEC(); // Actual humidity data
                             input[0][2] = 1.0f; // Third input, could be any constant value
 
                             // Prepare output buffer

@@ -9,11 +9,11 @@ import java.util.ArrayList;
 
 public class Tank implements Parcelable {
     private int tankID, numberOfWorms;
-    private double pHValue, temperature, humidity;
+    private double pHValue, temperature, moisture, EC;
     private ArrayList<Double> npkValues; // Using ArrayList to store NPK values
     private ArrayList<Log> feedingLog;
     private ArrayList<FeedSchedule> feedSchedule; // Added field
-    private String tankName, dateCreated, description;
+    private String tankName, dateCreated, description, deviceID;
 
     // Default Constructor
     public Tank() {
@@ -23,16 +23,18 @@ public class Tank implements Parcelable {
     }
 
     // Full Constructor
-    public Tank(int tankID, String tankName, String description, int numberOfWorms,
-                ArrayList<Double> npkValues, double temperature, double humidity, double pHValue,
+    public Tank(int tankID, String deviceID, String tankName, String description, int numberOfWorms,
+                ArrayList<Double> npkValues, double temperature, double EC, double pHValue, double moisture,
                 String dateCreated, ArrayList<Log> feedingLog, ArrayList<FeedSchedule> feedSchedule) {
         this.tankID = tankID;
+        this.deviceID = deviceID;
         this.tankName = tankName;
         this.description = description;
         this.numberOfWorms = numberOfWorms;
         this.npkValues = npkValues;
         this.temperature = temperature;
-        this.humidity = humidity;
+        this.EC = EC;
+        this.moisture = moisture;
         this.pHValue = pHValue;
         this.dateCreated = dateCreated;
         this.feedingLog = feedingLog;
@@ -42,13 +44,15 @@ public class Tank implements Parcelable {
     // Parcelable Constructor
     protected Tank(Parcel in) {
         tankID = in.readInt();
+        deviceID = in.readString();
         tankName = in.readString();
         description = in.readString();
         numberOfWorms = in.readInt();
         dateCreated = in.readString();
         pHValue = in.readDouble();
         temperature = in.readDouble();
-        humidity = in.readDouble();
+        EC = in.readDouble();
+        moisture = in.readDouble();
         npkValues = new ArrayList<>();
         in.readList(this.npkValues, Double.class.getClassLoader()); // Read the list of NPK values
         feedingLog = new ArrayList<>();
@@ -77,13 +81,15 @@ public class Tank implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeInt(tankID);
+        dest.writeString(deviceID);
         dest.writeString(tankName);
         dest.writeString(description);
         dest.writeInt(numberOfWorms);
         dest.writeString(dateCreated);
         dest.writeDouble(pHValue);
         dest.writeDouble(temperature);
-        dest.writeDouble(humidity);
+        dest.writeDouble(moisture);
+        dest.writeDouble(EC);
         dest.writeList(npkValues); // Write the list of NPK values
         dest.writeList(feedingLog);
         dest.writeList(feedSchedule); // Write feedSchedule to parcel
@@ -92,6 +98,8 @@ public class Tank implements Parcelable {
     // Getters and Setters
     public int getTankID() { return tankID; }
     public void setTankID(int tankID) { this.tankID = tankID; }
+    public String getDeviceID() {return deviceID;}
+    public void setDeviceID(String deviceID) { this.deviceID = deviceID;}
     public String getTankName() { return tankName; }
     public void setTankName(String tankName) { this.tankName = tankName; }
     public String getDescription() { return description; }
@@ -102,8 +110,10 @@ public class Tank implements Parcelable {
     public void setNpkValues(ArrayList<Double> npkValues) { this.npkValues = npkValues; }
     public double getTemperature() { return temperature; }
     public void setTemperature(double temperature) { this.temperature = temperature; }
-    public double getHumidity() { return humidity; }
-    public void setHumidity(double humidity) { this.humidity = humidity; }
+    public double getMoisture() { return moisture; }
+    public void setMoisture(double moisture) { this.moisture = moisture; }
+    public double getEC() { return EC; }
+    public void setEC(double EC) { this.EC = EC; }
     public double getPHValue() { return pHValue; }
     public void setPHValue(double pHValue) { this.pHValue = pHValue; }
     public String getDateCreated() { return dateCreated; }
@@ -118,4 +128,5 @@ public class Tank implements Parcelable {
     public void removeLog(Log log) {
         feedingLog.remove(log);
     }
+
 }

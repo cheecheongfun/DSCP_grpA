@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:theme="@style/AppBackgroundColour">
+
+    <TextView
+        android:id="@+id/deviceText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="195dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="195dp"
+        android:text="Device ID"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="25dp"/>
+
+    <RelativeLayout
+        android:id="@+id/editName"
+        android:layout_width="345dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="51dp"
+        android:background="@drawable/greyrounded"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deviceText">
+
+        <EditText
+            android:id="@+id/etName"
+            style="@style/NoUnderlineHint"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:ems="10"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:hint="Tank Name"
+            android:inputType="text"
+            android:maxLength="20"
+            android:maxLines="1"
+            android:paddingStart="5dp"
+            android:textColor="@color/textColour"
+            android:textColorHint="@color/light_grey" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/editWorm"
+        android:layout_width="345dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="51dp"
+        android:background="@drawable/greyrounded"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editName">
+
+        <EditText
+            android:id="@+id/etWorm"
+            style="@style/NoUnderlineHint"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:ems="10"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:hint="Number of worms"
+            android:inputType="number"
+            android:maxLength="20"
+            android:maxLines="1"
+            android:paddingStart="5dp"
+            android:textColor="@color/textColour"
+            android:textColorHint="@color/light_grey" />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="180dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="180dp"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="@color/mid_green"
+        android:text="Add"
+        android:textSize="20sp"
+        app:cornerRadius="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editWorm" />
+</androidx.constraintlayout.widget.ConstraintLayout>
