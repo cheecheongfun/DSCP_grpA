@@ -52,7 +52,7 @@ jobs:
         BLOB_URL: ${{ github.event.inputs.blob_url }}
         FILENAME: ${{ env.FILENAME }}
       run: |
-        wget -O $FILENAME "${{ env.BLOB_URL }}"
+        wget -O "$FILENAME" "${{ env.BLOB_URL }}"
 
     - name: Run preprocessing script
       if: env.SKIP_WORKFLOW == 'false'
@@ -62,4 +62,4 @@ jobs:
         CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
         FILENAME: ${{ env.FILENAME }}
       run: |
-        python preprocess_and_append.py $FILENAME
+        python preprocess_and_append.py "$FILENAME"
