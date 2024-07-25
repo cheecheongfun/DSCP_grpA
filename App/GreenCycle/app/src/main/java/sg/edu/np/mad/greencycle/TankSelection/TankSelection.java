@@ -389,7 +389,7 @@ public class TankSelection extends AppCompatActivity {
         if (user.getTanks()!=null){
             size = user.getTanks().size();
         } else size = 0;
-        return new Tank(size, deviceID, "New Tank", null, 0, npk, temperature, EC, moisture, pHLevel, today,  null, null);
+        return new Tank(size, deviceID, "New Tank", null, 0, npk, temperature, EC, pHLevel, moisture, today,  null, null);
     }
     private void addTankToUserAccount(Tank tank) {
         DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("users").child(user.getUsername());

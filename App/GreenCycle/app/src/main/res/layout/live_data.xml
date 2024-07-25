@@ -55,24 +55,13 @@
         android:theme="@style/TankRecyclerCard"
         android:elevation="20dp">
 
-        <TextView
-            android:id="@+id/refreshText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:fontFamily="sans-serif-condensed-light"
-            android:text="Next refresh: 9:45 am"
-            android:textSize="15sp"
-            android:layout_marginTop="15dp"/>
-
-        <TextView
+         <TextView
             android:id="@+id/temperatureData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/refreshText"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="125dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:background="@drawable/home_page_buttons"
             android:backgroundTint="@color/icon_brown_light"
             android:drawableStart="@drawable/baseline_device_thermostat_24"
@@ -83,7 +72,7 @@
             android:textColor="@color/textColour"/>
 
         <TextView
-            android:id="@+id/humidityData"
+            android:id="@+id/soilEC"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/temperatureData"
@@ -102,7 +91,7 @@
             android:id="@+id/phData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/humidityData"
+            android:layout_below="@+id/soilEC"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="125dp"
             android:layout_marginTop="20dp"
@@ -114,6 +103,7 @@
             android:textSize="16sp"
             android:textColor="@color/textColour"/>
 
+
         <RelativeLayout
             android:id="@+id/npk"
             android:layout_width="match_parent"
@@ -123,7 +113,7 @@
             android:layout_marginTop="20dp"
             android:layout_centerHorizontal="true"
             android:background="@drawable/home_page_buttons"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="0dp">
 
             <TextView
                 android:id="@+id/npkIcon"
@@ -170,6 +160,22 @@
                 android:textSize="16sp"
                 android:textColor="@color/textColour"/>
         </RelativeLayout>
+        <TextView
+            android:id="@+id/moisture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/npk"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="125dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/home_page_buttons"
+            android:drawableStart="@drawable/baseline_water_24"
+            android:drawablePadding="15dp"
+            android:padding="15dp"
+            android:text="Moisture"
+            android:textSize="16sp"
+            android:textColor="@color/textColour"/>
 
     </RelativeLayout>
 

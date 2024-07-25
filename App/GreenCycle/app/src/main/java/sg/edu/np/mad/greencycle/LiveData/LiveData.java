@@ -40,7 +40,7 @@ public class LiveData extends AppCompatActivity {
     DatabaseReference reference;
     Interpreter tflite;
     String soil;
-    TextView backButton, temp, humidity, pH, nitrogen,phosphorous,potassium, feedback1, feedback2, tankName, mlOutput;
+    TextView backButton, temp, EC, pH, nitrogen,phosphorous,potassium, moisture, feedback1, feedback2, tankName, mlOutput;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,11 +62,12 @@ public class LiveData extends AppCompatActivity {
         tankName = findViewById(R.id.tankName);
         backButton = findViewById(R.id.backButton);
         temp = findViewById(R.id.temperatureData);
-        humidity = findViewById(R.id.humidityData);
+        EC = findViewById(R.id.soilEC);
         pH = findViewById(R.id.phData);
         nitrogen = findViewById(R.id.nitrogenData);
         phosphorous = findViewById(R.id.phosphorousData);
         potassium = findViewById(R.id.potassiumData);
+        moisture = findViewById(R.id.moisture);
         feedback1 = findViewById(R.id.point1);
         feedback2 = findViewById(R.id.point2);
         mlOutput = findViewById(R.id.mlOutput);
@@ -85,11 +86,12 @@ public class LiveData extends AppCompatActivity {
 
         tankName.setText(tank.getTankName());
         temp.setText("Temperature: " + tank.getTemperature() + "°C");
-        humidity.setText("Humidity: " + tank.getEC());
+        EC.setText("Soil EC: " + tank.getEC());
         pH.setText("pH Level: " + tank.getPHValue());
         nitrogen.setText("Nitrogen: " + tank.getNpkValues().get(0));
         phosphorous.setText("Phosphorous: " + tank.getNpkValues().get(1));
         potassium.setText("Potassium: " + tank.getNpkValues().get(2));
+        moisture.setText("Moisture: " + tank.getMoisture());
 
         CustomModelDownloadConditions conditions = new CustomModelDownloadConditions.Builder()
                 .requireWifi()

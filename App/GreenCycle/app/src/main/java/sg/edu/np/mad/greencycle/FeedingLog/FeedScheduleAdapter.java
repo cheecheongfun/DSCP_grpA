@@ -111,7 +111,6 @@ public class FeedScheduleAdapter extends ArrayAdapter<FeedSchedule> {
                 original.remove(feedSchedule);
                 feedSchedules.remove(feedSchedule);
                 newTank.setFeedSchedule(original);
-                notifyDataSetChanged();
 
                 database = FirebaseDatabase.getInstance();
                 reference = database.getReference("users");
@@ -132,6 +131,7 @@ public class FeedScheduleAdapter extends ArrayAdapter<FeedSchedule> {
                             public void onSuccess(Void aVoid) {
                                 Log.i("FirebaseUpdate", "Feed Schedule: "+ user.getTanks().get(0).getFeedSchedule().size());
                                 // Dismiss the dialog or close the activity
+                                notifyDataSetChanged();
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {

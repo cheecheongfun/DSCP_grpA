@@ -88,8 +88,8 @@ public class Tank implements Parcelable {
         dest.writeString(dateCreated);
         dest.writeDouble(pHValue);
         dest.writeDouble(temperature);
-        dest.writeDouble(moisture);
         dest.writeDouble(EC);
+        dest.writeDouble(moisture);
         dest.writeList(npkValues); // Write the list of NPK values
         dest.writeList(feedingLog);
         dest.writeList(feedSchedule); // Write feedSchedule to parcel
