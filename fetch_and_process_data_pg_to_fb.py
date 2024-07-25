@@ -1,48 +1,118 @@
-import requests
-import pandas as pd
-import json
-import urllib.parse
 import os
 import psycopg2
+import pandas as pd
+import json
+import requests
 
-# Fetch secrets from environment variables
+# Firebase configuration
 FIREBASE_DATABASE_URL = os.getenv('FIREBASE_DATABASE_URL')
 FIREBASE_DATABASE_SECRET = os.getenv('FIREBASE_DATABASE_SECRET')
 
-# Function to get the latest timestamp from Firebase
 def get_latest_timestamp():
     response = requests.get(f'{FIREBASE_DATABASE_URL}/Tanks/data.json?auth={FIREBASE_DATABASE_SECRET}')
     data = response.json()
 
-    print(f"Fetched data from Firebase for latest timestamp: {data}")  # Debug statement
+    # Print the fetched data to inspect its structure
+    print("Fetched data:", json.dumps(data, indent=2))
 
     if data:
+        # Flatten the nested dictionary to get all timestamps
         timestamps = []
         for device_data in data.values():
-            if isinstance(device_data, dict):
-                timestamps.extend(device_data.keys())
+            timestamps.extend(device_data.keys())
 
-        print(f"Extracted timestamps: {timestamps}")  # Debug statement
+        # Print timestamps to inspect
+        print("Timestamps:", timestamps)
 
         if timestamps:
+            # Filter out invalid timestamps
             valid_timestamps = []
             for ts in timestamps:
                 try:
-                    start_time_str = ts.split(" - ")[0]
-                    start_time = pd.to_datetime(start_time_str, format='%Y-%m-%dT%H:%M:%S')
-                    valid_timestamps.append(start_time)
-                except Exception as e:
-                    print(f"Invalid timestamp format: {ts} - Error: {e}")
-
-            print(f"Valid timestamps: {valid_timestamps}")  # Debug statement
+                    pd.to_datetime(ts, errors='coerce')
+                    valid_timestamps.append(ts)
+                except Exception:
+                    print(f"Invalid timestamp format: {ts}")
 
             if valid_timestamps:
-                latest_timestamp = max(valid_timestamps)
-                return latest_timestamp
+                try:
+                    # Convert timestamps to datetime and find the max
+                    latest_timestamp = max(valid_timestamps, key=lambda k: pd.to_datetime(k, errors='coerce'))
+                    return latest_timestamp
+                except Exception as e:
+                    print("Error converting valid timestamps:", e)
     return None
 
-# Function to fetch new data from PostgreSQL
-def fetch_new_data(since_timestamp=None):
+def fetch_new_data(since_timestamp):
+    # Adjust the timestamp by subtracting 8 hours to align with PostgreSQL time
+    since_timestamp = pd.to_datetime(since_timestamp) - pd.Timedelta(hours=8)
+
+    # PostgreSQL connection details from environment variables
+    pg_conn = psycopg2.connect(
+        dbname=os.getenv("DB_NAME"),
+        user=os.getenv("DB_USER"),
+	@@ -58,8 +53,7 @@ def fetch_new_data(since_timestamp):
+
+    cursor = pg_conn.cursor()
+
+    # SQL query to get new data since the latest timestamp
+    query = f"""
+    SELECT
+        d.devicename,
+        dd.deviceid,
+	@@ -75,158 +69,88 @@ def fetch_new_data(since_timestamp):
+    JOIN
+        devices d ON d.deviceid = dd.deviceid
+    WHERE
+        dd.deviceid IN (10, 9, 8, 7) AND dd.devicetimestamp > '{since_timestamp}'
+    """
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    columns = [desc[0] for desc in cursor.description]
+
+    # Convert data to a pandas DataFrame
+    combined_df = pd.DataFrame(rows, columns=columns)
+
+    # Adjust timestamp by adding 8 hours
+    combined_df['devicetimestamp'] = pd.to_datetime(combined_df['devicetimestamp']) + pd.Timedelta(hours=8)
+
+    # Process and pivot the data as needed
+    pivot_df = combined_df.pivot_table(
+        index=['devicename', 'deviceid', 'devicetimestamp'],
+        columns='sensordescription',
+        values='value',
+        aggfunc='first'
+    ).reset_index()
+    pivot_df.columns.name = None
+    pivot_df.columns = [str(col) for col in pivot_df.columns]
+
+    # Function to replace values outside range
+    def replace_out_of_range(series, min_val, max_val):
+        valid_series = series.copy()
+        mask = (series < min_val) | (series > max_val)
+        valid_series[mask] = pd.NA
+        valid_series = valid_series.ffill().fillna(0)
+        return valid_series
+
+    if 'Soil - Temperature' in pivot_df.columns:
+        pivot_df['Soil - Temperature'] = replace_out_of_range(pivot_df['Soil - Temperature'], 5, 40)
+
+    if 'Soil - PH' in pivot_df.columns:
+        pivot_df['Soil - PH'] = replace_out_of_range(pivot_df['Soil - PH'], 0, 14)
+
+    # Convert DataFrame to a dictionary
+    data_dict = {}
+    for _, row in pivot_df.iterrows():
+        devicename = row['devicename']
+        timestamp = row['devicetimestamp'].strftime('%Y-%m-%dT%H:%M:%S')
+        if devicename not in data_dict:
+            data_dict[devicename] = {}
+        data_dict[devicename][timestamp] = row.drop(['devicename', 'deviceid', 'devicetimestamp']).to_dict()
+
+    return data_dict
+
+def fetch_all_data():
+    # PostgreSQL connection details from environment variables
     pg_conn = psycopg2.connect(
         dbname=os.getenv("DB_NAME"),
         user=os.getenv("DB_USER"),
@@ -50,9 +120,9 @@ def fetch_new_data(since_timestamp=None):
         host=os.getenv("DB_HOST"),
         port=os.getenv("DB_PORT")
     )
-
     cursor = pg_conn.cursor()
 
+    # SQL query to get all data
     query = """
     SELECT
         d.devicename,
@@ -71,18 +141,27 @@ def fetch_new_data(since_timestamp=None):
     WHERE
         dd.deviceid IN (10, 9, 8, 7)
     """
-    if since_timestamp:
-        query += f" AND dd.devicetimestamp > '{since_timestamp}'"
-
     cursor.execute(query)
     rows = cursor.fetchall()
     columns = [desc[0] for desc in cursor.description]
 
+    # Convert data to a pandas DataFrame
     combined_df = pd.DataFrame(rows, columns=columns)
 
+    # Adjust timestamp by adding 8 hours
     combined_df['devicetimestamp'] = pd.to_datetime(combined_df['devicetimestamp']) + pd.Timedelta(hours=8)
 
-    # Apply data cleaning before aggregation
+    # Process and pivot the data as needed
+    pivot_df = combined_df.pivot_table(
+        index=['devicename', 'deviceid', 'devicetimestamp'],
+        columns='sensordescription',
+        values='value',
+        aggfunc='first'
+    ).reset_index()
+    pivot_df.columns.name = None
+    pivot_df.columns = [str(col) for col in pivot_df.columns]
+
+    # Function to replace values outside range
     def replace_out_of_range(series, min_val, max_val):
         valid_series = series.copy()
         mask = (series < min_val) | (series > max_val)
@@ -90,67 +169,53 @@ def fetch_new_data(since_timestamp=None):
         valid_series = valid_series.ffill().fillna(0)
         return valid_series
 
-    if 'Soil - Temperature' in combined_df.columns:
-        combined_df['Soil - Temperature'] = replace_out_of_range(combined_df['Soil - Temperature'], 5, 40)
+    if 'Soil - Temperature' in pivot_df.columns:
+        pivot_df['Soil - Temperature'] = replace_out_of_range(pivot_df['Soil - Temperature'], 5, 40)
 
-    if 'Soil - PH' in combined_df.columns:
-        combined_df['Soil - PH'] = replace_out_of_range(combined_df['Soil - PH'], 0, 14)
-        
-    combined_df['minute_interval'] = combined_df['devicetimestamp'].dt.floor('T')
+    if 'Soil - PH' in pivot_df.columns:
+        pivot_df['Soil - PH'] = replace_out_of_range(pivot_df['Soil - PH'], 0, 14)
 
-    print(f"Dataframe after fetching new data:\n{combined_df.head()}")  # Debug statement
-
-    return combined_df
-
-# Function to push aggregated data to Firebase
-def push_aggregated_data_to_firebase(data):
-    for device_name, timestamps in data.items():
-        for timestamp, values in timestamps.items():
-            encoded_timestamp = urllib.parse.quote(timestamp)
-            url = f'{FIREBASE_DATABASE_URL}/Tanks/data/{device_name}/{encoded_timestamp}.json?auth={FIREBASE_DATABASE_SECRET}'
-            
-            print(f"Pushing aggregated data for {device_name} at {timestamp}: {values}")  # Debug statement
-            
-            try:
-                response = requests.put(url, json=values)
-                response.raise_for_status()  # Raise an HTTPError for bad responses
-                print(f"Successfully pushed aggregated data for {device_name} at {timestamp}")
-            except requests.exceptions.HTTPError as http_err:
-                print(f"HTTP error occurred for aggregated data of {device_name} at {timestamp}: {http_err}")
-                print(f"Response content: {response.text}")  # Log response content
-            except Exception as err:
-                print(f"Other error occurred for aggregated data of {device_name} at {timestamp}: {err}")
-
-# Main process
-latest_timestamp = get_latest_timestamp()
-if latest_timestamp:
-    print(f"Latest timestamp from Firebase: {latest_timestamp}")
-    combined_df = fetch_new_data(latest_timestamp)
-else:
-    print("No data found in Firebase or unable to fetch latest timestamp. Fetching all data.")
-    combined_df = fetch_new_data()
-
-if not combined_df.empty:
-    aggregated_data = combined_df.pivot_table(
-        index=['devicename', 'deviceid', 'minute_interval'],
-        columns='sensordescription',
-        values='value',
-        aggfunc='mean'
-    ).reset_index()
-    aggregated_data.columns.name = None
-    aggregated_data.columns = [str(col) for col in aggregated_data.columns]
-
-    # Convert aggregated data to dictionary format for pushing
-    aggregated_data_dict = {}
-    for _, row in aggregated_data.iterrows():
+    # Convert DataFrame to a dictionary
+    data_dict = {}
+    for _, row in pivot_df.iterrows():
         devicename = row['devicename']
-        start_time = row['minute_interval']
-        end_time = start_time + pd.Timedelta(minutes=1)
-        timestamp = f"{start_time.strftime('%Y-%m-%dT%H:%M:%S')} - {end_time.strftime('%H:%M:%S')}"
-        if devicename not in aggregated_data_dict:
-            aggregated_data_dict[devicename] = {}
-        aggregated_data_dict[devicename][timestamp] = row.drop(['devicename', 'deviceid', 'minute_interval']).to_dict()
+        timestamp = row['devicetimestamp'].strftime('%Y-%m-%dT%H:%M:%S')
+        if devicename not in data_dict:
+            data_dict[devicename] = {}
+        data_dict[devicename][timestamp] = row.drop(['devicename', 'deviceid', 'devicetimestamp']).to_dict()
 
-    if aggregated_data_dict:
-        print(f"Aggregated data to push:\n{json.dumps(aggregated_data_dict, indent=2)}")  # Debug statement
-        push_aggregated_data_to_firebase(aggregated_data_dict)
+    return data_dict
+
+def push_to_firebase(data_dict):
+    for devicename, timestamps in data_dict.items():
+        for timestamp, values in timestamps.items():
+            # Construct the correct URL for each entry
+            url = f'{FIREBASE_DATABASE_URL}/Tanks/data/{devicename}/{timestamp}.json?auth={FIREBASE_DATABASE_SECRET}'
+            print(f'Pushing to URL: {url}')  # Debug print to check URL construction
+            response = requests.put(url, json=values)
+            if response.status_code == 200:
+                print(f'Successfully pushed data for {devicename} at {timestamp}')
+            else:
+                print(f'Failed to push data for {devicename} at {timestamp}. Status code: {response.status_code}')
+
+def delete_from_firebase(path):
+    url = f'{FIREBASE_DATABASE_URL}/{path}.json?auth={FIREBASE_DATABASE_SECRET}'
+    response = requests.delete(url)
+    if response.status_code == 200:
+        print(f"Successfully deleted {path}")
+    else:
+        print(f"Failed to delete {path}. Status code: {response.status_code}")
+
+if __name__ == "__main__":
+    latest_timestamp = get_latest_timestamp()
+    if latest_timestamp:
+        print(f'Latest timestamp in Firebase: {latest_timestamp}')
+        new_data = fetch_new_data(latest_timestamp)
+    else:
+        print('No existing data in Firebase. Fetching all data.')
+        new_data = fetch_all_data()
+
+    # Optionally delete old data (adjust path as needed)
+    #delete_from_firebase('Tanks/data/NDS006/Tanks')
+
+    push_to_firebase(new_data)
