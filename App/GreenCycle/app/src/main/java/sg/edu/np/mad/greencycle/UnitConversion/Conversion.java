@@ -31,7 +31,7 @@ public class Conversion extends Dialog {
     private String[] units;
 
     public Conversion(@NonNull Context context) {
-        super(context);
+        super(context, R.style.CustomDialog);
     }
 
     @Override
@@ -40,7 +40,8 @@ public class Conversion extends Dialog {
         setContentView(R.layout.conversion_activity);
 
         // Adjust dialog window dimensions
-        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        int width = (int) (getContext().getResources().getDisplayMetrics().widthPixels * 0.8);
+        getWindow().setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         inputNo = findViewById(R.id.input_no);
         inputUnit = findViewById(R.id.input_unit);

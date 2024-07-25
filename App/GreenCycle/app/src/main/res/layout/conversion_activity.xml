@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:color="@android:color/transparent"
-    android:gravity="center">
+    android:gravity="center"
+    android:theme="@style/CustomDialog">
 
 
     <androidx.cardview.widget.CardView

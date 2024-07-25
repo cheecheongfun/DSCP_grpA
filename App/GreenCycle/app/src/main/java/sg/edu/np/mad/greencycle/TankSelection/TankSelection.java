@@ -110,50 +110,18 @@ public class TankSelection extends AppCompatActivity {
                 return true;
             }
         });
-
+        int width = (int) (TankSelection.this.getResources().getDisplayMetrics().widthPixels * 0.8);
         searchTank = new Dialog(TankSelection.this, R.style.CustomDialog);
         searchTank.setContentView(R.layout.search_tank);
-        searchTank.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        searchTank.getWindow().setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT);
         searchTank.setCancelable(true);
         confirm = searchTank.findViewById(R.id.submitCodeButton);
 
         tankDialog = new Dialog(TankSelection.this, R.style.CustomDialog);
         tankDialog.setContentView(R.layout.tank_dialog);
-        tankDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        tankDialog.getWindow().setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT);
         tankDialog.setCancelable(true);
 
-        // Add Tank
-//        add.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                npk = new ArrayList<>();
-//                npk.add(180.0);
-//                npk.add(100.0);
-//                npk.add(100.0);
-//                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-//                String today = formatter.format(new Date());
-//                Tank tank = new Tank(tankList.size(), "Test", "Testing", 30, npk, 30.2, 89.9, 7.0, today, null, null);
-//                tankList.add(tank);
-//                user.setTanks(tankList);
-//                reference.child(user.getUsername()).setValue(user)
-//                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                            @Override
-//                            public void onSuccess(Void aVoid) {
-//                                // update success
-//                                Log.i("Firebase", "User tank list updated. Tank ID: " + tank.getTankID());
-//                            }
-//                        })
-//                        .addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                // update failed
-//                                Log.e("Firebase", "Failed to update user tank list.", e);
-//                            }
-//                        });
-//                refreshTankRecyclerView(null);
-//            }
-//        });
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,33 +139,44 @@ public class TankSelection extends AppCompatActivity {
                 final EditText[] boxes = {code1, code2, code3};
 
                 // Set TextChangedListener for all boxes except the last one
-                for (int i = 0; i < boxes.length - 1; i++) {
+                for (int i = 0; i < boxes.length; i++) {
                     final int currentIndex = i;
                     boxes[currentIndex].addTextChangedListener(new TextWatcher() {
                         @Override
                         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            // If character is deleted (count > after), handle backspace focus
+                            if (count > after && start == 0) {
+                                if (currentIndex > 0) {
+                                    // Move focus to the previous box
+                                    boxes[currentIndex - 1].requestFocus();
+                                }
+                            }
                         }
 
                         @Override
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            // If character is added (count > before), handle forward focus
+                            if (count > before && s.length() == 1) {
+                                if (currentIndex < boxes.length - 1) {
+                                    // Move focus to the next box
+                                    boxes[currentIndex + 1].requestFocus();
+                                }
+                            }
                         }
 
                         @Override
                         public void afterTextChanged(Editable s) {
-                            if (s.length() == 1) {
-                                // Move focus to the next box
-                                boxes[currentIndex + 1].requestFocus();
-                            }
                         }
                     });
                 }
+
                 confirm.setText("Find");
                 confirm.setEnabled(true);
                 confirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (code1.getText().toString().isEmpty() || code2.getText().toString().isEmpty() || code3.getText().toString().isEmpty()){
-                            Toast.makeText(TankSelection.this, "Input device ID", Toast.LENGTH_SHORT);
+                            Toast.makeText(TankSelection.this, "Input device ID", Toast.LENGTH_SHORT).show();
                         }
                         else {
                             confirm.setText("Finding...");
@@ -243,6 +222,12 @@ public class TankSelection extends AppCompatActivity {
                                                 retrieveLatestTankData(deviceId, queryTime);
                                             }
                                         } else {
+                                            code1.setText("");
+                                            code2.setText("");
+                                            code3.setText("");
+                                            confirm.setText("Find");
+                                            confirm.setEnabled(true);
+                                            code1.requestFocus();
                                             Toast.makeText(TankSelection.this, "Device ID not found", Toast.LENGTH_SHORT).show();
                                         }
                                     }
@@ -361,6 +346,7 @@ public class TankSelection extends AppCompatActivity {
                     add.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            Log.e("add", "Worm: " + worm.getText().toString() + " Name: "+ name.getText().toString());
                             String tankName = name.getText().toString();
                             if (tankName.isEmpty()){
                                 tank.setTankName(deviceId);
@@ -370,7 +356,7 @@ public class TankSelection extends AppCompatActivity {
                             String wormNo = worm.getText().toString();
                             if (wormNo.isEmpty()) {
                                 tank.setNumberOfWorms(0);
-                                worm.setText(0);
+                                worm.setText("0");
                             } else tank.setNumberOfWorms(Integer.parseInt(wormNo));
                             addTankToUserAccount(tank);
                             refreshTankRecyclerView(null);

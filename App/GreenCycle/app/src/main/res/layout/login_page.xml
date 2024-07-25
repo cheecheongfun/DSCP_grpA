@@ -153,6 +153,7 @@
         android:layout_marginTop="1dp"
         android:backgroundTint="@color/light_green"
         android:text="New User?"
+        android:textColor="@color/textColour"
         android:textSize="12sp"
         app:cornerRadius="5dp" />
 

@@ -81,6 +81,9 @@ public class options extends AppCompatActivity {
                                 public void onSuccess(Void aVoid) {
                                     // Data successfully deleted
                                     Toast.makeText(getApplicationContext(), "User data deleted successfully", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(options.this, LoginPage.class);
+                                    startActivity(intent);
+                                    finish();
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {

@@ -11,9 +11,9 @@
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableStart="@drawable/back_button"
-        android:layout_marginTop="15dp"
         android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:drawableStart="@drawable/back_button"
         android:theme="@style/DrawableTint" />
 
     <TextView
@@ -61,7 +61,7 @@
         android:id="@+id/editPass"
         style="@style/NoUnderlineHint"
         android:layout_below="@id/editName"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:layout_centerHorizontal="true"
         android:layout_width="345dp"
         android:layout_marginEnd="30dp"
@@ -84,38 +84,127 @@
 
     </RelativeLayout>
 
-<!--    <Button-->
-<!--        android:id="@+id/registerFingerprint"-->
-<!--        android:layout_width="259dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@+id/editPass"-->
-<!--        android:layout_centerHorizontal="true"-->
-<!--        android:layout_marginTop="40dp"-->
-<!--        android:backgroundTint="@color/mid_green"-->
-<!--        android:text="Register Fingerprint"-->
-<!--        android:textSize="15sp"-->
-<!--        app:cornerRadius="5dp" />-->
+    <LinearLayout
+        android:id="@+id/boxChar8"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_alignStart="@+id/editPass"
+        android:layout_below="@id/editPass"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-<!--    <TextView-->
-<!--        android:id="@+id/authStatus"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_centerVertical="true"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@id/registerFingerprint"-->
-<!--        android:layout_centerHorizontal="true"-->
-<!--        android:fontFamily="sans-serif-condensed-medium"-->
-<!--        android:text=" "-->
-<!--        android:textSize="18sp" />-->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/frameOne"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:cardBackgroundColor="#dcdcdc"
+            android:layout_marginStart="2dp"
+            app:cardCornerRadius="25dp">
 
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:background="@drawable/check_box_ticked" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="center|start"
+            android:text="Between 8-20 characters"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:textColor="@color/textColour" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/boxUpper"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignStart="@+id/editPass"
+        android:gravity="center"
+        android:layout_below="@id/boxChar8"
+        android:orientation="horizontal">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/frameTwo"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:cardBackgroundColor="#dcdcdc"
+            android:layout_marginStart="2dp"
+            app:cardCornerRadius="25dp">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:background="@drawable/check_box_ticked" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="center|start"
+            android:textColor="@color/textColour"
+            android:text="Minimum one uppercase and lowercase"
+            android:fontFamily="sans-serif-condensed-medium" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/boxNum"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:layout_alignStart="@id/editPass"
+        android:layout_below="@id/boxUpper"
+        android:orientation="horizontal">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/frameThree"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:cardBackgroundColor="#dcdcdc"
+            android:layout_marginStart="2dp"
+            app:cardCornerRadius="25dp">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:background="@drawable/check_box_ticked" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="center|start"
+            android:text="Minimum one number"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:textColor="@color/textColour" />
+
+    </LinearLayout>
     <Button
         android:id="@+id/registerbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editPass"
+        android:layout_below="@id/boxNum"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:backgroundTint="@color/light_green"
         android:text="Create"
+        android:textColor="@color/textColour"
         android:textSize="12sp"
         app:cornerRadius="5dp" />
 
@@ -123,11 +212,10 @@
         android:id="@+id/availabilityStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="209dp"
+        android:layout_below="@+id/editName"
         android:text="TextView"
-        android:visibility="gone" />
+        android:visibility="visible"
+        android:layout_marginTop="5dp"
+        android:layout_alignStart="@id/editName"/>
 
 </RelativeLayout>
