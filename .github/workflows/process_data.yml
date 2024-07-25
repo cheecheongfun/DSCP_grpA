@@ -25,27 +25,34 @@ jobs:
         python -m pip install --upgrade pip
         pip install pandas azure-storage-blob numpy feature-engine requests openpyxl
 
-    - name: Check if the blob URL contains estate_soe_combined_api_latest.xlsx
-      id: check_filename
+    - name: Extract filename from URL
+      id: extract_filename
       run: |
         FILENAME=$(basename "${{ github.event.inputs.blob_url }}")
-        if [[ "$FILENAME" == "estate_soe_combined_api_latest.xlsx" ]]; then
+        echo "FILENAME=$FILENAME" >> $GITHUB_ENV
+        echo "Extracted filename: $FILENAME"
+
+    - name: Check if the blob URL contains estate_soe_combined_api_latest.xlsx or soe_combined_api_latest.xlsx
+      id: check_filename
+      run: |
+        if [[ "$FILENAME" == "estate_soe_combined_api_latest.xlsx" || "$FILENAME" == *"soe_combined_api_latest.xlsx"* ]]; then
           echo "SKIP_WORKFLOW=true" >> $GITHUB_ENV
         else
           echo "SKIP_WORKFLOW=false" >> $GITHUB_ENV
         fi
 
-    - name: Skip workflow if filename matches estate_soe_combined_api_latest.xlsx
+    - name: Skip workflow if filename matches estate_soe_combined_api_latest.xlsx or soe_combined_api_latest.xlsx
       if: env.SKIP_WORKFLOW == 'true'
       run: |
-        echo "The blob URL contains estate_soe_combined_api_latest.xlsx. Skipping workflow."
+        echo "The blob URL contains either estate_soe_combined_api_latest.xlsx or soe_combined_api_latest.xlsx. Skipping workflow."
 
     - name: Download new data file
       if: env.SKIP_WORKFLOW == 'false'
       env:
         BLOB_URL: ${{ github.event.inputs.blob_url }}
+        FILENAME: ${{ env.FILENAME }}
       run: |
-        wget -O new_datafile.xlsx "${{ env.BLOB_URL }}"
+        wget -O "$FILENAME" "${{ env.BLOB_URL }}"
 
     - name: Run preprocessing script
       if: env.SKIP_WORKFLOW == 'false'
@@ -53,5 +60,6 @@ jobs:
         AZURE_STORAGE_ACCOUNT_NAME: ${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}
         AZURE_STORAGE_ACCOUNT_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
         CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
+        FILENAME: ${{ env.FILENAME }}
       run: |
-        python preprocess_and_append.py new_datafile.xlsx
+        python preprocess_and_append.py "$FILENAME"
