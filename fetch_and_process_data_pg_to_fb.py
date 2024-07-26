@@ -62,10 +62,14 @@ def get_latest_timestamp():
                 timestamps = hourly_data.keys()
                 for ts in timestamps:
                     try:
-                        # Convert Firebase timestamp to the format used in the database
-                        start_time_str = ts.split(" - ")[0]
-                        start_time = pd.to_datetime(start_time_str, format='%Y-%m-%dT%H:%M:%S')
-                        all_timestamps.append(start_time)
+                        if isinstance(ts, str):
+                            # Convert Firebase timestamp string to the database format
+                            start_time_str = ts.split(" - ")[0]
+                            start_time = pd.to_datetime(start_time_str, format='%Y-%m-%dT%H:%M:%S')
+                            all_timestamps.append(start_time)
+                        elif isinstance(ts, pd.Timestamp):
+                            # If timestamp is already a Timestamp object, add it directly
+                            all_timestamps.append(ts)
                     except Exception as e:
                         logging.warning(f"Invalid timestamp format: {ts} - Error: {e}")
 
