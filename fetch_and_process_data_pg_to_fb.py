@@ -25,12 +25,35 @@ def delete_firebase_directory(directory_path):
     except requests.RequestException as e:
         logging.error(f"Error deleting directory in Firebase: {e}")
 
-# Example usage of deleting a directory before pushing new data
-#directory_to_delete = "Tanks"  # Adjust this to the path you need to delete
-#delete_firebase_directory(directory_to_delete)
+# Function to get device names from PostgreSQL
+def get_device_names():
+    try:
+        # Establish connection to PostgreSQL
+        pg_conn = psycopg2.connect(
+            dbname=os.getenv("DB_NAME"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD"),
+            host=os.getenv("DB_HOST"),
+            port=os.getenv("DB_PORT")
+        )
+        cursor = pg_conn.cursor()
 
-# Function to get the latest timestamp from Firebase
-def get_latest_timestamp():
+        # Query to fetch device names
+        query = "SELECT DISTINCT devicename FROM devices"
+        cursor.execute(query)
+        rows = cursor.fetchall()
+
+        device_names = [row[0] for row in rows]
+        return device_names
+    except psycopg2.Error as e:
+        logging.error(f"Database error: {e}")
+        return []
+    except Exception as e:
+        logging.error(f"Unexpected error while fetching device names: {e}")
+        return []
+
+# Function to get the latest timestamp from Firebase for a specific device
+def get_latest_timestamp(device_name):
     try:
         response = requests.get(f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/HourlyData.json?auth={FIREBASE_DATABASE_SECRET}')
         response.raise_for_status()  # Raise an exception for HTTP errors
@@ -185,61 +208,43 @@ def fetch_new_data(since_timestamp=None):
 
 # Function to push data to Firebase
 def push_data_to_firebase(data_dict1, data_dict2):
-    # Function to serialize data for Firebase
-    def serialize_data(data):
-        serialized_data = {}
-        for k, v in data.items():
-            if isinstance(v, pd.Timestamp):
-                serialized_data[k] = v.isoformat()
-            elif isinstance(v, dict):
-                serialized_data[k] = serialize_data(v)
-            elif isinstance(v, (int, float)):
-                serialized_data[k] = round(v, 1)
-            else:
-                serialized_data[k] = v
-        return serialized_data
+    for device_name in data_dict1:
+        delete_firebase_directory(f'Tanks/{device_name}/HourlyData')
+        url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/HourlyData.json?auth={FIREBASE_DATABASE_SECRET}'
+        response = requests.put(url, json=data_dict1[device_name])
+        if response.status_code == 200:
+            logging.info(f"Successfully updated hourly data for device: {device_name}")
+        else:
+            logging.warning(f"Failed to update hourly data for device: {device_name}. Response: {response.content}")
 
-    try:
-        # Push hourly data to Firebase
-        for device_name, timestamps in data_dict1.items():
-            for timestamp, values in timestamps.items():
-                url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/HourlyData/{timestamp}.json?auth={FIREBASE_DATABASE_SECRET}'
-                values = serialize_data(values)
-                logging.info(f"Pushing data to {url}: {values}")
-                print(f"Pushing data to {url}: {values}")
-                response = requests.put(url, json=values)
-                response.raise_for_status()
-                if response.status_code != 200:
-                    logging.warning(f"Failed to push data for {device_name} at {timestamp}: {response.content}")
+        url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/LatestData.json?auth={FIREBASE_DATABASE_SECRET}'
+        response = requests.put(url, json=data_dict2[device_name])
+        if response.status_code == 200:
+            logging.info(f"Successfully updated latest data for device: {device_name}")
+        else:
+            logging.warning(f"Failed to update latest data for device: {device_name}. Response: {response.content}")
 
-        # Push latest live data to Firebase
-        for device_name, values in data_dict2.items():
-            url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/LatestData.json?auth={FIREBASE_DATABASE_SECRET}'
-            values = serialize_data(values)
-            logging.info(f"Pushing latest data to {url}: {values}")
-            print(f"Pushing latest data to {url}: {values}")
-            response = requests.put(url, json=values)
-            response.raise_for_status()
-            if response.status_code != 200:
-                logging.warning(f"Failed to push latest data for {device_name}: {response.content}")
-    except requests.RequestException as e:
-        logging.error(f"Error pushing data to Firebase: {e}")
-
-# Main function to orchestrate the script
 def main():
-    logging.info("Script started")
+    logging.info("Starting the script...")
 
-    # Get the latest timestamp from Firebase
-    latest_timestamp = get_latest_timestamp()
-    logging.info(f"Latest timestamp: {latest_timestamp}")
+    # Get device names from PostgreSQL
+    device_names = get_device_names()
 
-    # Fetch new data from PostgreSQL since the latest timestamp
-    data_dict1, data_dict2 = fetch_new_data(latest_timestamp)
-    logging.info("Data fetched successfully")
+    if not device_names:
+        logging.warning("No device names found. Exiting the script.")
+        return
 
-    # Push the new data to Firebase
-    push_data_to_firebase(data_dict1, data_dict2)
-    logging.info("Data pushed to Firebase successfully")
+    for device_name in device_names:
+        # Get the latest timestamp for the device
+        latest_timestamp = get_latest_timestamp(device_name)
+        
+        # Fetch new data from PostgreSQL
+        new_data, latest_data = fetch_new_data(since_timestamp=latest_timestamp)
+        
+        # Push data to Firebase
+        push_data_to_firebase(new_data, latest_data)
+
+    logging.info("Script completed.")
 
 if __name__ == "__main__":
     main()
