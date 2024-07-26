@@ -108,10 +108,8 @@ def fetch_new_data(since_timestamp=None):
         JOIN
             devices d ON d.deviceid = dd.deviceid
         WHERE
-            dd.deviceid IN (10, 9, 8, 7)
-        """
-        if since_timestamp:
-            query += f" AND dd.devicetimestamp > '{since_timestamp}'"
+            dd.deviceid IN (10, 9, 8, 7) AND dd.devicetimestamp > '{since_timestamp}'
+
 
         cursor.execute(query)
         rows = cursor.fetchall()
