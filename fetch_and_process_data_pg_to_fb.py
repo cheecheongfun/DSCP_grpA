@@ -5,18 +5,19 @@ import pandas as pd
 import json
 import logging
 
-# Configure logging
+# Configure logging to log information, warnings, and errors
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Firebase configuration
 FIREBASE_DATABASE_URL = os.getenv('FIREBASE_DATABASE_URL')
 FIREBASE_DATABASE_SECRET = os.getenv('FIREBASE_DATABASE_SECRET')
 
+# Function to delete a directory in Firebase
 def delete_firebase_directory(directory_path):
     try:
         url = f'{FIREBASE_DATABASE_URL}/{directory_path}.json?auth={FIREBASE_DATABASE_SECRET}'
         response = requests.delete(url)
-        response.raise_for_status()
+        response.raise_for_status()  # Raise an exception for HTTP errors
         if response.status_code == 200:
             logging.info(f"Successfully deleted directory: {directory_path}")
         else:
@@ -25,8 +26,8 @@ def delete_firebase_directory(directory_path):
         logging.error(f"Error deleting directory in Firebase: {e}")
 
 # Example usage of deleting a directory before pushing new data
-directory_to_delete = "Tanks"  # Adjust this to the path you need to delete
-delete_firebase_directory(directory_to_delete)
+#directory_to_delete = "Tanks"  # Adjust this to the path you need to delete
+#delete_firebase_directory(directory_to_delete)
 
 # Function to get the latest timestamp from Firebase
 def get_latest_timestamp():
@@ -62,6 +63,7 @@ def get_latest_timestamp():
 # Function to fetch new data from PostgreSQL
 def fetch_new_data(since_timestamp=None):
     try:
+        # Establish connection to PostgreSQL
         pg_conn = psycopg2.connect(
             dbname=os.getenv("DB_NAME"),
             user=os.getenv("DB_USER"),
@@ -71,6 +73,7 @@ def fetch_new_data(since_timestamp=None):
         )
         cursor = pg_conn.cursor()
 
+        # Query to fetch data from PostgreSQL
         query = """
         SELECT
             d.devicename,
@@ -98,9 +101,11 @@ def fetch_new_data(since_timestamp=None):
 
         combined_df = pd.DataFrame(rows, columns=columns)
 
+        # Convert timestamps to local time
         combined_df['devicetimestamp'] = pd.to_datetime(combined_df['devicetimestamp']) + pd.Timedelta(hours=8)
         combined_df['hourly_interval'] = combined_df['devicetimestamp'].dt.floor('H')
 
+        # Pivot data for further processing
         pivot_df = combined_df.pivot_table(
             index=['devicename', 'deviceid', 'devicetimestamp', 'hourly_interval'],
             columns='sensordescription',
@@ -113,6 +118,7 @@ def fetch_new_data(since_timestamp=None):
         pivot_df.columns.name = None
         pivot_df.columns = [str(col) for col in pivot_df.columns]
 
+        # Function to replace out-of-range values with forward fill or zero
         def replace_out_of_range(series, min_val, max_val):
             valid_series = series.copy()
             mask = (series < min_val) | (series > max_val)
@@ -120,6 +126,7 @@ def fetch_new_data(since_timestamp=None):
             valid_series = valid_series.ffill().fillna(0)
             return valid_series
 
+        # Replace out-of-range values for specific columns
         if 'Soil - Temperature' in pivot_df.columns:
             pivot_df['Soil - Temperature'] = replace_out_of_range(pivot_df['Soil - Temperature'], -10, 60)
 
@@ -141,12 +148,15 @@ def fetch_new_data(since_timestamp=None):
         if 'Soil - Phosphorus' in pivot_df.columns:
             pivot_df['Soil - Phosphorus'] = replace_out_of_range(pivot_df['Soil - Phosphorus'], 0, 300)
 
+        # Get the latest live data
         latest_live_df = pivot_df.loc[pivot_df.groupby(['deviceid'])['devicetimestamp'].idxmax()]
         latest_live_df = latest_live_df.drop(columns=['hourly_interval'])
 
+        # Group data by hourly intervals
         grouped_df = pivot_df.groupby(['devicename', 'deviceid', 'hourly_interval']).mean().reset_index()
         grouped_df = grouped_df.drop(columns=['devicetimestamp'])
 
+        # Convert grouped data to dictionary format
         data_dict1 = {}
         for _, row in grouped_df.iterrows():
             devicename = row['devicename']
@@ -157,6 +167,7 @@ def fetch_new_data(since_timestamp=None):
                 data_dict1[devicename] = {}
             data_dict1[devicename][timestamp] = row.drop(['devicename', 'deviceid', 'hourly_interval']).to_dict()
 
+        # Convert latest live data to dictionary format
         data_dict2 = {}
         for _, row in latest_live_df.iterrows():
             devicename = row['devicename']
@@ -172,7 +183,9 @@ def fetch_new_data(since_timestamp=None):
         logging.error(f"Unexpected error while fetching data: {e}")
         return {}, {}
 
+# Function to push data to Firebase
 def push_data_to_firebase(data_dict1, data_dict2):
+    # Function to serialize data for Firebase
     def serialize_data(data):
         serialized_data = {}
         for k, v in data.items():
@@ -187,6 +200,7 @@ def push_data_to_firebase(data_dict1, data_dict2):
         return serialized_data
 
     try:
+        # Push hourly data to Firebase
         for device_name, timestamps in data_dict1.items():
             for timestamp, values in timestamps.items():
                 url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/HourlyData/{timestamp}.json?auth={FIREBASE_DATABASE_SECRET}'
@@ -198,8 +212,9 @@ def push_data_to_firebase(data_dict1, data_dict2):
                 if response.status_code != 200:
                     logging.warning(f"Failed to push data for {device_name} at {timestamp}: {response.content}")
 
+        # Push latest live data to Firebase
         for device_name, values in data_dict2.items():
-            url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/LiveData.json?auth={FIREBASE_DATABASE_SECRET}'
+            url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/LatestData.json?auth={FIREBASE_DATABASE_SECRET}'
             values = serialize_data(values)
             logging.info(f"Pushing latest data to {url}: {values}")
             print(f"Pushing latest data to {url}: {values}")
@@ -210,14 +225,19 @@ def push_data_to_firebase(data_dict1, data_dict2):
     except requests.RequestException as e:
         logging.error(f"Error pushing data to Firebase: {e}")
 
+# Main function to orchestrate the script
 def main():
     logging.info("Script started")
+
+    # Get the latest timestamp from Firebase
     latest_timestamp = get_latest_timestamp()
     logging.info(f"Latest timestamp: {latest_timestamp}")
 
+    # Fetch new data from PostgreSQL since the latest timestamp
     data_dict1, data_dict2 = fetch_new_data(latest_timestamp)
     logging.info("Data fetched successfully")
 
+    # Push the new data to Firebase
     push_data_to_firebase(data_dict1, data_dict2)
     logging.info("Data pushed to Firebase successfully")
 
