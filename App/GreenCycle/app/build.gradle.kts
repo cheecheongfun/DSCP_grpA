@@ -88,6 +88,8 @@ dependencies {
     implementation ("com.google.android.material:material:1.8.0")
     implementation ("com.sun.mail:android-mail:1.6.6")
     implementation ("com.sun.mail:android-activation:1.6.6")
+    implementation ("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation ("org.json:json:20201115")
 
 
 
