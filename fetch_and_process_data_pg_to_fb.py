@@ -25,10 +25,17 @@ def delete_firebase_directory(directory_path):
 
 def convert_firebase_timestamp(firebase_timestamp):
     try:
-        # Extract the start time from the Firebase timestamp
-        start_time_str = firebase_timestamp.split(" - ")[0]
-        # Convert to database timestamp format
-        return pd.to_datetime(start_time_str, format='%Y-%m-%dT%H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
+        if isinstance(firebase_timestamp, str):
+            # Extract the start time from the Firebase timestamp
+            start_time_str = firebase_timestamp.split(" - ")[0]
+            # Convert to database timestamp format
+            return pd.to_datetime(start_time_str, format='%Y-%m-%dT%H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
+        elif isinstance(firebase_timestamp, pd.Timestamp):
+            # If it's already a Timestamp object, format it directly
+            return firebase_timestamp.strftime('%Y-%m-%d %H:%M:%S')
+        else:
+            logging.error(f"Unsupported timestamp format: {firebase_timestamp}")
+            return None
     except Exception as e:
         logging.error(f"Error converting Firebase timestamp: {e}")
         return None
