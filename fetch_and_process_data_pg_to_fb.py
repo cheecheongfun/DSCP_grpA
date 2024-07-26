@@ -92,6 +92,8 @@ def fetch_new_data(since_timestamp=None):
         )
         cursor = pg_conn.cursor()
 
+        since_timestamp = pd.to_datetime(since_timestamp) - pd.Timedelta(hours=8)
+
         # Using parameterized query to prevent SQL injection
         query = """
         SELECT
