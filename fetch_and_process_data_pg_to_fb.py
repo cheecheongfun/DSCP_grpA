@@ -80,7 +80,7 @@ def fetch_new_data(since_timestamp=None):
         )
         cursor = pg_conn.cursor()
 
-        since_timestamp = pd.to_datetime(since_timestamp) - pd.Timedelta(hours=8)
+        
 
         # Query to fetch data from PostgreSQL
         query = """
@@ -102,6 +102,7 @@ def fetch_new_data(since_timestamp=None):
             dd.deviceid IN (10, 9, 8, 7)
         """
         if since_timestamp:
+            since_timestamp = pd.to_datetime(since_timestamp) - pd.Timedelta(hours=8)
             query += f" AND dd.devicetimestamp > '{since_timestamp}'"
 
         cursor.execute(query)
