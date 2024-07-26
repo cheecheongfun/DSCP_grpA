@@ -80,6 +80,8 @@ def fetch_new_data(since_timestamp=None):
         )
         cursor = pg_conn.cursor()
 
+        since_timestamp = pd.to_datetime(since_timestamp) - pd.Timedelta(hours=8)
+
         # Query to fetch data from PostgreSQL
         query = """
         SELECT
