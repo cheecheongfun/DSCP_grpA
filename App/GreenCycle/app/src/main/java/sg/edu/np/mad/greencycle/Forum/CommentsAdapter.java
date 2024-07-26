@@ -249,7 +249,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
                         }
                     });
 
-                    RepliesAdapter repliesAdapter = new RepliesAdapter(replies, parentComment, user, post, context);
+                    RepliesAdapter repliesAdapter = new RepliesAdapter(replies, user);
                     holder.repliesRecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
                     holder.repliesRecyclerView.setAdapter(repliesAdapter);
                 });
