@@ -26,8 +26,8 @@ def delete_firebase_directory(directory_path):
         logging.error(f"Error deleting directory in Firebase: {e}")
 
 # Example usage of deleting a directory before pushing new data
-directory_to_delete = "Tanks"  # Adjust this to the path you need to delete
-delete_firebase_directory(directory_to_delete)
+#directory_to_delete = "Tanks"  # Adjust this to the path you need to delete
+#delete_firebase_directory(directory_to_delete)
 
 def get_latest_timestamp():
     try:
@@ -230,21 +230,33 @@ def push_data_to_firebase(data_dict1, data_dict2):
     except requests.RequestException as e:
         logging.error(f"Error pushing data to Firebase: {e}")
 
-# Main function to orchestrate the script
 def main():
     logging.info("Script started")
 
     # Get the latest timestamp from Firebase
     latest_timestamp = get_latest_timestamp()
-    logging.info(f"Latest timestamp: {latest_timestamp}")
+    if latest_timestamp:
+        logging.info(f"Latest timestamp: {latest_timestamp}")
+    else:
+        logging.warning("No latest timestamp found.")
+        latest_timestamp = None
 
     # Fetch new data from PostgreSQL since the latest timestamp
     data_dict1, data_dict2 = fetch_new_data(latest_timestamp)
-    logging.info("Data fetched successfully")
+    
+    # Check if any new data was fetched
+    if data_dict1 or data_dict2:
+        logging.info("Data fetched successfully")
 
-    # Push the new data to Firebase
-    push_data_to_firebase(data_dict1, data_dict2)
-    logging.info("Data pushed to Firebase successfully")
+        # Push the new data to Firebase
+        if data_dict1:
+            push_data_to_firebase(data_dict1, data_dict2)
+            logging.info("Data pushed to Firebase successfully")
+        else:
+            logging.warning("No new hourly data to push to Firebase.")
+    else:
+        logging.warning("No new data fetched. Nothing to push to Firebase.")
 
 if __name__ == "__main__":
     main()
+
