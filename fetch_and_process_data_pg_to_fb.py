@@ -2,6 +2,7 @@ import requests
 import psycopg2
 import os
 import pandas as pd
+import json
 import logging
 
 # Configure logging to log information, warnings, and errors
@@ -11,6 +12,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 FIREBASE_DATABASE_URL = os.getenv('FIREBASE_DATABASE_URL')
 FIREBASE_DATABASE_SECRET = os.getenv('FIREBASE_DATABASE_SECRET')
 
+# Function to delete a directory in Firebase
 def delete_firebase_directory(directory_path):
     try:
         url = f'{FIREBASE_DATABASE_URL}/{directory_path}.json?auth={FIREBASE_DATABASE_SECRET}'
@@ -23,28 +25,16 @@ def delete_firebase_directory(directory_path):
     except requests.RequestException as e:
         logging.error(f"Error deleting directory in Firebase: {e}")
 
-def convert_firebase_timestamp(firebase_timestamp):
-    try:
-        if isinstance(firebase_timestamp, str):
-            # Extract the start time from the Firebase timestamp
-            start_time_str = firebase_timestamp.split(" - ")[0]
-            # Convert to database timestamp format
-            return pd.to_datetime(start_time_str, format='%Y-%m-%dT%H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
-        elif isinstance(firebase_timestamp, pd.Timestamp):
-            # If it's already a Timestamp object, format it directly
-            return firebase_timestamp.strftime('%Y-%m-%d %H:%M:%S')
-        else:
-            logging.error(f"Unsupported timestamp format: {firebase_timestamp}")
-            return None
-    except Exception as e:
-        logging.error(f"Error converting Firebase timestamp: {e}")
-        return None
+# Example usage of deleting a directory before pushing new data
+#directory_to_delete = "Tanks"  # Adjust this to the path you need to delete
+#delete_firebase_directory(directory_to_delete)
 
 def get_latest_timestamp():
     try:
+        # Get all device names from Firebase
         devices_url = f'{FIREBASE_DATABASE_URL}/Tanks.json?auth={FIREBASE_DATABASE_SECRET}'
         devices_response = requests.get(devices_url)
-        devices_response.raise_for_status()
+        devices_response.raise_for_status()  # Raise an exception for HTTP errors
         devices_data = devices_response.json()
 
         if not devices_data:
@@ -55,21 +45,16 @@ def get_latest_timestamp():
         for device_name in devices_data.keys():
             hourly_data_url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/HourlyData.json?auth={FIREBASE_DATABASE_SECRET}'
             hourly_data_response = requests.get(hourly_data_url)
-            hourly_data_response.raise_for_status()
+            hourly_data_response.raise_for_status()  # Raise an exception for HTTP errors
             hourly_data = hourly_data_response.json()
 
             if hourly_data:
                 timestamps = hourly_data.keys()
                 for ts in timestamps:
                     try:
-                        if isinstance(ts, str):
-                            # Convert Firebase timestamp string to the database format
-                            start_time_str = ts.split(" - ")[0]
-                            start_time = pd.to_datetime(start_time_str, format='%Y-%m-%dT%H:%M:%S')
-                            all_timestamps.append(start_time)
-                        elif isinstance(ts, pd.Timestamp):
-                            # If timestamp is already a Timestamp object, add it directly
-                            all_timestamps.append(ts)
+                        start_time_str = ts.split(" - ")[0]
+                        start_time = pd.to_datetime(start_time_str, format='%Y-%m-%dT%H:%M:%S')
+                        all_timestamps.append(start_time)
                     except Exception as e:
                         logging.warning(f"Invalid timestamp format: {ts} - Error: {e}")
 
@@ -81,8 +66,11 @@ def get_latest_timestamp():
         logging.error(f"Error fetching latest timestamp from Firebase: {e}")
         return None
 
+
+# Function to fetch new data from PostgreSQL
 def fetch_new_data(since_timestamp=None):
     try:
+        # Establish connection to PostgreSQL
         pg_conn = psycopg2.connect(
             dbname=os.getenv("DB_NAME"),
             user=os.getenv("DB_USER"),
@@ -92,9 +80,7 @@ def fetch_new_data(since_timestamp=None):
         )
         cursor = pg_conn.cursor()
 
-        since_timestamp = pd.to_datetime(since_timestamp) - pd.Timedelta(hours=8)
-
-        # Using parameterized query to prevent SQL injection
+        # Query to fetch data from PostgreSQL
         query = """
         SELECT
             d.devicename,
@@ -111,18 +97,22 @@ def fetch_new_data(since_timestamp=None):
         JOIN
             devices d ON d.deviceid = dd.deviceid
         WHERE
-            dd.deviceid IN (10, 9, 8, 7) AND dd.devicetimestamp > %s
+            dd.deviceid IN (10, 9, 8, 7)
         """
-        cursor.execute(query, (since_timestamp,))
+        if since_timestamp:
+            query += f" AND dd.devicetimestamp > '{since_timestamp}'"
+
+        cursor.execute(query)
         rows = cursor.fetchall()
         columns = [desc[0] for desc in cursor.description]
 
         combined_df = pd.DataFrame(rows, columns=columns)
-        logging.info("Fetched DataFrame:\n%s", combined_df.head())
 
+        # Convert timestamps to local time
         combined_df['devicetimestamp'] = pd.to_datetime(combined_df['devicetimestamp']) + pd.Timedelta(hours=8)
         combined_df['hourly_interval'] = combined_df['devicetimestamp'].dt.floor('H')
 
+        # Pivot data for further processing
         pivot_df = combined_df.pivot_table(
             index=['devicename', 'deviceid', 'devicetimestamp', 'hourly_interval'],
             columns='sensordescription',
@@ -134,8 +124,8 @@ def fetch_new_data(since_timestamp=None):
         pivot_df.fillna(method='bfill', inplace=True)
         pivot_df.columns.name = None
         pivot_df.columns = [str(col) for col in pivot_df.columns]
-        logging.info("Pivot DataFrame:\n%s", pivot_df.head())
 
+        # Function to replace out-of-range values with forward fill or zero
         def replace_out_of_range(series, min_val, max_val):
             valid_series = series.copy()
             mask = (series < min_val) | (series > max_val)
@@ -143,6 +133,7 @@ def fetch_new_data(since_timestamp=None):
             valid_series = valid_series.ffill().fillna(0)
             return valid_series
 
+        # Replace out-of-range values for specific columns
         if 'Soil - Temperature' in pivot_df.columns:
             pivot_df['Soil - Temperature'] = replace_out_of_range(pivot_df['Soil - Temperature'], -10, 60)
 
@@ -164,14 +155,15 @@ def fetch_new_data(since_timestamp=None):
         if 'Soil - Phosphorus' in pivot_df.columns:
             pivot_df['Soil - Phosphorus'] = replace_out_of_range(pivot_df['Soil - Phosphorus'], 0, 300)
 
+        # Get the latest live data
         latest_live_df = pivot_df.loc[pivot_df.groupby(['deviceid'])['devicetimestamp'].idxmax()]
         latest_live_df = latest_live_df.drop(columns=['hourly_interval'])
-        logging.info("Latest Live DataFrame:\n%s", latest_live_df.head())
 
+        # Group data by hourly intervals
         grouped_df = pivot_df.groupby(['devicename', 'deviceid', 'hourly_interval']).mean().reset_index()
         grouped_df = grouped_df.drop(columns=['devicetimestamp'])
-        logging.info("Grouped DataFrame:\n%s", grouped_df.head())
 
+        # Convert grouped data to dictionary format
         data_dict1 = {}
         for _, row in grouped_df.iterrows():
             devicename = row['devicename']
@@ -181,65 +173,76 @@ def fetch_new_data(since_timestamp=None):
             if devicename not in data_dict1:
                 data_dict1[devicename] = {}
             data_dict1[devicename][timestamp] = row.drop(['devicename', 'deviceid', 'hourly_interval']).to_dict()
-        logging.info("Hourly Data Dict:\n%s", data_dict1)
 
+        # Convert latest live data to dictionary format
         data_dict2 = {}
         for _, row in latest_live_df.iterrows():
             devicename = row['devicename']
+            if devicename not in data_dict2:
+                data_dict2[devicename] = {}
             data_dict2[devicename] = row.drop(['devicename', 'deviceid']).to_dict()
-        logging.info("Live Data Dict:\n%s", data_dict2)
 
         return data_dict1, data_dict2
-
     except psycopg2.Error as e:
-        logging.error(f"PostgreSQL error: {e}")
+        logging.error(f"Database error: {e}")
+        return {}, {}
+    except Exception as e:
+        logging.error(f"Unexpected error while fetching data: {e}")
         return {}, {}
 
-def serialize_data(data):
-    serialized_data = {}
-    for key, value in data.items():
-        if isinstance(value, dict):
-            serialized_data[key] = serialize_data(value)
-        elif isinstance(value, pd.Timestamp):
-            serialized_data[key] = value.isoformat()
-        else:
-            serialized_data[key] = value
-    return serialized_data
-
 def push_data_to_firebase(data_dict1, data_dict2):
-    try:
-        for device_name, data in data_dict1.items():
-            url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/HourlyData.json?auth={FIREBASE_DATABASE_SECRET}'
-            response = requests.put(url, json=data)
-            response.raise_for_status()
-            logging.info(f"Successfully pushed hourly data for {device_name} to Firebase")
+    # Function to serialize data for Firebase
+    def serialize_data(data):
+        serialized_data = {}
+        for k, v in data.items():
+            if isinstance(v, pd.Timestamp):
+                serialized_data[k] = v.isoformat()
+            elif isinstance(v, dict):
+                serialized_data[k] = serialize_data(v)
+            elif isinstance(v, (int, float)):
+                serialized_data[k] = round(v, 1)
+            else:
+                serialized_data[k] = v
+        return serialized_data
 
-        for device_name, data in data_dict2.items():
-            url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/LatestData.json?auth={FIREBASE_DATABASE_SECRET}'
-            response = requests.put(url, json=data)
-            response.raise_for_status()
-            logging.info(f"Successfully pushed latest data for {device_name} to Firebase")
+    try:
+        # Push hourly data to Firebase
+        for device_name, timestamps in data_dict1.items():
+            for timestamp, values in timestamps.items():
+                # Serialize data before pushing
+                serialized_values = serialize_data(values)
+                url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/HourlyData/{timestamp}.json?auth={FIREBASE_DATABASE_SECRET}'
+                response = requests.put(url, json=serialized_values)
+                response.raise_for_status()  # Raise an exception for HTTP errors
+                logging.info(f"Pushed hourly data to Firebase: {device_name} - {timestamp} - {serialized_values}")
+
+        # Push latest live data to Firebase
+        for device_name, values in data_dict2.items():
+            # Serialize data before pushing
+            serialized_values = serialize_data(values)
+            url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/LiveData.json?auth={FIREBASE_DATABASE_SECRET}'
+            response = requests.put(url, json=serialized_values)
+            response.raise_for_status()  # Raise an exception for HTTP errors
+            logging.info(f"Pushed live data to Firebase: {device_name} - {serialized_values}")
 
     except requests.RequestException as e:
         logging.error(f"Error pushing data to Firebase: {e}")
 
+# Main function to orchestrate the script
 def main():
-    try:
-        latest_timestamp = get_latest_timestamp()
-        if latest_timestamp is None:
-            latest_timestamp = pd.Timestamp.min
+    logging.info("Script started")
 
-        # Log the value of since_timestamp
-        logging.info(f"Using since_timestamp: {latest_timestamp}")
+    # Get the latest timestamp from Firebase
+    latest_timestamp = get_latest_timestamp()
+    logging.info(f"Latest timestamp: {latest_timestamp}")
 
-        data_dict1, data_dict2 = fetch_new_data(latest_timestamp)
-        if data_dict1 or data_dict2:
-            push_data_to_firebase(data_dict1, data_dict2)
-            delete_firebase_directory('Tanks')
-        else:
-            logging.info("No new data to process.")
-    except Exception as e:
-        logging.error(f"Unexpected error: {e}")
+    # Fetch new data from PostgreSQL since the latest timestamp
+    data_dict1, data_dict2 = fetch_new_data(latest_timestamp)
+    logging.info("Data fetched successfully")
+
+    # Push the new data to Firebase
+    push_data_to_firebase(data_dict1, data_dict2)
+    logging.info("Data pushed to Firebase successfully")
 
 if __name__ == "__main__":
     main()
