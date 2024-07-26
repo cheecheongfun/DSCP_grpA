@@ -190,7 +190,6 @@ def fetch_new_data(since_timestamp=None):
         logging.error(f"Unexpected error while fetching data: {e}")
         return {}, {}
 
-# Function to push data to Firebase
 def push_data_to_firebase(data_dict1, data_dict2):
     # Function to serialize data for Firebase
     def serialize_data(data):
@@ -210,25 +209,22 @@ def push_data_to_firebase(data_dict1, data_dict2):
         # Push hourly data to Firebase
         for device_name, timestamps in data_dict1.items():
             for timestamp, values in timestamps.items():
+                # Serialize data before pushing
+                serialized_values = serialize_data(values)
                 url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/HourlyData/{timestamp}.json?auth={FIREBASE_DATABASE_SECRET}'
-                values = serialize_data(values)
-                logging.info(f"Pushing data to {url}: {values}")
-                print(f"Pushing data to {url}: {values}")
-                response = requests.put(url, json=values)
-                response.raise_for_status()
-                if response.status_code != 200:
-                    logging.warning(f"Failed to push data for {device_name} at {timestamp}: {response.content}")
+                response = requests.put(url, json=serialized_values)
+                response.raise_for_status()  # Raise an exception for HTTP errors
+                logging.info(f"Pushed hourly data to Firebase: {device_name} - {timestamp} - {serialized_values}")
 
         # Push latest live data to Firebase
         for device_name, values in data_dict2.items():
-            url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/LatestData.json?auth={FIREBASE_DATABASE_SECRET}'
-            values = serialize_data(values)
-            logging.info(f"Pushing latest data to {url}: {values}")
-            print(f"Pushing latest data to {url}: {values}")
-            response = requests.put(url, json=values)
-            response.raise_for_status()
-            if response.status_code != 200:
-                logging.warning(f"Failed to push latest data for {device_name}: {response.content}")
+            # Serialize data before pushing
+            serialized_values = serialize_data(values)
+            url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/LiveData.json?auth={FIREBASE_DATABASE_SECRET}'
+            response = requests.put(url, json=serialized_values)
+            response.raise_for_status()  # Raise an exception for HTTP errors
+            logging.info(f"Pushed live data to Firebase: {device_name} - {serialized_values}")
+
     except requests.RequestException as e:
         logging.error(f"Error pushing data to Firebase: {e}")
 
