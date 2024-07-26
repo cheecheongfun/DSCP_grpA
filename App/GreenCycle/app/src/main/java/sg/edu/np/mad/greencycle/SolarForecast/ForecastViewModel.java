@@ -1,5 +1,7 @@
 package sg.edu.np.mad.greencycle.SolarForecast;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -64,15 +66,21 @@ public class ForecastViewModel extends ViewModel {
         double avgPrecipitation = sumPrecipitation / count;
         double avgCloudCover = sumCloudCover / count;
 
+        PostForecastData apiClient = new PostForecastData();
+
         double day1Output, day2Output, day3Output;
+        day1Output = 1;
+        day2Output = 2;
+        day3Output = 3;
         if ("SOE".equals(model)) {
-            day1Output = 500; // Placeholder for model 1
-            day2Output = 333;    // Placeholder for model 1
-            day3Output = 444;  // Placeholder for model 1
+
         } else {
-            day1Output = 100;  // Placeholder for model 2
-            day2Output = 60; // Placeholder for model 2
-            day3Output = 88;  // Placeholder for model 2
+            if(apiClient.postForecastData(new double[]{70, 65, 75}, new double[]{29, 32, 31}, new double[]{0.5, 0.3, 0}).size() == 3){
+                Log.e("forecast", "in else");
+                day1Output = apiClient.postForecastData(new double[]{70, 65, 75}, new double[]{29, 32, 31}, new double[]{0.5, 0.3, 0}).get(0); // Placeholder for model 1
+                day2Output = apiClient.postForecastData(new double[]{70, 65, 75}, new double[]{29, 32, 31}, new double[]{0.5, 0.3, 0}).get(1);    // Placeholder for model 1
+                day3Output = apiClient.postForecastData(new double[]{70, 65, 75}, new double[]{29, 32, 31}, new double[]{0.5, 0.3, 0}).get(2);  // Placeholder for model 1
+            }
         }
 
         AggregatedData aggregatedData = new AggregatedData(avgTemperature, avgHumidity, avgPrecipProb, avgPrecipitation, avgCloudCover, day1Output, day2Output, day3Output);
