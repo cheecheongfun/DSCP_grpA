@@ -25,10 +25,7 @@ def delete_firebase_directory(directory_path):
     except requests.RequestException as e:
         logging.error(f"Error deleting directory in Firebase: {e}")
 
-# Example usage of deleting a directory before pushing new data
-#directory_to_delete = "Tanks"  # Adjust this to the path you need to delete
-#delete_firebase_directory(directory_to_delete)
-
+# Function to get the latest timestamp from Firebase
 def get_latest_timestamp():
     try:
         # Get all device names from Firebase
@@ -65,7 +62,6 @@ def get_latest_timestamp():
     except requests.RequestException as e:
         logging.error(f"Error fetching latest timestamp from Firebase: {e}")
         return None
-
 
 # Function to fetch new data from PostgreSQL
 def fetch_new_data(since_timestamp=None):
@@ -159,6 +155,9 @@ def fetch_new_data(since_timestamp=None):
         latest_live_df = pivot_df.loc[pivot_df.groupby(['deviceid'])['devicetimestamp'].idxmax()]
         latest_live_df = latest_live_df.drop(columns=['hourly_interval'])
 
+        # Ensure devicetimestamp is included
+        latest_live_df['devicetimestamp'] = latest_live_df['devicetimestamp'].astype(str)
+
         # Group data by hourly intervals
         grouped_df = pivot_df.groupby(['devicename', 'deviceid', 'hourly_interval']).mean().reset_index()
         grouped_df = grouped_df.drop(columns=['devicetimestamp'])
@@ -181,6 +180,8 @@ def fetch_new_data(since_timestamp=None):
             if devicename not in data_dict2:
                 data_dict2[devicename] = {}
             data_dict2[devicename] = row.drop(['devicename', 'deviceid']).to_dict()
+            # Include devicetimestamp if needed
+            data_dict2[devicename]['devicetimestamp'] = row['devicetimestamp']
 
         return data_dict1, data_dict2
     except psycopg2.Error as e:
@@ -228,21 +229,16 @@ def push_data_to_firebase(data_dict1, data_dict2):
     except requests.RequestException as e:
         logging.error(f"Error pushing data to Firebase: {e}")
 
-# Main function to orchestrate the script
 def main():
-    logging.info("Script started")
-
-    # Get the latest timestamp from Firebase
     latest_timestamp = get_latest_timestamp()
-    logging.info(f"Latest timestamp: {latest_timestamp}")
+    logging.info(f"Latest timestamp from Firebase: {latest_timestamp}")
 
-    # Fetch new data from PostgreSQL since the latest timestamp
-    data_dict1, data_dict2 = fetch_new_data(latest_timestamp)
-    logging.info("Data fetched successfully")
+    data_dict1, data_dict2 = fetch_new_data(since_timestamp=latest_timestamp)
+    logging.info(f"Data fetched for hourly data: {data_dict1}")
+    logging.info(f"Data fetched for live data: {data_dict2}")
 
-    # Push the new data to Firebase
-    push_data_to_firebase(data_dict1, data_dict2)
-    logging.info("Data pushed to Firebase successfully")
+    if data_dict1 or data_dict2:
+        push_data_to_firebase(data_dict1, data_dict2)
 
 if __name__ == "__main__":
     main()
