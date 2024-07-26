@@ -145,7 +145,6 @@ def fetch_new_data(since_timestamp=None):
 
         latest_live_df = pivot_df.loc[pivot_df.groupby(['deviceid'])['devicetimestamp'].idxmax()]
         latest_live_df = latest_live_df.drop(columns=['hourly_interval'])
-        latest_live_df['devicetimestamp'] = latest_live_df['devicetimestamp'].astype(str)
         print("Latest Live DataFrame:", latest_live_df.head())
 
         grouped_df = pivot_df.groupby(['devicename', 'deviceid', 'hourly_interval']).mean().reset_index()
@@ -166,7 +165,7 @@ def fetch_new_data(since_timestamp=None):
         data_dict2 = {}
         for _, row in latest_live_df.iterrows():
             devicename = row['devicename']
-            data_dict2[devicename] = row.drop(['devicename', 'deviceid', 'devicetimestamp']).to_dict()
+            data_dict2[devicename] = row.drop(['devicename', 'deviceid']).to_dict()
         print("Live Data Dict:", data_dict2)
 
         return data_dict1, data_dict2
