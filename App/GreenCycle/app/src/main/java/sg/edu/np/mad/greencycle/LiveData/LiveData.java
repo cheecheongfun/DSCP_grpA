@@ -2,18 +2,26 @@ package sg.edu.np.mad.greencycle.LiveData;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.ml.modeldownloader.CustomModel;
 import com.google.firebase.ml.modeldownloader.CustomModelDownloadConditions;
 import com.google.firebase.ml.modeldownloader.DownloadType;
@@ -26,6 +34,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 
 import sg.edu.np.mad.greencycle.Classes.Tank;
 import sg.edu.np.mad.greencycle.Classes.User;
@@ -37,10 +46,11 @@ public class LiveData extends AppCompatActivity {
     User user;
     Tank tank;
     FirebaseDatabase database;
-    DatabaseReference reference;
+    DatabaseReference reference, referenceTank;
     Interpreter tflite;
     String soil;
-    TextView backButton, temp, EC, pH, nitrogen,phosphorous,potassium, moisture, feedback1, feedback2, tankName, mlOutput;
+    TextView backButton, temp, EC, pH, nitrogen,phosphorous,potassium, moisture, feedback1, feedback2, tankName, mlOutput, refresh;
+    ArrayList<Double> npk;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +67,7 @@ public class LiveData extends AppCompatActivity {
         Intent receivingEnd = getIntent();
         user = receivingEnd.getParcelableExtra("user");
         tank = receivingEnd.getParcelableExtra("tank");
+        referenceTank = database.getReference("Tanks").child(tank.getDeviceID()).child("LiveData");
 
         // Call layout elements
         tankName = findViewById(R.id.tankName);
@@ -71,6 +82,7 @@ public class LiveData extends AppCompatActivity {
         feedback1 = findViewById(R.id.point1);
         feedback2 = findViewById(R.id.point2);
         mlOutput = findViewById(R.id.mlOutput);
+        refresh = findViewById(R.id.refresh);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +94,23 @@ public class LiveData extends AppCompatActivity {
                 finish();
             }
         });
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateData();
+                tankName.setText(tank.getTankName());
+                temp.setText("Temperature: " + tank.getTemperature() + "°C");
+                EC.setText("Soil EC: " + tank.getEC());
+                pH.setText("pH Level: " + tank.getPHValue());
+                nitrogen.setText("Nitrogen: " + tank.getNpkValues().get(0));
+                phosphorous.setText("Phosphorous: " + tank.getNpkValues().get(1));
+                potassium.setText("Potassium: " + tank.getNpkValues().get(2));
+                moisture.setText("Moisture: " + tank.getMoisture());
+                Toast.makeText(LiveData.this, "Data loaded", Toast.LENGTH_SHORT).show();
+            }
+        });
         
+        tank = updateData();
 
         tankName.setText(tank.getTankName());
         temp.setText("Temperature: " + tank.getTemperature() + "°C");
@@ -145,5 +173,42 @@ public class LiveData extends AppCompatActivity {
             e.printStackTrace();
         }
         return null;
+    }
+    private Tank updateData() {
+        referenceTank.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                npk = new ArrayList<>();
+                npk.add(dataSnapshot.child("Soil - Nitrogen").getValue(Double.class));
+                npk.add(dataSnapshot.child("Soil - Phosphorus").getValue(Double.class));
+                npk.add(dataSnapshot.child("Soil - Potassium").getValue(Double.class));
+
+                Log.e("mapData", "NPK: " + npk.get(0) + " " + npk.get(1) + " " + npk.get(2));
+                double pHLevel = dataSnapshot.child("Soil - PH").getValue(Double.class);
+                double temperature = dataSnapshot.child("Soil - Temperature").getValue(Double.class);
+                double moisture = dataSnapshot.child("Soil - Moisture").getValue(Double.class);
+                double EC = dataSnapshot.child("Soil - EC").getValue(Double.class);
+                int size;
+                if (user.getTanks() != null) {
+                    size = user.getTanks().size();
+                } else size = 0;
+
+                tank.setNpkValues(npk);
+                tank.setPHValue(pHLevel);
+                tank.setTemperature(temperature);
+                tank.setMoisture(moisture);
+                tank.setEC(EC);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        reference.child(user.getUsername()).child("tanks").child(String.valueOf(tank.getTankID())).setValue(tank);
+
+        return tank;
     }
 }

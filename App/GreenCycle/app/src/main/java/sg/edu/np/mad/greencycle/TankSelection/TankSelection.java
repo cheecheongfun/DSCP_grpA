@@ -80,7 +80,7 @@ public class TankSelection extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         reference = database.getReference("users");
 
-        referenceTank = database.getReference("Tanks").child("data");
+        referenceTank = database.getReference("Tanks");
 
         Intent receivingEnd = getIntent();
         user = receivingEnd.getParcelableExtra("user");
@@ -193,34 +193,44 @@ public class TankSelection extends AppCompatActivity {
                                 searchTank.dismiss();
                             }
                             else {
-                                referenceTank.child(deviceId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                referenceTank.child(deviceId).child("LiveData").addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         if (dataSnapshot.exists()) {
-                                            List<String> timestampStrings = new ArrayList<>();
-                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                                String timestampString = snapshot.getKey();
-                                                if (timestampString != null) {
-                                                    timestampStrings.add(timestampString);
+                                            Tank tank = mapDataSnapshotToTank(dataSnapshot, deviceId);
+                                            // open a new dialog
+                                            confirm.setText("Search");
+                                            tankDialog.show();
+                                            TextView deviceText = tankDialog.findViewById(R.id.deviceText);
+                                            deviceText.setText(deviceId);
+                                            EditText name = tankDialog.findViewById(R.id.etName);
+                                            EditText worm = tankDialog.findViewById(R.id.etWorm);
+
+                                            name.setText("");
+                                            name.requestFocus();
+                                            worm.setText("");
+
+                                            Button add = tankDialog.findViewById(R.id.add);
+
+                                            add.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    Log.e("add", "Worm: " + worm.getText().toString() + " Name: "+ name.getText().toString());
+                                                    String tankName = name.getText().toString();
+                                                    if (tankName.isEmpty()){
+                                                        tank.setTankName(deviceId);
+                                                        name.setText(deviceId);
+                                                    } else tank.setTankName(tankName);
+
+                                                    String wormNo = worm.getText().toString();
+                                                    if (wormNo.isEmpty()) {
+                                                        tank.setNumberOfWorms(0);
+                                                        worm.setText("0");
+                                                    } else tank.setNumberOfWorms(Integer.parseInt(wormNo));
+                                                    addTankToUserAccount(tank);
+                                                    refreshTankRecyclerView(null);
                                                 }
-                                            }
-                                            DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-                                            LocalDateTime latestTimestamp = null;
-                                            if (!timestampStrings.isEmpty()){
-                                                for (String timestampString : timestampStrings) {
-                                                    try {
-                                                        LocalDateTime timestamp = LocalDateTime.parse(timestampString, formatter);
-                                                        if (latestTimestamp == null || timestamp.isAfter(latestTimestamp)) {
-                                                            latestTimestamp = timestamp;
-                                                        }
-                                                    } catch (Exception e) {
-                                                        System.err.println("Error parsing timestamp: " + timestampString);
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                                String queryTime = latestTimestamp.toString();
-                                                retrieveLatestTankData(deviceId, queryTime);
-                                            }
+                                            });
                                         } else {
                                             code1.setText("");
                                             code2.setText("");
@@ -321,58 +331,7 @@ public class TankSelection extends AppCompatActivity {
         tankRecycler.setLayoutManager(new LinearLayoutManager(this));
         tankRecycler.setAdapter(mAdapter);
     }
-    private void retrieveLatestTankData(String deviceId, String timestamp) {
-        Log.e("retrieve", "in retrieve: " + deviceId);
-        referenceTank.child(deviceId).child(timestamp).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    // Map the data to the Tank class
-                    Tank tank = mapDataSnapshotToTank(dataSnapshot, deviceId);
-                    // open a new dialog
-                    confirm.setText("Search");
-                    tankDialog.show();
-                    TextView deviceText = tankDialog.findViewById(R.id.deviceText);
-                    deviceText.setText(deviceId);
-                    EditText name = tankDialog.findViewById(R.id.etName);
-                    EditText worm = tankDialog.findViewById(R.id.etWorm);
 
-                    name.setText("");
-                    name.requestFocus();
-                    worm.setText("");
-
-                    Button add = tankDialog.findViewById(R.id.add);
-
-                    add.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Log.e("add", "Worm: " + worm.getText().toString() + " Name: "+ name.getText().toString());
-                            String tankName = name.getText().toString();
-                            if (tankName.isEmpty()){
-                                tank.setTankName(deviceId);
-                                name.setText(deviceId);
-                            } else tank.setTankName(tankName);
-
-                            String wormNo = worm.getText().toString();
-                            if (wormNo.isEmpty()) {
-                                tank.setNumberOfWorms(0);
-                                worm.setText("0");
-                            } else tank.setNumberOfWorms(Integer.parseInt(wormNo));
-                            addTankToUserAccount(tank);
-                            refreshTankRecyclerView(null);
-                        }
-                    });
-                } else {
-                    Toast.makeText(TankSelection.this, "No data available for the latest timestamp", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("FirebaseError", "Error: " + databaseError.getMessage());
-            }
-        });
-    }
     private Tank mapDataSnapshotToTank(DataSnapshot dataSnapshot, String deviceID) {
 
         npk = new ArrayList<>();
@@ -396,13 +355,6 @@ public class TankSelection extends AppCompatActivity {
         ArrayList<Tank> userTanks = user.getTanks();
 
         if (user.getTanks() != null){
-            boolean tankExists = false;
-            for (Tank userTank : userTanks) {
-                if (userTank.getTankID() == (tank.getTankID())) {
-                    tankExists = true;
-                    break;
-                }
-            }
             userTanks.add(tank);
             user.setTanks(userTanks);
             userReference.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
