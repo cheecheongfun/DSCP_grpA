@@ -111,7 +111,7 @@ def fetch_new_data(since_timestamp=None):
             dd.deviceid IN (10, 9, 8, 7)
         """
         if since_timestamp:
-            query += f" AND dd.devicetimestamp > '2024-07-26 13:00:00'"
+            query += f" AND dd.devicetimestamp > '2024-07-26T13:00:00'"
 
         cursor.execute(query)
         rows = cursor.fetchall()
