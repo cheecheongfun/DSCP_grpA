@@ -40,34 +40,23 @@
 
     <TextView
         android:id="@+id/nametext"
-        android:layout_width="390dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/profileImageView"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="13dp"
         android:layout_marginTop="7dp"
-        android:layout_marginEnd="8dp"
         android:gravity="center_horizontal"
-
+        android:layout_centerHorizontal="true"
         android:text="Name"
         android:textColor="@color/white"
         android:textSize="20sp" />
 
-    <ImageButton
-        android:id="@+id/editNameBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/nametext"
-        android:layout_alignTop="@id/nametext"
-        android:background="@android:color/transparent"
-        app:srcCompat="@drawable/baseline_create_24" />
-
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView7"
         android:layout_width="380dp"
-        android:layout_height="88dp"
+        android:layout_height="75dp"
+        android:layout_below="@+id/imageView2"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="320dp">
+        android:layout_marginTop="20dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -96,10 +85,12 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView8"
         android:layout_width="380dp"
-        android:layout_height="88dp"
+        android:layout_height="75dp"
+        android:layout_below="@+id/cardView7"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="420dp">
+        android:layout_marginTop="20dp">
         <!-- Code for Display Name CardView, assuming unchanged -->
         <RelativeLayout
             android:layout_width="match_parent"
@@ -129,55 +120,10 @@
                 android:id="@+id/editDisplayNameBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@id/displayNameText"
                 android:layout_alignParentEnd="true"
-                android:layout_marginStart="14dp"
-                android:layout_marginTop="-22dp"
-                android:layout_marginEnd="208dp"
+                android:layout_marginStart="211dp"
+                android:layout_marginEnd="11dp"
                 android:layout_toEndOf="@+id/displayNameLabel"
-                android:background="@android:color/transparent"
-                app:srcCompat="@drawable/baseline_mode_edit" />
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="380dp"
-        android:layout_height="88dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="520dp">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/emailLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="13dp"
-                android:text="Email"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/emailText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/emailLabel"
-                android:layout_marginStart="30dp"
-                android:text="james012@gmail.com"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-            <ImageButton
-                android:id="@+id/editEmailBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@id/emailText"
-                android:layout_marginStart="-116dp"
-                android:layout_marginTop="-23dp"
-                android:layout_toEndOf="@id/emailText"
                 android:background="@android:color/transparent"
                 app:srcCompat="@drawable/baseline_mode_edit" />
         </RelativeLayout>
@@ -192,7 +138,7 @@
         android:layout_marginTop="195dp"
         android:layout_marginEnd="112dp"
         android:backgroundTint="@color/transparent"
-        app:srcCompat="@drawable/baseline_create_24" />
+        app:srcCompat="@drawable/baseline_mode_edit" />
 
     <ImageButton
         android:id="@+id/backButton"

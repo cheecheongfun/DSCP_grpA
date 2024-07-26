@@ -16,8 +16,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,9 +60,12 @@ public class NewPost extends AppCompatActivity {
     private EditText editPostTitle, editPostBody;
     private ImageButton btnCamera, btnGallery, back;
     private Button btnPost;
-    private ViewPager viewPager;
+    private CustomViewPager viewPager;
     private User user;
     private TextView selectedTagsView;
+    private RelativeLayout layout;
+    private FrameLayout overlayContainer;
+    private ProgressBar progressBar;
 
     private List<String> postTags = new ArrayList<>();
 
@@ -83,6 +88,9 @@ public class NewPost extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPager);
         back = findViewById(R.id.backButton);
         selectedTagsView = findViewById(R.id.selectedTags);
+        layout = findViewById(R.id.activity_new_post);
+        overlayContainer = findViewById(R.id.overlay_container);
+        progressBar = findViewById(R.id.progressBar);
 
         back.setOnClickListener(view -> finish());
 
@@ -126,7 +134,6 @@ public class NewPost extends AppCompatActivity {
         tagDialog.show(getSupportFragmentManager(), "tagDialog");
     }
 
-
     private void updateSelectedTagsView() {
         StringBuilder tagsText = new StringBuilder("Selected Tags: ");
         for (String tag : postTags) {
@@ -136,6 +143,11 @@ public class NewPost extends AppCompatActivity {
     }
 
     private void chooseImage() {
+        if (imageUris.size() >= 5) {
+            Toast.makeText(this, "You can only upload up to 5 images", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -151,6 +163,11 @@ public class NewPost extends AppCompatActivity {
     }
 
     private void launchCamera() {
+        if (imageUris.size() >= 5) {
+            Toast.makeText(this, "You can only upload up to 5 images", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getPackageManager()) != null) {
             File photoFile = null;
@@ -180,18 +197,33 @@ public class NewPost extends AppCompatActivity {
             if (requestCode == PICK_IMAGE_REQUEST) {
                 if (data.getClipData() != null) {
                     int count = data.getClipData().getItemCount();
+                    if (imageUris.size() + count > 5) {
+                        Toast.makeText(this, "You can only upload up to 5 images", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     for (int i = 0; i < count; i++) {
                         Uri imageUri = data.getClipData().getItemAt(i).getUri();
                         imageUris.add(imageUri);
                         viewPagerAdapter.notifyDataSetChanged();
                     }
                 } else if (data.getData() != null) {
+                    if (imageUris.size() >= 5) {
+                        Toast.makeText(this, "You can only upload up to 5 images", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     Uri imageUri = data.getData();
                     imageUris.add(imageUri);
                     viewPagerAdapter.notifyDataSetChanged();
                 }
                 toggleImageVisibility(true);
             } else if (requestCode == CAPTURE_IMAGE_REQUEST) {
+                if (imageUris.size() >= 5) {
+                    Toast.makeText(this, "You can only upload up to 5 images", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Uri imageUri = this.imageUri;
                 imageUris.add(imageUri);
                 viewPagerAdapter.notifyDataSetChanged();
@@ -204,11 +236,14 @@ public class NewPost extends AppCompatActivity {
 
     private void uploadImageAndSavePost() {
         setButtonsEnabled(false); // Disable all buttons before uploading
+        viewPagerAdapter.setDeletionEnabled(false); // Disable image deletion before uploading
+        overlayContainer.setVisibility(View.VISIBLE); // Show overlay and progress bar
+        viewPager.setPagingEnabled(false); // Disable interactions in ViewPager
 
         List<String> uploadedUrls = new ArrayList<>();
         if (imageUris.isEmpty()) {
             savePost(editPostTitle.getText().toString(), editPostBody.getText().toString(), uploadedUrls);
-            setButtonsEnabled(true); // Re-enable buttons if no images to upload
+            resetUploadUI();
         } else {
             for (Uri uri : imageUris) {
                 StorageReference fileRef = mStorageRef.child("post_images/" + System.currentTimeMillis() + ".jpg");
@@ -217,17 +252,34 @@ public class NewPost extends AppCompatActivity {
                             uploadedUrls.add(downloadUri.toString());
                             if (uploadedUrls.size() == imageUris.size()) {
                                 savePost(editPostTitle.getText().toString(), editPostBody.getText().toString(), uploadedUrls);
-                                setButtonsEnabled(true); // Re-enable buttons after upload
+                                resetUploadUI();
                             }
                         }))
                         .addOnFailureListener(e -> {
                             Toast.makeText(NewPost.this, "Failed to upload image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            setButtonsEnabled(true); // Re-enable buttons on failure
+                            resetUploadUI();
                         });
             }
         }
     }
 
+    private void resetUploadUI() {
+        setButtonsEnabled(true); // Re-enable buttons after upload
+        viewPagerAdapter.setDeletionEnabled(true); // Re-enable image deletion after upload
+        overlayContainer.setVisibility(View.GONE); // Hide overlay and progress bar after upload
+        viewPager.setPagingEnabled(true); // Re-enable interactions in ViewPager
+    }
+
+
+    private void setButtonsEnabled(boolean enabled) {
+        btnCamera.setEnabled(enabled);
+        btnGallery.setEnabled(enabled);
+        btnPost.setEnabled(enabled);
+        back.setEnabled(enabled);
+        findViewById(R.id.btnShowTags).setEnabled(enabled);
+        editPostTitle.setEnabled(enabled);
+        editPostBody.setEnabled(enabled);
+    }
 
     private void savePost(String title, String content, List<String> imageUrls) {
         Map<String, Object> post = new HashMap<>();
@@ -251,7 +303,8 @@ public class NewPost extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(NewPost.this, "Error adding post: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    btnPost.setEnabled(true);
+                    setButtonsEnabled(true);
+                    overlayContainer.setVisibility(View.GONE); // Hide overlay and progress bar on failure
                 });
     }
 
@@ -289,13 +342,4 @@ public class NewPost extends AppCompatActivity {
 
         fullImageView.setOnClickListener(v -> fullImageDialog.dismiss());
     }
-    private void setButtonsEnabled(boolean enabled) {
-        btnCamera.setEnabled(enabled);
-        btnGallery.setEnabled(enabled);
-        btnPost.setEnabled(enabled);
-        back.setEnabled(enabled);
-        viewPager.setEnabled(enabled);
-        findViewById(R.id.btnShowTags).setEnabled(enabled);
-    }
-
 }

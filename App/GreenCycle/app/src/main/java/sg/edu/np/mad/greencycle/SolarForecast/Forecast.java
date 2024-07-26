@@ -5,17 +5,12 @@ import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager2.widget.ViewPager2;
 
-import me.relex.circleindicator.CircleIndicator3;
 import sg.edu.np.mad.greencycle.R;
 
 public class Forecast extends AppCompatActivity {
 
     private TextView back, refresh;
-    private ViewPager2 viewPager;
-    private ViewPagerAdapter viewPagerAdapter;
-    private CircleIndicator3 indicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,23 +19,30 @@ public class Forecast extends AppCompatActivity {
 
         back = findViewById(R.id.backButton);
         refresh = findViewById(R.id.refresh);
-        viewPager = findViewById(R.id.viewPager);
-        indicator = findViewById(R.id.indicator);
 
-        viewPagerAdapter = new ViewPagerAdapter(this);
-        viewPager.setAdapter(viewPagerAdapter);
-        indicator.setViewPager(viewPager);
-
-        viewPagerAdapter.registerAdapterDataObserver(indicator.getAdapterDataObserver());
+        back.setOnClickListener(v -> finish());
 
         refresh.setOnClickListener(v -> {
             Log.i("RefreshTag", "onClick: refresh");
             // Optionally, refresh or update data here
+            // You may need to refresh data within the fragment
+            refreshFragment();
         });
 
-        back.setOnClickListener(v -> {
-           finish();
-        });
+        // Load ForecastWeatherFragment
+        if (savedInstanceState == null) {
+            ForecastWeatherFragment fragment = new ForecastWeatherFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+        }
+    }
+
+    private void refreshFragment() {
+        // Reload the fragment
+        ForecastWeatherFragment fragment = new ForecastWeatherFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit();
     }
 }
-

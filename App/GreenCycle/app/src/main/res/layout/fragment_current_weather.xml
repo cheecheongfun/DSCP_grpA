@@ -13,18 +13,31 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="56dp"
+        android:layout_centerHorizontal="true"
         app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
-        android:layout_centerHorizontal="true">
+        app:cardElevation="4dp">
 
-        <TextView
-            android:id="@+id/forecast"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:padding="16dp"
-            android:text="Forecast:" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/forecastIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/forecast_weather_snow_cloud_winter_cold_day_svgrepo_com" />
+
+            <TextView
+                android:id="@+id/forecast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/forecastIcon"
+                android:gravity="center_vertical"
+                android:text="Forecast:" />
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -33,19 +46,32 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
         android:layout_below="@id/cardView"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp">
 
-        <TextView
-            android:id="@+id/temperature"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:padding="16dp"
-            android:text="Temperature:" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/temperatureIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/temperature_list_svgrepo_com" />
+
+            <TextView
+                android:id="@+id/temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/temperatureIcon"
+                android:gravity="center_vertical"
+                android:text="Temperature:" />
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -54,19 +80,32 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
         android:layout_below="@id/cardView2"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp">
 
-        <TextView
-            android:id="@+id/rainfall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Rainfall:"
-            android:gravity="center"
-            android:layout_gravity="center"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/rainfallIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/cloud_rain_alt_svgrepo_com" />
+
+            <TextView
+                android:id="@+id/rainfall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/rainfallIcon"
+                android:gravity="center_vertical"
+                android:text="Rainfall:" />
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -74,19 +113,32 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
         android:layout_below="@id/cardView3"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp">
 
-        <TextView
-            android:id="@+id/humidity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Humidity:"
-            android:gravity="center"
-            android:layout_gravity="center"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/humidityIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/humidity_svgrepo_com" />
+
+            <TextView
+                android:id="@+id/humidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/humidityIcon"
+                android:gravity="center_vertical"
+                android:text="Humidity:" />
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
 </RelativeLayout>

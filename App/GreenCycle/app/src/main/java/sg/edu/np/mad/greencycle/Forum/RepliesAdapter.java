@@ -1,15 +1,18 @@
 package sg.edu.np.mad.greencycle.Forum;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,9 +25,11 @@ import sg.edu.np.mad.greencycle.R;
 public class RepliesAdapter extends RecyclerView.Adapter<RepliesAdapter.ViewHolder> {
 
     private final List<Reply> replies;
+    private final User currentUser; // Assuming you have a current user object
 
-    public RepliesAdapter(List<Reply> replies, Comment parentComment, User user, Post post, Context context) {
+    public RepliesAdapter(List<Reply> replies, User user) {
         this.replies = replies;
+        this.currentUser = user; // Set the current user
     }
 
     @NonNull
@@ -42,6 +47,15 @@ public class RepliesAdapter extends RecyclerView.Adapter<RepliesAdapter.ViewHold
         holder.content.setText(reply.getContent());
         String replyAge = calculateReplyAge(reply.getTimestamp());
         holder.replyDate.setText(replyAge);
+
+        // Set long click listener for delete action
+        holder.itemView.setOnLongClickListener(v -> {
+            if (reply.getAuthor().equals(currentUser.getUsername())) { // Assuming you have a method to get the current user ID
+                showDeleteReplyDialog(holder.itemView.getContext(), position);
+                return true;
+            }
+            return false;
+        });
     }
 
     @Override
@@ -86,5 +100,31 @@ public class RepliesAdapter extends RecyclerView.Adapter<RepliesAdapter.ViewHold
         } else {
             return deltaSeconds + " seconds ago";
         }
+    }
+
+    private void showDeleteReplyDialog(Context context, int position) {
+        new AlertDialog.Builder(context)
+                .setTitle("Delete Reply")
+                .setMessage("Are you sure you want to delete this reply?")
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    deleteReply(context, position);
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .show();
+    }
+
+    private void deleteReply(Context context, int position) {
+        Reply reply = replies.get(position); // Assuming `replies` is a list of Reply objects
+        // Remove the reply from the local dataset
+        replies.remove(position);
+        notifyItemRemoved(position);
+
+        // Remove the reply from Firebase Firestore (assuming you have the necessary setup)
+        FirebaseFirestore.getInstance()
+                .collection("Replies")
+                .document(reply.getId()) // Assuming `reply.getId()` gets the document ID of the reply
+                .delete()
+                .addOnSuccessListener(aVoid -> Toast.makeText(context, "Reply deleted", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(context, "Failed to delete reply: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 }

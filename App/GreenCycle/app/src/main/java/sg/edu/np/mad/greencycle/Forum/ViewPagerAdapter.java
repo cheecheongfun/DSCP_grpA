@@ -22,6 +22,8 @@ public class ViewPagerAdapter extends PagerAdapter {
     private Context context;
     private OnImageDeleteListener onImageDeleteListener;
     private OnImageClickListener onImageClickListener;
+    private boolean isInteractionsEnabled = true;
+    private boolean isDeletionEnabled = true; // New flag for controlling deletion
 
     public interface OnImageDeleteListener {
         void onImageDelete(int position);
@@ -58,17 +60,22 @@ public class ViewPagerAdapter extends PagerAdapter {
         Uri imageUri = imageUris.get(position);
         Glide.with(context).load(imageUri).into(imageView);
 
-        deleteButton.setOnClickListener(v -> {
-            if (onImageDeleteListener != null) {
-                onImageDeleteListener.onImageDelete(position);
-            }
-        });
+        if (isInteractionsEnabled && isDeletionEnabled) {
+            deleteButton.setOnClickListener(v -> {
+                if (onImageDeleteListener != null) {
+                    onImageDeleteListener.onImageDelete(position);
+                }
+            });
 
-        imageView.setOnClickListener(v -> {
-            if (onImageClickListener != null) {
-                onImageClickListener.onImageClick(imageUri);
-            }
-        });
+            imageView.setOnClickListener(v -> {
+                if (onImageClickListener != null) {
+                    onImageClickListener.onImageClick(imageUri);
+                }
+            });
+        } else {
+            deleteButton.setOnClickListener(null);
+            imageView.setOnClickListener(null);
+        }
 
         container.addView(view);
         return view;
@@ -88,4 +95,16 @@ public class ViewPagerAdapter extends PagerAdapter {
     public int getItemPosition(@NonNull Object object) {
         return POSITION_NONE;
     }
+
+    public void setInteractionsEnabled(boolean enabled) {
+        this.isInteractionsEnabled = enabled;
+        notifyDataSetChanged();
+    }
+
+    public void setDeletionEnabled(boolean enabled) {
+        this.isDeletionEnabled = enabled;
+        notifyDataSetChanged();
+    }
 }
+
+

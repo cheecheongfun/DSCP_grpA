@@ -9,6 +9,15 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
+    <string name="temperature_info">Temperature: %1$.2f°C</string>
+    <string name="humidity_info">Humidity: %1$.2f%%</string>
+    <string name="precip_probability_info">Precipitation Probability: %1$.2f%%</string>
+    <string name="precipitation_info">Precipitation: %1$.2f mm</string>
+    <string name="cloud_cover_info">Cloud Cover: %1$.2f%%</string>
+    <string name="no_data_available">No data available</string>
+
+
+
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
@@ -70,5 +79,7 @@
         <item>tsp</item>
         <item>cup</item>
     </string-array>
+
+
 
 </resources>
