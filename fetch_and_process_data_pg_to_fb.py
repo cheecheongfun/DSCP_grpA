@@ -60,7 +60,7 @@ def get_latest_timestamp():
         logging.error(f"Error fetching latest timestamp from Firebase: {e}")
         return None
 
-def fetch_new_data(since_timestamp=None):
+def fetch_new_data(since_timestamp):
     try:
         pg_conn = psycopg2.connect(
             dbname=os.getenv("DB_NAME"),
@@ -209,7 +209,7 @@ def main():
     latest_timestamp = get_latest_timestamp()
     logging.info(f"Latest timestamp from Firebase: {latest_timestamp}")
 
-    data_dict1, data_dict2 = fetch_new_data(since_timestamp=latest_timestamp)
+    data_dict1, data_dict2 = fetch_new_data(latest_timestamp)
     logging.info(f"Data fetched for hourly data: {data_dict1}")
     logging.info(f"Data fetched for live data: {data_dict2}")
 
