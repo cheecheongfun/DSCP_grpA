@@ -24,7 +24,7 @@ def delete_firebase_directory(directory_path):
     except requests.RequestException as e:
         logging.error(f"Error deleting directory in Firebase: {e}")
 
-delete_firebase_directory(Tanks)
+delete_firebase_directory('Tanks')
 
 def get_latest_timestamp():
     try:
