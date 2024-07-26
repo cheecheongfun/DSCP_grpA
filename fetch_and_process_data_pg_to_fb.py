@@ -92,6 +92,7 @@ def fetch_new_data(since_timestamp=None):
         )
         cursor = pg_conn.cursor()
 
+        # Using parameterized query to prevent SQL injection
         query = """
         SELECT
             d.devicename,
@@ -108,15 +109,14 @@ def fetch_new_data(since_timestamp=None):
         JOIN
             devices d ON d.deviceid = dd.deviceid
         WHERE
-            dd.deviceid IN (10, 9, 8, 7) AND dd.devicetimestamp > '{since_timestamp}'
-
-
-        cursor.execute(query)
+            dd.deviceid IN (10, 9, 8, 7) AND dd.devicetimestamp > %s
+        """
+        cursor.execute(query, (since_timestamp,))
         rows = cursor.fetchall()
         columns = [desc[0] for desc in cursor.description]
 
         combined_df = pd.DataFrame(rows, columns=columns)
-        print("Fetched DataFrame:", combined_df.head())
+        logging.info("Fetched DataFrame:\n%s", combined_df.head())
 
         combined_df['devicetimestamp'] = pd.to_datetime(combined_df['devicetimestamp']) + pd.Timedelta(hours=8)
         combined_df['hourly_interval'] = combined_df['devicetimestamp'].dt.floor('H')
@@ -132,7 +132,7 @@ def fetch_new_data(since_timestamp=None):
         pivot_df.fillna(method='bfill', inplace=True)
         pivot_df.columns.name = None
         pivot_df.columns = [str(col) for col in pivot_df.columns]
-        print("Pivot DataFrame:", pivot_df.head())
+        logging.info("Pivot DataFrame:\n%s", pivot_df.head())
 
         def replace_out_of_range(series, min_val, max_val):
             valid_series = series.copy()
@@ -164,11 +164,11 @@ def fetch_new_data(since_timestamp=None):
 
         latest_live_df = pivot_df.loc[pivot_df.groupby(['deviceid'])['devicetimestamp'].idxmax()]
         latest_live_df = latest_live_df.drop(columns=['hourly_interval'])
-        print("Latest Live DataFrame:", latest_live_df.head())
+        logging.info("Latest Live DataFrame:\n%s", latest_live_df.head())
 
         grouped_df = pivot_df.groupby(['devicename', 'deviceid', 'hourly_interval']).mean().reset_index()
         grouped_df = grouped_df.drop(columns=['devicetimestamp'])
-        print("Grouped DataFrame:", grouped_df.head())
+        logging.info("Grouped DataFrame:\n%s", grouped_df.head())
 
         data_dict1 = {}
         for _, row in grouped_df.iterrows():
@@ -179,13 +179,13 @@ def fetch_new_data(since_timestamp=None):
             if devicename not in data_dict1:
                 data_dict1[devicename] = {}
             data_dict1[devicename][timestamp] = row.drop(['devicename', 'deviceid', 'hourly_interval']).to_dict()
-        print("Hourly Data Dict:", data_dict1)
+        logging.info("Hourly Data Dict:\n%s", data_dict1)
 
         data_dict2 = {}
         for _, row in latest_live_df.iterrows():
             devicename = row['devicename']
             data_dict2[devicename] = row.drop(['devicename', 'deviceid']).to_dict()
-        print("Live Data Dict:", data_dict2)
+        logging.info("Live Data Dict:\n%s", data_dict2)
 
         return data_dict1, data_dict2
 
@@ -206,39 +206,38 @@ def serialize_data(data):
 
 def push_data_to_firebase(data_dict1, data_dict2):
     try:
-        for device_name, timestamps in data_dict1.items():
-            for timestamp, values in timestamps.items():
-                serialized_values = serialize_data(values)
-                url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/HourlyData/{timestamp}.json?auth={FIREBASE_DATABASE_SECRET}'
-                response = requests.put(url, json=serialized_values)
-                response.raise_for_status()
-                logging.info(f"Pushed hourly data to Firebase: {device_name} - {timestamp} - {serialized_values}")
-
-        for device_name, values in data_dict2.items():
-            serialized_values = serialize_data(values)
-            url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/LiveData.json?auth={FIREBASE_DATABASE_SECRET}'
-            response = requests.put(url, json=serialized_values)
+        for device_name, data in data_dict1.items():
+            url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/HourlyData.json?auth={FIREBASE_DATABASE_SECRET}'
+            response = requests.put(url, json=data)
             response.raise_for_status()
-            logging.info(f"Pushed live data to Firebase: {device_name} - {serialized_values}")
+            logging.info(f"Successfully pushed hourly data for {device_name} to Firebase")
+
+        for device_name, data in data_dict2.items():
+            url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/LatestData.json?auth={FIREBASE_DATABASE_SECRET}'
+            response = requests.put(url, json=data)
+            response.raise_for_status()
+            logging.info(f"Successfully pushed latest data for {device_name} to Firebase")
 
     except requests.RequestException as e:
         logging.error(f"Error pushing data to Firebase: {e}")
 
 def main():
-    latest_firebase_timestamp = get_latest_timestamp()
-    if latest_firebase_timestamp:
-        latest_timestamp = convert_firebase_timestamp(latest_firebase_timestamp)
-        logging.info(f"Latest timestamp from Firebase: {latest_timestamp}")
-    else:
-        latest_timestamp = None
-        logging.info("No timestamp found in Firebase")
+    try:
+        latest_timestamp = get_latest_timestamp()
+        if latest_timestamp is None:
+            latest_timestamp = pd.Timestamp.min
 
-    data_dict1, data_dict2 = fetch_new_data(since_timestamp=latest_timestamp)
+        # Log the value of since_timestamp
+        logging.info(f"Using since_timestamp: {latest_timestamp}")
 
-    if data_dict1 or data_dict2:
-        push_data_to_firebase(data_dict1, data_dict2)
-    else:
-        logging.info("No new data to push to Firebase")
+        data_dict1, data_dict2 = fetch_new_data(latest_timestamp)
+        if data_dict1 or data_dict2:
+            push_data_to_firebase(data_dict1, data_dict2)
+            delete_firebase_directory('Tanks')
+        else:
+            logging.info("No new data to process.")
+    except Exception as e:
+        logging.error(f"Unexpected error: {e}")
 
 if __name__ == "__main__":
     main()
