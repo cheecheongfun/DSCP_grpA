@@ -2,7 +2,6 @@ import requests
 import psycopg2
 import os
 import pandas as pd
-import json
 import logging
 
 # Configure logging to log information, warnings, and errors
@@ -24,7 +23,15 @@ def delete_firebase_directory(directory_path):
     except requests.RequestException as e:
         logging.error(f"Error deleting directory in Firebase: {e}")
 
-delete_firebase_directory('Tanks')
+def convert_firebase_timestamp(firebase_timestamp):
+    try:
+        # Extract the start time from the Firebase timestamp
+        start_time_str = firebase_timestamp.split(" - ")[0]
+        # Convert to database timestamp format
+        return pd.to_datetime(start_time_str, format='%Y-%m-%dT%H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
+    except Exception as e:
+        logging.error(f"Error converting Firebase timestamp: {e}")
+        return None
 
 def get_latest_timestamp():
     try:
@@ -48,6 +55,7 @@ def get_latest_timestamp():
                 timestamps = hourly_data.keys()
                 for ts in timestamps:
                     try:
+                        # Convert Firebase timestamp to the format used in the database
                         start_time_str = ts.split(" - ")[0]
                         start_time = pd.to_datetime(start_time_str, format='%Y-%m-%dT%H:%M:%S')
                         all_timestamps.append(start_time)
@@ -208,15 +216,20 @@ def push_data_to_firebase(data_dict1, data_dict2):
         logging.error(f"Error pushing data to Firebase: {e}")
 
 def main():
-    latest_timestamp = get_latest_timestamp()
-    logging.info(f"Latest timestamp from Firebase: {latest_timestamp}")
+    latest_firebase_timestamp = get_latest_timestamp()
+    if latest_firebase_timestamp:
+        latest_timestamp = convert_firebase_timestamp(latest_firebase_timestamp)
+        logging.info(f"Latest timestamp from Firebase: {latest_timestamp}")
+    else:
+        latest_timestamp = None
+        logging.info("No timestamp found in Firebase")
 
     data_dict1, data_dict2 = fetch_new_data(since_timestamp=latest_timestamp)
-    logging.info(f"Data fetched for hourly data: {data_dict1}")
-    logging.info(f"Data fetched for live data: {data_dict2}")
 
     if data_dict1 or data_dict2:
         push_data_to_firebase(data_dict1, data_dict2)
+    else:
+        logging.info("No new data to push to Firebase")
 
 if __name__ == "__main__":
     main()
