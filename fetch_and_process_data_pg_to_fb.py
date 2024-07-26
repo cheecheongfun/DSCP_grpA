@@ -23,7 +23,7 @@ def delete_firebase_directory(directory_path):
             logging.warning(f"Failed to delete directory: {directory_path}. Response: {response.content}")
     except requests.RequestException as e:
         logging.error(f"Error deleting directory in Firebase: {e}")
-        
+
 # Example usage of deleting a directory before pushing new data
 directory_to_delete = "Tanks"  # Adjust this to the path you need to delete
 delete_firebase_directory(directory_to_delete)
@@ -191,6 +191,8 @@ def push_data_to_firebase(data_dict1, data_dict2):
             for timestamp, values in timestamps.items():
                 url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/HourlyData/{timestamp}.json?auth={FIREBASE_DATABASE_SECRET}'
                 values = serialize_data(values)
+                logging.info(f"Pushing data to {url}: {values}")
+                print(f"Pushing data to {url}: {values}")
                 response = requests.put(url, json=values)
                 response.raise_for_status()
                 if response.status_code != 200:
@@ -199,6 +201,8 @@ def push_data_to_firebase(data_dict1, data_dict2):
         for device_name, values in data_dict2.items():
             url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/LiveData.json?auth={FIREBASE_DATABASE_SECRET}'
             values = serialize_data(values)
+            logging.info(f"Pushing latest data to {url}: {values}")
+            print(f"Pushing latest data to {url}: {values}")
             response = requests.put(url, json=values)
             response.raise_for_status()
             if response.status_code != 200:
@@ -206,21 +210,16 @@ def push_data_to_firebase(data_dict1, data_dict2):
     except requests.RequestException as e:
         logging.error(f"Error pushing data to Firebase: {e}")
 
-# Main process
 def main():
-    try:
-        latest_timestamp = get_latest_timestamp()
-        if latest_timestamp:
-            logging.info(f"Latest timestamp from Firebase: {latest_timestamp}")
-            data_dict1, data_dict2 = fetch_new_data(latest_timestamp)
-        else:
-            logging.info("No data found in Firebase or unable to fetch latest timestamp. Fetching all data.")
-            data_dict1, data_dict2 = fetch_new_data()
+    logging.info("Script started")
+    latest_timestamp = get_latest_timestamp()
+    logging.info(f"Latest timestamp: {latest_timestamp}")
 
-        if data_dict1 or data_dict2:
-            push_data_to_firebase(data_dict1, data_dict2)
-    except Exception as e:
-        logging.error(f"Unexpected error in main process: {e}")
+    data_dict1, data_dict2 = fetch_new_data(latest_timestamp)
+    logging.info("Data fetched successfully")
+
+    push_data_to_firebase(data_dict1, data_dict2)
+    logging.info("Data pushed to Firebase successfully")
 
 if __name__ == "__main__":
     main()
