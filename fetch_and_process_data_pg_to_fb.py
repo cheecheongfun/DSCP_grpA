@@ -180,7 +180,7 @@ def fetch_new_data(since_timestamp=None):
             devicename = row['devicename']
             if devicename not in data_dict2:
                 data_dict2[devicename] = {}
-            data_dict2[devicename] = row.drop(['devicename', 'deviceid', 'devicetimestamp']).to_dict()
+            data_dict2[devicename] = row.drop(['devicename', 'deviceid']).to_dict()
 
         return data_dict1, data_dict2
     except psycopg2.Error as e:
