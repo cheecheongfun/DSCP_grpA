@@ -109,6 +109,7 @@ def fetch_new_data(since_timestamp=None):
             devices d ON d.deviceid = dd.deviceid
         WHERE
             dd.deviceid IN (10, 9, 8, 7) AND dd.devicetimestamp > '{since_timestamp}'
+        """
 
 
         cursor.execute(query)
