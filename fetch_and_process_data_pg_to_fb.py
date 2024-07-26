@@ -32,7 +32,7 @@ def delete_firebase_directory(directory_path):
 # Function to get the latest timestamp from Firebase
 def get_latest_timestamp():
     try:
-        response = requests.get(f'{FIREBASE_DATABASE_URL}/Tanks/data.json?auth={FIREBASE_DATABASE_SECRET}')
+        response = requests.get(f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/HourlyData.json?auth={FIREBASE_DATABASE_SECRET}')
         response.raise_for_status()  # Raise an exception for HTTP errors
         data = response.json()
 
