@@ -2,6 +2,7 @@ import requests
 import psycopg2
 import os
 import pandas as pd
+import json
 import logging
 
 # Configure logging to log information, warnings, and errors
@@ -23,6 +24,10 @@ def delete_firebase_directory(directory_path):
             logging.warning(f"Failed to delete directory: {directory_path}. Response: {response.content}")
     except requests.RequestException as e:
         logging.error(f"Error deleting directory in Firebase: {e}")
+
+# Example usage of deleting a directory before pushing new data
+#directory_to_delete = "Tanks"  # Adjust this to the path you need to delete
+#delete_firebase_directory(directory_to_delete)
 
 def get_latest_timestamp():
     try:
@@ -60,6 +65,7 @@ def get_latest_timestamp():
     except requests.RequestException as e:
         logging.error(f"Error fetching latest timestamp from Firebase: {e}")
         return None
+
 
 # Function to fetch new data from PostgreSQL
 def fetch_new_data(since_timestamp=None):
@@ -190,8 +196,7 @@ def push_data_to_firebase(data_dict1, data_dict2):
         serialized_data = {}
         for k, v in data.items():
             if isinstance(v, pd.Timestamp):
-                serialized_data[k] = v.isoformat()  # Convert timestamp to ISO 8601 format
-                logging.debug(f"Serialized timestamp: {k} - {v.isoformat()}")
+                serialized_data[k] = v.isoformat()
             elif isinstance(v, dict):
                 serialized_data[k] = serialize_data(v)
             elif isinstance(v, (int, float)):
@@ -204,34 +209,40 @@ def push_data_to_firebase(data_dict1, data_dict2):
         # Push hourly data to Firebase
         for device_name, timestamps in data_dict1.items():
             for timestamp, values in timestamps.items():
-                logging.debug(f"Pushing hourly data: {device_name} - {timestamp} - {values}")
+                # Serialize data before pushing
                 serialized_values = serialize_data(values)
                 url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/HourlyData/{timestamp}.json?auth={FIREBASE_DATABASE_SECRET}'
                 response = requests.put(url, json=serialized_values)
-                response.raise_for_status()
+                response.raise_for_status()  # Raise an exception for HTTP errors
                 logging.info(f"Pushed hourly data to Firebase: {device_name} - {timestamp} - {serialized_values}")
 
         # Push latest live data to Firebase
         for device_name, values in data_dict2.items():
-            logging.debug(f"Pushing live data: {device_name} - {values}")
+            # Serialize data before pushing
             serialized_values = serialize_data(values)
             url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/LiveData.json?auth={FIREBASE_DATABASE_SECRET}'
             response = requests.put(url, json=serialized_values)
-            response.raise_for_status()
+            response.raise_for_status()  # Raise an exception for HTTP errors
             logging.info(f"Pushed live data to Firebase: {device_name} - {serialized_values}")
 
     except requests.RequestException as e:
         logging.error(f"Error pushing data to Firebase: {e}")
 
+# Main function to orchestrate the script
 def main():
+    logging.info("Script started")
+
     # Get the latest timestamp from Firebase
     latest_timestamp = get_latest_timestamp()
-    
-    # Fetch new data from PostgreSQL
-    data_dict1, data_dict2 = fetch_new_data(since_timestamp=latest_timestamp)
-    
-    # Push new data to Firebase
+    logging.info(f"Latest timestamp: {latest_timestamp}")
+
+    # Fetch new data from PostgreSQL since the latest timestamp
+    data_dict1, data_dict2 = fetch_new_data(latest_timestamp)
+    logging.info("Data fetched successfully")
+
+    # Push the new data to Firebase
     push_data_to_firebase(data_dict1, data_dict2)
+    logging.info("Data pushed to Firebase successfully")
 
 if __name__ == "__main__":
     main()
