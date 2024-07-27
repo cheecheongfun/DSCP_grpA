@@ -8,12 +8,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 
 public class PostForecastData {
 
@@ -24,10 +22,12 @@ public class PostForecastData {
         client = new OkHttpClient();
     }
 
-    public ArrayList<Double> postForecastData(double[] forecastedHumidity, double[] forecastedAirTemp, double[] forecastedRainFall) {
+    public interface ModelCallback {
+        void onSuccess(List<Double> modelOutput);
+        void onFailure(Exception e);
+    }
 
-
-        ArrayList<Double> output = new ArrayList<>();
+    public void postForecastData(double[] forecastedHumidity, double[] forecastedAirTemp, double[] forecastedRainFall, ModelCallback callback) {
         JSONObject jsonPayload = new JSONObject();
 
         LocalDate today = LocalDate.now();
@@ -43,7 +43,8 @@ public class PostForecastData {
             jsonPayload.put("rain_fall", new JSONArray(forecastedRainFall));
             jsonPayload.put("dates", new JSONArray(forecastedDates));
         } catch (JSONException e) {
-            e.printStackTrace();
+            callback.onFailure(e);
+            return;
         }
 
         RequestBody body = RequestBody.create(
@@ -59,31 +60,31 @@ public class PostForecastData {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
+                callback.onFailure(e);
+                Log.e("PostForecastData", "Request failed", e);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.e("postData", "on response");
                 if (response.isSuccessful()) {
                     String responseData = response.body().string();
                     try {
                         JSONArray forecastValuesNext3Days = new JSONArray(responseData);
-                        // Handle the forecast values
+                        List<Double> output = new ArrayList<>();
                         for (int i = 0; i < forecastValuesNext3Days.length(); i++) {
-                            System.out.println("Forecasted Energy kWh for day " + (i + 1) + ": " + forecastValuesNext3Days.getDouble(i));
                             output.add(forecastValuesNext3Days.getDouble(i));
                         }
+                        callback.onSuccess(output);
+                        Log.d("PostForecastData", "Model output: " + output.toString());
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        callback.onFailure(e);
+                        Log.e("PostForecastData", "Failed to parse response", e);
                     }
                 } else {
-                    System.out.println("Request failed with code: " + response.code());
-                    System.out.println("Response message: " + response.message());
+                    callback.onFailure(new IOException("Request failed with code: " + response.code() + " and message: " + response.message()));
+                    Log.e("PostForecastData", "Request failed with code: " + response.code() + " and message: " + response.message());
                 }
             }
         });
-        return output;
     }
 }
-
