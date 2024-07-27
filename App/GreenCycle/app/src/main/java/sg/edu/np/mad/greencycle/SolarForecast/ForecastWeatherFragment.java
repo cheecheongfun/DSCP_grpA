@@ -1,6 +1,7 @@
 package sg.edu.np.mad.greencycle.SolarForecast;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -26,7 +26,6 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import sg.edu.np.mad.greencycle.R;
@@ -36,13 +35,9 @@ public class ForecastWeatherFragment extends Fragment {
     private ForecastViewModel forecastViewModel;
     private TextView temperatureInfo;
     private TextView humidityInfo;
-    private TextView precipProbabilityInfo;
     private TextView precipitationInfo;
-    private TextView cloudCoverInfo;
     private Spinner spinnerDate;
     private Spinner spinnerModel;
-    private HashMap<String, List<String>> dateToTimesMap = new HashMap<>();
-    private OpenMeteoResponse.Hourly currentHourlyData;
     private BarChart barChart;
     private List<String> dates = new ArrayList<>();
     private String selectedModel;
@@ -55,9 +50,7 @@ public class ForecastWeatherFragment extends Fragment {
         spinnerModel = view.findViewById(R.id.spinnerModel);
         temperatureInfo = view.findViewById(R.id.temperatureInfo);
         humidityInfo = view.findViewById(R.id.humidityInfo);
-        precipProbabilityInfo = view.findViewById(R.id.precipProbabilityInfo);
         precipitationInfo = view.findViewById(R.id.precipitationInfo);
-        cloudCoverInfo = view.findViewById(R.id.cloudCoverInfo);
         barChart = view.findViewById(R.id.barChart);
 
         forecastViewModel = new ViewModelProvider(requireActivity()).get(ForecastViewModel.class);
@@ -79,7 +72,7 @@ public class ForecastWeatherFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedModel = models.get(position);
-                fetchData(); // re-fetch data when model is changed
+                updateAggregatedData();
             }
 
             @Override
@@ -100,7 +93,6 @@ public class ForecastWeatherFragment extends Fragment {
 
         forecastViewModel.getForecastLiveData().observe(getViewLifecycleOwner(), forecastResponse -> {
             if (forecastResponse != null && forecastResponse.hourly != null) {
-                currentHourlyData = forecastResponse.hourly;
                 List<String> timeList = forecastResponse.hourly.time;
                 if (timeList != null && !timeList.isEmpty()) {
                     // Split datetime strings into separate date and time lists
@@ -109,9 +101,6 @@ public class ForecastWeatherFragment extends Fragment {
                         if (!dates.contains(date)) {
                             dates.add(date);
                         }
-                        List<String> times = dateToTimesMap.getOrDefault(date, new ArrayList<>());
-                        times.add(datetime);
-                        dateToTimesMap.put(date, times);
                     }
 
                     ArrayAdapter<String> dateAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, dates);
@@ -121,11 +110,7 @@ public class ForecastWeatherFragment extends Fragment {
                     spinnerDate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            String selectedDate = dates.get(position);
-                            List<String> selectedDateTimes = dateToTimesMap.get(selectedDate);
-
-                            // Aggregate the data for the selected date
-                            forecastViewModel.calculateAggregatedData(currentHourlyData, selectedDateTimes, selectedModel);
+                            updateAggregatedData();
                         }
 
                         @Override
@@ -143,29 +128,36 @@ public class ForecastWeatherFragment extends Fragment {
 
         forecastViewModel.getAggregatedDataLiveData().observe(getViewLifecycleOwner(), data -> {
             if (data != null) {
-                temperatureInfo.setText(getString(R.string.temperature_info, data.avgTemperature));
-                humidityInfo.setText(getString(R.string.humidity_info, data.avgHumidity));
-                precipProbabilityInfo.setText(getString(R.string.precip_probability_info, data.avgPrecipProb));
-                precipitationInfo.setText(getString(R.string.precipitation_info, data.avgPrecipitation));
-                cloudCoverInfo.setText(getString(R.string.cloud_cover_info, data.avgCloudCover));
-                updateBarChart(data); // update bar chart with actual data
+                Log.d("AggregatedData", "Updating UI with aggregated data");
+                temperatureInfo.setText(getString(R.string.temperature_info, data.avgTemperatureDay1));
+                humidityInfo.setText(getString(R.string.humidity_info, data.avgHumidityDay1));
+                precipitationInfo.setText(getString(R.string.precipitation_info, data.avgPrecipitationDay1));
+                updateBarChart(data); // Update bar chart with actual data
             } else {
                 updateNoDataAvailable();
             }
         });
     }
 
+    private void updateAggregatedData() {
+        int selectedDatePosition = spinnerDate.getSelectedItemPosition();
+        if (selectedDatePosition == AdapterView.INVALID_POSITION || selectedDatePosition >= dates.size()) {
+            updateNoDataAvailable();
+            return;
+        }
+
+        forecastViewModel.updateAggregatedData(dates, selectedDatePosition, selectedModel);
+    }
+
     private void updateNoDataAvailable() {
+        Log.d("ForecastWeatherFragment", "No data available, updating UI");
         temperatureInfo.setText(R.string.no_data_available);
         humidityInfo.setText(R.string.no_data_available);
-        precipProbabilityInfo.setText(R.string.no_data_available);
         precipitationInfo.setText(R.string.no_data_available);
-        cloudCoverInfo.setText(R.string.no_data_available);
         barChart.clear();
     }
 
     private void updateBarChart(ForecastViewModel.AggregatedData data) {
-        // Placeholder values for the bar chart, to be replaced by actual model output
         List<BarEntry> entries = new ArrayList<>();
         entries.add(new BarEntry(0f, (float) data.day1Output));
         entries.add(new BarEntry(1f, (float) data.day2Output));
@@ -204,6 +196,12 @@ public class ForecastWeatherFragment extends Fragment {
         leftAxis.setGranularity(1f);
         leftAxis.setGranularityEnabled(true);
 
+        // Set Y-axis range
+        float minValue = (float) Math.min(data.day1Output, Math.min(data.day2Output, data.day3Output));
+        float maxValue = (float) Math.max(data.day1Output, Math.max(data.day2Output, data.day3Output));
+        leftAxis.setAxisMinimum(minValue - 10); // Adjust as needed
+        leftAxis.setAxisMaximum(maxValue + 10); // Adjust as needed
+
         YAxis rightAxis = barChart.getAxisRight();
         rightAxis.setEnabled(false);
 
@@ -219,4 +217,5 @@ public class ForecastWeatherFragment extends Fragment {
         description.setText("");
         barChart.setDescription(description);
     }
+
 }
