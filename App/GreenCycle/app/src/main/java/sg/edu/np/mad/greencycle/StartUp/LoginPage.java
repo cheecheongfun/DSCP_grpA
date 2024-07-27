@@ -45,7 +45,6 @@ public class LoginPage extends AppCompatActivity {
 
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
-//        btnAuth = findViewById(R.id.btnAuth);
         tvAuthStatus = findViewById(R.id.tvAuthStatus);
         loginButton = findViewById(R.id.loginButton);
         registerButton = findViewById(R.id.register);
@@ -53,6 +52,8 @@ public class LoginPage extends AppCompatActivity {
         executor = ContextCompat.getMainExecutor(this);
         FirebaseApp.initializeApp(this);
 
+
+        etUsername.requestFocus();
         database = FirebaseDatabase.getInstance();
         reference = database.getReference("users");
 

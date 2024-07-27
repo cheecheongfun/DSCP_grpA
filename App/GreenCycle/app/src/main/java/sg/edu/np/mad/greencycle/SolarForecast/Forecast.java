@@ -9,12 +9,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
+
+import java.util.List;
 
 import sg.edu.np.mad.greencycle.R;
 
 public class Forecast extends AppCompatActivity {
 
     private TextView back, refresh;
+    private DataViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,21 @@ public class Forecast extends AppCompatActivity {
                     .replace(R.id.fragment_container, fragment)
                     .commit();
         }
+        // Initialize the ViewModel
+        viewModel = new ViewModelProvider(this).get(DataViewModel.class);
+
+        // Observe data changes
+        viewModel.getDataPoints().observe(this, dataPoints -> {
+            for (AzureStorageHelper.DataPoint dataPoint : dataPoints) {
+                Log.d("Test Azure Storage", "Date: " + dataPoint.getDate() +
+                        ", Humidity: " + dataPoint.getHumidity() +
+                        ", Air Temp: " + dataPoint.getAirTemp() +
+                        ", Rain Fall: " + dataPoint.getRainFall());
+            }
+        });
+
+        // Load data
+        viewModel.loadData();
     }
 
     private void refreshFragment() {

@@ -40,6 +40,9 @@ android {
         resources {
             excludes.add("META-INF/NOTICE.md")
             excludes.add("META-INF/LICENSE.md")
+            excludes.add("META-INF/io.netty.versions.properties")
+            excludes.add("META-INF/INDEX.LIST")
+            excludes.add("META-INF/DEPENDENCIES")
         }
     }
 
@@ -88,8 +91,22 @@ dependencies {
     implementation ("com.google.android.material:material:1.8.0")
     implementation ("com.sun.mail:android-mail:1.6.6")
     implementation ("com.sun.mail:android-activation:1.6.6")
-    implementation ("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation ("com.squareup.okhttp3:okhttp:4.10.0")
     implementation ("org.json:json:20201115")
+    implementation("com.azure:azure-storage-blob:12.21.0") {
+        exclude(group = "jakarta.activation", module = "jakarta.activation-api")
+    }
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("org.apache.poi:poi:5.2.4")
+    implementation("org.apache.poi:poi-ooxml:5.2.4") {
+        exclude(group = "org.apache.xmlgraphics", module = "batik-all")
+    }
+    implementation("org.apache.xmlbeans:xmlbeans:5.1.1")
+    implementation("com.sun.mail:android-mail:1.6.6") {
+        exclude(group = "jakarta.activation", module = "jakarta.activation-api")
+    }
+    implementation("net.sourceforge.jexcelapi:jxl:2.6.12")
+    implementation ("org.apache.poi:poi-ooxml-lite:5.2.4")
 
 
 

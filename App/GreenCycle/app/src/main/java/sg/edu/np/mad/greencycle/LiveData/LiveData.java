@@ -84,6 +84,7 @@ public class LiveData extends AppCompatActivity {
         mlOutput = findViewById(R.id.mlOutput);
         refresh = findViewById(R.id.refresh);
 
+        refresh.callOnClick();
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
