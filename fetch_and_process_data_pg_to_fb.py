@@ -26,8 +26,8 @@ def delete_firebase_directory(directory_path):
         logging.error(f"Error deleting directory in Firebase: {e}")
 
 # Example usage of deleting a directory before pushing new data
-directory_to_delete = "Tanks"  # Adjust this to the path you need to delete
-delete_firebase_directory(directory_to_delete)
+#directory_to_delete = "Tanks"  # Adjust this to the path you need to delete
+#delete_firebase_directory(directory_to_delete)
 
 def get_latest_timestamp():
     try:
