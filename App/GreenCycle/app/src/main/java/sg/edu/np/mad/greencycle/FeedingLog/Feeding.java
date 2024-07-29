@@ -348,7 +348,14 @@ public class Feeding extends AppCompatActivity {
                     bottomBtnLog.setVisibility(View.GONE);
                     toggleViewButton.setVisibility(View.VISIBLE);
                     ArrayList<Log> logList = tank.getFeedingLog();
+                    for (Log log : logList){
+                        if (log.getLogDate().equals(selectedDate)){
+                            selectedLog = log;
+                        }
+                    }
                     logList.remove(selectedLog);
+                    android.util.Log.e("logDelete", "selectedLog: " + String.valueOf(selectedLog != null));
+                    android.util.Log.e("logDelete", "LogList: " + logList.size());
                     database = FirebaseDatabase.getInstance();
                     reference = database.getReference("users");
 

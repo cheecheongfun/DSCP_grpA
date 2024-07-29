@@ -98,7 +98,7 @@ public class LiveData extends AppCompatActivity {
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateData();
+                tank = updateData();
                 tankName.setText(tank.getTankName());
                 temp.setText("Temperature: " + tank.getTemperature() + "°C");
                 EC.setText("Soil EC: " + tank.getEC());

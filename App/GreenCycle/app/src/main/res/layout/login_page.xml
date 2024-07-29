@@ -49,12 +49,13 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:ems="10"
+            android:focusedByDefault="true"
             android:fontFamily="sans-serif-condensed-medium"
             android:hint="Username"
-            android:textColorHint="@color/light_grey"
             android:inputType="text"
+            android:paddingStart="5dp"
             android:textColor="@color/textColour"
-            android:paddingStart="5dp" />
+            android:textColorHint="@color/light_grey" />
 
         <!--        <TextView-->
         <!--            android:id="@+id/textView2"-->
