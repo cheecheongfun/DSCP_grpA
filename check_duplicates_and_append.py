@@ -24,11 +24,17 @@ def upload_blob(blob_name, file_path):
 
 def check_and_append(new_file):
     df_new = pd.read_excel(new_file)
-    df_new.drop_duplicates(inplace=True)
-    df_new.to_excel(new_file,index=False)
-    upload_blob(os.path.basename(new_file), new_file)
+    duplicates_exist = df_new.duplicated().any()
+    if duplicates_exist:
+        df_new.drop_duplicates(inplace=True)
+        df_new.to_excel(new_file,index=False)
+        upload_blob(os.path.basename(new_file), new_file)
+        return True
+    return False
 
 if __name__ == "__main__":
     import sys
     new_file = download_blob(sys.argv[1])
-    check_and_append(new_file)
+    has_duplicates = check_and_append(new_file)
+    if not has_duplicates:
+        print("No dupliactes found.")
