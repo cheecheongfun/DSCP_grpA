@@ -60,6 +60,7 @@ jobs:
         AZURE_STORAGE_ACCOUNT_NAME: ${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}
         AZURE_STORAGE_ACCOUNT_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
         CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
+        CONTAINER_NAME2: ${{ secrets.CONTAINER_NAME2}}
         FILENAME: ${{ env.FILENAME }}
       run: |
         python preprocess_and_append.py "$FILENAME"

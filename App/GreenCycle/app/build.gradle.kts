@@ -60,6 +60,8 @@ dependencies {
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     implementation(libs.activity)
+    implementation(libs.room.common)
+    implementation(libs.room.runtime)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -107,7 +109,7 @@ dependencies {
     }
     implementation("net.sourceforge.jexcelapi:jxl:2.6.12")
     implementation ("org.apache.poi:poi-ooxml-lite:5.2.4")
-
+    annotationProcessor(libs.room.compiler)
 
 
 }

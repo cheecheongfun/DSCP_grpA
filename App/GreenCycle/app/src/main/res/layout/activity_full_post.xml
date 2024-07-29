@@ -20,16 +20,31 @@
             <!-- Author's profile picture -->
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/authorProfilePicture"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="340dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="50dp"
+                android:layout_marginLeft="10dp"
                 android:src="@drawable/green_cycle_icon"
-                app:civ_border_color="#FF000000"
+                app:civ_border_color="@color/mdtp_background_color"
                 app:civ_border_width="1dp" />
+
+            <!-- Author's display name -->
+
+            <TextView
+                android:id="@+id/authorDisplayName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/authorProfilePicture"
+                android:layout_toRightOf="@id/authorProfilePicture"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="12dp"
+                android:text="Author Name"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+
 
 
             <TextView
@@ -44,21 +59,8 @@
                 android:textSize="12sp"/>
 
 
-            <!-- Author's display name -->
-
             <!-- Post title -->
 
-            <TextView
-                android:id="@+id/authorDisplayName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@id/authorProfilePicture"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="67dp"
-                android:layout_marginTop="12dp"
-                android:text="Author Name"
-                android:textSize="16sp"
-                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/postTitle"

@@ -118,8 +118,8 @@ public class Forum extends AppCompatActivity {
         tagsContainer = findViewById(R.id.tagsContainer);
 
         int buttonHeight = 100; // Set the desired height of the buttons, in pixels.
-        Drawable selectedBackground = getResources().getDrawable(R.drawable.selected);
-        Drawable normalBackground = getResources().getDrawable(R.drawable.rounded_button);
+        Drawable selectedBackground = getResources().getDrawable(R.drawable.selected, null);
+        Drawable normalBackground = getResources().getDrawable(R.drawable.rounded_button, null);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -139,12 +139,12 @@ public class Forum extends AppCompatActivity {
 
             // Set onClickListener to toggle selection state
             tagButton.setOnClickListener(v -> {
-                if (selectedButtons.contains(v)) {
-                    v.setBackground(normalBackground);
-                    selectedButtons.remove(v);
+                if (selectedButtons.contains(tagButton)) {
+                    tagButton.setBackground(normalBackground);
+                    selectedButtons.remove(tagButton);
                 } else {
-                    v.setBackground(selectedBackground);
-                    selectedButtons.add((Button)v);
+                    tagButton.setBackground(selectedBackground);
+                    selectedButtons.add(tagButton);
                 }
                 fetchPostsBasedOnSelection();
             });

@@ -108,10 +108,32 @@ public class options extends AppCompatActivity {
         });
 
         logout.setOnClickListener(v -> {
-            Intent intent = new Intent(this, LoginPage.class);
-            startActivity(intent);
-            finish();
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Confirm Logout");
+            builder.setMessage("Are you sure you want to Logout?");
+
+            // Add the buttons
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User clicked Yes button, perform Logout operation here
+                    Intent intent = new Intent(options.this, LoginPage.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User clicked No button, dismiss the dialog
+                    dialog.dismiss();
+                }
+            });
+
+            // Create and show the AlertDialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
         });
+
 
 
 
