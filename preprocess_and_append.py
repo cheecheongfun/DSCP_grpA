@@ -153,7 +153,7 @@ def preprocess_estate_dpm(new_file):
     # df_new = winsorizer.transform(df_new)
     # winsorizer = Winsorizer(capping_method='quantiles',tail='left',fold=0.05,variables='IRR Value W/m²')
     # winsorizer.fit(df_new)
-    df_new = winsorizer.transform(df_new)
+    # df_new = winsorizer.transform(df_new)
     df_new.rename(columns={'Date and Time':'Date'},inplace=True)
     df_new['Date'] = pd.to_datetime(df_new['Date'])
     df_new['Month']=df_new['Date'].dt.month
