@@ -35,7 +35,7 @@ def delete_old_data():
             logging.warning("No devices found in Firebase")
             return
 
-        cutoff_date = datetime.datetime.now() - datetime.timedelta(days=9)  # Set to 9 days for testing
+        cutoff_date = datetime.datetime.now() - datetime.timedelta(days=30) 
 
         for device_name in devices_data.keys():
             hourly_data_url = f'{FIREBASE_DATABASE_URL}/Tanks/{device_name}/HourlyData.json?auth={FIREBASE_DATABASE_SECRET}'
