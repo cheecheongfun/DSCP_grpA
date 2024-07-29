@@ -9,6 +9,7 @@ from concurrent.futures import ThreadPoolExecutor
 account_name = os.getenv('AZURE_STORAGE_ACCOUNT_NAME')
 account_key = os.getenv('AZURE_STORAGE_ACCOUNT_KEY')
 container_name = os.getenv('CONTAINER_NAME')
+container_name2 = os.getenv('CONTAINER_NAME2')
 blob_service_client = BlobServiceClient(account_url=f"https://{account_name}.blob.core.windows.net", credential=account_key)
 
 def download_blob(blob_name):
@@ -21,8 +22,18 @@ def download_blob(blob_name):
         download_file.write(blob_client.download_blob().readall())
     return download_file_path
 
+def download_blob2(blob_name):
+    blob_client = blob_service_client.get_blob_client(container=container_name2, blob=blob_name)
+    if not blob_client.exists():
+        raise FileNotFoundError(f"The specified blob '{blob_name}' does not exist in the container '{container_name2}'.")
+    
+    download_file_path = f"./{blob_name.split('/')[-1]}"
+    with open(download_file_path, "wb") as download_file:
+        download_file.write(blob_client.download_blob().readall())
+    return download_file_path
+
 def upload_blob(blob_name, file_path):
-    blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+    blob_client = blob_service_client.get_blob_client(container=container_name2, blob=blob_name)
     with open(file_path, "rb") as data:
         blob_client.upload_blob(data, overwrite=True)
 
@@ -377,7 +388,7 @@ def preprocess_soe_dpm_5mins(new_file,sensorID):
 
 def preprocess_and_append(new_file):
     try:
-        collated_file=download_blob('final_data/estate_soe_combined_api_latest.xlsx')
+        collated_file=download_blob2('estate_soe_combined_api_latest.xlsx')
     except FileNotFoundError as e:
         print(e)
         return
@@ -399,10 +410,10 @@ def preprocess_and_append(new_file):
     # combine and upload
     df_combined = pd.concat([df_collated, df_new], ignore_index=True)
     df_combined.to_excel(collated_file, index=False)
-    upload_blob('final_data/estate_soe_combined_api_latest.xlsx', collated_file)
+    upload_blob('estate_soe_combined_api_latest.xlsx', collated_file)
 
     try:
-        collated_file = download_blob('final_data/soe_combined_api_latest.xlsx')
+        collated_file = download_blob2('soe_combined_api_latest.xlsx')
     except FileNotFoundError as e:
         print(e)
         return
@@ -416,7 +427,7 @@ def preprocess_and_append(new_file):
     
     df_combined = pd.concat([df_collated, df_new], ignore_index=True)
     df_combined.to_excel(collated_file, index=False)
-    upload_blob('final_data/soe_combined_api_latest.xlsx', collated_file)
+    upload_blob('soe_combined_api_latest.xlsx', collated_file)
 
 if __name__ == "__main__":
     import sys
