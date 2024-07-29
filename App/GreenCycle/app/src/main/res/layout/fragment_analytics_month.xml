@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Analytics.Week_charts"
+    tools:context=".Analytics.Analytics_month"
     android:theme="@style/AppBackgroundColour">
 
     <LinearLayout
@@ -46,7 +46,35 @@
 
         </LinearLayout>
 
-        <!-- CardView for Bar Chart for Nitrogen -->
+        <!-- CardView for Bar Chart for EC Levels -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:layout_marginTop="8dp">
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChart_ec"
+                android:layout_width="match_parent"
+                android:layout_height="400dp" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- CardView for Bar Chart for Moisture Levels -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:layout_marginTop="8dp">
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChart_moisture"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"/>
+        </androidx.cardview.widget.CardView>
+
+        <!-- CardView for Bar Chart for Nitrogen Levels -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,24 +85,10 @@
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/barChart_nitrogen"
                 android:layout_width="match_parent"
-                android:layout_height="400dp" />
-        </androidx.cardview.widget.CardView>
-
-        <!-- CardView for Line Chart for Potassium -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
-            android:layout_marginTop="8dp">
-
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/lineChart_potassium"
-                android:layout_width="match_parent"
                 android:layout_height="400dp"/>
         </androidx.cardview.widget.CardView>
 
-        <!-- CardView for Bar Chart for Phosphorous -->
+        <!-- CardView for Bar Chart for Phosphorous Levels -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -88,21 +102,7 @@
                 android:layout_height="400dp"/>
         </androidx.cardview.widget.CardView>
 
-        <!-- CardView for Line Chart for Temperature -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
-            android:layout_marginTop="8dp">
-
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/lineChart_temperature"
-                android:layout_width="match_parent"
-                android:layout_height="400dp"/>
-        </androidx.cardview.widget.CardView>
-
-        <!-- CardView for Bar Chart for Humidity -->
+        <!-- CardView for Bar Chart for Potassium Levels -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -111,12 +111,12 @@
             android:layout_marginTop="8dp">
 
             <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/barChart_humidity"
+                android:id="@+id/barChart_potassium"
                 android:layout_width="match_parent"
                 android:layout_height="400dp"/>
         </androidx.cardview.widget.CardView>
 
-        <!-- CardView for Line Chart for pH -->
+        <!-- CardView for Bar Chart for Temperature Levels -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -124,8 +124,22 @@
             app:cardElevation="4dp"
             android:layout_marginTop="8dp">
 
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/lineChart_ph"
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChart_temperature"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"/>
+        </androidx.cardview.widget.CardView>
+
+        <!-- CardView for Bar Chart for pH Levels -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:layout_marginTop="8dp">
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChart_ph"
                 android:layout_width="match_parent"
                 android:layout_height="400dp"/>
         </androidx.cardview.widget.CardView>

@@ -9,36 +9,54 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.room.Room;
 
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.Chart;
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
-import java.util.Random;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
+import sg.edu.np.mad.greencycle.Classes.Tank;
 import sg.edu.np.mad.greencycle.R;
-// Oh Ern Qi S10243067K
+
 public class Analytics_month extends Fragment {
     private Calendar currentMonth = Calendar.getInstance();
     private TextView monthDateTextView;
     private ImageButton btnNextMonth, btnPreviousMonth;
+    private AppDatabase db;
+    private HourlyDataDao hourlyDataDao;
+    private Executor databaseExecutor;
+    private Tank tank;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        db = Room.databaseBuilder(getContext(), AppDatabase.class, "database-name")
+                .addMigrations(AppDatabase.MIGRATION_1_2, AppDatabase.MIGRATION_2_3) // Add all migrations here
+                .build();
+        hourlyDataDao = db.hourlyDataDao();
+        databaseExecutor = Executors.newSingleThreadExecutor();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_analytics_month, container, false);
+
+        if (getArguments() != null) {
+            tank = getArguments().getParcelable("tank");
+        }
 
         monthDateTextView = view.findViewById(R.id.Monthdate);
         btnNextMonth = view.findViewById(R.id.btnNextMonth);
@@ -49,7 +67,7 @@ public class Analytics_month extends Fragment {
         btnNextMonth.setOnClickListener(v -> adjustMonth(1));
 
         updateDateDisplay();
-        setupCharts(view);
+        fetchAndDisplayMonthlyData();
         checkButtonState();
         return view;
     }
@@ -61,7 +79,6 @@ public class Analytics_month extends Fragment {
             selectedDate.set(year, monthOfYear, 1);
             if (!selectedDate.after(today)) {
                 adjustToSelectedMonth(selectedDate);
-                setupCharts(getView());
             }
         }, today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
 
@@ -74,13 +91,14 @@ public class Analytics_month extends Fragment {
     private void adjustToSelectedMonth(Calendar selectedMonth) {
         currentMonth.setTime(selectedMonth.getTime());
         updateDateDisplay();
+        fetchAndDisplayMonthlyData();
         checkButtonState();
     }
 
     private void adjustMonth(int amount) {
         currentMonth.add(Calendar.MONTH, amount);
         updateDateDisplay();
-        setupCharts(getView());
+        fetchAndDisplayMonthlyData();
         checkButtonState();
     }
 
@@ -100,53 +118,64 @@ public class Analytics_month extends Fragment {
         monthDateTextView.setText(dateFormat.format(currentMonth.getTime()));
     }
 
-    private void setupCharts(View view) {
-        // Setup Bar and Line Charts with appropriate data generation for each month
-        setupBarChart((BarChart) view.findViewById(R.id.barChart_nitrogen),
-                generateMonthlyBarData(20, 80),
-                "Nitrogen",
-                Color.parseColor("#FFC0CB"));
+    private void fetchAndDisplayMonthlyData() {
+        databaseExecutor.execute(() -> {
+            Calendar startCal = (Calendar) currentMonth.clone();
+            startCal.set(Calendar.DAY_OF_MONTH, 1);
+            String startDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(startCal.getTime());
 
-        setupLineChart((LineChart) view.findViewById(R.id.lineChart_potassium),
-                generateMonthlyLineData(10, 60),
-                "Potassium",
-                Color.parseColor("#FF69B4"));
+            Calendar endCal = (Calendar) currentMonth.clone();
+            endCal.set(Calendar.DAY_OF_MONTH, endCal.getActualMaximum(Calendar.DAY_OF_MONTH));
+            String endDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(endCal.getTime());
 
-        setupBarChart((BarChart) view.findViewById(R.id.barChart_phosphorous),
-                generateMonthlyBarData(15, 55),
-                "Phosphorous",
-                Color.parseColor("#DB7093"));
+            List<DailyAggregate> aggregates = hourlyDataDao.getDailyAggregates(startDate, endDate, tank.getDeviceID());
 
-        setupLineChart((LineChart) view.findViewById(R.id.lineChart_temperature),
-                generateMonthlyLineData(10, 30),
-                "Temperature",
-                Color.parseColor("#FFC0CB"));
-
-        setupBarChart((BarChart) view.findViewById(R.id.barChart_humidity),
-                generateMonthlyBarData(40, 100),
-                "Humidity",
-                Color.parseColor("#FF69B4"));
-
-        setupLineChart((LineChart) view.findViewById(R.id.lineChart_ph),
-                generateMonthlyLineData(4, 9),
-                "pH Level",
-                Color.parseColor("#DB7093"));
+            getActivity().runOnUiThread(() -> {
+                setupCharts(getView(), aggregates);
+            });
+        });
     }
 
-    private ArrayList<BarEntry> generateMonthlyBarData(float min, float max) {
+    private void setupCharts(View view, List<DailyAggregate> aggregates) {
+        // Setup Bar Charts with DAO data for each month
+        setupBarChart((BarChart) view.findViewById(R.id.barChart_ec), getBarEntries(aggregates, "avg_ec"), "EC Levels", Color.parseColor("#FFA07A"));
+        setupBarChart((BarChart) view.findViewById(R.id.barChart_moisture), getBarEntries(aggregates, "avg_moisture"), "Moisture Levels", Color.parseColor("#20B2AA"));
+        setupBarChart((BarChart) view.findViewById(R.id.barChart_nitrogen), getBarEntries(aggregates, "avg_nitrogen"), "Nitrogen Levels", Color.parseColor("#FFC0CB"));
+        setupBarChart((BarChart) view.findViewById(R.id.barChart_phosphorous), getBarEntries(aggregates, "avg_phosphorous"), "Phosphorous Levels", Color.parseColor("#DB7093"));
+        setupBarChart((BarChart) view.findViewById(R.id.barChart_potassium), getBarEntries(aggregates, "avg_potassium"), "Potassium Levels", Color.parseColor("#FF69B4"));
+        setupBarChart((BarChart) view.findViewById(R.id.barChart_temperature), getBarEntries(aggregates, "avg_temperature"), "Temperature Levels", Color.parseColor("#32CD32"));
+        setupBarChart((BarChart) view.findViewById(R.id.barChart_ph), getBarEntries(aggregates, "avg_ph"), "pH Levels", Color.parseColor("#90EE90"));
+    }
+
+    private ArrayList<BarEntry> getBarEntries(List<DailyAggregate> aggregates, String field) {
         ArrayList<BarEntry> entries = new ArrayList<>();
-        Random random = new Random();
-        for (int i = 0; i < 12; i++) {
-            entries.add(new BarEntry(i, min + random.nextFloat() * (max - min)));
-        }
-        return entries;
-    }
-
-    private ArrayList<Entry> generateMonthlyLineData(float min, float max) {
-        ArrayList<Entry> entries = new ArrayList<>();
-        Random random = new Random();
-        for (int i = 0; i < 12; i++) {
-            entries.add(new Entry(i, min + random.nextFloat() * (max - min)));
+        for (int i = 0; i < aggregates.size(); i++) {
+            DailyAggregate aggregate = aggregates.get(i);
+            float value = 0;
+            switch (field) {
+                case "avg_ec":
+                    value = aggregate.avg_ec;
+                    break;
+                case "avg_moisture":
+                    value = aggregate.avg_moisture;
+                    break;
+                case "avg_nitrogen":
+                    value = aggregate.avg_nitrogen;
+                    break;
+                case "avg_phosphorous":
+                    value = aggregate.avg_phosphorous;
+                    break;
+                case "avg_potassium":
+                    value = aggregate.avg_potassium;
+                    break;
+                case "avg_temperature":
+                    value = aggregate.avg_temperature;
+                    break;
+                case "avg_ph":
+                    value = aggregate.avg_ph;
+                    break;
+            }
+            entries.add(new BarEntry(i, value));
         }
         return entries;
     }
@@ -157,40 +186,35 @@ public class Analytics_month extends Fragment {
         dataSet.setValueTextColor(Color.WHITE);
         BarData barData = new BarData(dataSet);
         chart.setData(barData);
-        customizeChart(chart);
-    }
 
-    private void setupLineChart(LineChart chart, ArrayList<Entry> data, String label, int color) {
-        LineDataSet dataSet = new LineDataSet(data, label);
-        dataSet.setColor(color);
-        dataSet.setValueTextColor(Color.WHITE);
-        dataSet.setLineWidth(2f);
-        dataSet.setDrawCircles(true);
-        dataSet.setCircleColor(color);
-        LineData lineData = new LineData(dataSet);
-        chart.setData(lineData);
-        customizeChart(chart);
-    }
-
-    private void customizeChart(BarChart chart) {
         chart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-        chart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"}));
+        chart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(getDaysOfMonth()));
+        chart.getXAxis().setGranularity(1f);
+        chart.getXAxis().setGranularityEnabled(true);
+
         chart.getAxisLeft().setEnabled(true);
         chart.getAxisRight().setEnabled(false);
+
         chart.getDescription().setEnabled(false);
-        chart.setDrawGridBackground(true);
-        chart.setGridBackgroundColor(Color.WHITE);
-        chart.invalidate();
+        chart.getLegend().setEnabled(false);
+
+        chart.setTouchEnabled(true); // Enable touch interactions
+        chart.setDragEnabled(true); // Enable dragging
+        chart.setScaleEnabled(false); // Disable scaling
+        chart.setPinchZoom(false); // Disable pinch zoom
+        chart.setDoubleTapToZoomEnabled(false); // Disable double-tap zoom
+        chart.setHighlightPerDragEnabled(false); // Disable highlight on drag
+        chart.setHighlightPerTapEnabled(false); // Disable highlight on tap
+
+        chart.invalidate(); // Refresh the chart
     }
 
-    private void customizeChart(LineChart chart) {
-        chart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-        chart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"}));
-        chart.getAxisLeft().setEnabled(true);
-        chart.getAxisRight().setEnabled(false);
-        chart.getDescription().setEnabled(false);
-        chart.setDrawGridBackground(true);
-        chart.setGridBackgroundColor(Color.WHITE);
-        chart.invalidate();
+    private String[] getDaysOfMonth() {
+        int daysInMonth = currentMonth.getActualMaximum(Calendar.DAY_OF_MONTH);
+        String[] days = new String[daysInMonth];
+        for (int i = 0; i < daysInMonth; i++) {
+            days[i] = String.valueOf(i + 1);
+        }
+        return days;
     }
 }

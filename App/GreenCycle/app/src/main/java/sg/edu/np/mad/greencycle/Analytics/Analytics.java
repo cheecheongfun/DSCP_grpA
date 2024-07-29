@@ -1,5 +1,6 @@
 package sg.edu.np.mad.greencycle.Analytics;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -23,11 +24,11 @@ import sg.edu.np.mad.greencycle.Classes.Tank;
 import sg.edu.np.mad.greencycle.TankSelection.TankSelection;
 import sg.edu.np.mad.greencycle.R;
 
-// Oh Ern Qi S10243067K
 public class Analytics extends AppCompatActivity {
-    TextView tvDay, tvWeek, tvMonth, tvYear, back;
+    TextView tvDay, tvWeek, tvMonth, tvYear, back,temp;
     User user;
     Tank tank;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +47,17 @@ public class Analytics extends AppCompatActivity {
 
         tvDay = findViewById(R.id.tvDay);
         tvWeek = findViewById(R.id.tvWeek);
-        tvMonth = findViewById(R.id.tvMonth);
         tvYear = findViewById(R.id.tvYear);
         back = findViewById(R.id.backButton);
+        temp = findViewById(R.id.button2);
+
+        temp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),DeleteDAOActivity.class);
+                startActivity(intent);
+            }
+        });
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -59,10 +68,9 @@ public class Analytics extends AppCompatActivity {
 
         tvDay.setOnClickListener(listener);
         tvWeek.setOnClickListener(listener);
-        tvMonth.setOnClickListener(listener);
         tvYear.setOnClickListener(listener);
 
-        loadFragment(new Analytics_day());
+        loadFragment(new Analytics_day(), user, tank); // Pass user and tank objects
         highlightTextView(tvDay);
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -76,30 +84,38 @@ public class Analytics extends AppCompatActivity {
         });
     }
 
-
     private void handleTextViewClick(View view) {
         resetTextViewColors();
         highlightTextView((TextView) view);
 
+        Fragment fragment = null;
         if (view.getId() == R.id.tvDay) {
-            loadFragment(new Analytics_day());
+            fragment = new Analytics_day();
+        } else if (view.getId() == R.id.tvWeek) {
+            fragment = new Week_charts();
+        } else if (view.getId() == R.id.tvYear) {
+            fragment = new Analytics_year();
+        }
 
+        if (fragment != null) {
+            loadFragment(fragment, user, tank);
         }
-        else if (view.getId() == R.id.tvWeek){
-            loadFragment(new Week_charts());
-        }
-        else if (view.getId() == R.id.tvMonth){
-            loadFragment(new Analytics_month());
-        }
-        else if (view.getId() == R.id.tvYear){
-            loadFragment(new Analytics_year());
-        }
+    }
+
+    private void loadFragment(Fragment fragment, User user, Tank tank) {
+        Bundle args = new Bundle();
+        args.putParcelable("user", user);
+        args.putParcelable("tank", tank);
+        fragment.setArguments(args);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.analytics_frag, fragment);
+        transaction.commit();
     }
 
     private void resetTextViewColors() {
         resetTextViewStyle(tvDay);
         resetTextViewStyle(tvWeek);
-        resetTextViewStyle(tvMonth);
         resetTextViewStyle(tvYear);
     }
 
@@ -114,12 +130,6 @@ public class Analytics extends AppCompatActivity {
         SpannableString content = new SpannableString(textView.getText());
         content.setSpan(new CustomUnderlineSpan(), 0, content.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         textView.setText(content);
-    }
-
-    private void loadFragment(Fragment fragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.analytics_frag, fragment);
-        transaction.commit();
     }
 
     public static class CustomUnderlineSpan extends UnderlineSpan {

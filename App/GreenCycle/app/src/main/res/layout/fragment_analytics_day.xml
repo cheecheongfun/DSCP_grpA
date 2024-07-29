@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -17,9 +16,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- CardView for Nitrogen Chart -->
-
-
             <TextView
                 android:id="@+id/Date"
                 android:layout_width="match_parent"
@@ -29,87 +25,149 @@
                 android:textSize="15sp"
                 android:textAlignment="center"
                 android:background="@color/light_green"
-                android:gravity="center"
-                />
+                android:gravity="center" />
 
-
+            <!-- Title and CardView for EC Chart -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="EC Chart"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:gravity="center" />
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 app:cardElevation="4dp"
                 app:cardCornerRadius="8dp">
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/chart_ec"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp" />
+            </androidx.cardview.widget.CardView>
 
+            <!-- Title and CardView for Moisture Chart -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Moisture Chart"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:gravity="center" />
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="8dp">
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/chart_moisture"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp" />
+            </androidx.cardview.widget.CardView>
+
+            <!-- Title and CardView for Nitrogen Chart -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nitrogen Chart"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:gravity="center" />
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="8dp">
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/chart_nitrogen"
                     android:layout_width="match_parent"
                     android:layout_height="400dp" />
             </androidx.cardview.widget.CardView>
 
-            <!-- CardView for Potassium Chart -->
+            <!-- Title and CardView for Potassium Chart -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Potassium Chart"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:gravity="center" />
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 app:cardElevation="4dp"
                 app:cardCornerRadius="8dp">
-
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/chart_potassium"
                     android:layout_width="match_parent"
                     android:layout_height="400dp" />
             </androidx.cardview.widget.CardView>
 
-            <!-- CardView for Phosphorous Chart -->
+            <!-- Title and CardView for Phosphorus Chart -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Phosphorus Chart"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:gravity="center" />
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 app:cardElevation="4dp"
                 app:cardCornerRadius="8dp">
-
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/chart_phosphorous"
                     android:layout_width="match_parent"
                     android:layout_height="400dp" />
             </androidx.cardview.widget.CardView>
 
-            <!-- CardView for Temperature Chart -->
+            <!-- Title and CardView for Temperature Chart -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Temperature Chart"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:gravity="center" />
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 app:cardElevation="4dp"
                 app:cardCornerRadius="8dp">
-
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/chart_temperature"
                     android:layout_width="match_parent"
                     android:layout_height="400dp" />
             </androidx.cardview.widget.CardView>
 
-            <!-- CardView for Humidity Chart -->
+            <!-- Title and CardView for pH Chart -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="pH Chart"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:gravity="center" />
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 app:cardElevation="4dp"
                 app:cardCornerRadius="8dp">
-
-                <com.github.mikephil.charting.charts.LineChart
-                    android:id="@+id/chart_humidity"
-                    android:layout_width="match_parent"
-                    android:layout_height="400dp" />
-            </androidx.cardview.widget.CardView>
-
-            <!-- CardView for pH Chart -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:cardElevation="4dp"
-                app:cardCornerRadius="8dp">
-
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/chart_ph"
                     android:layout_width="match_parent"

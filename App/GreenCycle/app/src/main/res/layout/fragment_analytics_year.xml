@@ -1,14 +1,217 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Analytics.Analytics_year">
+    tools:context=".Analytics.Analytics_year"
+    android:theme="@style/AppBackgroundColour">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btnPreviousYear"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@color/light_green"
+                android:src="@drawable/arrow_left" />
+
+            <TextView
+                android:id="@+id/YearDate"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@color/light_green"
+                android:gravity="center"
+                android:text="Year"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <ImageButton
+                android:id="@+id/btnNextYear"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@color/light_green"
+                android:src="@drawable/arrow_right" />
+
+        </LinearLayout>
+
+        <!-- Title and Bar Chart for EC Levels -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="EC Levels"
+            android:textSize="16sp"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black"
+            android:gravity="center" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:layout_marginTop="8dp">
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChart_ec"
+                android:layout_width="match_parent"
+                android:layout_height="400dp" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Title and Bar Chart for Moisture Levels -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Moisture Levels"
+            android:textSize="16sp"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black"
+            android:gravity="center" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:layout_marginTop="8dp">
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChart_moisture"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"/>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Title and Bar Chart for Nitrogen Levels -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nitrogen Levels"
+            android:textSize="16sp"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black"
+            android:gravity="center" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:layout_marginTop="8dp">
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChart_nitrogen"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"/>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Title and Bar Chart for Phosphorous Levels -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Phosphorous Levels"
+            android:textSize="16sp"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black"
+            android:gravity="center" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:layout_marginTop="8dp">
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChart_phosphorous"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"/>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Title and Bar Chart for Potassium Levels -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Potassium Levels"
+            android:textSize="16sp"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black"
+            android:gravity="center" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:layout_marginTop="8dp">
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChart_potassium"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"/>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Title and Bar Chart for Temperature Levels -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Temperature Levels"
+            android:textSize="16sp"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black"
+            android:gravity="center" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:layout_marginTop="8dp">
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChart_temperature"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"/>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Title and Bar Chart for pH Levels -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="pH Levels"
+            android:textSize="16sp"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/black"
+            android:gravity="center" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:layout_marginTop="8dp">
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChart_ph"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"/>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</ScrollView>

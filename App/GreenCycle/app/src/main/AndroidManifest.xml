@@ -25,6 +25,9 @@
         android:theme="@style/Theme.GreenCycle"
         tools:targetApi="31">
         <activity
+            android:name=".Analytics.DeleteDAOActivity"
+            android:exported="false" />
+        <activity
             android:name=".Settings.Settings"
             android:exported="false" />
         <activity
