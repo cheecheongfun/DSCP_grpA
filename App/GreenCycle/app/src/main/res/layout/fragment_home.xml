@@ -21,7 +21,7 @@
             android:id="@+id/helper"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true" />
 
         <!-- Welcome segment -->
 
@@ -45,6 +45,7 @@
             android:layout_alignBottom="@+id/profileImageView"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="-2dp"
+
             android:layout_marginEnd="59dp"
             android:gravity="center_vertical"
             android:text="Welcome, User"
@@ -52,7 +53,7 @@
             android:textStyle="bold" />
 
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/welcomeTab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -60,19 +61,94 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/rounded_corner_mid_green">
+            android:gravity="center"
+            android:background="@drawable/rounded_corner_mid_green"
+            android:orientation="vertical">
 
             <TextView
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="80dp"
-                android:layout_marginBottom="80dp"
-                android:background="#84a98c"
-                android:gravity="center"
-                android:text="Energy Generated"
-                android:textColor="@color/white" />
-        </RelativeLayout>
+                android:layout_marginTop="16dp"
+                android:background="@color/mid_green"
+                android:text="Next Day Predicted Energy"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="20dp"
+                android:background="@drawable/rounded_corner_mid_green"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/mid_green"
+                    android:gravity="center"
+                    android:elevation="4dp"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/SOE"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:text="SOE"
+                        android:textColor="@color/white"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/SOE_energy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:text="Energy Generated"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/mid_green"
+                    android:gravity="center"
+                    android:orientation="vertical"
+
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/Estate"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:text="Estate"
+                        android:textColor="@color/white"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/Estate_energy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:gravity="center"
+                        android:padding="8dp"
+
+                        android:text="Energy Generated"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/sectionVermi"
@@ -117,12 +193,12 @@
             android:layout_height="60dp"
             android:layout_below="@+id/sectionVermi"
             android:layout_alignTop="@+id/liveDataButton"
-            android:background="@drawable/home_page_buttons"
-            android:padding="10dp"
-            android:elevation="2dp"
-            android:scaleType="centerCrop"
             android:layout_centerHorizontal="true"
-            android:theme="@style/FeedingLogBtn"/>
+            android:background="@drawable/home_page_buttons"
+            android:elevation="2dp"
+            android:padding="10dp"
+            android:scaleType="centerCrop"
+            android:theme="@style/FeedingLogBtn" />
 
         <TextView
             android:id="@+id/feedingLogText"
@@ -142,11 +218,11 @@
             android:layout_height="60dp"
             android:layout_below="@+id/sectionVermi"
             android:layout_alignTop="@+id/liveDataButton"
-            android:layout_marginTop="0dp"
-            android:elevation="2dp"
-            android:layout_toEndOf="@+id/feedingLogButton"
             android:layout_marginStart="60dp"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@+id/feedingLogButton"
             android:background="@drawable/home_page_buttons"
+            android:elevation="2dp"
             android:padding="10dp"
             android:scaleType="centerCrop"
             android:theme="@style/AnalyticsBtn" />
@@ -194,8 +270,8 @@
             android:layout_below="@+id/feedingLogText"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="25dp"
-            android:elevation="2dp"
             android:background="@drawable/home_page_buttons"
+            android:elevation="2dp"
             android:padding="10dp"
             android:scaleType="centerCrop"
             android:theme="@style/CommunityBtn" />
@@ -208,7 +284,7 @@
             android:layout_alignStart="@+id/communityButton"
             android:layout_alignEnd="@+id/communityButton"
             android:gravity="center"
-            android:text="Forum"/>
+            android:text="Forum" />
 
 
         <ImageButton
@@ -218,8 +294,8 @@
             android:layout_alignTop="@+id/goalsButton"
             android:layout_alignEnd="@+id/analyticsButton"
             android:background="@drawable/home_page_buttons"
-            android:padding="10dp"
             android:elevation="2dp"
+            android:padding="10dp"
             android:scaleType="centerCrop"
             android:theme="@style/SoilBtn" />
 
@@ -244,8 +320,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/goalsButton"
             android:layout_alignStart="@+id/sectionVermi"
-            android:layout_marginTop="30dp"
             android:layout_alignEnd="@+id/sectionVermi"
+            android:layout_marginTop="30dp"
             android:text="Solar Panels"
             android:textSize="23dp"
             android:textStyle="bold" />
@@ -258,10 +334,10 @@
             android:layout_alignStart="@+id/goalsButton"
             android:layout_marginTop="15dp"
             android:background="@drawable/home_page_buttons"
-            android:padding="10dp"
             android:elevation="2dp"
+            android:padding="10dp"
             android:scaleType="centerCrop"
-            android:theme="@style/ForecastBtn"/>
+            android:theme="@style/ForecastBtn" />
 
         <TextView
             android:id="@+id/solarText"
@@ -277,11 +353,11 @@
             android:id="@+id/insightsBtn"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_centerHorizontal="true"
             android:layout_below="@+id/sectionSolar"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="15dp"
-            android:elevation="2dp"
             android:background="@drawable/home_page_buttons"
+            android:elevation="2dp"
             android:padding="10dp"
             android:scaleType="centerCrop"
             android:theme="@style/CommunityBtn" />
@@ -294,7 +370,7 @@
             android:layout_alignStart="@+id/communityButton"
             android:layout_alignEnd="@+id/communityButton"
             android:gravity="center"
-            android:text="Insights"/>
+            android:text="Insights" />
 
         <ImageButton
             android:id="@+id/settings"
@@ -311,10 +387,10 @@
             android:id="@+id/circleButton"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="16dp"
+            android:layout_alignParentBottom="true"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/baseline_change_circle_24"
             android:scaleType="fitCenter" />
 

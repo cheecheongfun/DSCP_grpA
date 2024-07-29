@@ -9,10 +9,14 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
@@ -23,9 +27,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.w3c.dom.Text;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.Forum.Forum;
+import sg.edu.np.mad.greencycle.SolarForecast.ForecastViewModel;
 import sg.edu.np.mad.greencycle.SolarInsight.Insight;
 import sg.edu.np.mad.greencycle.TankSelection.TankSelection;
 import sg.edu.np.mad.greencycle.NPKvalue.npk_value;
@@ -40,13 +51,19 @@ public class HomeFragment extends Fragment {
 
     ImageButton liveDataBtn, feedingLogBtn, analyticsBtn, goalsBtn, soilTypeBtn, solarForecastBtn, communityBtn, settingsBtn,ConversionBtn, insightsBtn;
     NumberPicker inputNo, inputUnit, outputUnit;
-    TextView username, outputNo;
+    TextView username, outputNo,soeenergy,estateenergy;
     String newInputNo, newInputUnit, newOutputUnit;
+    double soe,estate;
 
     User user;
 
     private DrawerLayout drawerLayout;
     private CircleImageView imageView;
+
+    private ForecastViewModel forecastViewModel;
+
+    private List<String> dates = new ArrayList<>();
+
 
     public HomeFragment() {
         // Constructor
@@ -78,6 +95,8 @@ public class HomeFragment extends Fragment {
 
         // Layout elements
         username = view.findViewById(R.id.userWelcome);
+        estateenergy = view.findViewById(R.id.Estate_energy);
+        soeenergy = view.findViewById(R.id.SOE_energy);
         liveDataBtn = view.findViewById(R.id.liveDataButton);
         feedingLogBtn = view.findViewById(R.id.feedingLogButton);
         analyticsBtn = view.findViewById(R.id.analyticsButton);
@@ -197,6 +216,18 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        // Initialize the ForecastViewModel
+        // Initialize the ForecastViewModel
+        forecastViewModel = new ViewModelProvider(this).get(ForecastViewModel.class);
+
+        // Start with fetching data for "SOE"
+        fetchAndObserveForecastData("SOE", () -> {
+            // Once "SOE" data has been processed, fetch data for "Estate"
+            fetchAndObserveForecastData("Estate", null);
+        });
+
+
+
         return view;
     }
 
@@ -244,7 +275,72 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    private void fetchAndObserveForecastData(String model, Runnable onComplete) {
+        double latitude = 1.3331;
+        double longitude = 103.7759;
+        String current = "temperature_2m,relative_humidity_2m,is_day,precipitation,cloud_cover";
+        String hourly = "temperature_2m,relative_humidity_2m,precipitation_probability,precipitation,cloud_cover";
+        String timezone = "Asia/Singapore";
+        int days = 1;
 
+        // Clear previous data for the new model
+        dates.clear();
+
+        // Fetch forecast data for the model
+        forecastViewModel.fetchForecastData(latitude, longitude, current, hourly, timezone, days);
+
+        // Observe the forecast data
+        forecastViewModel.getForecastLiveData().observe(getViewLifecycleOwner(), forecastResponse -> {
+            if (forecastResponse != null && forecastResponse.hourly != null) {
+                List<String> timeList = forecastResponse.hourly.time;
+                if (timeList != null && !timeList.isEmpty()) {
+                    // Split datetime strings into separate date and time lists
+                    for (String datetime : timeList) {
+                        String date = datetime.substring(0, datetime.indexOf('T'));
+                        if (!dates.contains(date)) {
+                            dates.add(date);
+                        }
+                    }
+
+                    // Update aggregated data with the latest model
+                    forecastViewModel.updateAggregatedData(dates, 0, model);
+                    Log.d("Model", "Model used: " + model);
+                }
+            } else {
+                Log.e("Model", "No forecast response available");
+            }
+        });
+
+        // Clear previous observers before adding a new one
+        forecastViewModel.getAggregatedDataLiveData().removeObservers(getViewLifecycleOwner());
+
+        // Observe the AggregatedData LiveData
+        forecastViewModel.getAggregatedDataLiveData().observe(getViewLifecycleOwner(), aggregatedData -> {
+            if (aggregatedData != null) {
+                // Get the day1Output
+                double day1Output = aggregatedData.day1Output;
+                if ("SOE".equals(model)) {
+                    // Update SOE energy
+                    Log.d("EnergyPredictionActivity", "Day 1 Predicted Energy (SOE): " + day1Output);
+                    DecimalFormat df = new DecimalFormat("#.00");
+                    String formattedOutput = df.format(day1Output);
+                    soeenergy.setText(formattedOutput+ " kWh");
+                } else if ("Estate".equals(model)) {
+                    // Update Estate energy
+                    Log.d("EnergyPredictionActivity", "Day 1 Predicted Energy (Estate): " + day1Output);
+                    DecimalFormat df = new DecimalFormat("#.00");
+                    String formattedOutput = df.format(day1Output);
+                    estateenergy.setText(formattedOutput + " kWh");
+                }
+                // Call the onComplete callback if provided
+                if (onComplete != null) {
+                    onComplete.run();
+                }
+            } else {
+                Log.e("EnergyPredictionActivity", "AggregatedData is null");
+            }
+        });
+    }
 
 
 }
