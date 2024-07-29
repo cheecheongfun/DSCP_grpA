@@ -410,7 +410,7 @@ def preprocess_and_append(new_file):
     # combine and upload
     df_combined = pd.concat([df_collated, df_new], ignore_index=True)
     df_combined.to_excel(collated_file, index=False)
-    upload_blob('estate_soe_combined_api_latest.xlsx', collated_file)
+    upload_blob('estate_soe_combined_api_latest_test.xlsx', collated_file)
 
     try:
         collated_file = download_blob2('soe_combined_api_latest.xlsx')
@@ -427,7 +427,7 @@ def preprocess_and_append(new_file):
     
     df_combined = pd.concat([df_collated, df_new], ignore_index=True)
     df_combined.to_excel(collated_file, index=False)
-    upload_blob('soe_combined_api_latest.xlsx', collated_file)
+    upload_blob('soe_combined_api_latest_test.xlsx', collated_file)
 
 if __name__ == "__main__":
     import sys
