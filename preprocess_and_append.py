@@ -391,7 +391,7 @@ def preprocess_and_append(new_file):
         collated_file=download_blob2('estate_soe_combined_api_latest.xlsx')
     except FileNotFoundError as e:
         print(e)
-        return
+        quit()
     df_collated = pd.read_excel(collated_file)
     
     if 'DPM' in new_file:
@@ -415,7 +415,7 @@ def preprocess_and_append(new_file):
     try:
         collated_file = download_blob2('soe_combined_api_latest.xlsx')
     except FileNotFoundError as e:
-        print(e)
+        quit()
         return
     df_collated = pd.read_excel(collated_file)
     if new_file.endswith('01'):
