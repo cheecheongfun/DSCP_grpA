@@ -25,12 +25,12 @@ def upload_blob(blob_name, file_path):
 def check_and_append(new_file):
     if 'estate_soe_combined_api_latest' in new_file:
         df_new = pd.read_excel(new_file)
-        temp = df_new.copy()
+        temp = download_blob('estate_soe_combined_api_latest.xlsx')
         df_new.drop_duplicates(inplace=True)
         upload_blob('estate_soe_combined_api_latest.xlsx',temp)
     else:
         df_new = pd.read_excel(new_file)
-        temp = df_new.copy()
+        temp = download_blob('soe_combined_api_latest.xlsx')
         df_new.drop_duplicates(inplace=True)
         upload_blob('soe_combined_api_latest.xlsx',temp)
 
