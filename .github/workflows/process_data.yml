@@ -36,18 +36,23 @@ jobs:
       id: check_filename
       run: |
         if [[ "$FILENAME" == "estate_soe_combined_api_latest.xlsx" || "$FILENAME" == *"soe_combined_api_latest.xlsx"* ]]; then
-          echo "SKIP_WORKFLOW=true" >> $GITHUB_ENV
+          echo "RUN_CHECK_DUPLICATES=true" >> $GITHUB_ENV
         else
-          echo "SKIP_WORKFLOW=false" >> $GITHUB_ENV
+          echo "RUN_CHECK_DUPLICATES=false" >> $GITHUB_ENV
         fi
 
-    - name: Skip workflow if filename matches estate_soe_combined_api_latest.xlsx or soe_combined_api_latest.xlsx
-      if: env.SKIP_WORKFLOW == 'true'
+    - name: Run check_duplicates_and_append.py if filename matches estate_soe_combined_api_latest.xlsx or soe_combined_api_latest.xlsx
+      if: env.RUN_CHECK_DUPLICATES == 'true'
+      env:
+        AZURE_STORAGE_ACCOUNT_NAME: ${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}
+        AZURE_STORAGE_ACCOUNT_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
+        CONTAINER_NAME2: ${{ secrets.CONTAINER_NAME2}}
+        FILENAME: ${{ env.FILENAME }}
       run: |
-        echo "The blob URL contains either estate_soe_combined_api_latest.xlsx or soe_combined_api_latest.xlsx. Skipping workflow."
+        python check_duplicates_and_append.py "$FILENAME"
 
     - name: Download new data file
-      if: env.SKIP_WORKFLOW == 'false'
+      if: env.RUN_CHECK_DUPLICATES == 'false'
       env:
         BLOB_URL: ${{ github.event.inputs.blob_url }}
         FILENAME: ${{ env.FILENAME }}
@@ -55,7 +60,7 @@ jobs:
         wget -O "$FILENAME" "${{ env.BLOB_URL }}"
 
     - name: Run preprocessing script
-      if: env.SKIP_WORKFLOW == 'false'
+      if: env.RUN_CHECK_DUPLICATES == 'false'
       env:
         AZURE_STORAGE_ACCOUNT_NAME: ${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}
         AZURE_STORAGE_ACCOUNT_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
