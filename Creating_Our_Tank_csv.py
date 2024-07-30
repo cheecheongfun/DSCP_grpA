@@ -11,6 +11,7 @@ pg_conn = psycopg2.connect(
 )
 cursor = pg_conn.cursor()
 
+
 # Query to join the tables
 query = """
 SELECT
@@ -29,7 +30,7 @@ JOIN
 JOIN
     devices d ON d.deviceid = dd.deviceid
 WHERE
-    dd.deviceid IN (10,9,8,7)
+    dd.deviceid IN (10,9,8,7) 
 """
  
 cursor.execute(query)
@@ -53,9 +54,17 @@ pivot_df = combined_df.pivot_table(
 pivot_df.columns.name = None
 pivot_df.columns = [str(col) for col in pivot_df.columns]
 
+# Function to replace values outside range with the previous valid value within range
+def replace_out_of_range(series, min_val, max_val):
+    valid_series = series.copy()
+    mask = (series < min_val) | (series > max_val)
+    valid_series[mask] = pd.NA  # Replace out-of-range values with NA
+    valid_series = valid_series.ffill().fillna(0)  # Forward fill NA values, then fill remaining NAs with 0
+    return valid_series
 
 # Convert 'devicetimestamp' to a datetime format and add 8 hours
 pivot_df['devicetimestamp'] = pd.to_datetime(pivot_df['devicetimestamp']) + pd.DateOffset(hours=8)
+pivot_df['hourly_interval'] = pd.to_datetime(pivot_df['hourly_interval']) + pd.DateOffset(hours=8)
 
 # Convert 'devicetimestamp' to a human-readable format
 pivot_df['devicetimestamp'] = pivot_df['devicetimestamp'].dt.strftime('%Y-%m-%d %H:%M:%S')
@@ -102,9 +111,13 @@ grouped_df = grouped_df.groupby(['devicename', 'deviceid', 'hourly_interval']).m
 
 # Split data by devicename and save each to a separate CSV file
 for devicename, group_df in grouped_df.groupby('devicename'):
-    filename = f"{devicename}_data.csv"
+    filename = f"{devicename}_correctcombined_data.csv"
     group_df.to_csv(filename, index=False)
     print(f"Saved {filename}")
+
+
+
+
 
 
 
