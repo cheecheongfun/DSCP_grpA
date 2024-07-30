@@ -5,6 +5,6 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface AzureStorageService {
-    @GET("datadump/final_data/estate_soe_combined_api_latest.xlsx")
+    @GET("finaldata/estate_soe_combined_api_latest.xlsx")
     Call<ResponseBody> downloadBlob();
 }
