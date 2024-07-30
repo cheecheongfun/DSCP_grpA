@@ -15,7 +15,7 @@ import java.util.List;
 
 public class PostForecastData {
 
-    private static final String URL = "https://deploying-model-to-fb.azurewebsites.net/predict";
+    private static final String URL = "https://deploymodel-bpccapb3a8h8hkhh.southeastasia-01.azurewebsites.net/predict";
     private OkHttpClient client;
 
     public PostForecastData() {
@@ -27,7 +27,7 @@ public class PostForecastData {
         void onFailure(Exception e);
     }
 
-    public void postForecastData(double[] forecastedHumidity, double[] forecastedAirTemp, double[] forecastedRainFall, ModelCallback callback) {
+    public void postForecastData(String modelId, double[] forecastedHumidity, double[] forecastedAirTemp, double[] forecastedRainFall, ModelCallback callback) {
         JSONObject jsonPayload = new JSONObject();
 
         LocalDate today = LocalDate.now();
@@ -38,6 +38,7 @@ public class PostForecastData {
         }
 
         try {
+            jsonPayload.put("model_id",modelId);
             jsonPayload.put("humidity", new JSONArray(forecastedHumidity));
             jsonPayload.put("air_temp", new JSONArray(forecastedAirTemp));
             jsonPayload.put("rain_fall", new JSONArray(forecastedRainFall));
