@@ -52,16 +52,6 @@ public class Forecast extends AppCompatActivity {
         // Initialize the ViewModel
         viewModel = new ViewModelProvider(this).get(DataViewModel.class);
 
-        // Observe data changes
-        viewModel.getDataPoints().observe(this, dataPoints -> {
-            for (AzureStorageHelper.DataPoint dataPoint : dataPoints) {
-                Log.d("Test Azure Storage", "Date: " + dataPoint.getDate() +
-                        ", Humidity: " + dataPoint.getHumidity() +
-                        ", Air Temp: " + dataPoint.getAirTemp() +
-                        ", Rain Fall: " + dataPoint.getRainFall());
-            }
-        });
-
         // Load data
         viewModel.loadData();
     }

@@ -156,15 +156,15 @@ def preprocess_estate_dpm(new_file):
     df_new['PR %'] = np.where(df_new['PR %']==0,80,df_new['PR %'])
     df_new['PR %'] = np.where(df_new['PR %']<70,70,df_new['PR %'])
     df_new.drop(['Energy Generation','Expected Value kWh'],axis=1,inplace=True)
-    # winsorizer = Winsorizer(capping_method='quantiles',tail='right',fold=0.05,variables='Energy kWh')
-    # winsorizer.fit(df_new)
-    # df_new = winsorizer.transform(df_new)
-    # winsorizer = Winsorizer(capping_method='quantiles',tail='left',fold=0.01,variables='Energy kWh')
-    # winsorizer.fit(df_new)
-    # df_new = winsorizer.transform(df_new)
-    # winsorizer = Winsorizer(capping_method='quantiles',tail='left',fold=0.05,variables='IRR Value W/m²')
-    # winsorizer.fit(df_new)
-    # df_new = winsorizer.transform(df_new)
+    winsorizer = Winsorizer(capping_method='quantiles',tail='right',fold=0.05,variables='Energy kWh')
+    winsorizer.fit(df_new)
+    df_new = winsorizer.transform(df_new)
+    winsorizer = Winsorizer(capping_method='quantiles',tail='left',fold=0.01,variables='Energy kWh')
+    winsorizer.fit(df_new)
+    df_new = winsorizer.transform(df_new)
+    winsorizer = Winsorizer(capping_method='quantiles',tail='left',fold=0.05,variables='IRR Value W/m²')
+    winsorizer.fit(df_new)
+    df_new = winsorizer.transform(df_new)
     df_new.rename(columns={'Date and Time':'Date'},inplace=True)
     df_new['Date'] = pd.to_datetime(df_new['Date'])
     df_new['Month']=df_new['Date'].dt.month
@@ -391,7 +391,7 @@ def preprocess_and_append(new_file):
         collated_file=download_blob2('estate_soe_combined_api_latest.xlsx')
     except FileNotFoundError as e:
         print(e)
-        quit()
+        return
     df_collated = pd.read_excel(collated_file)
     
     if 'DPM' in new_file:
@@ -410,12 +410,12 @@ def preprocess_and_append(new_file):
     # combine and upload
     df_combined = pd.concat([df_collated, df_new], ignore_index=True)
     df_combined.to_excel(collated_file, index=False)
-    upload_blob('estate_soe_combined_api_latest_test.xlsx', collated_file)
+    upload_blob('estate_soe_combined_api_latest.xlsx', collated_file)
 
     try:
         collated_file = download_blob2('soe_combined_api_latest.xlsx')
     except FileNotFoundError as e:
-        quit()
+        print(e)
         return
     df_collated = pd.read_excel(collated_file)
     if new_file.endswith('01'):
@@ -427,7 +427,7 @@ def preprocess_and_append(new_file):
     
     df_combined = pd.concat([df_collated, df_new], ignore_index=True)
     df_combined.to_excel(collated_file, index=False)
-    upload_blob('soe_combined_api_latest_test.xlsx', collated_file)
+    upload_blob('soe_combined_api_latest.xlsx', collated_file)
 
 if __name__ == "__main__":
     import sys
