@@ -120,9 +120,9 @@
             android:layout_marginTop="50dp"
             android:layout_marginBottom="50dp"
             android:layout_marginLeft="30dp"
-            android:backgroundTint="@color/light_green"
+            android:backgroundTint="@color/mid_green"
             android:text="Save Goal"
-            android:textColor="@color/black" />
+            android:textColor="@color/white" />
 
         <!-- Your existing views here -->
 
