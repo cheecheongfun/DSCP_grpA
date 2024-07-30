@@ -342,6 +342,7 @@ public class Feeding extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // deleting log
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 if (logDelete.getText().equals("Delete")){
                     confirm.setText("Add log");
                     confirm.setVisibility(View.VISIBLE);
@@ -349,13 +350,11 @@ public class Feeding extends AppCompatActivity {
                     toggleViewButton.setVisibility(View.VISIBLE);
                     ArrayList<Log> logList = tank.getFeedingLog();
                     for (Log log : logList){
-                        if (log.getLogDate().equals(selectedDate)){
+                        if (log.getLogDate().equals(formatter.format(selectedDate))){
                             selectedLog = log;
                         }
                     }
                     logList.remove(selectedLog);
-                    android.util.Log.e("logDelete", "selectedLog: " + String.valueOf(selectedLog != null));
-                    android.util.Log.e("logDelete", "LogList: " + logList.size());
                     database = FirebaseDatabase.getInstance();
                     reference = database.getReference("users");
 
