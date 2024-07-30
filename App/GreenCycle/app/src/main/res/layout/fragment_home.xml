@@ -65,43 +65,63 @@
             android:background="@drawable/rounded_corner_mid_green"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/title"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:background="@color/mid_green"
-                android:text="Next Day Predicted Energy"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/mid_green"
+                    android:text="Energy Prediction Location"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="@color/mid_green"
+                    android:src="@drawable/baseline_energy_savings_leaf_24" />
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="20dp"
-                android:background="@drawable/rounded_corner_mid_green"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/top_rounded_dark_beige"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="10dp"
                     android:layout_weight="1"
                     android:background="@color/mid_green"
                     android:gravity="center"
-                    android:elevation="4dp"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/SOE"
-                        android:layout_width="100dp"
+                        android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:background="@color/transparent"
                         android:gravity="center"
                         android:padding="8dp"
                         android:text="SOE"
                         android:textColor="@color/white"
-                        android:textSize="24sp" />
+                        android:textSize="40sp" />
 
                     <TextView
                         android:id="@+id/SOE_energy"
@@ -110,6 +130,7 @@
                         android:background="@color/transparent"
                         android:gravity="center"
                         android:padding="8dp"
+                        android:textSize="30sp"
                         android:text="Energy Generated"
                         android:textColor="@color/white" />
                 </LinearLayout>
@@ -117,23 +138,24 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:background="@color/mid_green"
                     android:gravity="center"
-                    android:orientation="vertical"
-
-                    android:padding="16dp">
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/Estate"
-                        android:layout_width="100dp"
+                        android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:background="@color/transparent"
                         android:gravity="center"
                         android:padding="8dp"
                         android:text="Estate"
                         android:textColor="@color/white"
-                        android:textSize="24sp" />
+                        android:textSize="40sp" />
 
                     <TextView
                         android:id="@+id/Estate_energy"
@@ -142,12 +164,13 @@
                         android:background="@color/transparent"
                         android:gravity="center"
                         android:padding="8dp"
-
+                        android:textSize="30sp"
                         android:text="Energy Generated"
                         android:textColor="@color/white" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
 
 
         <TextView
