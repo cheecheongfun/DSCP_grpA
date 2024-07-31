@@ -1,5 +1,7 @@
 package sg.edu.np.mad.greencycle.SolarForecast;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -17,8 +19,13 @@ public class DataViewModel extends ViewModel {
     public void loadData() {
         Executors.newSingleThreadExecutor().execute(() -> {
             AzureStorageHelper azureStorageHelper = new AzureStorageHelper();
-            List<AzureStorageHelper.DataPoint> points = azureStorageHelper.downloadAndProcessBlob();
-            dataPoints.postValue(points);
+            azureStorageHelper.downloadAndProcessBlobAsync(points -> {
+                if (points == null || points.isEmpty()) {
+                    Log.e("DataViewModel", "No data points retrieved.");
+                } else {
+                    dataPoints.postValue(points);
+                }
+            });
         });
     }
 }

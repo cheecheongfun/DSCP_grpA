@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
@@ -24,7 +25,6 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -32,9 +32,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import sg.edu.np.mad.greencycle.R;
 
@@ -47,11 +45,11 @@ public class ForecastWeatherFragment extends Fragment {
     private Spinner spinnerDate;
     private Spinner spinnerModel;
     private BarChart barChart;
+    private LineChart lineChart;
     private List<String> dates = new ArrayList<>();
     private String selectedModel;
     private Button viewOneMonthForecastButton;
-
-
+    private boolean isOneMonthForecast = false;
 
     @Nullable
     @Override
@@ -63,12 +61,20 @@ public class ForecastWeatherFragment extends Fragment {
         humidityInfo = view.findViewById(R.id.humidityInfo);
         precipitationInfo = view.findViewById(R.id.precipitationInfo);
         barChart = view.findViewById(R.id.barChart);
+        lineChart = view.findViewById(R.id.lineChart);
         viewOneMonthForecastButton = view.findViewById(R.id.viewOneMonthForecastButton);
-
 
         forecastViewModel = new ViewModelProvider(requireActivity()).get(ForecastViewModel.class);
         setupModelSpinner();
         fetchData();
+
+        viewOneMonthForecastButton.setOnClickListener(v -> {
+            if (isOneMonthForecast) {
+                viewThreeDayForecast();
+            } else {
+                viewOneMonthForecast();
+            }
+        });
 
         return view;
     }
@@ -102,8 +108,7 @@ public class ForecastWeatherFragment extends Fragment {
         });
     }
 
-
-    public void fetchData() {
+    private void fetchData() {
         double latitude = 1.3331;
         double longitude = 103.7759;
         String current = "temperature_2m,relative_humidity_2m,is_day,precipitation,cloud_cover";
@@ -176,9 +181,12 @@ public class ForecastWeatherFragment extends Fragment {
         humidityInfo.setText(R.string.no_data_available);
         precipitationInfo.setText(R.string.no_data_available);
         barChart.clear();
+        lineChart.clear();
     }
+
     private void updateBarChart(ForecastViewModel.AggregatedData data) {
-        barChart.clear();
+        barChart.setVisibility(View.VISIBLE);
+        lineChart.setVisibility(View.GONE);
 
         TextView totalEnergyTextView = getView().findViewById(R.id.totalEnergyTextView);
 
@@ -343,8 +351,97 @@ public class ForecastWeatherFragment extends Fragment {
         barChart.setDescription(description);
     }
 
+    private void viewOneMonthForecast() {
+        String modelId = "model_1";
+        forecastViewModel.fetchOneMonthForecastData(modelId, new PostForecastData.ModelCallback() {
+            @Override
+            public void onSuccess(List<Double> modelOutput) {
+                Log.d("ForecastWeatherFragment", "One month forecast data: " + modelOutput.toString());
+                requireActivity().runOnUiThread(() -> {
+                    updateLineChart(modelOutput);
+                    viewOneMonthForecastButton.setText("View 3-Day Energy Forecast");
+                    isOneMonthForecast = true;
+                });
+            }
 
+            @Override
+            public void onFailure(Exception e) {
+                Log.e("ForecastWeatherFragment", "Error fetching one month forecast data", e);
+                // Handle the error scenario
+            }
+        });
+    }
 
+    private void viewThreeDayForecast() {
+        // Switch back to 3-day forecast view
+        isOneMonthForecast = false;
+        viewOneMonthForecastButton.setText("View 1 Month Energy Forecast");
+        updateAggregatedData();
+    }
+
+    private void updateLineChart(List<Double> modelOutput) {
+        lineChart.setVisibility(View.VISIBLE);
+        barChart.setVisibility(View.GONE);
+
+        List<Entry> entries = new ArrayList<>();
+        float totalEnergy = 0;
+        for (int i = 0; i < modelOutput.size(); i++) {
+            float value = modelOutput.get(i).floatValue();
+            entries.add(new Entry(i, value));
+            totalEnergy += value;
+        }
+
+        LineDataSet dataSet = new LineDataSet(entries, "One Month Forecast");
+        dataSet.setColor(android.graphics.Color.BLUE);
+        dataSet.setValueTextColor(android.graphics.Color.BLACK);
+        dataSet.setLineWidth(2f);
+        dataSet.setDrawCircles(true);
+        dataSet.setDrawCircleHole(false);
+        dataSet.setCircleColor(android.graphics.Color.BLUE);
+
+        LineData lineData = new LineData(dataSet);
+        lineChart.setData(lineData);
+
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGranularity(1f);
+        xAxis.setGranularityEnabled(true);
+        xAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getAxisLabel(float value, AxisBase axis) {
+                int index = (int) value;
+                if (index >= 0 && index < dates.size()) {
+                    return dates.get(index);
+                } else {
+                    return "";
+                }
+            }
+        });
+
+        YAxis leftAxis = lineChart.getAxisLeft();
+        leftAxis.setGranularity(1f);
+        leftAxis.setGranularityEnabled(true);
+        leftAxis.setAxisMinimum(0f);
+
+        YAxis rightAxis = lineChart.getAxisRight();
+        rightAxis.setEnabled(false);
+
+        lineChart.getDescription().setEnabled(false);
+
+        // Enable dragging but disable scaling
+        lineChart.setDragEnabled(true);
+        lineChart.setScaleEnabled(false);
+        lineChart.setPinchZoom(false);
+        lineChart.setDoubleTapToZoomEnabled(false);
+
+        // Set the MarkerView
+        DateMarkerView markerView = new DateMarkerView(getContext(), R.layout.marker_view, dates);
+        lineChart.setMarker(markerView);
+
+        // Update total energy text view for one month
+        TextView totalEnergyTextView = getView().findViewById(R.id.totalEnergyTextView);
+        totalEnergyTextView.setText("Total 1-Month Energy Generated: " + Math.round(totalEnergy) + " kWh");
+
+        lineChart.invalidate();
+    }
 }
-
-

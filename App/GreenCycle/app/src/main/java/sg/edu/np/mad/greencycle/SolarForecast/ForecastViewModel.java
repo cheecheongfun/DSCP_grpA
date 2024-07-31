@@ -6,7 +6,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +27,11 @@ public class ForecastViewModel extends ViewModel {
     private Map<String, double[]> precipProbData = new HashMap<>();
     private Map<String, double[]> precipitationData = new HashMap<>();
     private Map<String, double[]> cloudCoverData = new HashMap<>();
+    private AzureStorageHelper azureStorageHelper;
+
+    public ForecastViewModel() {
+        azureStorageHelper = new AzureStorageHelper();
+    }
 
     // Arrays to store the averages for the three days
     private double[] avgHumidity = new double[3];
@@ -122,6 +131,19 @@ public class ForecastViewModel extends ViewModel {
         cloudCoverData.forEach((date, data) -> Log.d("CloudCoverData", date + ": " + arrayToString(data)));
     }
 
+    public void postForecastData(String modelId, double[] humidity, double[] airTemp, double[] rainFall, String[] dates, PostForecastData.ModelCallback callback) {
+        // Log the data
+        Log.d("ForecastViewModel", "Model ID: " + modelId);
+        Log.d("ForecastViewModel", "Humidity: " + Arrays.toString(humidity));
+        Log.d("ForecastViewModel", "AirTemp: " + Arrays.toString(airTemp));
+        Log.d("ForecastViewModel", "RainFall: " + Arrays.toString(rainFall));
+        Log.d("ForecastViewModel", "Dates: " + Arrays.toString(dates));
+
+        // Call the model and handle the response
+        PostForecastData apiClient = new PostForecastData();
+        apiClient.postForecastData(modelId, humidity, airTemp, rainFall, dates, callback);
+    }
+
     public void updateAggregatedData(List<String> dates, int selectedDatePosition, String selectedModel) {
         Log.d("ForecastViewModel", "Updating aggregated data for selected model: " + selectedModel);
 
@@ -176,7 +198,7 @@ public class ForecastViewModel extends ViewModel {
         Log.d("ForecastViewModel", "Fetching data for model: " + modelName);
 
         PostForecastData apiClient = new PostForecastData();
-        apiClient.postForecastData(modelName, avgHumidity, avgTemperature, avgPrecipitation, new PostForecastData.ModelCallback() {
+        apiClient.postForecastData(modelName, avgHumidity, avgTemperature, avgPrecipitation, new String[3], new PostForecastData.ModelCallback() {
             @Override
             public void onSuccess(List<Double> modelOutput) {
                 Log.d("ForecastViewModel", "Model data fetch successful for " + modelName);
@@ -266,6 +288,38 @@ public class ForecastViewModel extends ViewModel {
         sb.append("]");
         return sb.toString();
     }
+
+    public void fetchOneMonthForecastData(String modelId, PostForecastData.ModelCallback callback) {
+        azureStorageHelper.downloadAndProcessBlobAsync(dataPoints -> {
+            if (dataPoints == null || dataPoints.isEmpty()) {
+                Log.e("ForecastViewModel", "No data points retrieved for one-month forecast.");
+                return;
+            }
+
+            // Shuffle and get random data points for the next 30 days
+            Collections.shuffle(dataPoints);
+            List<AzureStorageHelper.DataPoint> randomDataPoints = dataPoints.subList(0, Math.min(30, dataPoints.size()));
+
+            double[] humidity = new double[30];
+            double[] airTemp = new double[30];
+            double[] rainFall = new double[30];
+            String[] dates = new String[30];
+
+            LocalDate today = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+            for (int i = 0; i < 30; i++) {
+                humidity[i] = randomDataPoints.get(i).getHumidity();
+                airTemp[i] = randomDataPoints.get(i).getAirTemp();
+                rainFall[i] = randomDataPoints.get(i).getRainFall();
+                dates[i] = today.plusDays(i).format(formatter);
+            }
+
+            postForecastData(modelId, humidity, airTemp, rainFall, dates, callback);
+        });
+    }
+
+
 
     public static class AggregatedData {
         public double avgTemperatureDay1;

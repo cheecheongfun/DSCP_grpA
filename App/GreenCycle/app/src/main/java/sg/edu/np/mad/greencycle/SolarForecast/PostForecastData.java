@@ -27,18 +27,11 @@ public class PostForecastData {
         void onFailure(Exception e);
     }
 
-    public void postForecastData(String modelId, double[] forecastedHumidity, double[] forecastedAirTemp, double[] forecastedRainFall, ModelCallback callback) {
+    public void postForecastData(String modelId, double[] forecastedHumidity, double[] forecastedAirTemp, double[] forecastedRainFall, String[] forecastedDates, ModelCallback callback) {
         JSONObject jsonPayload = new JSONObject();
 
-        LocalDate today = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        ArrayList<String> forecastedDates = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            forecastedDates.add(today.plusDays(i).format(formatter));
-        }
-
         try {
-            jsonPayload.put("model_id",modelId);
+            jsonPayload.put("model_id", modelId);
             jsonPayload.put("humidity", new JSONArray(forecastedHumidity));
             jsonPayload.put("air_temp", new JSONArray(forecastedAirTemp));
             jsonPayload.put("rain_fall", new JSONArray(forecastedRainFall));
@@ -70,10 +63,10 @@ public class PostForecastData {
                 if (response.isSuccessful()) {
                     String responseData = response.body().string();
                     try {
-                        JSONArray forecastValuesNext3Days = new JSONArray(responseData);
+                        JSONArray forecastValues = new JSONArray(responseData);
                         List<Double> output = new ArrayList<>();
-                        for (int i = 0; i < forecastValuesNext3Days.length(); i++) {
-                            output.add(forecastValuesNext3Days.getDouble(i));
+                        for (int i = 0; i < forecastValues.length(); i++) {
+                            output.add(forecastValues.getDouble(i));
                         }
                         callback.onSuccess(output);
                         Log.d("PostForecastData", "Model output: " + output.toString());
@@ -88,5 +81,4 @@ public class PostForecastData {
             }
         });
     }
-
 }

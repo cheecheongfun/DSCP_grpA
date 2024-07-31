@@ -113,7 +113,7 @@ public class CardPagerAdapter extends PagerAdapter {
                     }
                     if (dates.size() >= 1) {
                         // Fetch model outputs after forecast data is fetched
-                        forecastViewModel.updateAggregatedData(dates, 0, "SOE");
+//                        forecastViewModel.updateAggregatedData(dates, 0, "SOE");
                     } else {
                         Log.e("CardPagerAdapter", "Not enough dates available in the forecast data.");
                     }

@@ -5,6 +5,8 @@ import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.provider.Settings;
 import android.util.Log;
 
 import java.util.Calendar;
@@ -75,6 +77,15 @@ public class AnomalyDetectionJobService extends JobService {
 
 
     private void sendNotification() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (!getSystemService(AlarmManager.class).canScheduleExactAlarms()) {
+                Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                return;
+            }
+        }
+
         // Implement your notification logic here
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, NotificationReceiver.class);
@@ -94,4 +105,4 @@ public class AnomalyDetectionJobService extends JobService {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
     }
-}// test
+}

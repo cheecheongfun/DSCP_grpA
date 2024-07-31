@@ -17,12 +17,17 @@
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/barChart"
-        android:layout_width="372dp"
-        android:layout_height="453dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp" />
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_margin="16dp"
+        android:visibility="visible" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/lineChart"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_margin="16dp"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/viewOneMonthForecastButton"
@@ -50,8 +55,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp" />
-
-    <!-- New Button for Viewing 1 Month Energy Forecast -->
 
     <androidx.cardview.widget.CardView
         android:id="@+id/temperatureCard"
