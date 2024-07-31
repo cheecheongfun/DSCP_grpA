@@ -1,4 +1,4 @@
-package sg.edu.np.mad.greencycle.SolarForecast;
+package sg.edu.np.mad.greencycle.Classes;
 
 import android.util.Log;
 
@@ -13,40 +13,37 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostForecastData {
+public class PostAnomalyData {
 
     private static final String URL = "https://deploymodel-bpccapb3a8h8hkhh.southeastasia-01.azurewebsites.net/predict";
     private OkHttpClient client;
 
-    public PostForecastData() {
+    public PostAnomalyData() {
         client = new OkHttpClient();
     }
 
     public interface ModelCallback {
-        void onSuccess(List<Double> modelOutput);
+        void onSuccess(List<String> modelOutput);
         void onFailure(Exception e);
     }
 
-    public void postForecastData(String modelId, double[] forecastedHumidity, double[] forecastedAirTemp, double[] forecastedRainFall, ModelCallback callback) {
+    public void postAnomalyData(double[] energy, int[] month, int[] day, double[] humidity, double[] airTemp, double[] rainfall,ModelCallback callback) {
         JSONObject jsonPayload = new JSONObject();
 
-        LocalDate today = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        ArrayList<String> forecastedDates = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            forecastedDates.add(today.plusDays(i).format(formatter));
-        }
-
         try {
-            jsonPayload.put("model_id",modelId);
-            jsonPayload.put("humidity", new JSONArray(forecastedHumidity));
-            jsonPayload.put("air_temp", new JSONArray(forecastedAirTemp));
-            jsonPayload.put("rain_fall", new JSONArray(forecastedRainFall));
-            jsonPayload.put("dates", new JSONArray(forecastedDates));
+            jsonPayload.put("model_id", "model_5");
+            jsonPayload.put("energy kwh", new JSONArray(energy));
+            jsonPayload.put("month", new JSONArray(month));
+            jsonPayload.put("day", new JSONArray(day));
+            jsonPayload.put("humidity", new JSONArray(humidity));
+            jsonPayload.put("air_temp", new JSONArray(airTemp));
+            jsonPayload.put("rain_fall", new JSONArray(rainfall));
         } catch (JSONException e) {
             callback.onFailure(e);
             return;
         }
+
+
 
         RequestBody body = RequestBody.create(
                 jsonPayload.toString(),
@@ -62,7 +59,7 @@ public class PostForecastData {
             @Override
             public void onFailure(Call call, IOException e) {
                 callback.onFailure(e);
-                Log.e("PostForecastData", "Request failed", e);
+                Log.e("PostAnomalyData", "Request failed", e);
             }
 
             @Override
@@ -70,23 +67,22 @@ public class PostForecastData {
                 if (response.isSuccessful()) {
                     String responseData = response.body().string();
                     try {
-                        JSONArray forecastValuesNext3Days = new JSONArray(responseData);
-                        List<Double> output = new ArrayList<>();
-                        for (int i = 0; i < forecastValuesNext3Days.length(); i++) {
-                            output.add(forecastValuesNext3Days.getDouble(i));
+                        JSONArray valuesPast5days = new JSONArray(responseData);
+                        List<String> output = new ArrayList<>();
+                        for (int i = 0; i < valuesPast5days.length(); i++) {
+                            output.add(valuesPast5days.getString(i));
                         }
                         callback.onSuccess(output);
-                        Log.d("PostForecastData", "Model output: " + output.toString());
+                        Log.d("PostAnomalyData", "Model output: " + output);
                     } catch (JSONException e) {
                         callback.onFailure(e);
-                        Log.e("PostForecastData", "Failed to parse response", e);
+                        Log.e("PostAnomalyData", "Failed to parse response", e);
                     }
                 } else {
                     callback.onFailure(new IOException("Request failed with code: " + response.code() + " and message: " + response.message()));
-                    Log.e("PostForecastData", "Request failed with code: " + response.code() + " and message: " + response.message());
+                    Log.e("PostAnomalyData", "Request failed with code: " + response.code() + " and message: " + response.message());
                 }
             }
         });
     }
-
 }

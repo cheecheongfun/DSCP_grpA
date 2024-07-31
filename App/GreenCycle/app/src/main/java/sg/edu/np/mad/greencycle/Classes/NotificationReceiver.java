@@ -26,8 +26,8 @@ public class NotificationReceiver extends BroadcastReceiver {
         if (notificationType != null) {
             if (notificationType.equals("feedingReminder")) {
                 sendFeedingReminderNotification(context, scheduleName);
-            } else if (notificationType.equals("otherPurpose")) {
-                sendOtherNotification(context, scheduleName);
+            } else if (notificationType.equals("lowEnergy")) {
+                lowEnergy(context);
             }
         }
     }
@@ -52,15 +52,15 @@ public class NotificationReceiver extends BroadcastReceiver {
         notificationManager.notify(scheduleName.hashCode(), builder.build());
     }
 
-    private void sendOtherNotification(Context context, String scheduleName) {
+    private void lowEnergy(Context context) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        String channelId = "other_notification_channel";
-        String title = "Other Notification";
-        String message = "This is a different type of notification for " + scheduleName + ".";
+        String channelId = "anomaly_detection";
+        String title = "Low Energy";
+        String message = "Low energy detected in block idk.";
 
         if (VERSION.SDK_INT >= VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId, "Other Notifications", NotificationManager.IMPORTANCE_DEFAULT);
-            channel.setDescription("Other notifications for various purposes");
+            NotificationChannel channel = new NotificationChannel(channelId, "Low Energy", NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("Low Energy");
             notificationManager.createNotificationChannel(channel);
         }
 
@@ -68,9 +68,9 @@ public class NotificationReceiver extends BroadcastReceiver {
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true);
 
-        notificationManager.notify(scheduleName.hashCode() + 1, builder.build());
+        notificationManager.notify(0, builder.build());
     }
 }

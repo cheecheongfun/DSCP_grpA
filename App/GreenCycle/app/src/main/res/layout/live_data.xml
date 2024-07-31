@@ -80,10 +80,10 @@
             android:layout_marginStart="125dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/home_page_buttons"
-            android:drawableStart="@drawable/baseline_cloud_queue_24"
+            android:drawableStart="@drawable/baseline_electric_bolt_24"
             android:drawablePadding="15dp"
             android:padding="15dp"
-            android:text="Humidity: 70%"
+            android:text="Soil EC: "
             android:textSize="16sp"
             android:textColor="@color/textColour"/>
 
@@ -170,7 +170,8 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/home_page_buttons"
-            android:drawableStart="@drawable/baseline_water_24"
+            android:drawableStart="@drawable/outline_water_drop_24"
+            android:drawableTint="@color/black"
             android:drawablePadding="15dp"
             android:padding="15dp"
             android:text="Moisture"

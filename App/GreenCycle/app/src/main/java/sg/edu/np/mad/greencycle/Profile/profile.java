@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -22,6 +23,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -31,18 +34,28 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import sg.edu.np.mad.greencycle.Classes.User;
+import sg.edu.np.mad.greencycle.Forum.Post;
+import sg.edu.np.mad.greencycle.Forum.PostAdapter;
 import sg.edu.np.mad.greencycle.Fragments.Home.HomeFragment;
 import sg.edu.np.mad.greencycle.R;
 
@@ -60,7 +73,13 @@ public class profile extends AppCompatActivity {
     private TextView displayNameTextView,name;
     private CircleImageView imageView;
 
-    ImageButton back,editusername,editDisplayName;
+    private RecyclerView recyclerView;
+    private ProfilePostAdapter postAdapter;
+    private List<Post> postList;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    ImageButton back,editusername,editDisplayName,editpfpbtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,19 +88,28 @@ public class profile extends AppCompatActivity {
         imageView = findViewById(R.id.profileImageView);
         back = findViewById(R.id.backButton);
         usernameTextView = findViewById(R.id.usernameText);
-        displayNameTextView = findViewById(R.id.displayNameText);
-        editDisplayName = findViewById(R.id.editDisplayNameBtn);
+        editDisplayName = findViewById(R.id.editNameButton);
         name = findViewById(R.id.nametext);
 
 
         user = getIntent().getParcelableExtra("user");
+
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        postList = new ArrayList<>();
+        postAdapter = new ProfilePostAdapter(postList, profile.this, user);
+        recyclerView.setAdapter(postAdapter);
+
+        fetchPostsByTag();
+
         if (user != null) {
             usernameTextView.setText(user.getUsername());
 
         }
         loadProfileImage();
 
-        findViewById(R.id.editProfilePictureBtn).setOnClickListener(view -> showBottomSheetDialog());
+        imageView.setOnClickListener(view -> showBottomSheetDialog());
 
         editDisplayName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +135,6 @@ public class profile extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String displayName = dataSnapshot.getValue(String.class);
-                    displayNameTextView.setText(displayName);
                     name.setText(displayName);
                     user.setDisplayname(displayName); // Update user object
                 }
@@ -231,7 +258,6 @@ public class profile extends AppCompatActivity {
         }
         if (requestCode == EDIT_DISPLAY_NAME_REQUEST && resultCode == RESULT_OK) {
             String newDisplayName = data.getStringExtra("newDisplayName");
-            displayNameTextView.setText(newDisplayName);
             user.setDisplayname(newDisplayName);
         }
     }
@@ -283,5 +309,33 @@ public class profile extends AppCompatActivity {
                     Toast.makeText(profile.this, "Profile Picture Removed", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> Toast.makeText(profile.this, "Error removing picture", Toast.LENGTH_SHORT).show());
+    }
+
+    private void fetchPostsByTag() {
+        // Execute a new query based on the selected tag
+        Query query = db.collection("Post").document("posts").collection("posts")
+                .whereEqualTo("user", user.getUsername())
+                .orderBy("timestamp", Query.Direction.DESCENDING);
+
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(QuerySnapshot value, FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.w("Firestore", "Listen failed.", error);
+                    return;
+                }
+
+                postList.clear();
+                for (QueryDocumentSnapshot doc : value) {
+                    Post post = doc.toObject(Post.class);
+                    post.setId(doc.getId());
+                    if (post.getLikedBy() == null) {
+                        post.setLikedBy(new ArrayList<>());
+                    }
+                    postList.add(post);
+                }
+                postAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }
