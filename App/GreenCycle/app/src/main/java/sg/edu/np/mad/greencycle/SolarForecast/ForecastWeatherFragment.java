@@ -23,10 +23,17 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.CombinedData;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import sg.edu.np.mad.greencycle.R;
 
@@ -42,6 +49,8 @@ public class ForecastWeatherFragment extends Fragment {
     private List<String> dates = new ArrayList<>();
     private String selectedModel;
 
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -52,6 +61,7 @@ public class ForecastWeatherFragment extends Fragment {
         humidityInfo = view.findViewById(R.id.humidityInfo);
         precipitationInfo = view.findViewById(R.id.precipitationInfo);
         barChart = view.findViewById(R.id.barChart);
+
 
         forecastViewModel = new ViewModelProvider(requireActivity()).get(ForecastViewModel.class);
         setupModelSpinner();
@@ -156,26 +166,143 @@ public class ForecastWeatherFragment extends Fragment {
         precipitationInfo.setText(R.string.no_data_available);
         barChart.clear();
     }
-
     private void updateBarChart(ForecastViewModel.AggregatedData data) {
-        List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0f, (float) data.day1Output));
-        entries.add(new BarEntry(1f, (float) data.day2Output));
-        entries.add(new BarEntry(2f, (float) data.day3Output));
+        barChart.clear();
 
-        BarDataSet dataSet = new BarDataSet(entries, "Energy Output");
-        dataSet.setColors(new int[]{
-                android.graphics.Color.parseColor("#66BB6A"), // Green shade 1
-                android.graphics.Color.parseColor("#43A047"), // Green shade 2
-                android.graphics.Color.parseColor("#2E7D32")  // Green shade 3
-        });
+        TextView totalEnergyTextView = getView().findViewById(R.id.totalEnergyTextView);
 
-        BarData barData = new BarData(dataSet);
-        barData.setBarWidth(0.9f); // set custom bar width
-        barChart.clear(); // clear the old data
-        barChart.setData(barData);
-        barChart.setFitBars(true); // make the x-axis fit exactly all bars
-        barChart.invalidate(); // refresh
+        if ("SOE".equals(selectedModel)) {
+            List<BarEntry> entries = new ArrayList<>();
+            List<BarEntry> totalEntries = new ArrayList<>();
+            float totalMaxValue = 0f;
+            float totalEnergyGenerated = 0f;
+
+            // Get the outputs for model_2 and model_3
+            double[] model2OutputsArray = forecastViewModel.getModel2Outputs(selectedModel);
+            double[] model3OutputsArray = forecastViewModel.getModel3Outputs(selectedModel);
+
+            // Add logging to check if data is available
+            Log.d("updateBarChart", "Model 2 Outputs: " + (model2OutputsArray != null ? Arrays.toString(model2OutputsArray) : "null"));
+            Log.d("updateBarChart", "Model 3 Outputs: " + (model3OutputsArray != null ? Arrays.toString(model3OutputsArray) : "null"));
+
+            if (model2OutputsArray != null && model3OutputsArray != null) {
+                for (int i = 0; i < 3; i++) {
+                    float model2Output = (float) model2OutputsArray[i];
+                    float model3Output = (float) model3OutputsArray[i];
+                    entries.add(new BarEntry(i, new float[]{model2Output, model3Output}));
+                    float totalOutput = model2Output + model3Output;
+                    totalEntries.add(new BarEntry(i, totalOutput));
+                    totalEnergyGenerated += totalOutput;
+                    totalMaxValue = Math.max(totalMaxValue, totalOutput);
+                }
+
+                BarDataSet dataSet = new BarDataSet(entries, "");
+                dataSet.setColors(new int[]{
+                        android.graphics.Color.parseColor("#66BB6A"), // Lighter green for model 2
+                        android.graphics.Color.parseColor("#388E3C")  // Darker green for model 3
+                });
+                dataSet.setStackLabels(new String[]{"Sensor 1 Output", "Sensor 2 Output"});
+                dataSet.setDrawValues(false); // Disable drawing values for individual segments
+
+                BarDataSet totalDataSet = new BarDataSet(totalEntries, "");
+                totalDataSet.setDrawValues(true);
+                totalDataSet.setValueTextColor(android.graphics.Color.BLACK);
+                totalDataSet.setColors(android.graphics.Color.TRANSPARENT);
+
+                // Custom value formatter to display the total value at the top
+                totalDataSet.setValueFormatter(new ValueFormatter() {
+                    @Override
+                    public String getBarLabel(BarEntry barEntry) {
+                        return String.valueOf((int) barEntry.getY());
+                    }
+                });
+
+                BarData barData = new BarData(dataSet, totalDataSet);
+                barData.setBarWidth(0.9f); // set custom bar width
+                barChart.setData(barData);
+                barChart.setFitBars(true); // make the x-axis fit exactly all bars
+
+                // Set the y-axis range based on data
+                YAxis leftAxis = barChart.getAxisLeft();
+                leftAxis.setGranularity(1f);
+                leftAxis.setGranularityEnabled(true);
+
+                leftAxis.setAxisMinimum(0f); // Start y-axis from 0
+                leftAxis.setAxisMaximum(totalMaxValue + 10); // Add some padding to the maximum
+
+                YAxis rightAxis = barChart.getAxisRight();
+                rightAxis.setEnabled(false);
+
+                barChart.invalidate(); // refresh
+            } else {
+                Log.e("updateBarChart", "No data available for model 2 or model 3 outputs.");
+            }
+
+            // Update total energy text view
+            totalEnergyTextView.setText("Total SOE 3-Day Energy Generated: " + Math.round(totalEnergyGenerated) + " kWh");
+
+        } else if ("Estate".equals(selectedModel)) {
+            List<BarEntry> entries = new ArrayList<>();
+            List<BarEntry> totalEntries = new ArrayList<>();
+            float totalMaxValue = 0f;
+            float totalEnergyGenerated = 0f;
+
+            // Add entries for model_1
+            double[] model1OutputsArray = forecastViewModel.getModel1Outputs(selectedModel);
+            Log.d("updateBarChart", "Model 1 Outputs: " + (model1OutputsArray != null ? Arrays.toString(model1OutputsArray) : "null"));
+
+            if (model1OutputsArray != null) {
+                for (int i = 0; i < 3; i++) {
+                    float model1Output = (float) model1OutputsArray[i];
+                    entries.add(new BarEntry(i, model1Output));
+                    totalEntries.add(new BarEntry(i, model1Output));
+                    totalEnergyGenerated += model1Output;
+                    totalMaxValue = Math.max(totalMaxValue, model1Output);
+                }
+
+                BarDataSet dataSet = new BarDataSet(entries, "Model 1 Output");
+                dataSet.setColors(new int[]{
+                        android.graphics.Color.parseColor("#4285F4")  // Blue shade for model 1
+                });
+                dataSet.setDrawValues(false); // Disable drawing values for individual segments
+
+                BarDataSet totalDataSet = new BarDataSet(totalEntries, "");
+                totalDataSet.setDrawValues(true);
+                totalDataSet.setValueTextColor(android.graphics.Color.BLACK);
+                totalDataSet.setColors(android.graphics.Color.TRANSPARENT);
+
+                // Custom value formatter to display the total value
+                totalDataSet.setValueFormatter(new ValueFormatter() {
+                    @Override
+                    public String getBarLabel(BarEntry barEntry) {
+                        return String.valueOf((int) barEntry.getY());
+                    }
+                });
+
+                BarData barData = new BarData(dataSet, totalDataSet);
+                barData.setBarWidth(0.9f); // set custom bar width
+                barChart.setData(barData);
+                barChart.setFitBars(true); // make the x-axis fit exactly all bars
+
+                // Set the y-axis range based on data
+                YAxis leftAxis = barChart.getAxisLeft();
+                leftAxis.setGranularity(1f);
+                leftAxis.setGranularityEnabled(true);
+
+                leftAxis.setAxisMinimum(0f); // Start y-axis from 0
+                leftAxis.setAxisMaximum(totalMaxValue + 10); // Add some padding to the maximum
+
+                YAxis rightAxis = barChart.getAxisRight();
+                rightAxis.setEnabled(false);
+
+                barChart.invalidate(); // refresh
+            } else {
+                Log.e("updateBarChart", "No data available for model 1 outputs.");
+            }
+
+            // Update total energy text view
+            totalEnergyTextView.setText("Total Estate 3-Day Energy Generated: " + Math.round(totalEnergyGenerated) + " kWh");
+        }
 
         XAxis xAxis = barChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -192,19 +319,6 @@ public class ForecastWeatherFragment extends Fragment {
             }
         });
 
-        YAxis leftAxis = barChart.getAxisLeft();
-        leftAxis.setGranularity(1f);
-        leftAxis.setGranularityEnabled(true);
-
-        // Set Y-axis range
-        float minValue = (float) Math.min(data.day1Output, Math.min(data.day2Output, data.day3Output));
-        float maxValue = (float) Math.max(data.day1Output, Math.max(data.day2Output, data.day3Output));
-        leftAxis.setAxisMinimum(minValue - 10); // Adjust as needed
-        leftAxis.setAxisMaximum(maxValue + 10); // Adjust as needed
-
-        YAxis rightAxis = barChart.getAxisRight();
-        rightAxis.setEnabled(false);
-
         // Disable interaction
         barChart.setTouchEnabled(false);
         barChart.setDragEnabled(false);
@@ -218,4 +332,8 @@ public class ForecastWeatherFragment extends Fragment {
         barChart.setDescription(description);
     }
 
+
+
 }
+
+

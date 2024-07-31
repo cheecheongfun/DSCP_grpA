@@ -3,151 +3,149 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <ImageView
-        android:id="@+id/imageView2"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="301dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="-3dp"
-        android:layout_marginEnd="-3dp"
-        app:srcCompat="@drawable/bottom_rounded_green" />
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profileImageView"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="129dp"
-        android:layout_marginTop="72dp"
-        android:layout_marginEnd="132dp"
-        android:src="@drawable/green_cycle_icon"
-        app:civ_border_color="@color/mid_green"
-        app:civ_border_width="2dp" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:text="Profile"
-        android:textColor="@color/white"
-        android:textSize="20sp"/>
+        android:id="@+id/layout"
+        android:background="@drawable/bottom_rounded_green">
 
-    <TextView
-        android:id="@+id/nametext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/profileImageView"
-        android:layout_marginTop="7dp"
-        android:gravity="center_horizontal"
-        android:layout_centerHorizontal="true"
-        android:text="Name"
-        android:textColor="@color/white"
-        android:textSize="20sp" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView7"
-        android:layout_width="380dp"
-        android:layout_height="75dp"
-        android:layout_below="@+id/imageView2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp">
-
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/imageView2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_marginTop="-3dp"
+            android:layout_marginEnd="-3dp"
+            android:layout_above="@id/cardView7"
+            android:layout_alignParentTop="true"
+            app:srcCompat="@drawable/bottom_rounded_green" />
+
+        <FrameLayout
+            android:id="@+id/frame"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="129dp"
+            android:layout_marginTop="72dp"
+            android:layout_marginEnd="132dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profileImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/green_cycle_icon"
+                app:civ_border_color="@color/mid_green"
+                app:civ_border_width="2dp" />
+
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:text="Profile"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:id="@+id/displaynamelayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/frame"
+            android:layout_marginTop="7dp"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_vertical">
 
             <TextView
-                android:id="@+id/usernameLabel"
+                android:id="@+id/nametext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="13dp"
-                android:text="Username"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/usernameText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/usernameLabel"
-                android:layout_marginStart="30dp"
-                android:text="dfghjkhjkl"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView8"
-        android:layout_width="380dp"
-        android:layout_height="75dp"
-        android:layout_below="@+id/cardView7"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp">
-        <!-- Code for Display Name CardView, assuming unchanged -->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/displayNameLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="13dp"
-                android:text="Display Name"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/displayNameText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/displayNameLabel"
-                android:layout_marginStart="30dp"
-                android:text="John Smith"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:text="Name"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_gravity="center_vertical" />
 
             <ImageButton
-                android:id="@+id/editDisplayNameBtn"
+                android:id="@+id/editNameButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="211dp"
-                android:layout_marginEnd="11dp"
-                android:layout_toEndOf="@+id/displayNameLabel"
-                android:background="@android:color/transparent"
-                app:srcCompat="@drawable/baseline_mode_edit" />
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@color/transparent"
+                app:srcCompat="@drawable/baseline_mode_edit"
+                android:contentDescription="Edit Name" />
 
-    <ImageButton
-        android:id="@+id/editProfilePictureBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="195dp"
-        android:layout_marginEnd="112dp"
-        android:backgroundTint="@color/transparent"
-        app:srcCompat="@drawable/baseline_mode_edit" />
+        </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="12dp"
-        android:backgroundTint="@color/transparent"
-        app:srcCompat="@drawable/back_button" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView7"
+            android:layout_width="380dp"
+            android:layout_height="75dp"
+            android:layout_below="@+id/displaynamelayout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/usernameLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="13dp"
+                    android:text="Username"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/usernameText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/usernameLabel"
+                    android:layout_marginStart="30dp"
+                    android:text="dfghjkhjkl"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+
+
+
+
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/transparent"
+            app:srcCompat="@drawable/back_button" />
+
+        <!-- Spacer View to add extra 10dp -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_below="@id/cardView7"
+            android:layout_height="30dp" />
+
+    </RelativeLayout>
+
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="380dp"
+        android:layout_height="match_parent"
+        android:layout_below="@id/layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:padding="8dp" />
+
 </RelativeLayout>

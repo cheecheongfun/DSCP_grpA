@@ -78,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@color/mid_green"
-                    android:text="Energy Prediction Location"
+                    android:text="Next Day Energy Prediction"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
@@ -128,7 +128,8 @@
                         android:gravity="center"
                         android:padding="8dp"
                         android:textSize="30sp"
-                        android:text="Energy Generated"
+                        android:fontFamily="@font/robotomedium"
+                        android:text="Number"
                         android:textColor="@color/white" />
                 </LinearLayout>
 
@@ -160,7 +161,8 @@
                         android:gravity="center"
                         android:padding="8dp"
                         android:textSize="30sp"
-                        android:text="Energy Generated"
+                        android:text="Number"
+                        android:fontFamily="@font/robotomedium"
                         android:textColor="@color/white" />
                 </LinearLayout>
             </LinearLayout>

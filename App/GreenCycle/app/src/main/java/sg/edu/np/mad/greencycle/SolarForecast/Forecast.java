@@ -17,7 +17,7 @@ import sg.edu.np.mad.greencycle.R;
 
 public class Forecast extends AppCompatActivity {
 
-    private TextView back, refresh;
+    private TextView back;
     private DataViewModel viewModel;
 
     @Override
@@ -31,16 +31,11 @@ public class Forecast extends AppCompatActivity {
             return insets;
         });
         back = findViewById(R.id.backButton);
-        refresh = findViewById(R.id.refresh);
+
 
         back.setOnClickListener(v -> finish());
 
-        refresh.setOnClickListener(v -> {
-            Log.i("RefreshTag", "onClick: refresh");
-            // Optionally, refresh or update data here
-            // You may need to refresh data within the fragment
-            refreshFragment();
-        });
+
 
         // Load ForecastWeatherFragment
         if (savedInstanceState == null) {
