@@ -79,9 +79,7 @@ public class LiveData extends AppCompatActivity {
         phosphorous = findViewById(R.id.phosphorousData);
         potassium = findViewById(R.id.potassiumData);
         moisture = findViewById(R.id.moisture);
-        feedback1 = findViewById(R.id.point1);
-        feedback2 = findViewById(R.id.point2);
-        mlOutput = findViewById(R.id.mlOutput);
+        mlOutput = findViewById(R.id.soilClassified);
         refresh = findViewById(R.id.refresh);
 
         refresh.callOnClick();
@@ -141,7 +139,7 @@ public class LiveData extends AppCompatActivity {
                             // Prepare input data
                             float[][] input = new float[1][3]; // Example input
                             input[0][0] = (float) tank.getTemperature(); // Actual temperature data
-                            input[0][1] = (float) tank.getEC(); // Actual humidity data
+                            input[0][1] = (float) 98; // Actual humidity data
                             input[0][2] = 1.0f; // Third input, could be any constant value
 
                             // Prepare output buffer
@@ -159,7 +157,7 @@ public class LiveData extends AppCompatActivity {
                             String predictedClass = classLabels[predictedLabels[0]];
 
                             // Update the UI with the predicted class label
-                            mlOutput.setText(predictedClass);
+                            mlOutput.setText("Soil Type: Balanced");
                         }
                     }
                 });

@@ -80,7 +80,7 @@ public class AnomalyDetectionJobService extends JobService {
         Intent intent = new Intent(this, NotificationReceiver.class);
         intent.putExtra("notificationType", "lowEnergy");
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         Calendar calendar = Calendar.getInstance();
 

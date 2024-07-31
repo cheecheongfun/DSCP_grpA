@@ -319,6 +319,7 @@ public class HomeFragment extends Fragment {
             if (aggregatedData != null) {
                 // Get the day1Output
                 double day1Output = aggregatedData.day1Output;
+                Log.e("homepage", "day1output: " + day1Output);
                 if ("SOE".equals(model)) {
                     // Update SOE energy
                     Log.d("EnergyPredictionActivity", "Day 1 Predicted Energy (SOE): " + day1Output);

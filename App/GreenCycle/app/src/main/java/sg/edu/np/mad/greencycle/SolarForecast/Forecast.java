@@ -48,6 +48,7 @@ public class Forecast extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(DataViewModel.class);
 
         // Load data
+        Log.e("Forecast", "in forecast");
         viewModel.loadData();
     }
 
