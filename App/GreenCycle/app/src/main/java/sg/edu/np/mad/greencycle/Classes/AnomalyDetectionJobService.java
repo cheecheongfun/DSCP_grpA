@@ -94,4 +94,4 @@ public class AnomalyDetectionJobService extends JobService {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
     }
-}
+}// test
