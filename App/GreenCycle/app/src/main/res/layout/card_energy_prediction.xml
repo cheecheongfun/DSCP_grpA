@@ -69,7 +69,7 @@
                 android:gravity="center"
                 android:padding="8dp"
                 android:textSize="30sp"
-                android:text=""
+                android:text="Energy Generated"
                 android:textColor="@color/white" />
         </LinearLayout>
 
@@ -100,9 +100,9 @@
                 android:background="@color/transparent"
                 android:gravity="center"
                 android:padding="8dp"
-                android:text=""
-                android:textColor="@color/white"
-                android:textSize="30sp" />
+                android:textSize="30sp"
+                android:text="Energy Generated"
+                android:textColor="@color/white" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
