@@ -42,16 +42,16 @@ public class Insight extends AppCompatActivity {
         user = receivingEnd.getParcelableExtra("user");
 
         webView = findViewById(R.id.webView);
-        backBtn = findViewById(R.id.backButton);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Insight.this, MainActivity.class);
-                intent.putExtra("user", user);
-                intent.putExtra("tab", "home_tab");
-                startActivity(intent);
-            }
-        });
+//        backBtn = findViewById(R.id.backButton);
+//        backBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(Insight.this, MainActivity.class);
+//                intent.putExtra("user", user);
+//                intent.putExtra("tab", "home_tab");
+//                startActivity(intent);
+//            }
+//        });
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
@@ -67,7 +67,7 @@ public class Insight extends AppCompatActivity {
         webView.setWebViewClient(new CustomWebViewClient());
         webView.setWebChromeClient(new CustomWebChromeClient());
 
-        String embedUrl = "https://app.powerbi.com/reportEmbed?reportId=41572c1b-0ad7-43b8-aa34-d918dbba3903&autoAuth=true&ctid=cba9e115-3016-4462-a1ab-a565cba0cdf1&filterPaneEnabled=false";
+        String embedUrl = "https://app.powerbi.com/reportEmbed?reportId=dda73211-945f-4e9a-b2ad-721f3e8234be&autoAuth=true&ctid=cba9e115-3016-4462-a1ab-a565cba0cdf1&filterPaneEnabled=false";
         webView.loadUrl(embedUrl);
     }
     private static class CustomWebViewClient extends WebViewClient {
