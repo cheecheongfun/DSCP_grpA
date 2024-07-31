@@ -154,7 +154,7 @@ public class ForecastViewModel extends ViewModel {
                 Log.d("ModelPrediction", "Calling model prediction for Estate model");
                 // Logic for Estate model
                 PostForecastData apiClient = new PostForecastData();
-                apiClient.postForecastData(avgHumidity, avgTemperature, avgPrecipitation, new PostForecastData.ModelCallback() {
+                apiClient.postForecastData("model_1",avgHumidity, avgTemperature, avgPrecipitation, new PostForecastData.ModelCallback() {
                     @Override
                     public void onSuccess(List<Double> modelOutput) {
                         Log.d("ModelResult", "Model returned values: " + modelOutput.toString()); // Log the model result
