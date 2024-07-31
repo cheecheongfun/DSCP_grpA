@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -48,6 +49,7 @@ public class ForecastWeatherFragment extends Fragment {
     private BarChart barChart;
     private List<String> dates = new ArrayList<>();
     private String selectedModel;
+    private Button viewOneMonthForecastButton;
 
 
 
@@ -61,6 +63,7 @@ public class ForecastWeatherFragment extends Fragment {
         humidityInfo = view.findViewById(R.id.humidityInfo);
         precipitationInfo = view.findViewById(R.id.precipitationInfo);
         barChart = view.findViewById(R.id.barChart);
+        viewOneMonthForecastButton = view.findViewById(R.id.viewOneMonthForecastButton);
 
 
         forecastViewModel = new ViewModelProvider(requireActivity()).get(ForecastViewModel.class);
@@ -74,6 +77,7 @@ public class ForecastWeatherFragment extends Fragment {
         List<String> models = new ArrayList<>();
         models.add("SOE");
         models.add("Estate");
+
         ArrayAdapter<String> modelAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, models);
         modelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerModel.setAdapter(modelAdapter);
@@ -83,14 +87,21 @@ public class ForecastWeatherFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedModel = models.get(position);
                 updateAggregatedData();
+
+                if ("Estate".equals(selectedModel)) {
+                    viewOneMonthForecastButton.setVisibility(View.VISIBLE);
+                } else {
+                    viewOneMonthForecastButton.setVisibility(View.GONE);
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing
+                viewOneMonthForecastButton.setVisibility(View.GONE);
             }
         });
     }
+
 
     public void fetchData() {
         double latitude = 1.3331;
