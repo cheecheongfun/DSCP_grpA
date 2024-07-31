@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,14 +43,15 @@ public class Conversion extends Dialog {
         // Adjust dialog window dimensions
         int width = (int) (getContext().getResources().getDisplayMetrics().widthPixels * 0.8);
         getWindow().setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT);
-
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         inputNo = findViewById(R.id.input_no);
         inputUnit = findViewById(R.id.input_unit);
         outputUnit = findViewById(R.id.output_unit);
         outputNo = findViewById(R.id.output_no);
         convertButton = findViewById(R.id.convert_button);
         close = findViewById(R.id.close_button);
-
+        inputNo.requestFocus();
         copy = findViewById(R.id.clipboard_button);
 
         units = getContext().getResources().getStringArray(R.array.units_array);

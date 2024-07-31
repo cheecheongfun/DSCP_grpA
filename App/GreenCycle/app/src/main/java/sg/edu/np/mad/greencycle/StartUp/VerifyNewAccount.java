@@ -74,6 +74,7 @@ public class VerifyNewAccount extends AppCompatActivity {
         btnSubmit = findViewById(R.id.submitCodeButton);
         back = findViewById(R.id.backToLoginButton);
 
+        etUsername.requestFocus();
         TextView Instruction = findViewById(R.id.forgotPasswordInstructions);
         TextView Title = findViewById(R.id.forgotPasswordText);
 

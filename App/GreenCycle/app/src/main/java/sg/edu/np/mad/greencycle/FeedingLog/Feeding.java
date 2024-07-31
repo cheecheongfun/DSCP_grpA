@@ -1769,6 +1769,12 @@ public class Feeding extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        for (Log log : tank.getFeedingLog()){
+            if (log.getLogDate().equals(formatter.format(selectedDate))){
+                selectedLog = log;
+            }
+        }
         if (requestCode == REQUEST_CODE_CREATE_SCHEDULE) {
             if (resultCode == Activity.RESULT_OK && data != null && data.getBooleanExtra("schedule_saved", false)) {
                 android.util.Log.i("onActivityResult", "Schedule created successfully");
@@ -1778,11 +1784,17 @@ public class Feeding extends AppCompatActivity {
         else if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null){
             if (resultCode == Activity.RESULT_OK){
                 imageUri = data.getData();
+                if (selectedLog == null){
+                    selectedLog = new Log();
+                }
                 uploadImage(selectedLog);  // Use the member variable
             }
         }
         else if (requestCode == CAPTURE_IMAGE_REQUEST){
             if (resultCode == Activity.RESULT_OK){
+                if (selectedLog == null){
+                    selectedLog = new Log();
+                }
                 uploadImage(selectedLog);
             }
         }

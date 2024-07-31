@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -127,6 +128,8 @@ public class TankSelection extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                searchTank.getWindow().setSoftInputMode(
+                        WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                 searchTank.show();
                 EditText code1 = searchTank.findViewById(R.id.codeBox4);
                 EditText code2 = searchTank.findViewById(R.id.codeBox5);
@@ -137,8 +140,6 @@ public class TankSelection extends AppCompatActivity {
                 code2.setText("");
                 code3.setText("");
 
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(code1, InputMethodManager.SHOW_IMPLICIT);
                 // Array of EditText boxes
                 final EditText[] boxes = {code1, code2, code3};
 
@@ -204,6 +205,8 @@ public class TankSelection extends AppCompatActivity {
                                             Tank tank = mapDataSnapshotToTank(dataSnapshot, deviceId);
                                             // open a new dialog
                                             confirm.setText("Search");
+                                            tankDialog.getWindow().setSoftInputMode(
+                                                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                                             tankDialog.show();
                                             TextView deviceText = tankDialog.findViewById(R.id.deviceText);
                                             deviceText.setText(deviceId);

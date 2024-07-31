@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -111,7 +112,8 @@ public class TankAdapter extends RecyclerView.Adapter<TankViewHolder>{
                 edit.getWindow().setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT);
                 edit.setCancelable(true);
 
-
+                edit.getWindow().setSoftInputMode(
+                        WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                 edit.show();
                 EditText name = edit.findViewById(R.id.etName);
                 EditText worm = edit.findViewById(R.id.etWorm);
