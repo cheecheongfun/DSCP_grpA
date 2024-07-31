@@ -24,6 +24,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GreenCycle"
         tools:targetApi="31">
+        <service
+            android:name=".Classes.AnomalyDetectionJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="false" />
+
         <activity
             android:name=".Analytics.DeleteDAOActivity"
             android:exported="false" />

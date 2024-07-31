@@ -79,7 +79,7 @@
             android:fontFamily="sans-serif-condensed-medium"
             android:hint="Password"
             android:textColorHint="@color/light_grey"
-            android:inputType="text"
+            android:inputType="textPassword"
             android:paddingStart="5dp"
             android:textColor="@color/textColour"
             />

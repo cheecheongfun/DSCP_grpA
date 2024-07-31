@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import sg.edu.np.mad.greencycle.Classes.JobSchedulerHelper;
 import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.Fragments.Chatbot.ChatBotFragment;
 import sg.edu.np.mad.greencycle.Fragments.Home.HomeFragment;
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
         });
+        JobSchedulerHelper.scheduleAnomalyDetectionJob(this);
     }
 
     private void replaceFragment(Fragment fragment){
