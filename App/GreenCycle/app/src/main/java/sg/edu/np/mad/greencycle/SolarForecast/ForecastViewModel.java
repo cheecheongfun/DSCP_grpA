@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,9 @@ public class ForecastViewModel extends ViewModel {
 
     // Arrays to store the model output for each model
     private Map<String, double[]> modelOutputs = new HashMap<>();
+    private Map<String, double[]> model2Outputs = new HashMap<>();
+    private Map<String, double[]> model3Outputs = new HashMap<>();
+    private Map<String, double[]> model1Outputs = new HashMap<>();
 
     public LiveData<OpenMeteoResponse> getForecastLiveData() {
         return forecastLiveData;
@@ -49,6 +53,18 @@ public class ForecastViewModel extends ViewModel {
 
     public double[] getAvgPrecipitation() {
         return avgPrecipitation;
+    }
+
+    public double[] getModel2Outputs(String selectedModel) {
+        return model2Outputs.get(selectedModel);
+    }
+
+    public double[] getModel3Outputs(String selectedModel) {
+        return model3Outputs.get(selectedModel);
+    }
+
+    public double[] getModel1Outputs(String selectedModel) {
+        return model1Outputs.get(selectedModel);
     }
 
     public void fetchForecastData(double latitude, double longitude, String current, String hourly, String timezone, int days) {
@@ -120,76 +136,66 @@ public class ForecastViewModel extends ViewModel {
         Log.d("AveragePrecipitationArray", arrayToString(getAvgPrecipitation()));
 
         // Check if the model output for the selected model is already cached
-        if (modelOutputs.containsKey(selectedModel)) {
-            double[] cachedOutputs = modelOutputs.get(selectedModel);
+        if (modelOutputs.containsKey(selectedModel) || model2Outputs.containsKey(selectedModel) || model1Outputs.containsKey(selectedModel)) {
+            double[] cachedOutputs = modelOutputs.getOrDefault(selectedModel, new double[]{0, 0, 0});
+            double[] cachedOutputs2 = model2Outputs.getOrDefault(selectedModel, new double[]{0, 0, 0});
+            double[] cachedOutputs1 = model1Outputs.getOrDefault(selectedModel, new double[]{0, 0, 0});
             processAggregatedDataForModel(
                     avgTemperature[0], avgHumidity[0], avgPrecipitation[0],
                     avgTemperature[1], avgHumidity[1], avgPrecipitation[1],
                     avgTemperature[2], avgHumidity[2], avgPrecipitation[2],
-                    cachedOutputs[0], cachedOutputs[1], cachedOutputs[2]
+                    cachedOutputs[0] + cachedOutputs2[0] + cachedOutputs1[0],
+                    cachedOutputs[1] + cachedOutputs2[1] + cachedOutputs1[1],
+                    cachedOutputs[2] + cachedOutputs2[2] + cachedOutputs1[2]
             );
         } else {
-            // Perform the model prediction if not cached
-            if ("SOE".equals(selectedModel)) {
-                // Placeholder values for SOE model
-                double day1Output = 100;
-                double day2Output = 200;
-                double day3Output = 300;
-
-                // Cache the model output
-                modelOutputs.put(selectedModel, new double[]{day1Output, day2Output, day3Output});
-
-                // Log the model outputs
-                Log.d("ModelOutput", "Day 1 Output: " + day1Output);
-                Log.d("ModelOutput", "Day 2 Output: " + day2Output);
-                Log.d("ModelOutput", "Day 3 Output: " + day3Output);
-
-                processAggregatedDataForModel(
-                        avgTemperature[0], avgHumidity[0], avgPrecipitation[0],
-                        avgTemperature[1], avgHumidity[1], avgPrecipitation[1],
-                        avgTemperature[2], avgHumidity[2], avgPrecipitation[2],
-                        day1Output, day2Output, day3Output
-                );
-            } else {
-                Log.d("ModelPrediction", "Calling model prediction for Estate model");
-                // Logic for Estate model
-                PostForecastData apiClient = new PostForecastData();
-                apiClient.postForecastData("model_1",avgHumidity, avgTemperature, avgPrecipitation, new PostForecastData.ModelCallback() {
-                    @Override
-                    public void onSuccess(List<Double> modelOutput) {
-                        Log.d("ModelResult", "Model returned values: " + modelOutput.toString()); // Log the model result
-                        if (modelOutput.size() == 3) {
-                            double day1Output = modelOutput.get(0);
-                            double day2Output = modelOutput.get(1);
-                            double day3Output = modelOutput.get(2);
-
-                            // Cache the model output
-                            modelOutputs.put(selectedModel, new double[]{day1Output, day2Output, day3Output});
-
-                            // Log the model outputs
-                            Log.d("ModelOutput", "Day 1 Output: " + day1Output);
-                            Log.d("ModelOutput", "Day 2 Output: " + day2Output);
-                            Log.d("ModelOutput", "Day 3 Output: " + day3Output);
-
-                            processAggregatedDataForModel(
-                                    avgTemperature[0], avgHumidity[0], avgPrecipitation[0],
-                                    avgTemperature[1], avgHumidity[1], avgPrecipitation[1],
-                                    avgTemperature[2], avgHumidity[2], avgPrecipitation[2],
-                                    day1Output, day2Output, day3Output
-                            );
-                        } else {
-                            Log.e("ModelOutput", "Model output size is less than 3");
-                            Log.e("ModelOutput", "Model output size is " + modelOutput.size());
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        Log.e("ForecastViewModel", "Model prediction failed", e);
-                    }
-                });
-            }
+            fetchModelOutputs(selectedModel);
         }
+    }
+
+    private void fetchModelOutputs(String selectedModel) {
+        if ("SOE".equals(selectedModel)) {
+            fetchModelData("model_2", model2Outputs, selectedModel);
+            fetchModelData("model_3", model3Outputs, selectedModel);
+        } else {
+            fetchModelData("model_1", model1Outputs, selectedModel);
+        }
+    }
+
+
+    private void fetchModelData(String modelName, Map<String, double[]> outputCache, String selectedModel) {
+        PostForecastData apiClient = new PostForecastData();
+        apiClient.postForecastData(modelName, avgHumidity, avgTemperature, avgPrecipitation, new PostForecastData.ModelCallback() {
+            @Override
+            public void onSuccess(List<Double> modelOutput) {
+                if (modelOutput.size() == 3) {
+                    double day1Output = modelOutput.get(0);
+                    double day2Output = modelOutput.get(1);
+                    double day3Output = modelOutput.get(2);
+
+                    outputCache.put(selectedModel, new double[]{day1Output, day2Output, day3Output});
+
+                    Log.d("fetchModelData", modelName + " outputs: " + Arrays.toString(outputCache.get(selectedModel)));
+
+                    double[] cachedOutputs = modelOutputs.getOrDefault(selectedModel, new double[]{0, 0, 0});
+                    double[] cachedOutputs2 = model2Outputs.getOrDefault(selectedModel, new double[]{0, 0, 0});
+                    double[] cachedOutputs1 = model1Outputs.getOrDefault(selectedModel, new double[]{0, 0, 0});
+                    processAggregatedDataForModel(
+                            avgTemperature[0], avgHumidity[0], avgPrecipitation[0],
+                            avgTemperature[1], avgHumidity[1], avgPrecipitation[1],
+                            avgTemperature[2], avgHumidity[2], avgPrecipitation[2],
+                            cachedOutputs[0] + cachedOutputs2[0] + cachedOutputs1[0],
+                            cachedOutputs[1] + cachedOutputs2[1] + cachedOutputs1[1],
+                            cachedOutputs[2] + cachedOutputs2[2] + cachedOutputs1[2]
+                    );
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.e("ForecastViewModel", "Model prediction failed", e);
+            }
+        });
     }
 
     public void calculateAggregatedData(String date, int dayIndex) {
