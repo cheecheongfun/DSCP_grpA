@@ -73,24 +73,30 @@ public class ForecastViewModel extends ViewModel {
             @Override
             public void onResponse(Call<OpenMeteoResponse> call, Response<OpenMeteoResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d("ForecastData", "Fetched forecast data: " + response.body().toString());
+                    Log.d("ForecastViewModel", "Fetched forecast data successfully: " + response.body().toString());
                     saveDataByDate(response.body().hourly);
                     forecastLiveData.postValue(response.body());
                 } else {
-                    Log.e("ForecastData", "Failed to fetch forecast data: " + response.errorBody());
+                    try {
+                        Log.e("ForecastViewModel", "Failed to fetch forecast data: " + response.errorBody().string());
+                    } catch (Exception e) {
+                        Log.e("ForecastViewModel", "Failed to fetch forecast data and error parsing response: ", e);
+                    }
                     forecastLiveData.postValue(null);
                 }
             }
 
             @Override
             public void onFailure(Call<OpenMeteoResponse> call, Throwable t) {
-                Log.e("ForecastData", "Error fetching forecast data: " + t.getMessage());
+                Log.e("ForecastViewModel", "Error fetching forecast data: " + t.getMessage());
                 forecastLiveData.postValue(null);
             }
         });
     }
 
     private void saveDataByDate(OpenMeteoResponse.Hourly hourly) {
+        Log.d("ForecastViewModel", "Saving data by date");
+
         for (int i = 0; i < hourly.time.size(); i++) {
             String datetime = hourly.time.get(i);
             String date = datetime.substring(0, datetime.indexOf('T'));
@@ -117,6 +123,8 @@ public class ForecastViewModel extends ViewModel {
     }
 
     public void updateAggregatedData(List<String> dates, int selectedDatePosition, String selectedModel) {
+        Log.d("ForecastViewModel", "Updating aggregated data for selected model: " + selectedModel);
+
         // Reset the average arrays to ensure no leftover data
         for (int i = 0; i < 3; i++) {
             avgTemperature[i] = 0.0;
@@ -154,6 +162,8 @@ public class ForecastViewModel extends ViewModel {
     }
 
     private void fetchModelOutputs(String selectedModel) {
+        Log.d("ForecastViewModel", "Fetching model outputs for: " + selectedModel);
+
         if ("SOE".equals(selectedModel)) {
             fetchModelData("model_2", model2Outputs, selectedModel);
             fetchModelData("model_3", model3Outputs, selectedModel);
@@ -162,12 +172,15 @@ public class ForecastViewModel extends ViewModel {
         }
     }
 
-
     private void fetchModelData(String modelName, Map<String, double[]> outputCache, String selectedModel) {
+        Log.d("ForecastViewModel", "Fetching data for model: " + modelName);
+
         PostForecastData apiClient = new PostForecastData();
         apiClient.postForecastData(modelName, avgHumidity, avgTemperature, avgPrecipitation, new PostForecastData.ModelCallback() {
             @Override
             public void onSuccess(List<Double> modelOutput) {
+                Log.d("ForecastViewModel", "Model data fetch successful for " + modelName);
+
                 if (modelOutput.size() == 3) {
                     double day1Output = modelOutput.get(0);
                     double day2Output = modelOutput.get(1);
@@ -175,7 +188,7 @@ public class ForecastViewModel extends ViewModel {
 
                     outputCache.put(selectedModel, new double[]{day1Output, day2Output, day3Output});
 
-                    Log.d("fetchModelData", modelName + " outputs: " + Arrays.toString(outputCache.get(selectedModel)));
+                    Log.d("ForecastViewModel", modelName + " outputs: " + Arrays.toString(outputCache.get(selectedModel)));
 
                     double[] cachedOutputs = modelOutputs.getOrDefault(selectedModel, new double[]{0, 0, 0});
                     double[] cachedOutputs2 = model2Outputs.getOrDefault(selectedModel, new double[]{0, 0, 0});
@@ -193,7 +206,7 @@ public class ForecastViewModel extends ViewModel {
 
             @Override
             public void onFailure(Exception e) {
-                Log.e("ForecastViewModel", "Model prediction failed", e);
+                Log.e("ForecastViewModel", "Model prediction failed for " + modelName, e);
             }
         });
     }
@@ -209,12 +222,19 @@ public class ForecastViewModel extends ViewModel {
         avgTemperature[dayIndex] = average(temperatureData.get(date));
         avgHumidity[dayIndex] = average(humidityData.get(date));
         avgPrecipitation[dayIndex] = average(precipitationData.get(date));
+
+        Log.d("ForecastViewModel", "Aggregated data for date " + date + ": " +
+                "avgTemperature = " + avgTemperature[dayIndex] +
+                ", avgHumidity = " + avgHumidity[dayIndex] +
+                ", avgPrecipitation = " + avgPrecipitation[dayIndex]);
     }
 
     private void processAggregatedDataForModel(double avgTemperatureDay1, double avgHumidityDay1, double avgPrecipitationDay1,
                                                double avgTemperatureDay2, double avgHumidityDay2, double avgPrecipitationDay2,
                                                double avgTemperatureDay3, double avgHumidityDay3, double avgPrecipitationDay3,
                                                double day1Output, double day2Output, double day3Output) {
+        Log.d("ForecastViewModel", "Processing aggregated data for model");
+
         AggregatedData aggregatedData = new AggregatedData(
                 avgTemperatureDay1, avgHumidityDay1, avgPrecipitationDay1,
                 avgTemperatureDay2, avgHumidityDay2, avgPrecipitationDay2,

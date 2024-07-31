@@ -4,66 +4,47 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import androidx.activity.EdgeToEdge;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.w3c.dom.Text;
-
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 import sg.edu.np.mad.greencycle.Classes.User;
 import sg.edu.np.mad.greencycle.Forum.Forum;
-import sg.edu.np.mad.greencycle.SolarForecast.ForecastViewModel;
-import sg.edu.np.mad.greencycle.SolarInsight.Insight;
-import sg.edu.np.mad.greencycle.TankSelection.TankSelection;
 import sg.edu.np.mad.greencycle.NPKvalue.npk_value;
 import sg.edu.np.mad.greencycle.Profile.options;
 import sg.edu.np.mad.greencycle.Profile.profile;
 import sg.edu.np.mad.greencycle.R;
 import sg.edu.np.mad.greencycle.SolarForecast.Forecast;
-import sg.edu.np.mad.greencycle.Goals.Goals_Notification;
+import sg.edu.np.mad.greencycle.SolarInsight.Insight;
+import sg.edu.np.mad.greencycle.TankSelection.TankSelection;
 import sg.edu.np.mad.greencycle.UnitConversion.Conversion;
 
 public class HomeFragment extends Fragment {
 
-    ImageButton liveDataBtn, feedingLogBtn, analyticsBtn, goalsBtn, soilTypeBtn, solarForecastBtn, communityBtn, settingsBtn,ConversionBtn, insightsBtn;
-    NumberPicker inputNo, inputUnit, outputUnit;
-    TextView username, outputNo,soeenergy,estateenergy;
-    String newInputNo, newInputUnit, newOutputUnit;
-    double soe,estate;
+    ImageButton liveDataBtn, feedingLogBtn, analyticsBtn, goalsBtn, soilTypeBtn, solarForecastBtn, communityBtn, settingsBtn, ConversionBtn, insightsBtn;
+    TextView username;
 
     User user;
 
     private DrawerLayout drawerLayout;
     private CircleImageView imageView;
 
-    private ForecastViewModel forecastViewModel;
-
-    private List<String> dates = new ArrayList<>();
-
+    private ViewPager viewPager;
 
     public HomeFragment() {
         // Constructor
@@ -82,21 +63,10 @@ public class HomeFragment extends Fragment {
 
         // Receiving intent
         Intent receivingEnd = getActivity().getIntent();
-        String tab = receivingEnd.getExtras().getString("tab");
         user = receivingEnd.getParcelableExtra("user");
-
-
-
-
-        Log.v("test", user.getUsername());
-        Log.v("test", user.getDisplayname());
-        Goals_Notification goalsNotification = new Goals_Notification();
-        goalsNotification.updateGoalsCompletion(user, getContext());
 
         // Layout elements
         username = view.findViewById(R.id.userWelcome);
-        estateenergy = view.findViewById(R.id.Estate_energy);
-        soeenergy = view.findViewById(R.id.SOE_energy);
         liveDataBtn = view.findViewById(R.id.liveDataButton);
         feedingLogBtn = view.findViewById(R.id.feedingLogButton);
         analyticsBtn = view.findViewById(R.id.analyticsButton);
@@ -105,22 +75,18 @@ public class HomeFragment extends Fragment {
         insightsBtn = view.findViewById(R.id.insightsBtn);
         soilTypeBtn = view.findViewById(R.id.soilTypeButton);
         communityBtn = view.findViewById(R.id.communityButton);
-
         solarForecastBtn = view.findViewById(R.id.solarForecast);
-        settingsBtn = view.findViewById((R.id.settings));
+        settingsBtn = view.findViewById(R.id.settings);
         drawerLayout = view.findViewById(R.id.drawer_layout);
         LinearLayout profileLayout = view.findViewById(R.id.nav_profile_layout);
         LinearLayout optionLayout = view.findViewById(R.id.nav_option_two_layout);
         imageView = view.findViewById(R.id.profileImageView);
+        viewPager = view.findViewById(R.id.viewPager);
 
         if (username != null) {
             username.setText("Welcome, " + user.getDisplayname());
             loadProfileImage(user);
         }
-
-
-
-
 
         profileLayout.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), profile.class);
@@ -141,8 +107,6 @@ public class HomeFragment extends Fragment {
             intent.putExtra("user", user);
             startActivity(intent);
         });
-
-
 
         settingsBtn.setOnClickListener(v -> {
             if (!drawerLayout.isDrawerOpen(GravityCompat.END)) {
@@ -180,26 +144,16 @@ public class HomeFragment extends Fragment {
             startActivity(goals);
         });
 
-        ConversionBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Conversion dialog = new Conversion(getContext());
-                dialog.show();
-            }
+        ConversionBtn.setOnClickListener(v -> {
+            Conversion dialog = new Conversion(getContext());
+            dialog.show();
         });
 
-
-        communityBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), Forum.class);
-                intent.putExtra("user", user);
-                startActivity(intent);
-
-            }
+        communityBtn.setOnClickListener(viewcom -> {
+            Intent intent = new Intent(getActivity(), Forum.class);
+            intent.putExtra("user", user);
+            startActivity(intent);
         });
-
-
 
         solarForecastBtn.setOnClickListener(view16 -> {
             Intent forecast = new Intent(getContext(), Forecast.class);
@@ -207,31 +161,25 @@ public class HomeFragment extends Fragment {
             startActivity(forecast);
         });
 
-        insightsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent insights = new Intent(getContext(), Insight.class);
-                insights.putExtra("user", user);
-                startActivity(insights);
-            }
+        insightsBtn.setOnClickListener(viewis -> {
+            Intent insights = new Intent(getContext(), Insight.class);
+            insights.putExtra("user", user);
+            startActivity(insights);
         });
 
-        // Initialize the ForecastViewModel
-        // Initialize the ForecastViewModel
-        forecastViewModel = new ViewModelProvider(this).get(ForecastViewModel.class);
+        // Set up the ViewPager
+        CardPagerAdapter adapter = new CardPagerAdapter(getContext(), this,user.getUsername());
+        viewPager.setAdapter(adapter);
+        viewPager.setPageTransformer(true, new DepthPageTransformer());
 
-        // Start with fetching data for "SOE"
-        fetchAndObserveForecastData("SOE", () -> {
-            // Once "SOE" data has been processed, fetch data for "Estate"
-            fetchAndObserveForecastData("Estate", null);
+        // Set up tap to change functionality
+        viewPager.setOnClickListener(v -> {
+            int nextItem = (viewPager.getCurrentItem() + 1) % adapter.getCount();
+            viewPager.setCurrentItem(nextItem, true);
         });
-
-
 
         return view;
     }
-
-
 
     private void loadProfileImage(User user) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -274,74 +222,4 @@ public class HomeFragment extends Fragment {
             username.setText("Welcome, " + displayName);
         }
     }
-
-    private void fetchAndObserveForecastData(String model, Runnable onComplete) {
-        double latitude = 1.3331;
-        double longitude = 103.7759;
-        String current = "temperature_2m,relative_humidity_2m,is_day,precipitation,cloud_cover";
-        String hourly = "temperature_2m,relative_humidity_2m,precipitation_probability,precipitation,cloud_cover";
-        String timezone = "Asia/Singapore";
-        int days = 1;
-
-        // Clear previous data for the new model
-        dates.clear();
-
-        // Fetch forecast data for the model
-        forecastViewModel.fetchForecastData(latitude, longitude, current, hourly, timezone, days);
-
-        // Observe the forecast data
-        forecastViewModel.getForecastLiveData().observe(getViewLifecycleOwner(), forecastResponse -> {
-            if (forecastResponse != null && forecastResponse.hourly != null) {
-                List<String> timeList = forecastResponse.hourly.time;
-                if (timeList != null && !timeList.isEmpty()) {
-                    // Split datetime strings into separate date and time lists
-                    for (String datetime : timeList) {
-                        String date = datetime.substring(0, datetime.indexOf('T'));
-                        if (!dates.contains(date)) {
-                            dates.add(date);
-                        }
-                    }
-
-                    // Update aggregated data with the latest model
-                    forecastViewModel.updateAggregatedData(dates, 0, model);
-                    Log.d("Model", "Model used: " + model);
-                }
-            } else {
-                Log.e("Model", "No forecast response available");
-            }
-        });
-
-        // Clear previous observers before adding a new one
-        forecastViewModel.getAggregatedDataLiveData().removeObservers(getViewLifecycleOwner());
-
-        // Observe the AggregatedData LiveData
-        forecastViewModel.getAggregatedDataLiveData().observe(getViewLifecycleOwner(), aggregatedData -> {
-            if (aggregatedData != null) {
-                // Get the day1Output
-                double day1Output = aggregatedData.day1Output;
-                Log.e("homepage", "day1output: " + day1Output);
-                if ("SOE".equals(model)) {
-                    // Update SOE energy
-                    Log.d("EnergyPredictionActivity", "Day 1 Predicted Energy (SOE): " + day1Output);
-                    DecimalFormat df = new DecimalFormat("#.00");
-                    String formattedOutput = df.format(day1Output);
-                    soeenergy.setText(formattedOutput+ " kWh");
-                } else if ("Estate".equals(model)) {
-                    // Update Estate energy
-                    Log.d("EnergyPredictionActivity", "Day 1 Predicted Energy (Estate): " + day1Output);
-                    DecimalFormat df = new DecimalFormat("#.00");
-                    String formattedOutput = df.format(day1Output);
-                    estateenergy.setText(formattedOutput + " kWh");
-                }
-                // Call the onComplete callback if provided
-                if (onComplete != null) {
-                    onComplete.run();
-                }
-            } else {
-                Log.e("EnergyPredictionActivity", "AggregatedData is null");
-            }
-        });
-    }
-
-
 }
