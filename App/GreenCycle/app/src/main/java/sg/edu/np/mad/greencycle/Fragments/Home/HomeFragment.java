@@ -168,7 +168,7 @@ public class HomeFragment extends Fragment {
         });
 
         // Set up the ViewPager
-        CardPagerAdapter adapter = new CardPagerAdapter(getContext(), this);
+        CardPagerAdapter adapter = new CardPagerAdapter(getContext(), this,user.getUsername());
         viewPager.setAdapter(adapter);
         viewPager.setPageTransformer(true, new DepthPageTransformer());
 
