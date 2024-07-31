@@ -1,21 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.Chatbot.ChatBotFragment"
-    android:theme="@style/AppBackgroundColour">
+    android:orientation="vertical"
+    android:background="@android:color/white">
 
-    <!-- TODO: Update blank fragment layout -->
-    <RelativeLayout
+    <!-- Invisible block matching the size of the notification bar -->
+    <View
+        android:id="@+id/statusBarPlaceholder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="20dp"
+        android:background="@color/mid_green"
+        android:layout_weight="0"/>
+
+    <!-- Header rectangle -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/buttom_rounded_mid_green"
+        android:padding="16dp"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/botImageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/green_cycle_icon"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center_vertical" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Chat Bot Fragment"
-            android:gravity="center"/>
-    </RelativeLayout>
+            android:id="@+id/botNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:text="Squirmy"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
-</FrameLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chatRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="16dp"
+        android:clipToPadding="false" />
+
+    <!-- Input field and send button -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@android:color/white"
+        android:elevation="4dp">
+
+        <EditText
+            android:id="@+id/userInputEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Type your message here"
+            android:background="@drawable/top_rounded_dark_beige"
+            android:padding="10dp"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/sendButton"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/sendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:backgroundTint="@color/mid_green"
+            android:text="Send"
+            android:textSize="16sp" />
+    </RelativeLayout>
+</LinearLayout>
