@@ -19,8 +19,11 @@ public class JobSchedulerHelper {
         JobInfo.Builder jobBuilder = new JobInfo.Builder(JOB_ID, componentName)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY) // Optional: Specify network requirements
                 .setPersisted(true) // Keep job alive across reboots
-                .setPeriodic(5 * 60 * 1000); // Run every 24 hours (change as needed)
+                .setPeriodic(24 * 60 * 60 * 1000); // Run every 24 hours (change as needed)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            jobBuilder.setRequiresBatteryNotLow(true); // Optional: Avoid running if battery is low
+        }
 
         JobInfo jobInfo = jobBuilder.build();
 
@@ -32,6 +35,5 @@ public class JobSchedulerHelper {
                 Log.e("JobScheduler", "Job scheduling failed.");
             }
         }
-        else Log.e("JobScheduler", "Job scheduling null.");
     }
 }

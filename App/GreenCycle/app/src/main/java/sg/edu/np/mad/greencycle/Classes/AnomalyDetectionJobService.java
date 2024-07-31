@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.util.Log;
 
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -18,16 +20,21 @@ public class AnomalyDetectionJobService extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters params) {
-        Log.e("AnomalyDetectionJobService", "Job started.");
         executorService.submit(() -> {
             // Perform the background work
-            boolean anomalyDetected = checkForAnomalies();
-            if (anomalyDetected) {
-                // Notify user about the anomaly
-                sendNotification();
-            }
-            // Notify JobScheduler that the job is finished
-            jobFinished(params, false);
+            Log.d("AnomalyDetectionJobService", "Job started at: " + System.currentTimeMillis());
+            checkForAnomalies(isAllAnomalies -> {
+                if (isAllAnomalies) {
+                    // Notify user about the anomaly
+                    Log.e("anomaly noti", "Anomaly detected");
+                    sendNotification();
+                } else {
+                    Log.d("AnomalyDetectionJobService", "No anomaly detected.");
+                }
+
+                // Notify JobScheduler that the job is finished
+                jobFinished(params, false);
+            });
         });
         return true; // Return true to indicate that the job is ongoing
     }
@@ -37,31 +44,35 @@ public class AnomalyDetectionJobService extends JobService {
         // Job needs to be rescheduled if it stops before completion
         return true;
     }
+    public interface AnomalyCheckCallback {
+        void onResult(boolean isAllAnomalies);
+    }
 
-    private boolean checkForAnomalies() {
+
+    private void checkForAnomalies(AnomalyCheckCallback callback) {
         PostAnomalyData apiClient = new PostAnomalyData();
-        final boolean[] allAnomaly = new boolean[1];
-        apiClient.postAnomalyData(new double[]{0, 0, 0, 0, 0}, new int[]{7,7,7,7,7}, new int[]{16, 17, 18, 19, 20}, new double[]{0, 0, 0, 0, 0}, new double[]{0, 0, 0, 0, 0}, new double[]{90, 100, 80, 40, 50}, new PostAnomalyData.ModelCallback() {
+        Set<String> uniqueStrings = new HashSet<>();
+
+        apiClient.postAnomalyData(new double[]{0, 0, 0, 0, 0}, new int[]{7, 7, 7, 7, 7}, new int[]{16, 17, 18, 19, 20}, new double[]{0, 0, 0, 0, 0}, new double[]{0, 0, 0, 0, 0}, new double[]{90, 100, 80, 40, 50}, new PostAnomalyData.ModelCallback() {
             @Override
             public void onSuccess(List<String> modelOutput) {
-                Log.d("postAnomalyData", "Model returned values: " + modelOutput.toString()); // Log the model result
-                allAnomaly[0] = true;
-                for (String output : modelOutput){
-                    if(!output.equals("anomaly")){
-                        allAnomaly[0] = false;
-                        break;
-                    }
-                }
+                uniqueStrings.addAll(modelOutput);
+                boolean allAnomaly = uniqueStrings.size() == 1 && uniqueStrings.contains("anomaly");
+                Log.e("postAnomalyData", "All anomalies: " + allAnomaly);
+
+                // Notify the result through the callback
+                callback.onResult(allAnomaly);
             }
 
             @Override
             public void onFailure(Exception e) {
-                allAnomaly[0] = false;
+                Log.e("postAnomalyData", "API call failed", e);
+                // Handle failure and notify through callback if necessary
+                callback.onResult(false); // Or whatever is appropriate
             }
         });
-
-        return allAnomaly[0]; // Example return value; replace with actual anomaly detection result
     }
+
 
     private void sendNotification() {
         // Implement your notification logic here
